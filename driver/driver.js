@@ -368,14 +368,29 @@ async function loadDriver(
      * screen will be connected next.
      */
 
-    updateReadingAvailability();
-
+    enableReadingButtons();
 
     hideLoading();
 
 }
 
+function enableReadingButtons() {
 
+    morningButton.disabled = false;
+    eveningButton.disabled = false;
+
+    morningStatus.textContent = "AVAILABLE";
+    morningStatus.className = "status pending";
+
+    morningDescription.textContent =
+        "Enter the odometer reading after starting the trip.";
+
+    eveningStatus.textContent = "AVAILABLE";
+    eveningStatus.className = "status pending";
+
+    eveningDescription.textContent =
+        "Enter the odometer reading after halting the vehicle.";
+}
 /* =========================================
    TIME CONTROL
 ========================================= */
