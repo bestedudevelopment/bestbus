@@ -3,7 +3,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
-const firebaseConfig = {
+ export const firebaseConfig = {
     apiKey: "AIzaSyCvpd7HxpLq4IJ22cMTldV3sanz35tt3H8",
     authDomain: "best----bus-application.firebaseapp.com",
     projectId: "best----bus-application",
