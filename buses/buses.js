@@ -897,11 +897,10 @@ function renderBuses(
             viewButton.addEventListener(
                 "click",
                 () => {
-
-                    window.location.href =
-                        `../bus/?id=${encodeURIComponent(
-                            bus.id
-                        )}`;
+window.location.href =
+    `../bus-details/?id=${encodeURIComponent(
+        bus.id
+    )}`;
 
                 }
             );
