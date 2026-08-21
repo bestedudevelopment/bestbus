@@ -6,24 +6,21 @@ import {
 import {
     getAuth,
     createUserWithEmailAndPassword,
-    signOut
+    signOut,
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 import {
     collection,
+    getDocs,
     query,
     where,
-    getDocs,
     doc,
     getDoc,
     setDoc,
     updateDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-import {
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 import {
     auth,
@@ -88,12 +85,17 @@ let adminUser = null;
 
 
 /* =====================================================
-   AUTHENTICATION
+   ADMIN AUTH CHECK
 ===================================================== */
 
 onAuthStateChanged(
     auth,
     async (user) => {
+
+        console.log(
+            "AUTH USER:",
+            user
+        );
 
         if (!user) {
 
@@ -103,10 +105,7 @@ onAuthStateChanged(
             return;
         }
 
-
-        adminUser =
-            user;
-
+        adminUser = user;
 
         try {
 
@@ -114,6 +113,11 @@ onAuthStateChanged(
                 await getUserProfile(
                     user.uid
                 );
+
+            console.log(
+                "ADMIN PROFILE:",
+                profile
+            );
 
 
             if (
@@ -128,18 +132,28 @@ onAuthStateChanged(
             }
 
 
+            console.log(
+                "ADMIN VERIFIED"
+            );
+
+
+            /*
+             * Load buses only after
+             * admin verification succeeds.
+             */
+
             await loadAvailableBuses();
 
 
         } catch (error) {
 
             console.error(
-                "Admin verification error:",
+                "ADMIN VERIFICATION ERROR:",
                 error
             );
 
-
             showError(
+                error.message ||
                 "Unable to verify admin account."
             );
 
@@ -165,12 +179,23 @@ backButton.addEventListener(
 
 
 /* =====================================================
-   LOAD AVAILABLE BUSES
+   LOAD BUSES
 ===================================================== */
 
 async function loadAvailableBuses() {
 
-    console.log("START: loading buses...");
+    console.log(
+        "================================"
+    );
+
+    console.log(
+        "START: LOADING BUSES"
+    );
+
+    console.log(
+        "================================"
+    );
+
 
     assignedBus.innerHTML = `
         <option value="">
@@ -178,30 +203,59 @@ async function loadAvailableBuses() {
         </option>
     `;
 
+
     try {
 
-        console.log("Firestore DB:", db);
-
-        const busesRef =
-            collection(db, "buses");
-
         console.log(
-            "Collection reference created:",
-            busesRef
+            "Firestore DB:",
+            db
         );
 
+
+        /*
+         * IMPORTANT:
+         * We intentionally do NOT filter
+         * by active here.
+         *
+         * First we want to confirm that
+         * the website can actually read
+         * the buses collection.
+         */
+
+        const busesReference =
+            collection(
+                db,
+                "buses"
+            );
+
+
+        console.log(
+            "BUS COLLECTION:",
+            busesReference
+        );
+
+
         const snapshot =
-            await getDocs(busesRef);
+            await getDocs(
+                busesReference
+            );
+
 
         console.log(
             "BUS SNAPSHOT:",
             snapshot
         );
 
+
         console.log(
             "NUMBER OF BUSES:",
             snapshot.size
         );
+
+
+        /*
+         * Clear loading option.
+         */
 
         assignedBus.innerHTML = `
             <option value="">
@@ -209,7 +263,19 @@ async function loadAvailableBuses() {
             </option>
         `;
 
-        if (snapshot.empty) {
+
+        /* =============================================
+           NO BUSES
+        ============================================= */
+
+        if (
+            snapshot.empty
+        ) {
+
+            console.warn(
+                "NO BUS DOCUMENTS FOUND"
+            );
+
 
             assignedBus.innerHTML = `
                 <option value="">
@@ -217,46 +283,197 @@ async function loadAvailableBuses() {
                 </option>
             `;
 
-            console.log(
-                "Firestore buses collection is empty."
-            );
 
             return;
         }
 
-        snapshot.forEach((busDoc) => {
 
-            const bus =
-                busDoc.data();
+        let availableCount = 0;
 
-            console.log(
-                "BUS DOCUMENT:",
-                busDoc.id,
-                bus
-            );
 
-            const option =
-                document.createElement("option");
+        /* =============================================
+           LOOP BUSES
+        ============================================= */
 
-            option.value =
-                busDoc.id;
+        snapshot.forEach(
+            (busDocument) => {
 
-            option.textContent =
-                `${bus.busNumber || "BUS"} — ${
+                const bus =
+                    busDocument.data();
+
+
+                console.log(
+                    "--------------------------------"
+                );
+
+
+                console.log(
+                    "BUS DOCUMENT ID:",
+                    busDocument.id
+                );
+
+
+                console.log(
+                    "BUS DATA:",
+                    bus
+                );
+
+
+                /*
+                 * Treat missing active field
+                 * as active.
+                 */
+
+                const isActive =
+                    bus.active !== false;
+
+
+                /*
+                 * If driverId exists, the bus
+                 * is already assigned.
+                 */
+
+                const alreadyAssigned =
+                    !!bus.driverId;
+
+
+                console.log(
+                    "ACTIVE:",
+                    isActive
+                );
+
+
+                console.log(
+                    "ALREADY ASSIGNED:",
+                    alreadyAssigned
+                );
+
+
+                /*
+                 * Skip inactive buses.
+                 */
+
+                if (
+                    !isActive
+                ) {
+
+                    console.log(
+                        "SKIPPING: BUS INACTIVE"
+                    );
+
+                    return;
+                }
+
+
+                /*
+                 * Skip buses already assigned.
+                 */
+
+                if (
+                    alreadyAssigned
+                ) {
+
+                    console.log(
+                        "SKIPPING: BUS ALREADY ASSIGNED"
+                    );
+
+                    return;
+                }
+
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    busDocument.id;
+
+
+                /*
+                 * Support multiple possible
+                 * field names.
+                 */
+
+                const busNumber =
+                    bus.busNumber ||
+                    bus.number ||
+                    bus.busNo ||
+                    "BUS";
+
+
+                const registration =
                     bus.registrationNumber ||
                     bus.registrationNo ||
-                    "No registration"
-                }`;
+                    bus.registration ||
+                    "";
 
-            assignedBus.appendChild(
-                option
+
+                if (
+                    registration
+                ) {
+
+                    option.textContent =
+                        `${busNumber} — ${registration}`;
+
+                } else {
+
+                    option.textContent =
+                        busNumber;
+
+                }
+
+
+                assignedBus.appendChild(
+                    option
+                );
+
+
+                availableCount++;
+
+
+                console.log(
+                    "BUS ADDED TO DROPDOWN:",
+                    option.textContent
+                );
+
+            }
+        );
+
+
+        /* =============================================
+           NO AVAILABLE BUSES
+        ============================================= */
+
+        if (
+            availableCount === 0
+        ) {
+
+            assignedBus.innerHTML = `
+                <option value="">
+                    No available buses
+                </option>
+            `;
+
+
+            console.warn(
+                "BUSES EXIST BUT NONE ARE AVAILABLE"
             );
 
-        });
+        } else {
 
-        console.log(
-            "SUCCESS: buses loaded."
-        );
+            console.log(
+                "AVAILABLE BUSES:",
+                availableCount
+            );
+
+            console.log(
+                "SUCCESS: BUSES LOADED"
+            );
+
+        }
+
 
     } catch (error) {
 
@@ -265,7 +482,7 @@ async function loadAvailableBuses() {
         );
 
         console.error(
-            "FIREBASE BUS ERROR:"
+            "FIREBASE BUS ERROR"
         );
 
         console.error(
@@ -286,18 +503,24 @@ async function loadAvailableBuses() {
             "================================"
         );
 
+
         assignedBus.innerHTML = `
             <option value="">
                 ERROR - Check Console
             </option>
         `;
 
+
         showError(
             error.message ||
             "Unable to load buses."
         );
+
     }
+
 }
+
+
 /* =====================================================
    FORM SUBMIT
 ===================================================== */
@@ -313,7 +536,7 @@ form.addEventListener(
 
 
         /* =============================================
-           GET VALUES
+           GET FORM VALUES
         ============================================= */
 
         const name =
@@ -385,7 +608,7 @@ form.addEventListener(
         if (!password) {
 
             showError(
-                "Please enter a temporary password."
+                "Please enter a password."
             );
 
             driverPassword.focus();
@@ -420,10 +643,6 @@ form.addEventListener(
         }
 
 
-        /* =============================================
-           START LOADING
-        ============================================= */
-
         setLoading(true);
 
 
@@ -433,21 +652,26 @@ form.addEventListener(
         try {
 
             /* =========================================
-               1. CHECK ADMIN
+               VERIFY ADMIN
             ========================================= */
 
             if (!adminUser) {
 
                 throw new Error(
-                    "Admin session has expired. Please login again."
+                    "Admin session not found."
                 );
 
             }
 
 
             /* =========================================
-               2. CHECK EMAIL ALREADY EXISTS
+               CHECK EMAIL
             ========================================= */
+
+            console.log(
+                "Checking existing email..."
+            );
+
 
             const emailQuery =
                 query(
@@ -482,8 +706,13 @@ form.addEventListener(
 
 
             /* =========================================
-               3. CHECK PHONE
+               CHECK PHONE
             ========================================= */
+
+            console.log(
+                "Checking existing phone..."
+            );
+
 
             const phoneQuery =
                 query(
@@ -518,8 +747,13 @@ form.addEventListener(
 
 
             /* =========================================
-               4. CHECK BUS
+               CHECK BUS AGAIN
             ========================================= */
+
+            console.log(
+                "Checking selected bus..."
+            );
+
 
             const busReference =
                 doc(
@@ -540,7 +774,7 @@ form.addEventListener(
             ) {
 
                 throw new Error(
-                    "The selected bus no longer exists."
+                    "Selected bus does not exist."
                 );
 
             }
@@ -562,24 +796,18 @@ form.addEventListener(
 
 
             /* =========================================
-               5. CREATE SECONDARY FIREBASE APP
+               CREATE SECONDARY FIREBASE APP
             ========================================= */
 
-            /*
-             * This is the important part.
-             *
-             * The main Firebase Auth session belongs
-             * to the ADMIN.
-             *
-             * We create a SECOND Firebase App so that
-             * creating the driver does not replace the
-             * admin's login session.
-             */
+            console.log(
+                "Creating secondary Firebase app..."
+            );
+
 
             secondaryApp =
                 initializeApp(
                     firebaseConfig,
-                    "DriverCreationApp_" +
+                    "DriverCreation_" +
                     Date.now()
                 );
 
@@ -591,8 +819,13 @@ form.addEventListener(
 
 
             /* =========================================
-               6. CREATE FIREBASE AUTH ACCOUNT
+               CREATE DRIVER AUTH ACCOUNT
             ========================================= */
+
+            console.log(
+                "Creating driver Authentication account..."
+            );
+
 
             const credential =
                 await createUserWithEmailAndPassword(
@@ -611,14 +844,19 @@ form.addEventListener(
 
 
             console.log(
-                "Driver Auth UID:",
+                "DRIVER AUTH UID:",
                 driverUid
             );
 
 
             /* =========================================
-               7. CREATE FIRESTORE DRIVER PROFILE
+               CREATE DRIVER FIRESTORE DOCUMENT
             ========================================= */
+
+            console.log(
+                "Creating Firestore driver profile..."
+            );
+
 
             const driverData = {
 
@@ -652,26 +890,29 @@ form.addEventListener(
             };
 
 
-            /*
-             * IMPORTANT:
-             *
-             * The document ID is the Firebase Auth UID.
-             */
-
             await setDoc(
                 doc(
                     db,
                     "users",
                     driverUid
                 ),
-
                 driverData
             );
 
 
+            console.log(
+                "DRIVER FIRESTORE PROFILE CREATED"
+            );
+
+
             /* =========================================
-               8. UPDATE BUS
+               ASSIGN DRIVER TO BUS
             ========================================= */
+
+            console.log(
+                "Assigning driver to bus..."
+            );
+
 
             await updateDoc(
                 busReference,
@@ -687,8 +928,13 @@ form.addEventListener(
             );
 
 
+            console.log(
+                "BUS ASSIGNMENT COMPLETE"
+            );
+
+
             /* =========================================
-               9. SIGN OUT SECONDARY AUTH
+               SIGN OUT SECONDARY AUTH
             ========================================= */
 
             await signOut(
@@ -697,46 +943,30 @@ form.addEventListener(
 
 
             /* =========================================
-               10. SUCCESS
+               SUCCESS
             ========================================= */
 
             showSuccess(
-                `${name} has been created successfully and assigned to ${
-                    bus.busNumber || "the selected bus"
-                }.`
+                `${name} created successfully.`
             );
 
-
-            /*
-             * Admin session is still alive because
-             * the driver was created through the
-             * secondary Firebase App.
-             */
 
             console.log(
-                "Admin UID still:",
-                auth.currentUser?.uid
+                "DRIVER CREATED SUCCESSFULLY"
             );
 
 
-            /* =========================================
-               11. CLEAR FORM
-            ========================================= */
+            console.log(
+                "ADMIN STILL LOGGED IN:",
+                auth.currentUser?.email
+            );
+
 
             form.reset();
 
 
-            /*
-             * Reload available buses because the
-             * selected bus is no longer available.
-             */
-
             await loadAvailableBuses();
 
-
-            /* =========================================
-               12. RETURN TO DRIVER LIST
-            ========================================= */
 
             setTimeout(
                 () => {
@@ -752,8 +982,29 @@ form.addEventListener(
         } catch (error) {
 
             console.error(
-                "CREATE DRIVER ERROR:",
+                "================================"
+            );
+
+            console.error(
+                "CREATE DRIVER ERROR"
+            );
+
+            console.error(
                 error
+            );
+
+            console.error(
+                "ERROR CODE:",
+                error.code
+            );
+
+            console.error(
+                "ERROR MESSAGE:",
+                error.message
+            );
+
+            console.error(
+                "================================"
             );
 
 
@@ -761,17 +1012,13 @@ form.addEventListener(
                 "Unable to create driver.";
 
 
-            /*
-             * Firebase error messages
-             */
-
             if (
                 error.code ===
                 "auth/email-already-in-use"
             ) {
 
                 message =
-                    "This email is already registered in Firebase Authentication.";
+                    "This email is already registered.";
 
             } else if (
                 error.code ===
@@ -787,7 +1034,7 @@ form.addEventListener(
             ) {
 
                 message =
-                    "Password is too weak. Use at least 6 characters.";
+                    "Password must contain at least 6 characters.";
 
             } else if (
                 error.code ===
@@ -795,7 +1042,7 @@ form.addEventListener(
             ) {
 
                 message =
-                    "Firebase denied this operation. Check your Firestore security rules.";
+                    "Firebase permission denied. Check Firestore Rules.";
 
             } else if (
                 error.message
@@ -813,10 +1060,6 @@ form.addEventListener(
 
         } finally {
 
-            /* =========================================
-               DELETE SECONDARY APP
-            ========================================= */
-
             if (
                 secondaryApp
             ) {
@@ -827,11 +1070,11 @@ form.addEventListener(
                         secondaryApp
                     );
 
-                } catch (deleteError) {
+                } catch (cleanupError) {
 
                     console.error(
                         "Secondary app cleanup error:",
-                        deleteError
+                        cleanupError
                     );
 
                 }
@@ -848,7 +1091,7 @@ form.addEventListener(
 
 
 /* =====================================================
-   LOADING UI
+   LOADING
 ===================================================== */
 
 function setLoading(
@@ -883,7 +1126,6 @@ function hideMessages() {
         "hidden"
     );
 
-
     successMessage.classList.add(
         "hidden"
     );
@@ -898,11 +1140,9 @@ function showError(
     errorMessage.textContent =
         message;
 
-
     errorMessage.classList.remove(
         "hidden"
     );
-
 
     successMessage.classList.add(
         "hidden"
@@ -918,11 +1158,9 @@ function showSuccess(
     successMessage.textContent =
         message;
 
-
     successMessage.classList.remove(
         "hidden"
     );
-
 
     errorMessage.classList.add(
         "hidden"
