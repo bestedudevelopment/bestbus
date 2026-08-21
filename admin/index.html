@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <title>BEST | Admin Dashboard</title>
+
+    <link rel="stylesheet" href="./admin.css">
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="top-header">
+
+        <div class="brand-area">
+
+            <div class="brand-logo">
+                🚌
+            </div>
+
+            <div>
+                <h1>BEST</h1>
+                <p>TRANSPORT MANAGEMENT</p>
+            </div>
+
+        </div>
+
+        <button
+            id="logoutButton"
+            class="logout-button"
+        >
+            Logout
+        </button>
+
+    </header>
+
+
+    <!-- MAIN -->
+    <main class="dashboard">
+
+        <!-- WELCOME -->
+        <section class="welcome-section">
+
+            <p class="small-label">
+                ADMIN PANEL
+            </p>
+
+            <h2>
+                Good Morning, <span id="adminName">Admin</span>
+            </h2>
+
+            <p class="date" id="currentDate"></p>
+
+        </section>
+
+
+        <!-- STATISTICS -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🚌
+                </div>
+
+                <div>
+                    <span class="stat-label">
+                        BUSES
+                    </span>
+
+                    <strong id="busCount">
+                        0
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    👨‍✈️
+                </div>
+
+                <div>
+                    <span class="stat-label">
+                        DRIVERS
+                    </span>
+
+                    <strong id="driverCount">
+                        0
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📍
+                </div>
+
+                <div>
+                    <span class="stat-label">
+                        TODAY KM
+                    </span>
+
+                    <strong id="todayKm">
+                        0 KM
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ⛽
+                </div>
+
+                <div>
+                    <span class="stat-label">
+                        DIESEL
+                    </span>
+
+                    <strong id="todayDiesel">
+                        0 L
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ALERTS -->
+        <section class="section">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="section-kicker">
+                        MONITORING
+                    </span>
+
+                    <h3>
+                        Fleet Alerts
+                    </h3>
+                </div>
+
+                <span
+                    id="alertCount"
+                    class="alert-count"
+                >
+                    0
+                </span>
+
+            </div>
+
+
+            <div
+                id="alertsContainer"
+                class="alerts-container"
+            >
+
+                <div class="empty-state">
+                    <span>✓</span>
+                    <p>No alerts currently</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUICK ACTIONS -->
+        <section class="section">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="section-kicker">
+                        MANAGEMENT
+                    </span>
+
+                    <h3>
+                        Quick Actions
+                    </h3>
+                </div>
+
+            </div>
+
+
+            <div class="action-grid">
+
+                <button
+                    class="action-card primary"
+                    id="addBusButton"
+                >
+
+                    <span class="action-icon">
+                        +
+                    </span>
+
+                    <span>
+                        ADD BUS
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="action-card"
+                    id="busListButton"
+                >
+
+                    <span class="action-icon">
+                        🚌
+                    </span>
+
+                    <span>
+                        BUS LIST
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="action-card"
+                    id="driverButton"
+                >
+
+                    <span class="action-icon">
+                        👨‍✈️
+                    </span>
+
+                    <span>
+                        DRIVERS
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="action-card"
+                    id="reportsButton"
+                >
+
+                    <span class="action-icon">
+                        📊
+                    </span>
+
+                    <span>
+                        REPORTS
+                    </span>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- FLEET PERFORMANCE -->
+        <section class="section">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="section-kicker">
+                        PERFORMANCE
+                    </span>
+
+                    <h3>
+                        Fleet Performance
+                    </h3>
+                </div>
+
+                <button
+                    id="viewBusesButton"
+                    class="view-button"
+                >
+                    View All
+                </button>
+
+            </div>
+
+
+            <div
+                id="fleetContainer"
+                class="fleet-container"
+            >
+
+                <div class="loading-state">
+                    Loading buses...
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+
+        <a
+            href="./"
+            class="nav-item active"
+        >
+            <span>⌂</span>
+            <small>Home</small>
+        </a>
+
+        <button
+            id="navBuses"
+            class="nav-item"
+        >
+            <span>🚌</span>
+            <small>Buses</small>
+        </button>
+
+        <button
+            id="navDrivers"
+            class="nav-item"
+        >
+            <span>👨‍✈️</span>
+            <small>Drivers</small>
+        </button>
+
+        <button
+            id="navReports"
+            class="nav-item"
+        >
+            <span>📊</span>
+            <small>Reports</small>
+        </button>
+
+    </nav>
+
+
+    <script
+        type="module"
+        src="./admin.js"
+    ></script>
+
+</body>
+
+</html>
