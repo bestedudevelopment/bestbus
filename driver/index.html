@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <title>BEST | Driver</title>
+
+    <link rel="stylesheet" href="./driver.css">
+
+</head>
+
+<body>
+
+<header class="top-header">
+
+    <div>
+
+        <div class="brand">
+            BEST
+        </div>
+
+        <p>
+            DRIVER PANEL
+        </p>
+
+    </div>
+
+    <button
+        id="logoutButton"
+        class="logout-button"
+    >
+        Logout
+    </button>
+
+</header>
+
+
+<main class="page">
+
+    <!-- DRIVER -->
+
+    <section class="welcome">
+
+        <span>
+            DRIVER
+        </span>
+
+        <h1>
+            Good morning,
+            <strong id="driverName">
+                Driver
+            </strong>
+            👋
+        </h1>
+
+    </section>
+
+
+    <!-- BUS -->
+
+    <section class="bus-card">
+
+        <div class="bus-top">
+
+            <div class="bus-icon">
+                🚌
+            </div>
+
+            <div>
+
+                <span>
+                    YOUR BUS
+                </span>
+
+                <h2 id="busNumber">
+                    Loading...
+                </h2>
+
+                <p id="registrationNumber">
+                    Loading...
+                </p>
+
+            </div>
+
+            <div
+                id="activeBadge"
+                class="active-badge"
+            >
+                ACTIVE
+            </div>
+
+        </div>
+
+
+        <div class="route">
+
+            <span>
+                ROUTE
+            </span>
+
+            <strong id="route">
+                Loading...
+            </strong>
+
+        </div>
+
+
+        <div class="bus-stats">
+
+            <div>
+
+                <span>
+                    CURRENT
+                </span>
+
+                <strong id="currentMeter">
+                    —
+                </strong>
+
+                <small>
+                    KM
+                </small>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    EXPECTED
+                </span>
+
+                <strong id="expectedMileage">
+                    —
+                </strong>
+
+                <small>
+                    KM/L
+                </small>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- TODAY -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <span>
+                TODAY
+            </span>
+
+            <h2>
+                Daily Entry
+            </h2>
+
+        </div>
+
+
+        <div class="form-card">
+
+
+            <!-- OPENING -->
+
+            <div class="field">
+
+                <label>
+                    Opening Meter
+                </label>
+
+                <div class="unit-input">
+
+                    <input
+                        type="number"
+                        id="openingMeter"
+                        placeholder="Enter opening reading"
+                        min="0"
+                        step="0.1"
+                    >
+
+                    <span>
+                        KM
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- CLOSING -->
+
+            <div class="field">
+
+                <label>
+                    Closing Meter
+                </label>
+
+                <div class="unit-input">
+
+                    <input
+                        type="number"
+                        id="closingMeter"
+                        placeholder="Enter closing reading"
+                        min="0"
+                        step="0.1"
+                    >
+
+                    <span>
+                        KM
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- DISTANCE -->
+
+            <div class="calculation">
+
+                <span>
+                    Today's Distance
+                </span>
+
+                <strong id="distance">
+                    0 KM
+                </strong>
+
+            </div>
+
+
+            <div class="divider"></div>
+
+
+            <!-- DIESEL -->
+
+            <div class="field">
+
+                <label>
+                    Diesel Filled
+                </label>
+
+                <div class="unit-input">
+
+                    <input
+                        type="number"
+                        id="dieselLitres"
+                        placeholder="Enter litres"
+                        min="0"
+                        step="0.01"
+                    >
+
+                    <span>
+                        L
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- AMOUNT -->
+
+            <div class="field">
+
+                <label>
+                    Diesel Amount
+                </label>
+
+                <div class="unit-input">
+
+                    <input
+                        type="number"
+                        id="dieselAmount"
+                        placeholder="Enter amount"
+                        min="0"
+                        step="0.01"
+                    >
+
+                    <span>
+                        ₹
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- MILEAGE -->
+
+            <div class="mileage-box">
+
+                <span>
+                    CALCULATED MILEAGE
+                </span>
+
+                <strong id="mileage">
+                    —
+                </strong>
+
+                <small>
+                    KM/L
+                </small>
+
+            </div>
+
+
+            <!-- PHOTO -->
+
+            <div class="photo-section">
+
+                <label>
+                    Meter Photo
+                </label>
+
+                <label
+                    for="meterPhoto"
+                    class="photo-button"
+                >
+
+                    📷
+
+                    <span>
+                        Take / Upload Meter Photo
+                    </span>
+
+                </label>
+
+                <input
+                    type="file"
+                    id="meterPhoto"
+                    accept="image/*"
+                    capture="environment"
+                    hidden
+                >
+
+                <div
+                    id="photoName"
+                    class="photo-name"
+                ></div>
+
+            </div>
+
+
+            <!-- ERROR -->
+
+            <div
+                id="errorMessage"
+                class="error hidden"
+            ></div>
+
+
+            <!-- SUBMIT -->
+
+            <button
+                id="submitButton"
+                class="submit-button"
+            >
+
+                SUBMIT TODAY
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- TODAY STATUS -->
+
+    <section class="section">
+
+        <div class="status-card">
+
+            <span>
+                TODAY'S STATUS
+            </span>
+
+            <strong id="todayStatus">
+                NOT SUBMITTED
+            </strong>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- NAVIGATION -->
+
+<nav class="bottom-nav">
+
+    <a
+        href="./"
+        class="nav-item active"
+    >
+
+        <span>
+            🏠
+        </span>
+
+        <small>
+            Home
+        </small>
+
+    </a>
+
+
+    <a
+        href="../driver-history/"
+        class="nav-item"
+    >
+
+        <span>
+            📋
+        </span>
+
+        <small>
+            History
+        </small>
+
+    </a>
+
+
+    <a
+        href="../driver-profile/"
+        class="nav-item"
+    >
+
+        <span>
+            👤
+        </span>
+
+        <small>
+            Profile
+        </small>
+
+    </a>
+
+</nav>
+
+
+<script
+    type="module"
+    src="./driver.js"
+></script>
+
+</body>
+
+</html>
