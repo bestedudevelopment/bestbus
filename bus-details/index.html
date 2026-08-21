@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>BEST | Bus Details</title>
+
+    <link
+        rel="stylesheet"
+        href="./bus-details.css"
+    >
+
+</head>
+
+<body>
+
+<header class="top-header">
+
+    <button
+        id="backButton"
+        class="back-button"
+        type="button"
+    >
+        ←
+    </button>
+
+    <div>
+
+        <div class="brand">
+            BEST
+        </div>
+
+        <div class="subtitle">
+            BUS MANAGEMENT
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="page">
+
+    <!-- BUS HERO -->
+
+    <section class="bus-hero">
+
+        <div class="bus-icon">
+            🚌
+        </div>
+
+        <div class="bus-main-info">
+
+            <span>
+                BUS
+            </span>
+
+            <h1 id="busNumber">
+                Loading...
+            </h1>
+
+            <p id="registrationNumber">
+                Loading...
+            </p>
+
+        </div>
+
+        <div
+            id="busStatus"
+            class="status-badge"
+        >
+            Loading
+        </div>
+
+    </section>
+
+
+    <!-- DRIVER -->
+
+    <section class="driver-card">
+
+        <div class="driver-avatar">
+            👤
+        </div>
+
+        <div class="driver-info">
+
+            <span>
+                ASSIGNED DRIVER
+            </span>
+
+            <strong id="driverName">
+                Loading...
+            </strong>
+
+            <small id="driverPhone">
+                --
+            </small>
+
+        </div>
+
+    </section>
+
+
+    <!-- OVERVIEW -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <span>
+                OVERVIEW
+            </span>
+
+            <h2>
+                Bus Performance
+            </h2>
+
+        </div>
+
+
+        <div class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <span>
+                    CURRENT ODOMETER
+                </span>
+
+                <strong id="currentOdometer">
+                    --
+                </strong>
+
+                <small>
+                    KM
+                </small>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    TOTAL DISTANCE
+                </span>
+
+                <strong id="totalDistance">
+                    --
+                </strong>
+
+                <small>
+                    KM
+                </small>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    TOTAL DIESEL
+                </span>
+
+                <strong id="totalDiesel">
+                    --
+                </strong>
+
+                <small>
+                    LITRES
+                </small>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    FUEL COST
+                </span>
+
+                <strong id="totalFuelCost">
+                    ₹ --
+                </strong>
+
+                <small>
+                    TOTAL
+                </small>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    AVERAGE
+                </span>
+
+                <strong id="averageMileage">
+                    --
+                </strong>
+
+                <small>
+                    KM / L
+                </small>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    FUEL COST / KM
+                </span>
+
+                <strong id="fuelCostPerKm">
+                    ₹ --
+                </strong>
+
+                <small>
+                    PER KM
+                </small>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- TABS -->
+
+    <div class="tabs">
+
+        <button
+            id="readingsTab"
+            class="tab active"
+            type="button"
+        >
+            ODOMETER
+        </button>
+
+        <button
+            id="dieselTab"
+            class="tab"
+            type="button"
+        >
+            DIESEL
+        </button>
+
+    </div>
+
+
+    <!-- ODOMETER HISTORY -->
+
+    <section
+        id="readingsSection"
+        class="section"
+    >
+
+        <div class="section-heading">
+
+            <span>
+                VEHICLE LOG
+            </span>
+
+            <h2>
+                Odometer History
+            </h2>
+
+        </div>
+
+
+        <div
+            id="readingsList"
+            class="records-list"
+        ></div>
+
+
+        <div
+            id="readingsEmpty"
+            class="empty-state hidden"
+        >
+
+            <div>
+                📋
+            </div>
+
+            <strong>
+                No odometer records
+            </strong>
+
+            <span>
+                Reading records for this bus will appear here.
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- DIESEL HISTORY -->
+
+    <section
+        id="dieselSection"
+        class="section hidden"
+    >
+
+        <div class="section-heading">
+
+            <span>
+                FUEL LOG
+            </span>
+
+            <h2>
+                Diesel History
+            </h2>
+
+        </div>
+
+
+        <div
+            id="dieselList"
+            class="records-list"
+        ></div>
+
+
+        <div
+            id="dieselEmpty"
+            class="empty-state hidden"
+        >
+
+            <div>
+                ⛽
+            </div>
+
+            <strong>
+                No diesel records
+            </strong>
+
+            <span>
+                Fuel records for this bus will appear here.
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- LOADING -->
+
+    <div
+        id="loading"
+        class="loading"
+    >
+
+        <div class="loading-spinner"></div>
+
+        <span>
+            Loading bus details...
+        </span>
+
+    </div>
+
+</main>
+
+
+<script
+    type="module"
+    src="./bus-details.js"
+></script>
+
+</body>
+
+</html>
