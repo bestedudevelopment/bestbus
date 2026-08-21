@@ -2,11 +2,11 @@ import {
     doc,
     getDoc,
     collection,
+    getDocs,
     query,
     where,
     orderBy,
-    limit,
-    getDocs
+    limit
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import {
@@ -19,141 +19,105 @@ import {
 } from "../core/firebase.js";
 
 
-/* =========================================
+/* =====================================================
    ELEMENTS
-========================================= */
+===================================================== */
 
 const backButton =
-    document.getElementById(
-        "backButton"
-    );
+    document.getElementById("backButton");
 
 const busNumber =
-    document.getElementById(
-        "busNumber"
-    );
+    document.getElementById("busNumber");
 
 const registrationNumber =
-    document.getElementById(
-        "registrationNumber"
-    );
+    document.getElementById("registrationNumber");
 
 const busStatus =
-    document.getElementById(
-        "busStatus"
-    );
+    document.getElementById("busStatus");
 
 const driverName =
-    document.getElementById(
-        "driverName"
-    );
+    document.getElementById("driverName");
 
 const driverPhone =
-    document.getElementById(
-        "driverPhone"
-    );
+    document.getElementById("driverPhone");
 
 const currentOdometer =
-    document.getElementById(
-        "currentOdometer"
-    );
+    document.getElementById("currentOdometer");
 
 const totalDistance =
-    document.getElementById(
-        "totalDistance"
-    );
+    document.getElementById("totalDistance");
 
 const totalDiesel =
-    document.getElementById(
-        "totalDiesel"
-    );
+    document.getElementById("totalDiesel");
 
 const totalFuelCost =
-    document.getElementById(
-        "totalFuelCost"
-    );
+    document.getElementById("totalFuelCost");
 
 const averageMileage =
-    document.getElementById(
-        "averageMileage"
-    );
+    document.getElementById("averageMileage");
 
 const fuelCostPerKm =
-    document.getElementById(
-        "fuelCostPerKm"
-    );
+    document.getElementById("fuelCostPerKm");
 
 const readingsTab =
-    document.getElementById(
-        "readingsTab"
-    );
+    document.getElementById("readingsTab");
 
 const dieselTab =
-    document.getElementById(
-        "dieselTab"
-    );
+    document.getElementById("dieselTab");
 
 const readingsSection =
-    document.getElementById(
-        "readingsSection"
-    );
+    document.getElementById("readingsSection");
 
 const dieselSection =
-    document.getElementById(
-        "dieselSection"
-    );
+    document.getElementById("dieselSection");
 
 const readingsList =
-    document.getElementById(
-        "readingsList"
-    );
+    document.getElementById("readingsList");
 
 const dieselList =
-    document.getElementById(
-        "dieselList"
-    );
+    document.getElementById("dieselList");
 
 const readingsEmpty =
-    document.getElementById(
-        "readingsEmpty"
-    );
+    document.getElementById("readingsEmpty");
 
 const dieselEmpty =
-    document.getElementById(
-        "dieselEmpty"
-    );
+    document.getElementById("dieselEmpty");
 
 const loading =
-    document.getElementById(
-        "loading"
-    );
+    document.getElementById("loading");
 
 
-/* =========================================
-   BUS ID
-========================================= */
+/* =====================================================
+   GET BUS ID FROM URL
+===================================================== */
 
-const params =
+const urlParams =
     new URLSearchParams(
         window.location.search
     );
 
 const busId =
-    params.get("id");
+    urlParams.get("id");
+
+
+console.log(
+    "BUS DETAILS - BUS ID:",
+    busId
+);
 
 
 if (!busId) {
 
-    showFatalError(
-        "No bus was selected."
+    showError(
+        "No bus ID found in the URL."
     );
 
 }
 
 
-/* =========================================
+/* =====================================================
    STATE
-========================================= */
+===================================================== */
 
 let busData = null;
 
@@ -162,9 +126,9 @@ let readings = [];
 let dieselRecords = [];
 
 
-/* =========================================
-   BACK
-========================================= */
+/* =====================================================
+   BACK BUTTON
+===================================================== */
 
 backButton.addEventListener(
     "click",
@@ -177,9 +141,9 @@ backButton.addEventListener(
 );
 
 
-/* =========================================
+/* =====================================================
    TABS
-========================================= */
+===================================================== */
 
 readingsTab.addEventListener(
     "click",
@@ -229,9 +193,9 @@ dieselTab.addEventListener(
 );
 
 
-/* =========================================
+/* =====================================================
    AUTH
-========================================= */
+===================================================== */
 
 onAuthStateChanged(
     auth,
@@ -256,17 +220,36 @@ onAuthStateChanged(
 
         try {
 
+            console.log(
+                "Loading bus:",
+                busId
+            );
+
+
             await loadBus();
+
+
+            await loadDriver();
+
 
             await loadReadings();
 
+
             await loadDiesel();
 
+
             calculateOverview();
+
 
             loading.classList.add(
                 "hidden"
             );
+
+
+            console.log(
+                "Bus details loaded successfully."
+            );
+
 
         } catch (error) {
 
@@ -275,7 +258,8 @@ onAuthStateChanged(
                 error
             );
 
-            showFatalError(
+
+            showError(
                 error.message ||
                 "Unable to load bus details."
             );
@@ -286,13 +270,13 @@ onAuthStateChanged(
 );
 
 
-/* =========================================
+/* =====================================================
    LOAD BUS
-========================================= */
+===================================================== */
 
 async function loadBus() {
 
-    const busReference =
+    const busRef =
         doc(
             db,
             "buses",
@@ -300,37 +284,55 @@ async function loadBus() {
         );
 
 
-    const snapshot =
+    const busSnapshot =
         await getDoc(
-            busReference
+            busRef
         );
 
 
+    console.log(
+        "BUS EXISTS:",
+        busSnapshot.exists()
+    );
+
+
     if (
-        !snapshot.exists()
+        !busSnapshot.exists()
     ) {
 
         throw new Error(
-            "This bus does not exist."
+            "Bus not found in Firestore."
         );
 
     }
 
 
     busData =
-        snapshot.data();
+        busSnapshot.data();
 
+
+    console.log(
+        "BUS DATA:",
+        busData
+    );
+
+
+    /* BUS NUMBER */
 
     busNumber.textContent =
         busData.busNumber ||
         "BUS";
 
 
+    /* REGISTRATION */
+
     registrationNumber.textContent =
         busData.registrationNumber ||
         busData.registrationNo ||
-        "Registration number not available";
+        "Registration not available";
 
+
+    /* STATUS */
 
     if (
         busData.active === false
@@ -352,90 +354,129 @@ async function loadBus() {
 
     }
 
-
-    /*
-     * Load assigned driver.
-     */
-
-    if (
-        busData.assignedDriverId
-    ) {
-
-        await loadDriver(
-            busData.assignedDriverId
-        );
-
-    } else {
-
-        driverName.textContent =
-            "No driver assigned";
-
-        driverPhone.textContent =
-            "Unassigned";
-
-    }
-
 }
 
 
-/* =========================================
+/* =====================================================
    LOAD DRIVER
-========================================= */
+===================================================== */
 
-async function loadDriver(
-    driverId
-) {
+async function loadDriver() {
 
-    const driverReference =
-        doc(
-            db,
-            "users",
-            driverId
-        );
+    /*
+     * IMPORTANT:
+     *
+     * Your buses.js uses:
+     *
+     * bus.driverId
+     *
+     * Therefore we use driverId here.
+     */
 
-
-    const snapshot =
-        await getDoc(
-            driverReference
-        );
+    const driverId =
+        busData?.driverId;
 
 
-    if (
-        !snapshot.exists()
-    ) {
+    console.log(
+        "ASSIGNED DRIVER ID:",
+        driverId
+    );
+
+
+    if (!driverId) {
 
         driverName.textContent =
-            "Driver account deleted";
+            "No Driver Assigned";
 
         driverPhone.textContent =
-            "No driver assigned";
+            "This bus is currently available";
 
         return;
 
     }
 
 
-    const driver =
-        snapshot.data();
+    try {
+
+        const driverRef =
+            doc(
+                db,
+                "users",
+                driverId
+            );
 
 
-    driverName.textContent =
-        driver.name ||
-        driver.displayName ||
-        "Driver";
+        const driverSnapshot =
+            await getDoc(
+                driverRef
+            );
 
 
-    driverPhone.textContent =
-        driver.phone ||
-        driver.email ||
-        "Contact unavailable";
+        console.log(
+            "DRIVER EXISTS:",
+            driverSnapshot.exists()
+        );
+
+
+        if (
+            !driverSnapshot.exists()
+        ) {
+
+            driverName.textContent =
+                "Driver Not Found";
+
+            driverPhone.textContent =
+                "Driver account may have been deleted";
+
+            return;
+
+        }
+
+
+        const driver =
+            driverSnapshot.data();
+
+
+        console.log(
+            "DRIVER DATA:",
+            driver
+        );
+
+
+        driverName.textContent =
+            driver.name ||
+            driver.displayName ||
+            "Driver";
+
+
+        driverPhone.textContent =
+            driver.phone ||
+            driver.email ||
+            "Contact not available";
+
+
+    } catch (error) {
+
+        console.error(
+            "DRIVER LOAD ERROR:",
+            error
+        );
+
+
+        driverName.textContent =
+            "Unable to load driver";
+
+        driverPhone.textContent =
+            "";
+
+    }
 
 }
 
 
-/* =========================================
-   LOAD READINGS
-========================================= */
+/* =====================================================
+   LOAD ODOMETER READINGS
+===================================================== */
 
 async function loadReadings() {
 
@@ -443,87 +484,152 @@ async function loadReadings() {
         "";
 
 
-    const readingsQuery =
-        query(
-            collection(
-                db,
-                "driverReadings"
-            ),
-            where(
-                "busId",
-                "==",
-                busId
-            ),
-            orderBy(
-                "date",
-                "desc"
-            ),
-            limit(100)
-        );
-
-
-    const snapshot =
-        await getDocs(
-            readingsQuery
-        );
-
-
-    readings =
-        [];
-
-
-    snapshot.forEach(
-        (documentSnapshot) => {
-
-            readings.push({
-
-                id:
-                    documentSnapshot.id,
-
-                ...documentSnapshot.data()
-
-            });
-
-        }
+    console.log(
+        "Loading readings for bus:",
+        busId
     );
 
 
-    if (
-        readings.length === 0
-    ) {
+    try {
+
+        /*
+         * We ONLY use busId.
+         *
+         * Therefore readings remain connected
+         * to the bus even when the driver changes.
+         */
+
+        const readingsRef =
+            collection(
+                db,
+                "driverReadings"
+            );
+
+
+        const readingsQuery =
+            query(
+                readingsRef,
+
+                where(
+                    "busId",
+                    "==",
+                    busId
+                ),
+
+                limit(100)
+            );
+
+
+        const snapshot =
+            await getDocs(
+                readingsQuery
+            );
+
+
+        console.log(
+            "READINGS FOUND:",
+            snapshot.size
+        );
+
+
+        readings = [];
+
+
+        snapshot.forEach(
+            (documentSnapshot) => {
+
+                readings.push({
+
+                    id:
+                        documentSnapshot.id,
+
+                    ...documentSnapshot.data()
+
+                });
+
+            }
+        );
+
+
+        /*
+         * Sort locally.
+         *
+         * This avoids Firestore composite-index
+         * problems caused by orderBy().
+         */
+
+        readings.sort(
+            (a, b) => {
+
+                return String(
+                    b.date || ""
+                ).localeCompare(
+                    String(
+                        a.date || ""
+                    )
+                );
+
+            }
+        );
+
+
+        if (
+            readings.length === 0
+        ) {
+
+            readingsEmpty.classList.remove(
+                "hidden"
+            );
+
+            return;
+
+        }
+
+
+        readingsEmpty.classList.add(
+            "hidden"
+        );
+
+
+        readings.forEach(
+            (record) => {
+
+                readingsList.appendChild(
+                    createReadingCard(
+                        record
+                    )
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "READINGS ERROR:",
+            error
+        );
+
 
         readingsEmpty.classList.remove(
             "hidden"
         );
 
-        return;
+
+        readingsEmpty.querySelector(
+            "span"
+        ).textContent =
+            "Unable to load odometer records.";
 
     }
-
-
-    readingsEmpty.classList.add(
-        "hidden"
-    );
-
-
-    readings.forEach(
-        (record) => {
-
-            readingsList.appendChild(
-                createReadingCard(
-                    record
-                )
-            );
-
-        }
-    );
 
 }
 
 
-/* =========================================
-   READING CARD
-========================================= */
+/* =====================================================
+   CREATE READING CARD
+===================================================== */
 
 function createReadingCard(
     data
@@ -561,10 +667,16 @@ function createReadingCard(
         data.distance;
 
 
+    /*
+     * If distance wasn't saved,
+     * calculate it automatically.
+     */
+
     if (
         distance === undefined &&
         morning !== null &&
-        evening !== null
+        evening !== null &&
+        evening >= morning
     ) {
 
         distance =
@@ -572,6 +684,12 @@ function createReadingCard(
             morning;
 
     }
+
+
+    const distanceText =
+        distance !== undefined
+            ? `${formatNumber(distance)} KM`
+            : "--";
 
 
     card.innerHTML = `
@@ -585,7 +703,7 @@ function createReadingCard(
                 </span>
 
                 <strong>
-                    ${escapeHTML(
+                    ${escapeHtml(
                         formatDate(
                             data.date
                         )
@@ -602,11 +720,7 @@ function createReadingCard(
                 </span>
 
                 <strong>
-                    ${
-                        distance !== undefined
-                            ? `${distance} KM`
-                            : "--"
-                    }
+                    ${distanceText}
                 </strong>
 
             </div>
@@ -625,7 +739,9 @@ function createReadingCard(
                 <strong>
                     ${
                         morning !== null
-                            ? morning
+                            ? formatNumber(
+                                morning
+                            )
                             : "--"
                     }
                 </strong>
@@ -650,7 +766,9 @@ function createReadingCard(
                 <strong>
                     ${
                         evening !== null
-                            ? evening
+                            ? formatNumber(
+                                evening
+                            )
                             : "--"
                     }
                 </strong>
@@ -715,9 +833,9 @@ function createReadingCard(
 }
 
 
-/* =========================================
+/* =====================================================
    LOAD DIESEL
-========================================= */
+===================================================== */
 
 async function loadDiesel() {
 
@@ -725,87 +843,154 @@ async function loadDiesel() {
         "";
 
 
-    const dieselQuery =
-        query(
-            collection(
-                db,
-                "dieselRecords"
-            ),
-            where(
-                "busId",
-                "==",
-                busId
-            ),
-            orderBy(
-                "createdAt",
-                "desc"
-            ),
-            limit(100)
-        );
-
-
-    const snapshot =
-        await getDocs(
-            dieselQuery
-        );
-
-
-    dieselRecords =
-        [];
-
-
-    snapshot.forEach(
-        (documentSnapshot) => {
-
-            dieselRecords.push({
-
-                id:
-                    documentSnapshot.id,
-
-                ...documentSnapshot.data()
-
-            });
-
-        }
+    console.log(
+        "Loading diesel for bus:",
+        busId
     );
 
 
-    if (
-        dieselRecords.length === 0
-    ) {
+    try {
+
+        const dieselRef =
+            collection(
+                db,
+                "dieselRecords"
+            );
+
+
+        /*
+         * Again we ONLY use busId.
+         */
+
+        const dieselQuery =
+            query(
+                dieselRef,
+
+                where(
+                    "busId",
+                    "==",
+                    busId
+                ),
+
+                limit(100)
+            );
+
+
+        const snapshot =
+            await getDocs(
+                dieselQuery
+            );
+
+
+        console.log(
+            "DIESEL RECORDS FOUND:",
+            snapshot.size
+        );
+
+
+        dieselRecords = [];
+
+
+        snapshot.forEach(
+            (documentSnapshot) => {
+
+                dieselRecords.push({
+
+                    id:
+                        documentSnapshot.id,
+
+                    ...documentSnapshot.data()
+
+                });
+
+            }
+        );
+
+
+        /*
+         * Newest first.
+         *
+         * createdAt is a Firestore Timestamp.
+         */
+
+        dieselRecords.sort(
+            (a, b) => {
+
+                const timeA =
+                    a.createdAt?.toMillis
+                        ? a.createdAt.toMillis()
+                        : 0;
+
+
+                const timeB =
+                    b.createdAt?.toMillis
+                        ? b.createdAt.toMillis()
+                        : 0;
+
+
+                return timeB - timeA;
+
+            }
+        );
+
+
+        if (
+            dieselRecords.length === 0
+        ) {
+
+            dieselEmpty.classList.remove(
+                "hidden"
+            );
+
+            return;
+
+        }
+
+
+        dieselEmpty.classList.add(
+            "hidden"
+        );
+
+
+        dieselRecords.forEach(
+            (record) => {
+
+                dieselList.appendChild(
+                    createDieselCard(
+                        record
+                    )
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "DIESEL ERROR:",
+            error
+        );
+
 
         dieselEmpty.classList.remove(
             "hidden"
         );
 
-        return;
+
+        dieselEmpty.querySelector(
+            "span"
+        ).textContent =
+            "Unable to load diesel records.";
 
     }
-
-
-    dieselEmpty.classList.add(
-        "hidden"
-    );
-
-
-    dieselRecords.forEach(
-        (record) => {
-
-            dieselList.appendChild(
-                createDieselCard(
-                    record
-                )
-            );
-
-        }
-    );
 
 }
 
 
-/* =========================================
-   DIESEL CARD
-========================================= */
+/* =====================================================
+   CREATE DIESEL CARD
+===================================================== */
 
 function createDieselCard(
     data
@@ -833,21 +1018,30 @@ function createDieselCard(
         );
 
 
-    const price =
+    let price =
         Number(
-            data.pricePerLitre ||
-            (
-                litres > 0
-                    ? amount / litres
-                    : 0
-            )
+            data.pricePerLitre || 0
         );
+
+
+    if (
+        !price &&
+        litres > 0
+    ) {
+
+        price =
+            amount /
+            litres;
+
+    }
 
 
     const odometer =
         data.odometer !== undefined
-            ? data.odometer
-            : "--";
+            ? Number(
+                data.odometer
+            )
+            : null;
 
 
     card.innerHTML = `
@@ -861,7 +1055,7 @@ function createDieselCard(
             <div>
 
                 <span>
-                    ${escapeHTML(
+                    ${escapeHtml(
                         formatDate(
                             data.date
                         )
@@ -904,7 +1098,9 @@ function createDieselCard(
                 </span>
 
                 <strong>
-                    ₹ ${amount.toFixed(2)}
+                    ₹ ${formatNumber(
+                        amount
+                    )}
                 </strong>
 
             </div>
@@ -930,15 +1126,21 @@ function createDieselCard(
                 </span>
 
                 <strong>
-                    ${escapeHTML(
-                        String(
-                            odometer
-                        )
-                    )}
+                    ${
+                        odometer !== null
+                            ? formatNumber(
+                                odometer
+                            )
+                            : "--"
+                    }
                 </strong>
 
                 <small>
-                    KM
+                    ${
+                        odometer !== null
+                            ? "KM"
+                            : ""
+                    }
                 </small>
 
             </div>
@@ -950,9 +1152,11 @@ function createDieselCard(
             data.fuelStation
                 ? `
                     <div class="station">
-                        📍 ${escapeHTML(
+
+                        📍 ${escapeHtml(
                             data.fuelStation
                         )}
+
                     </div>
                 `
                 : ""
@@ -984,83 +1188,34 @@ function createDieselCard(
 }
 
 
-/* =========================================
+/* =====================================================
    CALCULATE OVERVIEW
-========================================= */
+===================================================== */
 
 function calculateOverview() {
 
-    let distance =
+    let totalDistanceValue =
         0;
 
 
-    let diesel =
+    let totalDieselValue =
         0;
 
 
-    let fuelCost =
+    let totalFuelCostValue =
         0;
 
 
-    let latestOdometer =
+    let latestOdometerValue =
         null;
 
 
     /*
-     * DISTANCE
+     * READINGS
      */
 
     readings.forEach(
         (record) => {
-
-            if (
-                record.distance !==
-                undefined
-            ) {
-
-                distance +=
-                    Number(
-                        record.distance
-                    );
-
-            } else {
-
-                const morning =
-                    Number(
-                        record.morningReading
-                    );
-
-
-                const evening =
-                    Number(
-                        record.eveningReading
-                    );
-
-
-                if (
-                    !isNaN(morning) &&
-                    !isNaN(evening) &&
-                    evening >= morning
-                ) {
-
-                    distance +=
-                        evening -
-                        morning;
-
-                }
-
-            }
-
-
-            /*
-             * Latest odometer.
-             */
-
-            const evening =
-                Number(
-                    record.eveningReading
-                );
-
 
             const morning =
                 Number(
@@ -1068,18 +1223,64 @@ function calculateOverview() {
                 );
 
 
+            const evening =
+                Number(
+                    record.eveningReading
+                );
+
+
+            let distance =
+                Number(
+                    record.distance
+                );
+
+
+            /*
+             * If distance wasn't stored,
+             * calculate from readings.
+             */
+
+            if (
+                !distance &&
+                !isNaN(morning) &&
+                !isNaN(evening) &&
+                evening >= morning
+            ) {
+
+                distance =
+                    evening -
+                    morning;
+
+            }
+
+
+            if (
+                !isNaN(distance) &&
+                distance > 0
+            ) {
+
+                totalDistanceValue +=
+                    distance;
+
+            }
+
+
+            /*
+             * Current/latest odometer
+             */
+
             if (
                 !isNaN(evening) &&
                 evening > 0
             ) {
 
                 if (
-                    latestOdometer === null ||
+                    latestOdometerValue === null ||
                     evening >
-                    latestOdometer
+                    latestOdometerValue
                 ) {
 
-                    latestOdometer =
+                    latestOdometerValue =
                         evening;
 
                 }
@@ -1093,12 +1294,12 @@ function calculateOverview() {
             ) {
 
                 if (
-                    latestOdometer === null ||
+                    latestOdometerValue === null ||
                     morning >
-                    latestOdometer
+                    latestOdometerValue
                 ) {
 
-                    latestOdometer =
+                    latestOdometerValue =
                         morning;
 
                 }
@@ -1116,66 +1317,129 @@ function calculateOverview() {
     dieselRecords.forEach(
         (record) => {
 
-            diesel +=
+            totalDieselValue +=
                 Number(
                     record.litres || 0
                 );
 
 
-            fuelCost +=
+            totalFuelCostValue +=
                 Number(
                     record.amount || 0
                 );
+
+
+            /*
+             * Diesel odometer can also help
+             * determine current odometer.
+             */
+
+            const dieselOdometer =
+                Number(
+                    record.odometer
+                );
+
+
+            if (
+                !isNaN(dieselOdometer) &&
+                dieselOdometer > 0
+            ) {
+
+                if (
+                    latestOdometerValue === null ||
+                    dieselOdometer >
+                    latestOdometerValue
+                ) {
+
+                    latestOdometerValue =
+                        dieselOdometer;
+
+                }
+
+            }
 
         }
     );
 
 
     /*
-     * DISPLAY
+     * If bus document itself has
+     * currentOdometer, use it if
+     * it is higher.
      */
 
+    const busOdometer =
+        Number(
+            busData?.currentOdometer
+        );
+
+
+    if (
+        !isNaN(busOdometer) &&
+        busOdometer > 0
+    ) {
+
+        if (
+            latestOdometerValue === null ||
+            busOdometer >
+            latestOdometerValue
+        ) {
+
+            latestOdometerValue =
+                busOdometer;
+
+        }
+
+    }
+
+
+    /* =====================================
+       DISPLAY
+    ===================================== */
+
     currentOdometer.textContent =
-        latestOdometer !== null
+        latestOdometerValue !== null
             ? formatNumber(
-                latestOdometer
+                latestOdometerValue
             )
             : "--";
 
 
     totalDistance.textContent =
-        formatNumber(
-            distance
-        );
+        totalDistanceValue > 0
+            ? formatNumber(
+                totalDistanceValue
+            )
+            : "--";
 
 
     totalDiesel.textContent =
-        diesel > 0
-            ? diesel.toFixed(2)
+        totalDieselValue > 0
+            ? totalDieselValue.toFixed(2)
             : "--";
 
 
     totalFuelCost.textContent =
-        fuelCost > 0
+        totalFuelCostValue > 0
             ? `₹ ${formatNumber(
-                fuelCost
+                totalFuelCostValue
             )}`
             : "₹ --";
 
 
     /*
-     * Mileage
+     * Average mileage
      */
 
     if (
-        diesel > 0 &&
-        distance > 0
+        totalDistanceValue > 0 &&
+        totalDieselValue > 0
     ) {
 
         averageMileage.textContent =
             (
-                distance /
-                diesel
+                totalDistanceValue /
+                totalDieselValue
             ).toFixed(2);
 
     } else {
@@ -1191,15 +1455,15 @@ function calculateOverview() {
      */
 
     if (
-        fuelCost > 0 &&
-        distance > 0
+        totalDistanceValue > 0 &&
+        totalFuelCostValue > 0
     ) {
 
         fuelCostPerKm.textContent =
             `₹ ${
                 (
-                    fuelCost /
-                    distance
+                    totalFuelCostValue /
+                    totalDistanceValue
                 ).toFixed(2)
             }`;
 
@@ -1213,9 +1477,91 @@ function calculateOverview() {
 }
 
 
-/* =========================================
-   FORMAT NUMBER
-========================================= */
+/* =====================================================
+   DATE FORMAT
+===================================================== */
+
+function formatDate(
+    value
+) {
+
+    if (!value) {
+
+        return "--";
+
+    }
+
+
+    /*
+     * YYYY-MM-DD
+     */
+
+    if (
+        typeof value === "string"
+    ) {
+
+        const parts =
+            value.split("-");
+
+
+        if (
+            parts.length === 3
+        ) {
+
+            const date =
+                new Date(
+                    Number(parts[0]),
+                    Number(parts[1]) - 1,
+                    Number(parts[2])
+                );
+
+
+            return date.toLocaleDateString(
+                "en-IN",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            );
+
+        }
+
+    }
+
+
+    /*
+     * Firestore Timestamp
+     */
+
+    if (
+        value?.toDate
+    ) {
+
+        return value
+            .toDate()
+            .toLocaleDateString(
+                "en-IN",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            );
+
+    }
+
+
+    return String(
+        value
+    );
+
+}
+
+
+/* =====================================================
+   NUMBER
+===================================================== */
 
 function formatNumber(
     value
@@ -1233,85 +1579,35 @@ function formatNumber(
 }
 
 
-/* =========================================
-   FORMAT DATE
-========================================= */
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
 
-function formatDate(
-    dateString
-) {
-
-    if (!dateString) {
-
-        return "--";
-
-    }
-
-
-    const parts =
-        String(
-            dateString
-        ).split("-");
-
-
-    if (
-        parts.length !== 3
-    ) {
-
-        return dateString;
-
-    }
-
-
-    const date =
-        new Date(
-            Number(parts[0]),
-            Number(parts[1]) - 1,
-            Number(parts[2])
-        );
-
-
-    return date.toLocaleDateString(
-        "en-IN",
-        {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
-        }
-    );
-
-}
-
-
-/* =========================================
-   SECURITY HELPERS
-========================================= */
-
-function escapeHTML(
+function escapeHtml(
     value
 ) {
 
     return String(
         value ?? ""
     )
-        .replace(
-            /&/g,
+        .replaceAll(
+            "&",
             "&amp;"
         )
-        .replace(
-            /</g,
+        .replaceAll(
+            "<",
             "&lt;"
         )
-        .replace(
-            />/g,
+        .replaceAll(
+            ">",
             "&gt;"
         )
-        .replace(
-            /"/g,
+        .replaceAll(
+            '"',
             "&quot;"
         )
-        .replace(
-            /'/g,
+        .replaceAll(
+            "'",
             "&#039;"
         );
 
@@ -1322,48 +1618,81 @@ function escapeAttribute(
     value
 ) {
 
-    return escapeHTML(
+    return escapeHtml(
         value
     );
 
 }
 
 
-/* =========================================
-   FATAL ERROR
-========================================= */
+/* =====================================================
+   ERROR
+===================================================== */
 
-function showFatalError(
+function showError(
     message
 ) {
 
     loading.innerHTML = `
 
-        <strong>
-            Unable to load bus
-        </strong>
-
-        <span>
-            ${escapeHTML(
-                message
-            )}
-        </span>
-
-        <button
-            id="errorBackButton"
-            type="button"
+        <div
             style="
-                margin-top:12px;
-                padding:10px 15px;
-                border:none;
-                border-radius:10px;
-                background:#ffc400;
-                font-weight:900;
-                cursor:pointer;
+                text-align:center;
+                padding:25px;
             "
         >
-            BACK TO BUSES
-        </button>
+
+            <div
+                style="
+                    font-size:35px;
+                    margin-bottom:12px;
+                "
+            >
+                ⚠️
+            </div>
+
+            <strong
+                style="
+                    display:block;
+                    font-size:14px;
+                    margin-bottom:7px;
+                "
+            >
+                Unable to load bus
+            </strong>
+
+            <span
+                style="
+                    display:block;
+                    color:#777;
+                    font-size:9px;
+                    line-height:1.5;
+                "
+            >
+                ${escapeHtml(
+                    message
+                )}
+            </span>
+
+            <button
+                id="errorBackButton"
+                type="button"
+                style="
+                    margin-top:15px;
+                    padding:11px 18px;
+                    border:none;
+                    border-radius:10px;
+                    background:#ffc400;
+                    color:#111;
+                    font-size:9px;
+                    font-weight:900;
+                    cursor:pointer;
+                "
+            >
+                BACK TO BUSES
+            </button>
+
+        </div>
 
     `;
 
