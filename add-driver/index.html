@@ -28,8 +28,11 @@
     </button>
 
     <div>
+
         <h1>ADD DRIVER</h1>
+
         <p>DRIVER MANAGEMENT</p>
+
     </div>
 
 </header>
@@ -48,7 +51,7 @@
             <h2>New Driver</h2>
 
             <p>
-                Create a driver profile and assign a bus.
+                Create driver account and assign bus.
             </p>
 
         </div>
@@ -101,14 +104,39 @@
         <div class="form-group">
 
             <label for="driverEmail">
-                Email
+                Login Email <span>*</span>
             </label>
 
             <input
                 type="email"
                 id="driverEmail"
                 placeholder="driver@example.com"
+                required
             >
+
+        </div>
+
+
+        <!-- PASSWORD -->
+
+        <div class="form-group">
+
+            <label for="driverPassword">
+                Temporary Password <span>*</span>
+            </label>
+
+            <input
+                type="password"
+                id="driverPassword"
+                placeholder="Minimum 6 characters"
+                minlength="6"
+                required
+            >
+
+            <small>
+                Give this password to the driver.
+                They can change it later.
+            </small>
 
         </div>
 
@@ -151,7 +179,8 @@
             </select>
 
             <small>
-                A bus can be assigned to only one active driver.
+                Only buses without an active driver
+                can be assigned.
             </small>
 
         </div>
@@ -197,13 +226,11 @@
 
     <div class="info-box">
 
-        <strong>Driver account</strong>
+        <strong>Driver Login</strong>
 
         <p>
-            This creates the driver's transport profile.
-            Firebase Authentication login credentials will
-            be connected through the secure account-creation
-            system later.
+            The email and temporary password will be used
+            by the driver to log in to the BEST Driver Panel.
         </p>
 
     </div>
@@ -217,4 +244,5 @@
 ></script>
 
 </body>
+
 </html>
