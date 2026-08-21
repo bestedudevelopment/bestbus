@@ -170,16 +170,37 @@ backButton.addEventListener(
 
 async function loadAvailableBuses() {
 
+    console.log("START: loading buses...");
+
+    assignedBus.innerHTML = `
+        <option value="">
+            Loading buses...
+        </option>
+    `;
+
     try {
 
-        assignedBus.innerHTML = `
-            <option value="">
-                Loading buses...
-            </option>
-        `;
+        console.log("Firestore DB:", db);
 
-        const snapshot = await getDocs(
-            collection(db, "buses")
+        const busesRef =
+            collection(db, "buses");
+
+        console.log(
+            "Collection reference created:",
+            busesRef
+        );
+
+        const snapshot =
+            await getDocs(busesRef);
+
+        console.log(
+            "BUS SNAPSHOT:",
+            snapshot
+        );
+
+        console.log(
+            "NUMBER OF BUSES:",
+            snapshot.size
         );
 
         assignedBus.innerHTML = `
@@ -188,29 +209,31 @@ async function loadAvailableBuses() {
             </option>
         `;
 
-        let availableCount = 0;
+        if (snapshot.empty) {
+
+            assignedBus.innerHTML = `
+                <option value="">
+                    No buses found
+                </option>
+            `;
+
+            console.log(
+                "Firestore buses collection is empty."
+            );
+
+            return;
+        }
 
         snapshot.forEach((busDoc) => {
 
-            const bus = busDoc.data();
+            const bus =
+                busDoc.data();
 
             console.log(
-                "BUS FOUND:",
+                "BUS DOCUMENT:",
                 busDoc.id,
                 bus
             );
-
-            // If active is missing, treat the bus as active.
-            const isActive =
-                bus.active !== false;
-
-            // Don't show buses already assigned.
-            const isAssigned =
-                !!bus.driverId;
-
-            if (!isActive || isAssigned) {
-                return;
-            }
 
             const option =
                 document.createElement("option");
@@ -225,35 +248,47 @@ async function loadAvailableBuses() {
                     "No registration"
                 }`;
 
-            assignedBus.appendChild(option);
-
-            availableCount++;
+            assignedBus.appendChild(
+                option
+            );
 
         });
 
-        if (availableCount === 0) {
-
-            assignedBus.innerHTML = `
-                <option value="">
-                    No available buses
-                </option>
-            `;
-
-            console.log(
-                "No available buses found."
-            );
-        }
+        console.log(
+            "SUCCESS: buses loaded."
+        );
 
     } catch (error) {
 
         console.error(
-            "LOAD BUSES ERROR:",
+            "================================"
+        );
+
+        console.error(
+            "FIREBASE BUS ERROR:"
+        );
+
+        console.error(
             error
+        );
+
+        console.error(
+            "ERROR CODE:",
+            error.code
+        );
+
+        console.error(
+            "ERROR MESSAGE:",
+            error.message
+        );
+
+        console.error(
+            "================================"
         );
 
         assignedBus.innerHTML = `
             <option value="">
-                Unable to load buses
+                ERROR - Check Console
             </option>
         `;
 
