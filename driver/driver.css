@@ -1,0 +1,688 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --yellow: #ffc400;
+    --black: #111111;
+    --white: #ffffff;
+    --background: #f5f5f5;
+    --gray: #777777;
+    --light-gray: #eeeeee;
+    --green: #16803c;
+    --red: #d62828;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: var(--background);
+    color: var(--black);
+
+    padding-bottom: 80px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.top-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    min-height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 12px 16px;
+
+    background: var(--black);
+    color: white;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.15);
+}
+
+.brand {
+    font-size: 22px;
+    font-weight: 1000;
+    letter-spacing: 1px;
+}
+
+.top-header p {
+    margin-top: 2px;
+
+    color: #bbbbbb;
+
+    font-size: 8px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.logout-button {
+    border: none;
+    border-radius: 9px;
+
+    padding: 9px 12px;
+
+    background: #292929;
+    color: white;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.page {
+    width: 100%;
+    max-width: 650px;
+
+    margin: auto;
+
+    padding: 22px 16px 30px;
+}
+
+
+/* =========================
+   WELCOME
+========================= */
+
+.welcome {
+    margin-bottom: 18px;
+}
+
+.welcome span {
+    color: var(--gray);
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.welcome h1 {
+    margin-top: 4px;
+
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.welcome strong {
+    font-weight: 900;
+}
+
+
+/* =========================
+   BUS CARD
+========================= */
+
+.bus-card {
+    padding: 18px;
+
+    background: var(--black);
+    color: white;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 6px 22px rgba(0,0,0,.14);
+}
+
+.bus-top {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+}
+
+.bus-icon {
+    width: 55px;
+    height: 55px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--yellow);
+
+    border-radius: 16px;
+
+    font-size: 29px;
+}
+
+.bus-top span {
+    color: #aaaaaa;
+
+    font-size: 8px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.bus-top h2 {
+    margin-top: 2px;
+
+    font-size: 23px;
+    font-weight: 900;
+}
+
+.bus-top p {
+    margin-top: 2px;
+
+    color: #bbbbbb;
+
+    font-size: 11px;
+}
+
+.active-badge {
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    padding: 5px 8px;
+
+    border-radius: 20px;
+
+    background: #153d26;
+    color: #5ee58b;
+
+    font-size: 8px;
+    font-weight: 900;
+}
+
+
+/* ROUTE */
+
+.route {
+    margin-top: 17px;
+
+    padding-top: 14px;
+
+    border-top: 1px solid #333333;
+}
+
+.route span {
+    display: block;
+
+    color: #999999;
+
+    font-size: 8px;
+    font-weight: 900;
+}
+
+.route strong {
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 13px;
+}
+
+
+/* BUS STATS */
+
+.bus-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 9px;
+
+    margin-top: 12px;
+}
+
+.bus-stats > div {
+    padding: 12px;
+
+    border-radius: 11px;
+
+    background: #202020;
+}
+
+.bus-stats span {
+    display: block;
+
+    color: #888888;
+
+    font-size: 7px;
+    font-weight: 900;
+}
+
+.bus-stats strong {
+    display: inline-block;
+
+    margin-top: 4px;
+
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.bus-stats small {
+    color: #999999;
+
+    font-size: 8px;
+}
+
+
+/* =========================
+   SECTION
+========================= */
+
+.section {
+    margin-top: 25px;
+}
+
+.section-heading {
+    margin-bottom: 11px;
+}
+
+.section-heading span {
+    color: var(--gray);
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.section-heading h2 {
+    margin-top: 3px;
+
+    font-size: 19px;
+    font-weight: 900;
+}
+
+
+/* =========================
+   FORM CARD
+========================= */
+
+.form-card {
+    padding: 17px;
+
+    background: white;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 4px 17px rgba(0,0,0,.05);
+}
+
+
+/* FIELD */
+
+.field {
+    margin-bottom: 17px;
+}
+
+.field label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.unit-input {
+    position: relative;
+}
+
+.unit-input input {
+    width: 100%;
+
+    height: 51px;
+
+    padding:
+        0 55px
+        0 14px;
+
+    border: 1.5px solid #dddddd;
+
+    border-radius: 12px;
+
+    outline: none;
+
+    background: white;
+
+    font-size: 15px;
+}
+
+.unit-input input:focus {
+    border-color: var(--yellow);
+
+    box-shadow:
+        0 0 0 3px rgba(255,196,0,.18);
+}
+
+.unit-input span {
+    position: absolute;
+
+    right: 14px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: var(--gray);
+
+    font-size: 10px;
+    font-weight: 900;
+}
+
+
+/* CALCULATION */
+
+.calculation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    background: #fff8d9;
+}
+
+.calculation span {
+    color: #806800;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.calculation strong {
+    font-size: 17px;
+    font-weight: 900;
+}
+
+
+/* DIVIDER */
+
+.divider {
+    height: 1px;
+
+    margin: 18px 0;
+
+    background: var(--light-gray);
+}
+
+
+/* MILEAGE */
+
+.mileage-box {
+    margin-top: 5px;
+
+    padding: 18px;
+
+    text-align: center;
+
+    border-radius: 15px;
+
+    background: var(--black);
+
+    color: white;
+}
+
+.mileage-box span {
+    display: block;
+
+    color: #999999;
+
+    font-size: 8px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.mileage-box strong {
+    display: inline-block;
+
+    margin-top: 5px;
+
+    font-size: 29px;
+    font-weight: 1000;
+
+    color: var(--yellow);
+}
+
+.mileage-box small {
+    margin-left: 3px;
+
+    color: #aaaaaa;
+
+    font-size: 9px;
+}
+
+
+/* PHOTO */
+
+.photo-section {
+    margin-top: 20px;
+}
+
+.photo-section > label:first-child {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.photo-button {
+    min-height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    border: 1.5px dashed #cccccc;
+
+    border-radius: 12px;
+
+    background: #fafafa;
+
+    color: var(--black);
+
+    font-size: 12px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.photo-name {
+    margin-top: 7px;
+
+    color: var(--gray);
+
+    font-size: 10px;
+
+    word-break: break-word;
+}
+
+
+/* ERROR */
+
+.error {
+    margin-top: 15px;
+
+    padding: 12px;
+
+    border-radius: 11px;
+
+    background: #fff0f0;
+
+    color: var(--red);
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+/* SUBMIT */
+
+.submit-button {
+    width: 100%;
+
+    height: 56px;
+
+    margin-top: 20px;
+
+    border: none;
+
+    border-radius: 13px;
+
+    background: var(--yellow);
+
+    color: var(--black);
+
+    font-size: 13px;
+    font-weight: 1000;
+
+    letter-spacing: .7px;
+
+    cursor: pointer;
+}
+
+.submit-button:active {
+    transform: scale(.98);
+}
+
+.submit-button:disabled {
+    opacity: .6;
+}
+
+
+/* STATUS */
+
+.status-card {
+    padding: 17px;
+
+    border-radius: 16px;
+
+    background: white;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.04);
+}
+
+.status-card span {
+    display: block;
+
+    color: var(--gray);
+
+    font-size: 8px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.status-card strong {
+    display: block;
+
+    margin-top: 6px;
+
+    font-size: 15px;
+}
+
+
+/* BOTTOM NAV */
+
+.bottom-nav {
+    position: fixed;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 200;
+
+    height: 68px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    background: white;
+
+    border-top: 1px solid #eeeeee;
+
+    box-shadow:
+        0 -4px 18px rgba(0,0,0,.08);
+}
+
+.nav-item {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 3px;
+
+    text-decoration: none;
+
+    color: #999999;
+
+    font-size: 18px;
+}
+
+.nav-item small {
+    font-size: 9px;
+
+    font-weight: 800;
+}
+
+.nav-item.active {
+    color: var(--black);
+}
+
+
+/* DESKTOP */
+
+@media (min-width: 700px) {
+
+    .bottom-nav {
+        display: none;
+    }
+
+    body {
+        padding-bottom: 0;
+    }
+
+}
