@@ -1,12 +1,6 @@
 import {
     doc,
-    getDoc,
-    collection,
-    query,
-    where,
-    getDocs,
-    addDoc,
-    serverTimestamp
+    getDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import {
@@ -20,79 +14,154 @@ import {
 } from "../core/firebase.js";
 
 
-/* =========================
+/* =========================================
    ELEMENTS
-========================= */
+========================================= */
+
+const loadingScreen =
+    document.getElementById(
+        "loadingScreen"
+    );
 
 const driverName =
-    document.getElementById("driverName");
+    document.getElementById(
+        "driverName"
+    );
 
 const busNumber =
-    document.getElementById("busNumber");
+    document.getElementById(
+        "busNumber"
+    );
 
 const registrationNumber =
-    document.getElementById("registrationNumber");
+    document.getElementById(
+        "registrationNumber"
+    );
 
 const route =
-    document.getElementById("route");
+    document.getElementById(
+        "route"
+    );
 
-const currentMeter =
-    document.getElementById("currentMeter");
+const todayDate =
+    document.getElementById(
+        "todayDate"
+    );
 
-const expectedMileage =
-    document.getElementById("expectedMileage");
+const morningStatus =
+    document.getElementById(
+        "morningStatus"
+    );
 
-const openingMeter =
-    document.getElementById("openingMeter");
+const morningDescription =
+    document.getElementById(
+        "morningDescription"
+    );
 
-const closingMeter =
-    document.getElementById("closingMeter");
+const morningButton =
+    document.getElementById(
+        "morningButton"
+    );
 
-const distance =
-    document.getElementById("distance");
+const morningSaved =
+    document.getElementById(
+        "morningSaved"
+    );
 
-const dieselLitres =
-    document.getElementById("dieselLitres");
+const morningValue =
+    document.getElementById(
+        "morningValue"
+    );
 
-const dieselAmount =
-    document.getElementById("dieselAmount");
+const morningTime =
+    document.getElementById(
+        "morningTime"
+    );
 
-const mileage =
-    document.getElementById("mileage");
+const eveningStatus =
+    document.getElementById(
+        "eveningStatus"
+    );
 
-const meterPhoto =
-    document.getElementById("meterPhoto");
+const eveningDescription =
+    document.getElementById(
+        "eveningDescription"
+    );
 
-const photoName =
-    document.getElementById("photoName");
+const eveningButton =
+    document.getElementById(
+        "eveningButton"
+    );
 
-const submitButton =
-    document.getElementById("submitButton");
+const eveningSaved =
+    document.getElementById(
+        "eveningSaved"
+    );
 
-const errorMessage =
-    document.getElementById("errorMessage");
+const eveningValue =
+    document.getElementById(
+        "eveningValue"
+    );
 
-const todayStatus =
-    document.getElementById("todayStatus");
+const eveningTime =
+    document.getElementById(
+        "eveningTime"
+    );
+
+const distanceValue =
+    document.getElementById(
+        "distanceValue"
+    );
+
+const dieselButton =
+    document.getElementById(
+        "dieselButton"
+    );
+
+const historyButton =
+    document.getElementById(
+        "historyButton"
+    );
 
 const logoutButton =
-    document.getElementById("logoutButton");
+    document.getElementById(
+        "logoutButton"
+    );
 
 
-/* =========================
+/* =========================================
    STATE
-========================= */
+========================================= */
 
-let currentUser = null;
+let currentDriver =
+    null;
 
-let driverProfile = null;
+let currentBus =
+    null;
 
-let assignedBus = null;
+
+/* =========================================
+   DATE
+========================================= */
+
+const today =
+    new Date();
 
 
-/* =========================
+todayDate.textContent =
+    today.toLocaleDateString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+
+/* =========================================
    AUTH
-========================= */
+========================================= */
 
 onAuthStateChanged(
     auth,
@@ -104,47 +173,55 @@ onAuthStateChanged(
                 "../login/";
 
             return;
+
         }
-
-
-        currentUser =
-            user;
 
 
         try {
 
-            await loadDriverProfile();
+            await loadDriver(
+                user.uid
+            );
 
 
         } catch (error) {
 
             console.error(
-                "Driver loading error:",
+                "DRIVER PANEL ERROR:",
                 error
             );
 
-
-            showError(
+            alert(
                 error.message ||
-                "Unable to load driver information."
+                "Unable to load driver account."
             );
+
+            await signOut(
+                auth
+            );
+
+            window.location.href =
+                "../login/";
+
         }
 
     }
 );
 
 
-/* =========================
+/* =========================================
    LOAD DRIVER
-========================= */
+========================================= */
 
-async function loadDriverProfile() {
+async function loadDriver(
+    uid
+) {
 
     const driverReference =
         doc(
             db,
             "users",
-            currentUser.uid
+            uid
         );
 
 
@@ -159,81 +236,84 @@ async function loadDriverProfile() {
     ) {
 
         throw new Error(
-            "Driver profile was not found."
+            "Driver account not found."
         );
+
     }
 
 
-    driverProfile =
+    const driver =
         driverSnapshot.data();
 
 
-    console.log(
-        "Driver profile:",
-        driverProfile
-    );
-
-
     if (
-        driverProfile.role !== "driver"
+        driver.role !==
+        "driver"
     ) {
 
         throw new Error(
-            "This account is not registered as a driver."
+            "This account is not a driver account."
         );
+
     }
 
 
     if (
-        driverProfile.active === false
+        driver.active === false
     ) {
 
         throw new Error(
             "Your driver account is inactive."
         );
+
     }
+
+
+    currentDriver = {
+
+        id: uid,
+
+        ...driver
+
+    };
 
 
     driverName.textContent =
-        driverProfile.name ||
+        driver.name ||
         "Driver";
 
 
-    const busId =
-        driverProfile.assignedBusId;
+    /* =====================================
+       BUS
+    ===================================== */
 
+    if (
+        !driver.assignedBusId
+    ) {
 
-    if (!busId) {
+        busNumber.textContent =
+            "No Bus Assigned";
 
-        throw new Error(
-            "No bus has been assigned to your account."
-        );
+        registrationNumber.textContent =
+            "";
+
+        route.textContent =
+            "Please contact administrator.";
+
+        disableReadingButtons();
+
+        hideLoading();
+
+        return;
+
     }
 
-
-    await loadAssignedBus(
-        busId
-    );
-
-
-    await checkTodayEntry();
-
-}
-
-
-/* =========================
-   LOAD BUS
-========================= */
-
-async function loadAssignedBus(
-    busId
-) {
 
     const busReference =
         doc(
             db,
             "buses",
-            busId
+            driver.assignedBusId
         );
 
 
@@ -250,10 +330,11 @@ async function loadAssignedBus(
         throw new Error(
             "Your assigned bus could not be found."
         );
+
     }
 
 
-    assignedBus = {
+    currentBus = {
 
         id:
             busSnapshot.id,
@@ -263,704 +344,244 @@ async function loadAssignedBus(
     };
 
 
-    console.log(
-        "Assigned bus:",
-        assignedBus
-    );
-
-
     busNumber.textContent =
-        assignedBus.busNumber ||
+        currentBus.busNumber ||
         "BUS";
 
 
     registrationNumber.textContent =
-        assignedBus.registrationNumber ||
-        "No Registration";
+        currentBus.registrationNumber ||
+        currentBus.registrationNo ||
+        "";
 
 
     route.textContent =
-        assignedBus.route ||
-        "No Route";
-
-
-    const meter =
-        Number(
-            assignedBus.currentOdometer || 0
-        );
-
-
-    currentMeter.textContent =
-        meter
-            ? formatNumber(meter)
-            : "—";
-
-
-    const expected =
-        Number(
-            assignedBus.expectedMileage || 0
-        );
-
-
-    expectedMileage.textContent =
-        expected
-            ? expected.toFixed(2)
-            : "—";
+        currentBus.route ||
+        "Route not configured";
 
 
     /*
-     * Automatically use the current
-     * bus meter as the opening meter.
+     * For now, readings are prepared
+     * as pending.
+     *
+     * The actual Firestore reading
+     * screen will be connected next.
      */
 
-    if (meter > 0) {
-
-        openingMeter.value =
-            meter;
-
-    }
+    updateReadingAvailability();
 
 
-    calculateValues();
+    hideLoading();
 
 }
 
 
-/* =========================
-   CALCULATIONS
-========================= */
+/* =========================================
+   TIME CONTROL
+========================================= */
 
-openingMeter.addEventListener(
-    "input",
-    calculateValues
-);
+function updateReadingAvailability() {
 
-closingMeter.addEventListener(
-    "input",
-    calculateValues
-);
-
-dieselLitres.addEventListener(
-    "input",
-    calculateValues
-);
+    const now =
+        new Date();
 
 
-function calculateValues() {
-
-    const opening =
-        Number(
-            openingMeter.value
-        );
+    const hour =
+        now.getHours();
 
 
-    const closing =
-        Number(
-            closingMeter.value
-        );
+    const minute =
+        now.getMinutes();
 
 
-    const diesel =
-        Number(
-            dieselLitres.value
-        );
+    const currentMinutes =
+        hour * 60 +
+        minute;
 
 
-    /* DISTANCE */
-
-    if (
-        closing > 0 &&
-        opening >= 0 &&
-        closing >= opening
-    ) {
-
-        const km =
-            closing - opening;
+    const morningStart =
+        8 * 60;
 
 
-        distance.textContent =
-            `${formatNumber(km)} KM`;
-
-    } else {
-
-        distance.textContent =
-            "0 KM";
-    }
+    const morningEnd =
+        10 * 60;
 
 
-    /* MILEAGE */
+    const eveningStart =
+        16 * 60;
+
+
+    const eveningEnd =
+        19 * 60;
+
+
+    /*
+     * MORNING
+     */
 
     if (
-        closing >= opening &&
-        diesel > 0
+        currentMinutes >=
+        morningStart &&
+        currentMinutes <=
+        morningEnd
     ) {
 
-        const km =
-            closing - opening;
-
-
-        const calculated =
-            km / diesel;
-
-
-        if (
-            calculated >= 0
-        ) {
-
-            mileage.textContent =
-                calculated.toFixed(2);
-
-        }
-
-    } else {
-
-        mileage.textContent =
-            "—";
-    }
-
-}
-
-
-/* =========================
-   PHOTO
-========================= */
-
-meterPhoto.addEventListener(
-    "change",
-    () => {
-
-        if (
-            meterPhoto.files &&
-            meterPhoto.files.length
-        ) {
-
-            photoName.textContent =
-                meterPhoto.files[0].name;
-
-        } else {
-
-            photoName.textContent =
-                "";
-
-        }
-
-    }
-);
-
-
-/* =========================
-   SUBMIT
-========================= */
-
-submitButton.addEventListener(
-    "click",
-    submitDailyEntry
-);
-
-
-async function submitDailyEntry() {
-
-    hideError();
-
-
-    if (!assignedBus) {
-
-        showError(
-            "Bus information is not loaded."
-        );
-
-        return;
-    }
-
-
-    const opening =
-        Number(
-            openingMeter.value
-        );
-
-
-    const closing =
-        Number(
-            closingMeter.value
-        );
-
-
-    const diesel =
-        Number(
-            dieselLitres.value
-        );
-
-
-    const amount =
-        Number(
-            dieselAmount.value || 0
-        );
-
-
-    /* =====================
-       VALIDATION
-    ===================== */
-
-    if (
-        !openingMeter.value
-    ) {
-
-        showError(
-            "Please enter the opening meter."
-        );
-
-        return;
-    }
-
-
-    if (
-        !closingMeter.value
-    ) {
-
-        showError(
-            "Please enter the closing meter."
-        );
-
-        return;
-    }
-
-
-    if (
-        closing < opening
-    ) {
-
-        showError(
-            "Closing meter cannot be lower than opening meter."
-        );
-
-        return;
-    }
-
-
-    if (
-        !diesel ||
-        diesel <= 0
-    ) {
-
-        showError(
-            "Please enter the diesel quantity."
-        );
-
-        return;
-    }
-
-
-    const travelled =
-        closing - opening;
-
-
-    const calculatedMileage =
-        travelled / diesel;
-
-
-    /* =====================
-       TODAY
-    ===================== */
-
-    const today =
-        getTodayString();
-
-
-    /* =====================
-       CHECK DUPLICATE
-    ===================== */
-
-    try {
-
-        submitButton.disabled =
-            true;
-
-        submitButton.textContent =
-            "CHECKING...";
-
-
-        const existingQuery =
-            query(
-                collection(
-                    db,
-                    "dailyEntries"
-                ),
-
-                where(
-                    "driverId",
-                    "==",
-                    currentUser.uid
-                ),
-
-                where(
-                    "busId",
-                    "==",
-                    assignedBus.id
-                ),
-
-                where(
-                    "date",
-                    "==",
-                    today
-                )
-            );
-
-
-        const existingSnapshot =
-            await getDocs(
-                existingQuery
-            );
-
-
-        if (
-            !existingSnapshot.empty
-        ) {
-
-            showError(
-                "Today's entry has already been submitted."
-            );
-
-            submitButton.disabled =
-                false;
-
-            submitButton.textContent =
-                "SUBMIT TODAY";
-
-            return;
-        }
-
-
-        /* =====================
-           STATUS
-        ===================== */
-
-        const expected =
-            Number(
-                assignedBus.expectedMileage || 0
-            );
-
-
-        let status =
-            "normal";
-
-
-        if (expected > 0) {
-
-            const variation =
-                (
-                    (
-                        calculatedMileage -
-                        expected
-                    ) /
-                    expected
-                ) * 100;
-
-
-            if (
-                Math.abs(variation) <= 5
-            ) {
-
-                status =
-                    "normal";
-
-            } else if (
-                Math.abs(variation) <= 15
-            ) {
-
-                status =
-                    "warning";
-
-            } else {
-
-                status =
-                    "danger";
-            }
-
-        }
-
-
-        /* =====================
-           SAVE
-        ===================== */
-
-        submitButton.textContent =
-            "SAVING...";
-
-
-        const entry = {
-
-            date:
-                today,
-
-            busId:
-                assignedBus.id,
-
-            driverId:
-                currentUser.uid,
-
-            openingMeter:
-                opening,
-
-            closingMeter:
-                closing,
-
-            distance:
-                travelled,
-
-            dieselLitres:
-                diesel,
-
-            dieselAmount:
-                amount,
-
-            calculatedMileage:
-                Number(
-                    calculatedMileage.toFixed(2)
-                ),
-
-            expectedMileage:
-                expected,
-
-            status:
-                status,
-
-            meterPhotoUrl:
-                "",
-
-            createdAt:
-                serverTimestamp(),
-
-            updatedAt:
-                serverTimestamp()
-
-        };
-
-
-        const entryReference =
-            await addDoc(
-                collection(
-                    db,
-                    "dailyEntries"
-                ),
-                entry
-            );
-
-
-        console.log(
-            "Daily entry saved:",
-            entryReference.id
-        );
-
-
-        /* =====================
-           UPDATE BUS METER
-        ===================== */
-
-        /*
-         * The bus's current meter becomes
-         * today's closing meter.
-         */
-
-        const busReference =
-            doc(
-                db,
-                "buses",
-                assignedBus.id
-            );
-
-
-        /*
-         * We use updateDoc dynamically
-         * so the page remains compatible
-         * with the existing Firebase setup.
-         */
-
-        const {
-            updateDoc
-        } = await import(
-            "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
-        );
-
-
-        await updateDoc(
-            busReference,
-            {
-                currentOdometer:
-                    closing,
-
-                updatedAt:
-                    serverTimestamp()
-            }
-        );
-
-
-        todayStatus.textContent =
-            "SUBMITTED ✓";
-
-
-        todayStatus.style.color =
-            "#16803c";
-
-
-        submitButton.textContent =
-            "SUBMITTED";
-
-
-        submitButton.disabled =
-            true;
-
-
-        /*
-         * Keep the current screen.
-         * We will later add photo upload,
-         * history and editing.
-         */
-
-    } catch (error) {
-
-        console.error(
-            "Daily entry error:",
-            error
-        );
-
-
-        showError(
-            error.message ||
-            "Unable to save today's entry."
-        );
-
-
-        submitButton.disabled =
+        morningButton.disabled =
             false;
 
-        submitButton.textContent =
-            "SUBMIT TODAY";
-    }
+        morningStatus.textContent =
+            "AVAILABLE";
 
-}
+        morningStatus.className =
+            "status pending";
 
+        morningDescription.textContent =
+            "Enter the odometer reading after entering the campus.";
 
-/* =========================
-   CHECK TODAY
-========================= */
-
-async function checkTodayEntry() {
-
-    if (
-        !currentUser ||
-        !assignedBus
+    } else if (
+        currentMinutes <
+        morningStart
     ) {
-        return;
-    }
 
-
-    try {
-
-        const today =
-            getTodayString();
-
-
-        const entryQuery =
-            query(
-                collection(
-                    db,
-                    "dailyEntries"
-                ),
-
-                where(
-                    "driverId",
-                    "==",
-                    currentUser.uid
-                ),
-
-                where(
-                    "busId",
-                    "==",
-                    assignedBus.id
-                ),
-
-                where(
-                    "date",
-                    "==",
-                    today
-                )
-            );
-
-
-        const snapshot =
-            await getDocs(
-                entryQuery
-            );
-
-
-        if (
-            snapshot.empty
-        ) {
-
-            todayStatus.textContent =
-                "NOT SUBMITTED";
-
-            return;
-        }
-
-
-        const entry =
-            snapshot.docs[0].data();
-
-
-        todayStatus.textContent =
-            "SUBMITTED ✓";
-
-
-        todayStatus.style.color =
-            "#16803c";
-
-
-        /*
-         * Fill today's saved values.
-         */
-
-        openingMeter.value =
-            entry.openingMeter;
-
-
-        closingMeter.value =
-            entry.closingMeter;
-
-
-        dieselLitres.value =
-            entry.dieselLitres;
-
-
-        dieselAmount.value =
-            entry.dieselAmount || "";
-
-
-        calculateValues();
-
-
-        submitButton.textContent =
-            "ALREADY SUBMITTED";
-
-
-        submitButton.disabled =
+        morningButton.disabled =
             true;
 
+        morningStatus.textContent =
+            "OPENS 8:00 AM";
 
-    } catch (error) {
+        morningStatus.className =
+            "status locked";
 
-        console.log(
-            "No previous entry found."
-        );
+        morningDescription.textContent =
+            "First reading can be entered from 8:00 AM to 10:00 AM.";
+
+    } else {
+
+        morningButton.disabled =
+            true;
+
+        morningStatus.textContent =
+            "CLOSED";
+
+        morningStatus.className =
+            "status locked";
+
+        morningDescription.textContent =
+            "Morning reading time has ended.";
+
+    }
+
+
+    /*
+     * EVENING
+     */
+
+    if (
+        currentMinutes >=
+        eveningStart &&
+        currentMinutes <=
+        eveningEnd
+    ) {
+
+        eveningButton.disabled =
+            false;
+
+        eveningStatus.textContent =
+            "AVAILABLE";
+
+        eveningStatus.className =
+            "status pending";
+
+        eveningDescription.textContent =
+            "Enter the odometer reading after halting the vehicle.";
+
+    } else if (
+        currentMinutes <
+        eveningStart
+    ) {
+
+        eveningButton.disabled =
+            true;
+
+        eveningStatus.textContent =
+            "OPENS 4:00 PM";
+
+        eveningStatus.className =
+            "status locked";
+
+        eveningDescription.textContent =
+            "Halting reading can be entered from 4:00 PM to 7:00 PM.";
+
+    } else {
+
+        eveningButton.disabled =
+            true;
+
+        eveningStatus.textContent =
+            "CLOSED";
+
+        eveningStatus.className =
+            "status locked";
+
+        eveningDescription.textContent =
+            "Evening reading time has ended.";
 
     }
 
 }
 
 
-/* =========================
+/* =========================================
+   BUTTONS
+========================================= */
+
+morningButton.addEventListener(
+    "click",
+    () => {
+
+        window.location.href =
+            "../reading/?type=morning";
+
+    }
+);
+
+
+eveningButton.addEventListener(
+    "click",
+    () => {
+
+        window.location.href =
+            "../reading/?type=evening";
+
+    }
+);
+
+
+dieselButton.addEventListener(
+    "click",
+    () => {
+
+        window.location.href =
+            "../diesel/";
+
+    }
+);
+
+
+historyButton.addEventListener(
+    "click",
+    () => {
+
+        window.location.href =
+            "../history/";
+
+    }
+);
+
+
+/* =========================================
    LOGOUT
-========================= */
+========================================= */
 
 logoutButton.addEventListener(
     "click",
@@ -971,7 +592,6 @@ logoutButton.addEventListener(
             await signOut(
                 auth
             );
-
 
             window.location.href =
                 "../login/";
@@ -989,87 +609,29 @@ logoutButton.addEventListener(
 );
 
 
-/* =========================
-   ERROR
-========================= */
+/* =========================================
+   DISABLE
+========================================= */
 
-function showError(
-    message
-) {
+function disableReadingButtons() {
 
-    errorMessage.textContent =
-        message;
+    morningButton.disabled =
+        true;
 
-    errorMessage.classList.remove(
+    eveningButton.disabled =
+        true;
+
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+function hideLoading() {
+
+    loadingScreen.classList.add(
         "hidden"
     );
-
-}
-
-
-function hideError() {
-
-    errorMessage.textContent =
-        "";
-
-    errorMessage.classList.add(
-        "hidden"
-    );
-
-}
-
-
-/* =========================
-   DATE
-========================= */
-
-function getTodayString() {
-
-    const date =
-        new Date();
-
-
-    const year =
-        date.getFullYear();
-
-
-    const month =
-        String(
-            date.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const day =
-        String(
-            date.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    return `${year}-${month}-${day}`;
-
-}
-
-
-/* =========================
-   NUMBER
-========================= */
-
-function formatNumber(
-    value
-) {
-
-    return Number(value)
-        .toLocaleString(
-            "en-IN",
-            {
-                maximumFractionDigits: 2
-            }
-        );
 
 }
