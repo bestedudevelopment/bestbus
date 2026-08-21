@@ -178,27 +178,9 @@ async function loadAvailableBuses() {
             </option>
         `;
 
-
-        const busesQuery =
-            query(
-                collection(
-                    db,
-                    "buses"
-                ),
-
-                where(
-                    "active",
-                    "==",
-                    true
-                )
-            );
-
-
-        const snapshot =
-            await getDocs(
-                busesQuery
-            );
-
+        const snapshot = await getDocs(
+            collection(db, "buses")
+        );
 
         assignedBus.innerHTML = `
             <option value="">
@@ -206,78 +188,68 @@ async function loadAvailableBuses() {
             </option>
         `;
 
-
         let availableCount = 0;
 
+        snapshot.forEach((busDoc) => {
 
-        snapshot.forEach(
-            (busDoc) => {
+            const bus = busDoc.data();
 
-                const bus =
-                    busDoc.data();
+            console.log(
+                "BUS FOUND:",
+                busDoc.id,
+                bus
+            );
 
+            // If active is missing, treat the bus as active.
+            const isActive =
+                bus.active !== false;
 
-                /*
-                 * Only buses without a driver
-                 * are available.
-                 */
+            // Don't show buses already assigned.
+            const isAssigned =
+                !!bus.driverId;
 
-                if (
-                    bus.driverId
-                ) {
-
-                    return;
-                }
-
-
-                const option =
-                    document.createElement(
-                        "option"
-                    );
-
-
-                option.value =
-                    busDoc.id;
-
-
-                option.textContent =
-                    `${bus.busNumber || "BUS"} — ${
-                        bus.registrationNumber ||
-                        "No registration"
-                    }`;
-
-
-                assignedBus.appendChild(
-                    option
-                );
-
-
-                availableCount++;
-
+            if (!isActive || isAssigned) {
+                return;
             }
-        );
 
+            const option =
+                document.createElement("option");
 
-        if (
-            availableCount === 0
-        ) {
+            option.value =
+                busDoc.id;
+
+            option.textContent =
+                `${bus.busNumber || "BUS"} — ${
+                    bus.registrationNumber ||
+                    bus.registrationNo ||
+                    "No registration"
+                }`;
+
+            assignedBus.appendChild(option);
+
+            availableCount++;
+
+        });
+
+        if (availableCount === 0) {
 
             assignedBus.innerHTML = `
                 <option value="">
-                    No buses available
+                    No available buses
                 </option>
             `;
 
+            console.log(
+                "No available buses found."
+            );
         }
-
 
     } catch (error) {
 
         console.error(
-            "Load buses error:",
+            "LOAD BUSES ERROR:",
             error
         );
-
 
         assignedBus.innerHTML = `
             <option value="">
@@ -285,16 +257,12 @@ async function loadAvailableBuses() {
             </option>
         `;
 
-
         showError(
-            "Unable to load available buses."
+            error.message ||
+            "Unable to load buses."
         );
-
     }
-
 }
-
-
 /* =====================================================
    FORM SUBMIT
 ===================================================== */
