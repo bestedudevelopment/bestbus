@@ -1,0 +1,1094 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+:root {
+
+    --yellow: #ffc400;
+    --black: #111111;
+    --background: #f4f4f4;
+    --white: #ffffff;
+    --gray: #777777;
+    --light-gray: #f7f7f7;
+    --border: #dddddd;
+    --green: #16803c;
+    --red: #d62828;
+
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    background:
+        var(--background);
+
+    color:
+        var(--black);
+
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    padding-bottom: 50px;
+
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.top-header {
+
+    min-height: 72px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding:
+        12px 16px;
+
+    background:
+        var(--black);
+
+    color:
+        white;
+
+}
+
+
+.back-button {
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        #292929;
+
+    color:
+        white;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+}
+
+
+.brand {
+
+    font-size: 17px;
+
+    font-weight: 1000;
+
+    letter-spacing: 1px;
+
+}
+
+
+.subtitle {
+
+    margin-top: 3px;
+
+    color:
+        #999999;
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+/* =========================================
+   PAGE
+========================================= */
+
+.page {
+
+    width: 100%;
+
+    max-width: 850px;
+
+    margin:
+        0 auto;
+
+    padding:
+        20px 15px 50px;
+
+}
+
+
+/* =========================================
+   BUS HERO
+========================================= */
+
+.bus-hero {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding:
+        18px;
+
+    border-radius: 18px;
+
+    background:
+        var(--black);
+
+    color:
+        white;
+
+}
+
+
+.bus-icon {
+
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 15px;
+
+    background:
+        var(--yellow);
+
+    font-size: 29px;
+
+}
+
+
+.bus-main-info {
+
+    flex: 1;
+
+}
+
+
+.bus-main-info span {
+
+    color:
+        #999999;
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+}
+
+
+.bus-main-info h1 {
+
+    margin-top: 3px;
+
+    font-size: 23px;
+
+    font-weight: 1000;
+
+}
+
+
+.bus-main-info p {
+
+    margin-top: 3px;
+
+    color:
+        #aaaaaa;
+
+    font-size: 9px;
+
+}
+
+
+.status-badge {
+
+    padding:
+        7px 10px;
+
+    border-radius: 8px;
+
+    background:
+        #193c27;
+
+    color:
+        #7ee29e;
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+}
+
+
+/* =========================================
+   DRIVER
+========================================= */
+
+.driver-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 12px;
+
+    padding:
+        14px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 14px;
+
+    background:
+        white;
+
+}
+
+
+.driver-avatar {
+
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        #eeeeee;
+
+    font-size: 21px;
+
+}
+
+
+.driver-info {
+
+    flex: 1;
+
+}
+
+
+.driver-info span {
+
+    display: block;
+
+    color:
+        var(--gray);
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+}
+
+
+.driver-info strong {
+
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 12px;
+
+}
+
+
+.driver-info small {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color:
+        var(--gray);
+
+    font-size: 8px;
+
+}
+
+
+/* =========================================
+   SECTION
+========================================= */
+
+.section {
+
+    margin-top: 25px;
+
+}
+
+
+.section-heading {
+
+    margin-bottom: 12px;
+
+}
+
+
+.section-heading span {
+
+    color:
+        var(--gray);
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+}
+
+
+.section-heading h2 {
+
+    margin-top: 3px;
+
+    font-size: 19px;
+
+    font-weight: 1000;
+
+}
+
+
+/* =========================================
+   STATS
+========================================= */
+
+.stats-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+
+}
+
+
+.stat-card {
+
+    min-height: 105px;
+
+    padding:
+        14px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 14px;
+
+    background:
+        white;
+
+}
+
+
+.stat-card span {
+
+    display: block;
+
+    color:
+        var(--gray);
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: .5px;
+
+}
+
+
+.stat-card strong {
+
+    display: inline-block;
+
+    margin-top: 9px;
+
+    font-size: 19px;
+
+    font-weight: 1000;
+
+}
+
+
+.stat-card small {
+
+    margin-left: 2px;
+
+    color:
+        var(--gray);
+
+    font-size: 7px;
+
+}
+
+
+/* =========================================
+   TABS
+========================================= */
+
+.tabs {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 5px;
+
+    margin-top: 28px;
+
+    padding: 4px;
+
+    border-radius: 12px;
+
+    background:
+        #e5e5e5;
+
+}
+
+
+.tab {
+
+    height: 42px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background:
+        transparent;
+
+    color:
+        #777777;
+
+    font-size: 9px;
+
+    font-weight: 1000;
+
+    cursor: pointer;
+
+}
+
+
+.tab.active {
+
+    background:
+        white;
+
+    color:
+        var(--black);
+
+    box-shadow:
+        0 2px 7px rgba(0,0,0,.08);
+
+}
+
+
+/* =========================================
+   RECORDS
+========================================= */
+
+.records-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+}
+
+
+/* =========================================
+   ODOMETER CARD
+========================================= */
+
+.reading-card {
+
+    padding:
+        15px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 15px;
+
+    background:
+        white;
+
+}
+
+
+.record-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 13px;
+
+}
+
+
+.date-info span {
+
+    display: block;
+
+    color:
+        var(--gray);
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+}
+
+
+.date-info strong {
+
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 12px;
+
+}
+
+
+.distance {
+
+    padding:
+        7px 10px;
+
+    border-radius: 9px;
+
+    background:
+        var(--black);
+
+    color:
+        white;
+
+    text-align: center;
+
+}
+
+
+.distance span {
+
+    display: block;
+
+    color:
+        #999999;
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+}
+
+
+.distance strong {
+
+    display: block;
+
+    margin-top: 2px;
+
+    color:
+        var(--yellow);
+
+    font-size: 13px;
+
+}
+
+
+/* READING VALUES */
+
+.reading-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 8px;
+
+}
+
+
+.reading-value {
+
+    padding:
+        11px;
+
+    border-radius: 11px;
+
+    background:
+        var(--light-gray);
+
+}
+
+
+.reading-value span {
+
+    display: block;
+
+    color:
+        var(--gray);
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+}
+
+
+.reading-value strong {
+
+    display: inline-block;
+
+    margin-top: 5px;
+
+    font-size: 18px;
+
+    font-weight: 1000;
+
+}
+
+
+.reading-value small {
+
+    color:
+        var(--gray);
+
+    font-size: 7px;
+
+}
+
+
+/* PHOTOS */
+
+.photo-links {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-top: 10px;
+
+}
+
+
+.photo-link {
+
+    padding:
+        7px 9px;
+
+    border-radius: 8px;
+
+    background:
+        #eeeeee;
+
+    color:
+        #444444;
+
+    text-decoration: none;
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+}
+
+
+/* =========================================
+   DIESEL CARD
+========================================= */
+
+.diesel-card {
+
+    padding:
+        15px;
+
+    border:
+        1px solid #ead98c;
+
+    border-radius: 15px;
+
+    background:
+        #fffdf0;
+
+}
+
+
+.diesel-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+
+.diesel-icon {
+
+    width: 43px;
+    height: 43px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background:
+        var(--yellow);
+
+    font-size: 21px;
+
+}
+
+
+.diesel-title span {
+
+    display: block;
+
+    color:
+        #806800;
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+}
+
+
+.diesel-title strong {
+
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 13px;
+
+}
+
+
+.diesel-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 8px;
+
+    margin-top: 13px;
+
+}
+
+
+.diesel-value {
+
+    padding:
+        10px;
+
+    border-radius: 10px;
+
+    background:
+        rgba(255,255,255,.8);
+
+}
+
+
+.diesel-value span {
+
+    display: block;
+
+    color:
+        var(--gray);
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+}
+
+
+.diesel-value strong {
+
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 14px;
+
+}
+
+
+.diesel-value small {
+
+    color:
+        var(--gray);
+
+    font-size: 7px;
+
+}
+
+
+.station {
+
+    margin-top: 10px;
+
+    color:
+        #806800;
+
+    font-size: 8px;
+
+}
+
+
+.fuel-photo {
+
+    display: inline-block;
+
+    margin-top: 9px;
+
+    padding:
+        7px 9px;
+
+    border-radius: 8px;
+
+    background:
+        #f1e8b9;
+
+    color:
+        #806800;
+
+    text-decoration: none;
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+}
+
+
+/* =========================================
+   EMPTY
+========================================= */
+
+.empty-state {
+
+    padding:
+        40px 20px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 15px;
+
+    background:
+        white;
+
+    text-align: center;
+
+}
+
+
+.empty-state > div {
+
+    margin-bottom: 9px;
+
+    font-size: 30px;
+
+}
+
+
+.empty-state strong {
+
+    display: block;
+
+    font-size: 12px;
+
+}
+
+
+.empty-state span {
+
+    display: block;
+
+    margin-top: 5px;
+
+    color:
+        var(--gray);
+
+    font-size: 8px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.loading {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    padding:
+        45px;
+
+    color:
+        var(--gray);
+
+    font-size: 9px;
+
+}
+
+
+.loading-spinner {
+
+    width: 29px;
+    height: 29px;
+
+    border:
+        3px solid #dddddd;
+
+    border-top-color:
+        var(--yellow);
+
+    border-radius: 50%;
+
+    animation:
+        spin .7s linear infinite;
+
+}
+
+
+@keyframes spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+.hidden {
+
+    display: none !important;
+
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 650px) {
+
+    .stats-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+    .diesel-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 420px) {
+
+    .page {
+
+        padding:
+            16px 12px 40px;
+
+    }
+
+    .bus-hero {
+
+        flex-wrap: wrap;
+
+    }
+
+    .status-badge {
+
+        margin-left:
+            73px;
+
+    }
+
+}
