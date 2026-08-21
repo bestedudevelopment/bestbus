@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>BEST | Add Diesel</title>
+
+    <link
+        rel="stylesheet"
+        href="./diesel.css"
+    >
+
+</head>
+
+<body>
+
+<header class="top-header">
+
+    <button
+        id="backButton"
+        class="back-button"
+        type="button"
+    >
+        ←
+    </button>
+
+    <div>
+
+        <div class="brand">
+            BEST
+        </div>
+
+        <div class="subtitle">
+            FUEL RECORD
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="page">
+
+    <!-- HEADER -->
+
+    <section class="page-heading">
+
+        <div class="fuel-icon">
+            ⛽
+        </div>
+
+        <div>
+
+            <span>
+                FUEL MANAGEMENT
+            </span>
+
+            <h1>
+                Add Diesel
+            </h1>
+
+            <p>
+                Enter the details whenever diesel is filled.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- BUS -->
+
+    <section class="bus-card">
+
+        <div>
+
+            <span>
+                YOUR BUS
+            </span>
+
+            <strong id="busNumber">
+                Loading...
+            </strong>
+
+            <small id="registrationNumber">
+                Loading...
+            </small>
+
+        </div>
+
+        <div class="bus-small-icon">
+            🚌
+        </div>
+
+    </section>
+
+
+    <!-- FORM -->
+
+    <form id="dieselForm">
+
+
+        <!-- LITRES -->
+
+        <div class="form-group">
+
+            <label for="litres">
+
+                Diesel Filled
+                <b>*</b>
+
+            </label>
+
+            <div class="unit-input">
+
+                <input
+                    id="litres"
+                    type="number"
+                    min="0.01"
+                    step="0.01"
+                    placeholder="Enter litres"
+                    required
+                >
+
+                <span>
+                    L
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- AMOUNT -->
+
+        <div class="form-group">
+
+            <label for="amount">
+
+                Amount Paid
+                <b>*</b>
+
+            </label>
+
+            <div class="unit-input">
+
+                <input
+                    id="amount"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    placeholder="Enter amount"
+                    required
+                >
+
+                <span>
+                    ₹
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRICE -->
+
+        <div class="calculation-card">
+
+            <div>
+
+                <span>
+                    CALCULATED PRICE / LITRE
+                </span>
+
+                <strong id="pricePerLitre">
+                    ₹ --
+                </strong>
+
+            </div>
+
+            <div class="fuel-mini-icon">
+                ⛽
+            </div>
+
+        </div>
+
+
+        <!-- ODOMETER -->
+
+        <div class="form-group">
+
+            <label for="odometer">
+
+                Odometer Reading
+                <b>*</b>
+
+            </label>
+
+            <div class="unit-input">
+
+                <input
+                    id="odometer"
+                    type="number"
+                    min="0"
+                    step="1"
+                    placeholder="Enter current KM"
+                    required
+                >
+
+                <span>
+                    KM
+                </span>
+
+            </div>
+
+            <small>
+                Enter the odometer reading at the time of refuelling.
+            </small>
+
+        </div>
+
+
+        <!-- FUEL STATION -->
+
+        <div class="form-group">
+
+            <label for="fuelStation">
+                Fuel Station
+            </label>
+
+            <input
+                id="fuelStation"
+                type="text"
+                placeholder="Enter fuel station name"
+                maxlength="100"
+            >
+
+        </div>
+
+
+        <!-- BILL PHOTO -->
+
+        <div class="form-group">
+
+            <label>
+                Bill / Fuel Photo
+            </label>
+
+            <div class="photo-box">
+
+                <input
+                    id="fuelPhoto"
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    hidden
+                >
+
+                <button
+                    id="photoButton"
+                    type="button"
+                    class="photo-button"
+                >
+
+                    <span class="camera-icon">
+                        📷
+                    </span>
+
+                    <span>
+
+                        <strong>
+                            TAKE / UPLOAD PHOTO
+                        </strong>
+
+                        <small>
+                            Optional
+                        </small>
+
+                    </span>
+
+                </button>
+
+
+                <img
+                    id="photoPreview"
+                    class="photo-preview hidden"
+                    alt="Fuel photo preview"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div
+            id="errorMessage"
+            class="message error hidden"
+        ></div>
+
+
+        <!-- SAVE -->
+
+        <button
+            id="saveButton"
+            class="save-button"
+            type="submit"
+        >
+
+            <span id="saveText">
+                SAVE DIESEL DETAILS
+            </span>
+
+            <span
+                id="spinner"
+                class="spinner hidden"
+            ></span>
+
+        </button>
+
+    </form>
+
+
+    <!-- SUCCESS -->
+
+    <section
+        id="successCard"
+        class="success-card hidden"
+    >
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+        <span>
+            FUEL RECORD SAVED
+        </span>
+
+        <h2>
+            Diesel Details Saved
+        </h2>
+
+        <div class="success-details">
+
+            <div>
+
+                <strong id="successLitres">
+                    --
+                </strong>
+
+                <span>
+                    LITRES
+                </span>
+
+            </div>
+
+            <div>
+
+                <strong id="successAmount">
+                    ₹ --
+                </strong>
+
+                <span>
+                    AMOUNT
+                </span>
+
+            </div>
+
+        </div>
+
+        <p>
+            The fuel record has been saved successfully.
+        </p>
+
+        <button
+            id="homeButton"
+            type="button"
+        >
+            BACK TO DRIVER PANEL
+        </button>
+
+    </section>
+
+</main>
+
+
+<div
+    id="loadingScreen"
+    class="loading-screen"
+>
+
+    <div class="loading-spinner"></div>
+
+    <span>
+        Loading...
+    </span>
+
+</div>
+
+
+<script
+    type="module"
+    src="./diesel.js"
+></script>
+
+</body>
+
+</html>
