@@ -29,9 +29,6 @@ body {
     color: var(--black);
 }
 
-
-/* HEADER */
-
 .top-header {
     min-height: 72px;
 
@@ -77,9 +74,6 @@ body {
     font-weight: 700;
 }
 
-
-/* PAGE */
-
 .page {
     width: 100%;
     max-width: 600px;
@@ -88,9 +82,6 @@ body {
 
     padding: 24px 16px 40px;
 }
-
-
-/* INTRO */
 
 .page-intro {
     display: flex;
@@ -128,9 +119,6 @@ body {
 
     font-size: 12px;
 }
-
-
-/* FORM */
 
 .form-group {
     margin-bottom: 20px;
@@ -190,9 +178,6 @@ body {
     line-height: 1.4;
 }
 
-
-/* BUTTON */
-
 .save-button {
     width: 100%;
 
@@ -218,9 +203,6 @@ body {
 .save-button:disabled {
     opacity: .6;
 }
-
-
-/* MESSAGES */
 
 .message {
     margin-bottom: 15px;
@@ -254,9 +236,6 @@ body {
     display: none !important;
 }
 
-
-/* SPINNER */
-
 .spinner {
     display: inline-block;
 
@@ -279,9 +258,6 @@ body {
     }
 
 }
-
-
-/* INFO */
 
 .info-box {
     margin-top: 25px;
