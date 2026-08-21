@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>BEST | History</title>
+
+    <link
+        rel="stylesheet"
+        href="./history.css"
+    >
+
+</head>
+
+<body>
+
+<header class="top-header">
+
+    <button
+        id="backButton"
+        class="back-button"
+        type="button"
+    >
+        ←
+    </button>
+
+    <div>
+
+        <div class="brand">
+            BEST
+        </div>
+
+        <div class="subtitle">
+            DRIVER HISTORY
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="page">
+
+
+    <!-- DRIVER / BUS -->
+
+    <section class="bus-card">
+
+        <div>
+
+            <span>
+                YOUR BUS
+            </span>
+
+            <strong id="busNumber">
+                Loading...
+            </strong>
+
+            <small id="registrationNumber">
+                Loading...
+            </small>
+
+        </div>
+
+        <div class="bus-icon">
+            🚌
+        </div>
+
+    </section>
+
+
+    <!-- TABS -->
+
+    <div class="tabs">
+
+        <button
+            id="readingsTab"
+            class="tab active"
+            type="button"
+        >
+            READINGS
+        </button>
+
+        <button
+            id="dieselTab"
+            class="tab"
+            type="button"
+        >
+            DIESEL
+        </button>
+
+    </div>
+
+
+    <!-- READINGS -->
+
+    <section id="readingsSection">
+
+        <div class="section-title">
+
+            <div>
+
+                <span>
+                    VEHICLE
+                </span>
+
+                <h1>
+                    Reading History
+                </h1>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="readingsList"
+            class="history-list"
+        ></div>
+
+
+        <div
+            id="readingsEmpty"
+            class="empty hidden"
+        >
+
+            <div>
+                📋
+            </div>
+
+            <strong>
+                No reading history
+            </strong>
+
+            <span>
+                Your saved vehicle readings will appear here.
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- DIESEL -->
+
+    <section
+        id="dieselSection"
+        class="hidden"
+    >
+
+        <div class="section-title">
+
+            <div>
+
+                <span>
+                    FUEL
+                </span>
+
+                <h1>
+                    Diesel History
+                </h1>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="dieselList"
+            class="history-list"
+        ></div>
+
+
+        <div
+            id="dieselEmpty"
+            class="empty hidden"
+        >
+
+            <div>
+                ⛽
+            </div>
+
+            <strong>
+                No diesel records
+            </strong>
+
+            <span>
+                Diesel entries will appear here when fuel is added.
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- LOADING -->
+
+    <div
+        id="loadingContent"
+        class="loading-content"
+    >
+
+        <div class="spinner"></div>
+
+        <span>
+            Loading history...
+        </span>
+
+    </div>
+
+
+</main>
+
+
+<script
+    type="module"
+    src="./history.js"
+></script>
+
+</body>
+
+</html>
