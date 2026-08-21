@@ -2075,3 +2075,12 @@ function showError(
     }
 
 }
+const averageButton =
+    document.getElementById("averageButton");
+
+averageButton.addEventListener("click", () => {
+
+    window.location.href =
+        `../avg/?id=${encodeURIComponent(busId)}`;
+
+});
