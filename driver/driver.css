@@ -4,19 +4,32 @@
     padding: 0;
 }
 
+
 :root {
+
     --yellow: #ffc400;
     --black: #111111;
+    --dark: #1c1c1c;
+    --background: #f4f4f4;
     --white: #ffffff;
-    --background: #f5f5f5;
     --gray: #777777;
-    --light-gray: #eeeeee;
+    --light: #f7f7f7;
+    --border: #e3e3e3;
     --green: #16803c;
     --red: #d62828;
+
 }
 
+
 body {
+
     min-height: 100vh;
+
+    background:
+        var(--background);
+
+    color:
+        var(--black);
 
     font-family:
         Inter,
@@ -24,665 +37,950 @@ body {
         Helvetica,
         sans-serif;
 
-    background: var(--background);
-    color: var(--black);
+    padding-bottom: 35px;
 
-    padding-bottom: 80px;
 }
 
 
-/* =========================
+/* =========================================
    HEADER
-========================= */
+========================================= */
 
 .top-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
 
-    min-height: 70px;
+    min-height: 72px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
-    padding: 12px 16px;
+    padding:
+        12px 17px;
 
-    background: var(--black);
-    color: white;
+    background:
+        var(--black);
 
-    box-shadow:
-        0 4px 15px rgba(0,0,0,.15);
+    color:
+        white;
+
 }
+
 
 .brand {
-    font-size: 22px;
+
+    font-size: 17px;
+
     font-weight: 1000;
-    letter-spacing: 1px;
-}
-
-.top-header p {
-    margin-top: 2px;
-
-    color: #bbbbbb;
-
-    font-size: 8px;
-    font-weight: 800;
 
     letter-spacing: 1px;
+
 }
+
+
+.subtitle {
+
+    margin-top: 3px;
+
+    color:
+        #999999;
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+
+}
+
 
 .logout-button {
-    border: none;
+
+    height: 34px;
+
+    padding:
+        0 11px;
+
+    border:
+        1px solid #444444;
+
     border-radius: 9px;
 
-    padding: 9px 12px;
+    background:
+        transparent;
 
-    background: #292929;
-    color: white;
+    color:
+        white;
 
-    font-size: 10px;
-    font-weight: 800;
+    font-size: 8px;
+
+    font-weight: 900;
 
     cursor: pointer;
+
 }
 
 
-/* =========================
+/* =========================================
    PAGE
-========================= */
+========================================= */
 
 .page {
+
     width: 100%;
+
     max-width: 650px;
 
-    margin: auto;
+    margin:
+        0 auto;
 
-    padding: 22px 16px 30px;
+    padding:
+        20px 15px 40px;
+
 }
 
 
-/* =========================
+/* =========================================
    WELCOME
-========================= */
+========================================= */
 
 .welcome {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
     margin-bottom: 18px;
+
 }
 
-.welcome span {
-    color: var(--gray);
 
-    font-size: 9px;
+.small-label {
+
+    color:
+        var(--gray);
+
+    font-size: 8px;
+
     font-weight: 900;
 
     letter-spacing: 1px;
+
 }
+
 
 .welcome h1 {
+
+    margin-top: 3px;
+
+    font-size: 25px;
+
+    font-weight: 1000;
+
+}
+
+
+.welcome p {
+
     margin-top: 4px;
 
-    font-size: 23px;
-    font-weight: 700;
+    color:
+        var(--gray);
+
+    font-size: 10px;
+
 }
 
-.welcome strong {
-    font-weight: 900;
-}
 
+.driver-avatar {
 
-/* =========================
-   BUS CARD
-========================= */
-
-.bus-card {
-    padding: 18px;
-
-    background: var(--black);
-    color: white;
-
-    border-radius: 20px;
-
-    box-shadow:
-        0 6px 22px rgba(0,0,0,.14);
-}
-
-.bus-top {
-    position: relative;
-
-    display: flex;
-    align-items: center;
-
-    gap: 13px;
-}
-
-.bus-icon {
     width: 55px;
     height: 55px;
 
-    flex-shrink: 0;
-
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
-    background: var(--yellow);
+    border-radius: 17px;
 
-    border-radius: 16px;
+    background:
+        var(--yellow);
 
-    font-size: 29px;
-}
+    font-size: 28px;
 
-.bus-top span {
-    color: #aaaaaa;
-
-    font-size: 8px;
-    font-weight: 900;
-
-    letter-spacing: 1px;
-}
-
-.bus-top h2 {
-    margin-top: 2px;
-
-    font-size: 23px;
-    font-weight: 900;
-}
-
-.bus-top p {
-    margin-top: 2px;
-
-    color: #bbbbbb;
-
-    font-size: 11px;
-}
-
-.active-badge {
-    position: absolute;
-
-    top: 0;
-    right: 0;
-
-    padding: 5px 8px;
-
-    border-radius: 20px;
-
-    background: #153d26;
-    color: #5ee58b;
-
-    font-size: 8px;
-    font-weight: 900;
 }
 
 
-/* ROUTE */
+/* =========================================
+   BUS CARD
+========================================= */
 
-.route {
-    margin-top: 17px;
+.bus-card {
 
-    padding-top: 14px;
+    overflow: hidden;
 
-    border-top: 1px solid #333333;
-}
-
-.route span {
-    display: block;
-
-    color: #999999;
-
-    font-size: 8px;
-    font-weight: 900;
-}
-
-.route strong {
-    display: block;
-
-    margin-top: 4px;
-
-    font-size: 13px;
-}
-
-
-/* BUS STATS */
-
-.bus-stats {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap: 9px;
-
-    margin-top: 12px;
-}
-
-.bus-stats > div {
-    padding: 12px;
-
-    border-radius: 11px;
-
-    background: #202020;
-}
-
-.bus-stats span {
-    display: block;
-
-    color: #888888;
-
-    font-size: 7px;
-    font-weight: 900;
-}
-
-.bus-stats strong {
-    display: inline-block;
-
-    margin-top: 4px;
-
-    font-size: 18px;
-    font-weight: 900;
-}
-
-.bus-stats small {
-    color: #999999;
-
-    font-size: 8px;
-}
-
-
-/* =========================
-   SECTION
-========================= */
-
-.section {
-    margin-top: 25px;
-}
-
-.section-heading {
-    margin-bottom: 11px;
-}
-
-.section-heading span {
-    color: var(--gray);
-
-    font-size: 9px;
-    font-weight: 900;
-
-    letter-spacing: 1px;
-}
-
-.section-heading h2 {
-    margin-top: 3px;
-
-    font-size: 19px;
-    font-weight: 900;
-}
-
-
-/* =========================
-   FORM CARD
-========================= */
-
-.form-card {
-    padding: 17px;
-
-    background: white;
+    margin-bottom: 23px;
 
     border-radius: 18px;
 
-    box-shadow:
-        0 4px 17px rgba(0,0,0,.05);
-}
-
-
-/* FIELD */
-
-.field {
-    margin-bottom: 17px;
-}
-
-.field label {
-    display: block;
-
-    margin-bottom: 7px;
-
-    font-size: 12px;
-    font-weight: 900;
-}
-
-.unit-input {
-    position: relative;
-}
-
-.unit-input input {
-    width: 100%;
-
-    height: 51px;
-
-    padding:
-        0 55px
-        0 14px;
-
-    border: 1.5px solid #dddddd;
-
-    border-radius: 12px;
-
-    outline: none;
-
-    background: white;
-
-    font-size: 15px;
-}
-
-.unit-input input:focus {
-    border-color: var(--yellow);
+    background:
+        white;
 
     box-shadow:
-        0 0 0 3px rgba(255,196,0,.18);
-}
+        0 5px 20px rgba(0,0,0,.06);
 
-.unit-input span {
-    position: absolute;
-
-    right: 14px;
-    top: 50%;
-
-    transform: translateY(-50%);
-
-    color: var(--gray);
-
-    font-size: 10px;
-    font-weight: 900;
 }
 
 
-/* CALCULATION */
+.bus-top {
 
-.calculation {
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
-    padding: 14px;
+    padding:
+        18px;
 
-    border-radius: 12px;
+    background:
+        var(--black);
 
-    background: #fff8d9;
-}
+    color:
+        white;
 
-.calculation span {
-    color: #806800;
-
-    font-size: 11px;
-    font-weight: 800;
-}
-
-.calculation strong {
-    font-size: 17px;
-    font-weight: 900;
 }
 
 
-/* DIVIDER */
+.bus-top span {
 
-.divider {
-    height: 1px;
+    color:
+        #999999;
 
-    margin: 18px 0;
+    font-size: 7px;
 
-    background: var(--light-gray);
-}
-
-
-/* MILEAGE */
-
-.mileage-box {
-    margin-top: 5px;
-
-    padding: 18px;
-
-    text-align: center;
-
-    border-radius: 15px;
-
-    background: var(--black);
-
-    color: white;
-}
-
-.mileage-box span {
-    display: block;
-
-    color: #999999;
-
-    font-size: 8px;
     font-weight: 900;
 
     letter-spacing: 1px;
+
 }
 
-.mileage-box strong {
+
+.bus-top h2 {
+
+    margin-top: 5px;
+
+    font-size: 22px;
+
+    font-weight: 1000;
+
+}
+
+
+.bus-top p {
+
+    margin-top: 3px;
+
+    color:
+        #aaaaaa;
+
+    font-size: 9px;
+
+}
+
+
+.bus-icon {
+
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 16px;
+
+    background:
+        var(--yellow);
+
+    font-size: 28px;
+
+}
+
+
+.bus-route {
+
+    padding:
+        13px 18px;
+
+}
+
+
+.bus-route span {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color:
+        var(--gray);
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+}
+
+
+.bus-route strong {
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================
+   SECTION
+========================================= */
+
+.section-heading {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    margin-bottom: 11px;
+
+}
+
+
+.section-heading span {
+
+    color:
+        var(--gray);
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+}
+
+
+.section-heading h2 {
+
+    margin-top: 3px;
+
+    font-size: 18px;
+
+    font-weight: 1000;
+
+}
+
+
+.today-date {
+
+    color:
+        var(--gray);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================
+   READING CARD
+========================================= */
+
+.reading-card {
+
+    display: flex;
+
+    gap: 12px;
+
+    margin-bottom: 11px;
+
+    padding: 14px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 16px;
+
+    background:
+        white;
+
+}
+
+
+.reading-icon {
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+
+    font-size: 21px;
+
+}
+
+
+.reading-icon.morning {
+
+    background:
+        #fff3bd;
+
+}
+
+
+.reading-icon.evening {
+
+    background:
+        #e8e5ff;
+
+}
+
+
+.reading-content {
+
+    min-width: 0;
+
+    flex: 1;
+
+}
+
+
+.reading-title-row {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 8px;
+
+}
+
+
+.reading-label {
+
+    color:
+        var(--gray);
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+}
+
+
+.reading-content h3 {
+
+    margin-top: 2px;
+
+    font-size: 14px;
+
+    font-weight: 1000;
+
+}
+
+
+.status {
+
+    padding:
+        5px 7px;
+
+    border-radius: 20px;
+
+    font-size: 6px;
+
+    font-weight: 1000;
+
+}
+
+
+.status.pending {
+
+    background:
+        #fff4c8;
+
+    color:
+        #866900;
+
+}
+
+
+.status.completed {
+
+    background:
+        #e7f7ed;
+
+    color:
+        var(--green);
+
+}
+
+
+.status.locked {
+
+    background:
+        #eeeeee;
+
+    color:
+        #888888;
+
+}
+
+
+.description {
+
+    margin-top: 6px;
+
+    color:
+        var(--gray);
+
+    font-size: 9px;
+
+    line-height: 1.4;
+
+}
+
+
+.primary-button {
+
+    width: 100%;
+
+    height: 39px;
+
+    margin-top: 11px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background:
+        var(--black);
+
+    color:
+        white;
+
+    font-size: 8px;
+
+    font-weight: 1000;
+
+    cursor: pointer;
+
+}
+
+
+.primary-button:disabled {
+
+    background:
+        #dddddd;
+
+    color:
+        #999999;
+
+    cursor:
+        not-allowed;
+
+}
+
+
+/* =========================================
+   SAVED READING
+========================================= */
+
+.saved-reading {
+
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 4px;
+
+    margin-top: 10px;
+
+}
+
+
+.saved-reading strong {
+
+    font-size: 22px;
+
+    font-weight: 1000;
+
+}
+
+
+.saved-reading > span {
+
+    color:
+        var(--gray);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+}
+
+
+.saved-reading small {
+
+    margin-left: auto;
+
+    color:
+        var(--gray);
+
+    font-size: 8px;
+
+}
+
+
+.hidden {
+
+    display: none !important;
+
+}
+
+
+/* =========================================
+   DISTANCE
+========================================= */
+
+.distance-card {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin:
+        17px 0;
+
+    padding:
+        17px;
+
+    border-radius: 16px;
+
+    background:
+        var(--black);
+
+    color:
+        white;
+
+}
+
+
+.distance-card span {
+
+    display: block;
+
+    color:
+        #999999;
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+}
+
+
+.distance-card strong {
+
     display: inline-block;
 
     margin-top: 5px;
 
     font-size: 29px;
+
     font-weight: 1000;
 
-    color: var(--yellow);
 }
 
-.mileage-box small {
-    margin-left: 3px;
 
-    color: #aaaaaa;
+.distance-card small {
+
+    margin-left: 4px;
+
+    color:
+        #aaaaaa;
 
     font-size: 9px;
+
 }
 
 
-/* PHOTO */
+.distance-icon {
 
-.photo-section {
-    margin-top: 20px;
-}
-
-.photo-section > label:first-child {
-    display: block;
-
-    margin-bottom: 7px;
-
-    font-size: 12px;
-    font-weight: 900;
-}
-
-.photo-button {
-    min-height: 52px;
+    width: 47px;
+    height: 47px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
-    gap: 8px;
+    border-radius: 14px;
 
-    border: 1.5px dashed #cccccc;
+    background:
+        #292929;
+
+    font-size: 23px;
+
+}
+
+
+/* =========================================
+   DIESEL
+========================================= */
+
+.diesel-button {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    padding:
+        13px;
+
+    border:
+        1px solid #ead98c;
+
+    border-radius: 14px;
+
+    background:
+        #fff9df;
+
+    text-align: left;
+
+    cursor: pointer;
+
+}
+
+
+.diesel-icon {
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
 
     border-radius: 12px;
 
-    background: #fafafa;
+    background:
+        var(--yellow);
 
-    color: var(--black);
+    font-size: 21px;
 
-    font-size: 12px;
-    font-weight: 800;
-
-    cursor: pointer;
 }
 
-.photo-name {
-    margin-top: 7px;
 
-    color: var(--gray);
+.diesel-button strong {
+
+    display: block;
 
     font-size: 10px;
 
-    word-break: break-word;
-}
-
-
-/* ERROR */
-
-.error {
-    margin-top: 15px;
-
-    padding: 12px;
-
-    border-radius: 11px;
-
-    background: #fff0f0;
-
-    color: var(--red);
-
-    font-size: 11px;
-
-    line-height: 1.5;
-}
-
-.hidden {
-    display: none !important;
-}
-
-
-/* SUBMIT */
-
-.submit-button {
-    width: 100%;
-
-    height: 56px;
-
-    margin-top: 20px;
-
-    border: none;
-
-    border-radius: 13px;
-
-    background: var(--yellow);
-
-    color: var(--black);
-
-    font-size: 13px;
     font-weight: 1000;
 
-    letter-spacing: .7px;
-
-    cursor: pointer;
-}
-
-.submit-button:active {
-    transform: scale(.98);
-}
-
-.submit-button:disabled {
-    opacity: .6;
 }
 
 
-/* STATUS */
+.diesel-button span {
 
-.status-card {
-    padding: 17px;
-
-    border-radius: 16px;
-
-    background: white;
-
-    box-shadow:
-        0 4px 15px rgba(0,0,0,.04);
-}
-
-.status-card span {
     display: block;
 
-    color: var(--gray);
+    margin-top: 3px;
+
+    color:
+        #806800;
 
     font-size: 8px;
-    font-weight: 900;
 
-    letter-spacing: 1px;
-}
-
-.status-card strong {
-    display: block;
-
-    margin-top: 6px;
-
-    font-size: 15px;
 }
 
 
-/* BOTTOM NAV */
+.arrow {
 
-.bottom-nav {
+    margin-left: auto;
+
+    color:
+        #806800;
+
+    font-size: 18px;
+
+}
+
+
+/* =========================================
+   HISTORY
+========================================= */
+
+.history-button {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 10px;
+
+    padding:
+        14px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 14px;
+
+    background:
+        white;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+}
+
+
+.history-button span {
+
+    flex: 1;
+
+    text-align: left;
+
+    font-size: 9px;
+
+    font-weight: 1000;
+
+}
+
+
+.history-button strong {
+
+    color:
+        var(--gray);
+
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.loading-screen {
+
     position: fixed;
 
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
 
-    z-index: 200;
+    z-index: 999;
 
-    height: 68px;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    background: white;
-
-    border-top: 1px solid #eeeeee;
-
-    box-shadow:
-        0 -4px 18px rgba(0,0,0,.08);
-}
-
-.nav-item {
     display: flex;
 
     flex-direction: column;
 
     align-items: center;
+
     justify-content: center;
 
-    gap: 3px;
+    gap: 12px;
 
-    text-decoration: none;
+    background:
+        var(--black);
 
-    color: #999999;
+    color:
+        white;
 
-    font-size: 18px;
-}
+    font-size: 10px;
 
-.nav-item small {
-    font-size: 9px;
-
-    font-weight: 800;
-}
-
-.nav-item.active {
-    color: var(--black);
 }
 
 
-/* DESKTOP */
+.loading-spinner {
 
-@media (min-width: 700px) {
+    width: 30px;
+    height: 30px;
 
-    .bottom-nav {
-        display: none;
+    border:
+        3px solid #444444;
+
+    border-top-color:
+        var(--yellow);
+
+    border-radius: 50%;
+
+    animation:
+        spin .7s linear infinite;
+
+}
+
+
+@keyframes spin {
+
+    to {
+        transform: rotate(360deg);
     }
 
-    body {
-        padding-bottom: 0;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 400px) {
+
+    .page {
+
+        padding:
+            17px 12px 35px;
+
+    }
+
+    .welcome h1 {
+
+        font-size: 22px;
+
     }
 
 }
