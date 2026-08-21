@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>BEST | Add Driver</title>
+
+    <link rel="stylesheet" href="./add-driver.css">
+
+</head>
+
+<body>
+
+<header class="top-header">
+
+    <button
+        id="backButton"
+        class="back-button"
+    >
+        ←
+    </button>
+
+    <div>
+        <h1>ADD DRIVER</h1>
+        <p>DRIVER MANAGEMENT</p>
+    </div>
+
+</header>
+
+
+<main class="page">
+
+    <div class="page-intro">
+
+        <div class="driver-icon">
+            👨‍✈️
+        </div>
+
+        <div>
+
+            <h2>New Driver</h2>
+
+            <p>
+                Create a driver profile and assign a bus.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <form id="driverForm">
+
+        <!-- NAME -->
+
+        <div class="form-group">
+
+            <label for="driverName">
+                Driver Name <span>*</span>
+            </label>
+
+            <input
+                type="text"
+                id="driverName"
+                placeholder="Enter full name"
+                maxlength="80"
+                required
+            >
+
+        </div>
+
+
+        <!-- PHONE -->
+
+        <div class="form-group">
+
+            <label for="driverPhone">
+                Phone Number <span>*</span>
+            </label>
+
+            <input
+                type="tel"
+                id="driverPhone"
+                placeholder="Enter phone number"
+                maxlength="15"
+                required
+            >
+
+        </div>
+
+
+        <!-- EMAIL -->
+
+        <div class="form-group">
+
+            <label for="driverEmail">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="driverEmail"
+                placeholder="driver@example.com"
+            >
+
+        </div>
+
+
+        <!-- LICENSE -->
+
+        <div class="form-group">
+
+            <label for="licenseNumber">
+                Driving Licence Number
+            </label>
+
+            <input
+                type="text"
+                id="licenseNumber"
+                placeholder="Enter licence number"
+                maxlength="40"
+            >
+
+        </div>
+
+
+        <!-- BUS -->
+
+        <div class="form-group">
+
+            <label for="assignedBus">
+                Assign Bus <span>*</span>
+            </label>
+
+            <select
+                id="assignedBus"
+                required
+            >
+
+                <option value="">
+                    Loading buses...
+                </option>
+
+            </select>
+
+            <small>
+                A bus can be assigned to only one active driver.
+            </small>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div
+            id="errorMessage"
+            class="message error hidden"
+        ></div>
+
+
+        <!-- SUCCESS -->
+
+        <div
+            id="successMessage"
+            class="message success hidden"
+        ></div>
+
+
+        <!-- SAVE -->
+
+        <button
+            type="submit"
+            id="saveButton"
+            class="save-button"
+        >
+
+            <span id="saveText">
+                CREATE DRIVER
+            </span>
+
+            <span
+                id="spinner"
+                class="spinner hidden"
+            ></span>
+
+        </button>
+
+    </form>
+
+
+    <div class="info-box">
+
+        <strong>Driver account</strong>
+
+        <p>
+            This creates the driver's transport profile.
+            Firebase Authentication login credentials will
+            be connected through the secure account-creation
+            system later.
+        </p>
+
+    </div>
+
+</main>
+
+
+<script
+    type="module"
+    src="./add-driver.js"
+></script>
+
+</body>
+</html>
