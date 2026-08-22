@@ -1,0 +1,851 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --black: #111111;
+    --yellow: #ffc400;
+    --white: #ffffff;
+    --background: #f3f3f3;
+    --border: #dddddd;
+    --gray: #777777;
+    --light: #f8f8f8;
+    --green: #15803d;
+    --green-bg: #e9f8ef;
+    --red: #dc2626;
+    --red-bg: #fff0f0;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--background);
+    color: var(--black);
+    font-family: Arial, Helvetica, sans-serif;
+    padding-bottom: 50px;
+}
+
+/* =========================
+   LOADING
+========================= */
+
+.loading-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    background: var(--black);
+    color: white;
+}
+
+.loading-screen p {
+    color: #999;
+    font-size: 10px;
+}
+
+.spinner {
+    width: 34px;
+    height: 34px;
+
+    border: 3px solid #444;
+    border-top-color: var(--yellow);
+
+    border-radius: 50%;
+
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    min-height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 12px 15px;
+
+    background: var(--black);
+    color: white;
+}
+
+.brand {
+    font-size: 18px;
+    font-weight: 1000;
+    letter-spacing: 1px;
+}
+
+.header-subtitle {
+    margin-top: 3px;
+
+    color: #999;
+
+    font-size: 7px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+}
+
+.logout-button {
+    padding: 10px 13px;
+
+    border: 1px solid #444;
+    border-radius: 9px;
+
+    background: #222;
+    color: white;
+
+    font-size: 7px;
+    font-weight: 900;
+
+    cursor: pointer;
+}
+
+.logout-button:active {
+    transform: scale(0.97);
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+    width: 100%;
+    max-width: 700px;
+
+    margin: 0 auto;
+
+    padding: 15px;
+}
+
+/* =========================
+   WELCOME
+========================= */
+
+.welcome {
+    padding: 10px 2px 14px;
+}
+
+.welcome span {
+    color: var(--gray);
+
+    font-size: 7px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.welcome h1 {
+    margin-top: 4px;
+
+    font-size: 25px;
+    font-weight: 1000;
+}
+
+.welcome p {
+    margin-top: 5px;
+
+    color: var(--gray);
+
+    font-size: 9px;
+}
+
+/* =========================
+   BUS CARD
+========================= */
+
+.bus-card {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 17px;
+
+    border-radius: 17px;
+
+    background: var(--black);
+    color: white;
+}
+
+.bus-icon {
+    width: 54px;
+    height: 54px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 14px;
+
+    background: var(--yellow);
+
+    font-size: 27px;
+}
+
+.bus-info {
+    flex: 1;
+}
+
+.bus-info span {
+    display: block;
+
+    color: #999;
+
+    font-size: 6px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.bus-info h2 {
+    margin-top: 4px;
+
+    font-size: 21px;
+    font-weight: 1000;
+}
+
+.bus-info p {
+    margin-top: 3px;
+
+    color: #aaa;
+
+    font-size: 8px;
+}
+
+.bus-status {
+    padding: 7px 9px;
+
+    border-radius: 8px;
+
+    background: var(--green-bg);
+    color: var(--green);
+
+    font-size: 6px;
+    font-weight: 1000;
+}
+
+/* =========================
+   TODAY
+========================= */
+
+.today-card {
+    margin-top: 12px;
+
+    padding: 15px;
+
+    border: 1px solid var(--border);
+    border-radius: 15px;
+
+    background: white;
+}
+
+.section-label {
+    color: var(--gray);
+
+    font-size: 7px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.today-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr 1.3fr;
+
+    gap: 8px;
+
+    margin-top: 10px;
+}
+
+.today-item {
+    padding: 11px;
+
+    border-radius: 10px;
+
+    background: var(--light);
+}
+
+.today-item span {
+    display: block;
+
+    color: var(--gray);
+
+    font-size: 6px;
+    font-weight: 900;
+}
+
+.today-item strong {
+    display: inline-block;
+
+    margin-top: 6px;
+
+    font-size: 16px;
+    font-weight: 1000;
+}
+
+.today-item small {
+    margin-left: 2px;
+
+    color: var(--gray);
+
+    font-size: 6px;
+}
+
+.today-item.distance {
+    background: #fff8d9;
+}
+
+.today-item.distance strong {
+    font-size: 19px;
+}
+
+/* =========================
+   ACTION CARD
+========================= */
+
+.action-card {
+    margin-top: 12px;
+
+    padding: 17px;
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    background: white;
+}
+
+.action-heading {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+}
+
+.number {
+    width: 39px;
+    height: 39px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    font-size: 13px;
+    font-weight: 1000;
+}
+
+.morning-number {
+    background: #fff3bd;
+}
+
+.evening-number {
+    background: #e5e7eb;
+}
+
+.diesel-number {
+    background: #fff3bd;
+}
+
+.action-heading span {
+    display: block;
+
+    color: var(--gray);
+
+    font-size: 6px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.action-heading h2 {
+    margin-top: 3px;
+
+    font-size: 17px;
+    font-weight: 1000;
+}
+
+/* =========================
+   INPUT
+========================= */
+
+.input-box {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    margin-top: 13px;
+
+    border: 1px solid var(--border);
+    border-radius: 11px;
+
+    overflow: hidden;
+
+    background: var(--light);
+}
+
+.input-box input {
+    width: 100%;
+
+    min-width: 0;
+
+    padding: 14px;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: var(--black);
+
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.input-box input::placeholder {
+    color: #aaa;
+    font-weight: 500;
+}
+
+.input-box span {
+    padding: 0 13px;
+
+    color: var(--gray);
+
+    font-size: 7px;
+    font-weight: 900;
+}
+
+/* =========================
+   SAVE BUTTON
+========================= */
+
+.save-button {
+    width: 100%;
+
+    margin-top: 11px;
+
+    padding: 14px;
+
+    border: none;
+    border-radius: 11px;
+
+    font-size: 8px;
+    font-weight: 1000;
+
+    cursor: pointer;
+}
+
+.morning-button {
+    background: var(--yellow);
+    color: var(--black);
+}
+
+.evening-button {
+    background: var(--black);
+    color: white;
+}
+
+.diesel-button {
+    background: var(--yellow);
+    color: var(--black);
+}
+
+.save-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.save-button:active {
+    transform: scale(0.99);
+}
+
+/* =========================
+   DIESEL
+========================= */
+
+.diesel-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 9px;
+
+    margin-top: 14px;
+}
+
+.diesel-grid label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--gray);
+
+    font-size: 6px;
+    font-weight: 900;
+
+    letter-spacing: 0.7px;
+}
+
+.diesel-grid .input-box {
+    margin-top: 0;
+}
+
+.full-input {
+    margin-top: 10px;
+}
+
+.text-input {
+    width: 100%;
+
+    margin-top: 10px;
+
+    padding: 14px;
+
+    border: 1px solid var(--border);
+    border-radius: 11px;
+
+    outline: none;
+
+    background: var(--light);
+
+    color: var(--black);
+
+    font-size: 12px;
+}
+
+.text-input::placeholder {
+    color: #aaa;
+}
+
+/* =========================
+   AVERAGE CARD
+========================= */
+
+.average-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 13px;
+
+    padding: 17px;
+
+    border-radius: 16px;
+
+    background: var(--black);
+
+    color: white;
+}
+
+.average-card > div {
+    flex: 1;
+}
+
+.average-card span {
+    display: block;
+
+    color: #999;
+
+    font-size: 6px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.average-card h2 {
+    margin-top: 4px;
+
+    font-size: 17px;
+    font-weight: 1000;
+}
+
+.average-card p {
+    margin-top: 5px;
+
+    max-width: 390px;
+
+    color: #aaa;
+
+    font-size: 8px;
+    line-height: 1.5;
+}
+
+.average-button {
+    flex-shrink: 0;
+
+    padding: 12px 14px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: var(--yellow);
+    color: var(--black);
+
+    font-size: 7px;
+    font-weight: 1000;
+
+    cursor: pointer;
+}
+
+.average-button:active {
+    transform: scale(0.97);
+}
+
+/* =========================
+   HISTORY
+========================= */
+
+.history-section {
+    margin-top: 25px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 10px;
+}
+
+.section-heading span {
+    display: block;
+
+    color: var(--gray);
+
+    font-size: 6px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.section-heading h2 {
+    margin-top: 3px;
+
+    font-size: 19px;
+    font-weight: 1000;
+}
+
+.history-button {
+    padding: 8px 10px;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    background: white;
+    color: var(--black);
+
+    font-size: 6px;
+    font-weight: 900;
+
+    cursor: pointer;
+}
+
+/* =========================
+   HISTORY ITEMS
+========================= */
+
+#historyList {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding: 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 11px;
+
+    background: white;
+}
+
+.history-left {
+    min-width: 0;
+}
+
+.history-title {
+    font-size: 9px;
+    font-weight: 1000;
+}
+
+.history-date {
+    margin-top: 3px;
+
+    color: var(--gray);
+
+    font-size: 6px;
+}
+
+.history-value {
+    flex-shrink: 0;
+
+    text-align: right;
+
+    font-size: 10px;
+    font-weight: 1000;
+}
+
+.history-value small {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--gray);
+
+    font-size: 6px;
+}
+
+.history-empty {
+    padding: 25px;
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    background: white;
+
+    color: var(--gray);
+
+    text-align: center;
+
+    font-size: 8px;
+}
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message {
+    margin-top: 13px;
+
+    padding: 13px;
+
+    border-radius: 10px;
+
+    font-size: 8px;
+
+    line-height: 1.5;
+}
+
+.message.success {
+    background: var(--green-bg);
+    color: var(--green);
+}
+
+.message.error {
+    background: var(--red-bg);
+    color: var(--red);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 520px) {
+
+    .container {
+        padding: 10px;
+    }
+
+    .header {
+        padding: 11px;
+    }
+
+    .welcome h1 {
+        font-size: 22px;
+    }
+
+    .bus-card {
+        padding: 14px;
+    }
+
+    .bus-icon {
+        width: 48px;
+        height: 48px;
+
+        font-size: 23px;
+    }
+
+    .bus-info h2 {
+        font-size: 18px;
+    }
+
+    .bus-status {
+        display: none;
+    }
+
+    .today-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .today-item.distance {
+        grid-column: 1 / -1;
+    }
+
+    .average-card {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .average-button {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 380px) {
+
+    .diesel-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .header {
+        min-height: 62px;
+    }
+
+    .logout-button {
+        padding: 8px 9px;
+    }
+
+}
