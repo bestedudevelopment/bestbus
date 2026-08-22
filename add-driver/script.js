@@ -1,17 +1,16 @@
 import {
     collection,
     getDocs,
-    doc,
-    setDoc,
-    updateDoc,
+    addDoc,
     query,
     where,
+    doc,
+    getDoc,
+    updateDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
@@ -25,7 +24,7 @@ import {
    ELEMENTS
 ================================= */
 
-const form =
+const driverForm =
     document.getElementById(
         "driverForm"
     );
@@ -38,16 +37,6 @@ const driverName =
 const driverEmail =
     document.getElementById(
         "driverEmail"
-    );
-
-const driverPassword =
-    document.getElementById(
-        "driverPassword"
-    );
-
-const adminPassword =
-    document.getElementById(
-        "adminPassword"
     );
 
 const busSelect =
@@ -66,11 +55,8 @@ const message =
     );
 
 
-let adminEmail = null;
-
-
 /* =================================
-   CHECK CURRENT ADMIN
+   ADMIN AUTH CHECK
 ================================= */
 
 onAuthStateChanged(
@@ -79,22 +65,84 @@ onAuthStateChanged(
 
         if (!user) {
 
-            showError(
-                "Admin is not logged in."
+            window.location.replace(
+                "../index.html"
             );
-
-            saveButton.disabled =
-                true;
 
             return;
         }
 
 
-        adminEmail =
-            user.email;
+        try {
+
+            const userRef =
+                doc(
+                    db,
+                    "users",
+                    user.uid
+                );
 
 
-        await loadAvailableBuses();
+            const userSnapshot =
+                await getDoc(
+                    userRef
+                );
+
+
+            if (
+                !userSnapshot.exists()
+            ) {
+
+                await auth.signOut();
+
+                window.location.replace(
+                    "../index.html"
+                );
+
+                return;
+            }
+
+
+            const userData =
+                userSnapshot.data();
+
+
+            if (
+                userData.role !== "admin"
+            ) {
+
+                await auth.signOut();
+
+                window.location.replace(
+                    "../index.html"
+                );
+
+                return;
+            }
+
+
+            /*
+             * Admin verified.
+             * Load buses.
+             */
+
+            await loadAvailableBuses();
+
+
+        } catch (error) {
+
+            console.error(
+                "ADMIN CHECK ERROR:",
+                error
+            );
+
+            await auth.signOut();
+
+            window.location.replace(
+                "../index.html"
+            );
+
+        }
 
     }
 );
@@ -119,7 +167,7 @@ async function loadAvailableBuses() {
 
         busSelect.innerHTML = `
             <option value="">
-                Select a bus
+                Select an available bus
             </option>
         `;
 
@@ -135,19 +183,8 @@ async function loadAvailableBuses() {
 
 
                 /*
-                 * A bus is available if it
-                 * does NOT have an assigned
-                 * driver.
+                 * Ignore inactive buses.
                  */
-
-                if (
-                    bus.assignedDriverId
-                ) {
-
-                    return;
-
-                }
-
 
                 if (
                     bus.status &&
@@ -155,7 +192,20 @@ async function loadAvailableBuses() {
                 ) {
 
                     return;
+                }
 
+
+                /*
+                 * If a bus already has
+                 * an assigned driver,
+                 * DO NOT show it.
+                 */
+
+                if (
+                    bus.assignedDriverId
+                ) {
+
+                    return;
                 }
 
 
@@ -171,7 +221,8 @@ async function loadAvailableBuses() {
 
                 option.textContent =
                     `${bus.busNumber || "Unnamed Bus"} — ${
-                        bus.registrationNumber || "No registration"
+                        bus.registrationNumber ||
+                        "No registration"
                     }`;
 
 
@@ -192,9 +243,12 @@ async function loadAvailableBuses() {
 
             busSelect.innerHTML = `
                 <option value="">
-                    No unassigned buses
+                    No available buses
                 </option>
             `;
+
+            saveButton.disabled =
+                true;
 
         }
 
@@ -214,7 +268,7 @@ async function loadAvailableBuses() {
         `;
 
         showError(
-            "Unable to load buses."
+            "Unable to load buses from Firestore."
         );
 
     }
@@ -223,10 +277,10 @@ async function loadAvailableBuses() {
 
 
 /* =================================
-   CREATE DRIVER
+   CREATE DRIVER PROFILE
 ================================= */
 
-form.addEventListener(
+driverForm.addEventListener(
     "submit",
     async (event) => {
 
@@ -236,21 +290,14 @@ form.addEventListener(
 
 
         const name =
-            driverName.value.trim();
+            driverName.value
+                .trim();
 
 
         const email =
             driverEmail.value
                 .trim()
                 .toLowerCase();
-
-
-        const password =
-            driverPassword.value;
-
-
-        const adminPass =
-            adminPassword.value;
 
 
         const busId =
@@ -268,7 +315,6 @@ form.addEventListener(
             );
 
             return;
-
         }
 
 
@@ -279,20 +325,6 @@ form.addEventListener(
             );
 
             return;
-
-        }
-
-
-        if (
-            password.length < 6
-        ) {
-
-            showError(
-                "Driver password must contain at least 6 characters."
-            );
-
-            return;
-
         }
 
 
@@ -303,18 +335,6 @@ form.addEventListener(
             );
 
             return;
-
-        }
-
-
-        if (!adminPass) {
-
-            showError(
-                "Enter the Admin password."
-            );
-
-            return;
-
         }
 
 
@@ -322,93 +342,159 @@ form.addEventListener(
             true;
 
         saveButton.textContent =
-            "CREATING DRIVER...";
+            "CREATING PROFILE...";
 
 
         try {
 
-            /*
-             * First verify that the
-             * Admin password is correct.
-             */
+            /* =========================
+               DUPLICATE EMAIL CHECK
+            ========================= */
 
-            await signInWithEmailAndPassword(
-                auth,
-                adminEmail,
-                adminPass
-            );
-
-
-            /*
-             * Now create the driver
-             * Firebase Auth account.
-             *
-             * IMPORTANT:
-             * Firebase automatically signs
-             * in the newly-created driver.
-             */
-
-            const credential =
-                await createUserWithEmailAndPassword(
-                    auth,
-                    email,
-                    password
+            const emailQuery =
+                query(
+                    collection(
+                        db,
+                        "drivers"
+                    ),
+                    where(
+                        "email",
+                        "==",
+                        email
+                    )
                 );
 
 
-            const driverUid =
-                credential.user.uid;
+            const existingDriver =
+                await getDocs(
+                    emailQuery
+                );
 
 
-            /*
-             * Save the driver's profile
-             * using UID as the document ID.
+            if (
+                !existingDriver.empty
+            ) {
+
+                throw new Error(
+                    "A driver profile with this email already exists."
+                );
+
+            }
+
+
+            /* =========================
+               RE-CHECK BUS
+            =========================
+            
+             * This is important.
+             *
+             * Another admin could have
+             * assigned the bus after this
+             * page loaded.
              */
 
-            await setDoc(
-                doc(
-                    db,
-                    "users",
-                    driverUid
-                ),
-                {
-
-                    name:
-                        name,
-
-                    email:
-                        email,
-
-                    role:
-                        "driver",
-
-                    assignedBusId:
-                        busId,
-
-                    status:
-                        "active",
-
-                    createdAt:
-                        serverTimestamp()
-
-                }
-            );
-
-
-            /*
-             * Mark the bus as assigned.
-             */
-
-            await updateDoc(
+            const busRef =
                 doc(
                     db,
                     "buses",
                     busId
-                ),
+                );
+
+
+            const busSnapshot =
+                await getDoc(
+                    busRef
+                );
+
+
+            if (
+                !busSnapshot.exists()
+            ) {
+
+                throw new Error(
+                    "Selected bus no longer exists."
+                );
+
+            }
+
+
+            const bus =
+                busSnapshot.data();
+
+
+            if (
+                bus.assignedDriverId
+            ) {
+
+                throw new Error(
+                    "This bus has already been assigned to another driver."
+                );
+
+            }
+
+
+            if (
+                bus.status &&
+                bus.status !== "active"
+            ) {
+
+                throw new Error(
+                    "This bus is not active."
+                );
+
+            }
+
+
+            /* =========================
+               CREATE DRIVER PROFILE
+            ========================= */
+
+            const driverData = {
+
+                name:
+                    name,
+
+                email:
+                    email,
+
+                authUid:
+                    null,
+
+                assignedBusId:
+                    busId,
+
+                status:
+                    "pending",
+
+                createdAt:
+                    serverTimestamp(),
+
+                createdBy:
+                    auth.currentUser.uid
+
+            };
+
+
+            const driverReference =
+                await addDoc(
+                    collection(
+                        db,
+                        "drivers"
+                    ),
+                    driverData
+                );
+
+
+            /* =========================
+               ASSIGN BUS
+            ========================= */
+
+            await updateDoc(
+                busRef,
                 {
 
                     assignedDriverId:
-                        driverUid,
+                        driverReference.id,
 
                     assignedDriverName:
                         name
@@ -417,44 +503,26 @@ form.addEventListener(
             );
 
 
-            /*
-             * Now restore Admin login.
-             */
-
-            await signInWithEmailAndPassword(
-                auth,
-                adminEmail,
-                adminPass
-            );
-
+            /* =========================
+               SUCCESS
+            ========================= */
 
             showSuccess(
-                "Driver created and bus assigned successfully."
+                "Driver profile created successfully."
             );
 
 
-            form.reset();
+            driverForm.reset();
 
 
             /*
-             * Reload available buses.
+             * Refresh the bus list.
              *
-             * The newly assigned bus will
-             * now disappear automatically.
+             * The assigned bus will
+             * disappear immediately.
              */
 
             await loadAvailableBuses();
-
-
-            setTimeout(
-                () => {
-
-                    window.location.href =
-                        "../admin/";
-
-                },
-                1000
-            );
 
 
         } catch (error) {
@@ -465,15 +533,9 @@ form.addEventListener(
             );
 
 
-            /*
-             * Convert Firebase errors
-             * into simple messages.
-             */
-
             showError(
-                getErrorMessage(
-                    error
-                )
+                error.message ||
+                "Unable to create driver profile."
             );
 
         } finally {
@@ -481,8 +543,24 @@ form.addEventListener(
             saveButton.disabled =
                 false;
 
+            /*
+             * If there are no buses,
+             * keep button disabled.
+             */
+
+            if (
+                busSelect.options.length <= 1 &&
+                !busSelect.value
+            ) {
+
+                saveButton.disabled =
+                    true;
+
+            }
+
+
             saveButton.textContent =
-                "CREATE DRIVER";
+                "CREATE DRIVER PROFILE";
 
         }
 
@@ -491,103 +569,45 @@ form.addEventListener(
 
 
 /* =================================
-   ERROR MESSAGE
-================================= */
-
-function getErrorMessage(
-    error
-) {
-
-    switch (
-        error.code
-    ) {
-
-        case "auth/email-already-in-use":
-
-            return "This driver email is already registered.";
-
-        case "auth/invalid-email":
-
-            return "Enter a valid driver email.";
-
-        case "auth/weak-password":
-
-            return "Driver password is too weak.";
-
-        case "auth/invalid-credential":
-
-            return "Admin password is incorrect.";
-
-        case "auth/wrong-password":
-
-            return "Admin password is incorrect.";
-
-        case "permission-denied":
-
-            return "Firestore permission denied.";
-
-        default:
-
-            return (
-                error.message ||
-                "Unable to create driver."
-            );
-
-    }
-
-}
-
-
-/* =================================
-   SHOW ERROR
+   ERROR
 ================================= */
 
 function showError(
     text
 ) {
 
-    message.style.borderColor =
-        "#c62828";
-
-    message.style.background =
-        "#fff1f1";
-
-    message.style.color =
-        "#c62828";
-
-    message.textContent =
-        text;
+    message.classList.remove(
+        "success"
+    );
 
     message.classList.remove(
         "hidden"
     );
 
+    message.textContent =
+        text;
+
 }
 
 
 /* =================================
-   SHOW SUCCESS
+   SUCCESS
 ================================= */
 
 function showSuccess(
     text
 ) {
 
-    message.style.borderColor =
-        "#e7b900";
-
-    message.style.background =
-        "#fff8d9";
-
-    message.style.color =
-        "#111111";
-
-    message.textContent =
-        text;
+    message.classList.add(
+        "success"
+    );
 
     message.classList.remove(
         "hidden"
     );
+
+    message.textContent =
+        text;
 
 }
 
@@ -598,11 +618,15 @@ function showSuccess(
 
 function hideMessage() {
 
-    message.textContent =
-        "";
+    message.classList.remove(
+        "success"
+    );
 
     message.classList.add(
         "hidden"
     );
 
-                    }
+    message.textContent =
+        "";
+
+}
