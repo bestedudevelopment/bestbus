@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+</head>
+
+<body>
+
+    <main class="login-page">
+
+        <section class="login-card">
+
+            <img
+                src="./logo.png"
+                alt="Logo"
+                class="logo"
+            >
+
+            <div class="heading">
+
+                <span>FLEET MANAGEMENT</span>
+
+                <h1>Login</h1>
+
+                <p>
+                    Sign in to continue.
+                </p>
+
+            </div>
+
+
+            <form id="loginForm">
+
+                <div class="field">
+
+                    <label for="email">
+                        EMAIL
+                    </label>
+
+                    <input
+                        id="email"
+                        type="email"
+                        placeholder="Enter email"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="password">
+                        PASSWORD
+                    </label>
+
+                    <input
+                        id="password"
+                        type="password"
+                        placeholder="Enter password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    id="loginButton"
+                    type="submit"
+                >
+                    LOGIN
+                </button>
+
+            </form>
+
+
+            <div
+                id="errorMessage"
+                class="error-message hidden"
+            ></div>
+
+        </section>
+
+    </main>
+
+
+    <script
+        type="module"
+        src="./script.js"
+    ></script>
+
+</body>
+</html>
