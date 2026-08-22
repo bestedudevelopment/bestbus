@@ -485,19 +485,7 @@ morningButton.addEventListener(
         }
 
 
-        if (
-            morningRecord
-        ) {
-
-            showMessage(
-                "Morning reading has already been saved today.",
-                "error"
-            );
-
-            return;
-
-        }
-
+       
 
         /*
          * Prevent a reading lower than
