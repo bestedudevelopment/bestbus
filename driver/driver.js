@@ -484,7 +484,7 @@ morningButton.addEventListener(
                     value,
 
              date:
-    morningDate.value,
+                   morningDate.value,
 
                 createdAt:
                     serverTimestamp()
@@ -607,21 +607,6 @@ eveningButton.addEventListener(
         }
 
 
-        if (
-            eveningRecord
-        ) {
-
-            showMessage(
-                "Evening reading has already been saved today.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        /*
          * If morning reading exists,
          * evening cannot be lower.
          */
