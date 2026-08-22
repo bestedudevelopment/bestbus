@@ -89,7 +89,14 @@ const historyList =
 const message =
     document.getElementById("message");
 
+const morningDate =
+    document.getElementById("morningDate");
 
+const eveningDate =
+    document.getElementById("eveningDate");
+
+const dieselDate =
+    document.getElementById("dieselDate");
 /* =========================================
    STATE
 ========================================= */
@@ -544,8 +551,8 @@ morningButton.addEventListener(
                 odometer:
                     value,
 
-                date:
-                    getTodayKey(),
+             date:
+    morningDate.value,
 
                 createdAt:
                     serverTimestamp()
@@ -613,7 +620,17 @@ morningButton.addEventListener(
             );
 
         }
+if (!morningDate.value) {
 
+    showMessage(
+        "Select the morning reading date.",
+        "error"
+    );
+
+    morningDate.focus();
+
+    return;
+}
 
         setButtonLoading(
             morningButton,
@@ -729,7 +746,7 @@ eveningButton.addEventListener(
                     value,
 
                 date:
-                    getTodayKey(),
+    eveningDate.value,
 
                 createdAt:
                     serverTimestamp()
@@ -797,7 +814,17 @@ eveningButton.addEventListener(
 
         }
 
+if (!eveningDate.value) {
 
+    showMessage(
+        "Select the evening reading date.",
+        "error"
+    );
+
+    eveningDate.focus();
+
+    return;
+}
         setButtonLoading(
             eveningButton,
             false
@@ -963,8 +990,8 @@ dieselButton.addEventListener(
                 fuelStation:
                     station,
 
-                date:
-                    getTodayKey(),
+               date:
+    dieselDate.value,
 
                 createdAt:
                     serverTimestamp()
@@ -1025,7 +1052,17 @@ dieselButton.addEventListener(
 
         }
 
+if (!dieselDate.value) {
 
+    showMessage(
+        "Select the diesel date.",
+        "error"
+    );
+
+    dieselDate.focus();
+
+    return;
+}
         setButtonLoading(
             dieselButton,
             false
