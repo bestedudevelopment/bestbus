@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -8,19 +10,37 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Login</title>
+    <title>Login | Fleet Management</title>
 
     <link
         rel="stylesheet"
         href="./style.css"
     >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+
 </head>
+
 
 <body>
 
-    <main class="login-page">
+    <header class="topbar">
 
-        <section class="login-card">
+        <div class="brand">
 
             <img
                 src="./logo.png"
@@ -28,31 +48,68 @@
                 class="logo"
             >
 
-            <div class="heading">
+            <div class="brand-text">
 
-                <span>FLEET MANAGEMENT</span>
+                <strong>
+                    FLEET
+                </strong>
 
-                <h1>Login</h1>
-
-                <p>
-                    Sign in to continue.
-                </p>
+                <span>
+                    MANAGEMENT
+                </span>
 
             </div>
 
+        </div>
 
-            <form id="loginForm">
+        <span class="top-label">
+            SECURE ACCESS
+        </span>
+
+    </header>
+
+
+    <main class="page">
+
+        <section class="heading">
+
+            <span class="eyebrow">
+                FLEET MANAGEMENT SYSTEM
+            </span>
+
+            <h1>
+                Welcome back.
+            </h1>
+
+            <p>
+                Sign in to manage your fleet or access your driver account.
+            </p>
+
+        </section>
+
+
+        <!-- LOGIN -->
+
+        <section
+            id="loginSection"
+            class="auth-section"
+        >
+
+            <form
+                id="loginForm"
+                class="form"
+            >
 
                 <div class="field">
 
-                    <label for="email">
+                    <label for="loginEmail">
                         EMAIL
                     </label>
 
                     <input
-                        id="email"
+                        id="loginEmail"
                         type="email"
-                        placeholder="Enter email"
+                        placeholder="you@example.com"
                         autocomplete="email"
                         required
                     >
@@ -62,14 +119,14 @@
 
                 <div class="field">
 
-                    <label for="password">
+                    <label for="loginPassword">
                         PASSWORD
                     </label>
 
                     <input
-                        id="password"
+                        id="loginPassword"
                         type="password"
-                        placeholder="Enter password"
+                        placeholder="Enter your password"
                         autocomplete="current-password"
                         required
                     >
@@ -77,20 +134,156 @@
                 </div>
 
 
+                <div
+                    id="loginMessage"
+                    class="message hidden"
+                ></div>
+
+
                 <button
-                    id="loginButton"
                     type="submit"
+                    id="loginButton"
+                    class="primary-button"
                 >
-                    LOGIN
+                    SIGN IN
                 </button>
 
             </form>
 
 
-            <div
-                id="errorMessage"
-                class="error-message hidden"
-            ></div>
+            <div class="switch-box">
+
+                <span>
+                    Don't have an account?
+                </span>
+
+                <button
+                    type="button"
+                    id="showRegister"
+                    class="text-button"
+                >
+                    CREATE ACCOUNT
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- REGISTER -->
+
+        <section
+            id="registerSection"
+            class="auth-section hidden"
+        >
+
+            <form
+                id="registerForm"
+                class="form"
+            >
+
+                <div class="field">
+
+                    <label for="registerName">
+                        FULL NAME
+                    </label>
+
+                    <input
+                        id="registerName"
+                        type="text"
+                        placeholder="Your full name"
+                        autocomplete="name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="registerEmail">
+                        EMAIL
+                    </label>
+
+                    <input
+                        id="registerEmail"
+                        type="email"
+                        placeholder="you@example.com"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="registerPassword">
+                        PASSWORD
+                    </label>
+
+                    <input
+                        id="registerPassword"
+                        type="password"
+                        placeholder="Minimum 6 characters"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="registerConfirm">
+                        CONFIRM PASSWORD
+                    </label>
+
+                    <input
+                        id="registerConfirm"
+                        type="password"
+                        placeholder="Enter password again"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+
+                <div
+                    id="registerMessage"
+                    class="message hidden"
+                ></div>
+
+
+                <button
+                    type="submit"
+                    id="registerButton"
+                    class="primary-button"
+                >
+                    CREATE ACCOUNT
+                </button>
+
+            </form>
+
+
+            <div class="switch-box">
+
+                <span>
+                    Already have an account?
+                </span>
+
+                <button
+                    type="button"
+                    id="showLogin"
+                    class="text-button"
+                >
+                    SIGN IN
+                </button>
+
+            </div>
 
         </section>
 
@@ -103,4 +296,5 @@
     ></script>
 
 </body>
+
 </html>
