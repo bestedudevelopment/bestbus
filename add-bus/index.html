@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Add Bus | Admin</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body>
+
+    <header class="topbar">
+
+        <a
+            href="../admin/"
+            class="back"
+        >
+            ← ADMIN
+        </a>
+
+
+        <img
+            src="../logo.png"
+            alt="Logo"
+            class="logo"
+        >
+
+        <span class="page-label">
+            ADD BUS
+        </span>
+
+    </header>
+
+
+    <main class="page">
+
+        <section class="heading">
+
+            <span class="eyebrow">
+                FLEET MANAGEMENT
+            </span>
+
+            <h1>
+                Add Bus
+            </h1>
+
+            <p>
+                Register a vehicle and set its initial odometer.
+            </p>
+
+        </section>
+
+
+        <form
+            id="busForm"
+            class="form"
+        >
+
+            <div class="field">
+
+                <label for="busNumber">
+                    BUS NUMBER
+                </label>
+
+                <input
+                    id="busNumber"
+                    type="text"
+                    placeholder="TEST BUS 1"
+                    autocomplete="off"
+                    required
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="registrationNumber">
+                    REGISTRATION NUMBER
+                </label>
+
+                <input
+                    id="registrationNumber"
+                    type="text"
+                    placeholder="KA 35 AB 1234"
+                    autocomplete="off"
+                    required
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="startingOdometer">
+                    STARTING ODOMETER
+                </label>
+
+                <div class="unit-input">
+
+                    <input
+                        id="startingOdometer"
+                        type="number"
+                        min="0"
+                        step="0.1"
+                        placeholder="12000"
+                        required
+                    >
+
+                    <span>
+                        KM
+                    </span>
+
+                </div>
+
+                <small>
+                    This is entered by Admin only once when the bus is created.
+                </small>
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="expectedMileage">
+                    EXPECTED MILEAGE
+                </label>
+
+                <div class="unit-input">
+
+                    <input
+                        id="expectedMileage"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        placeholder="5.00"
+                        required
+                    >
+
+                    <span>
+                        KM/L
+                    </span>
+
+                </div>
+
+                <small>
+                    Used later to identify fuel-efficiency red flags.
+                </small>
+
+            </div>
+
+
+            <div
+                id="message"
+                class="message hidden"
+            ></div>
+
+
+            <button
+                id="saveButton"
+                type="submit"
+                class="save-button"
+            >
+                CREATE BUS
+            </button>
+
+        </form>
+
+    </main>
+
+
+    <script
+        type="module"
+        src="./script.js"
+    ></script>
+
+</body>
+
+</html>
