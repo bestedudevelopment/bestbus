@@ -1,11 +1,12 @@
 import {
     collection,
-    getDocs,
-    addDoc,
-    query,
-    where,
-    serverTimestamp
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import {
+    getFunctions,
+    httpsCallable
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-functions.js";
 
 import {
     db
@@ -49,6 +50,21 @@ const saveButton =
 const message =
     document.getElementById(
         "message"
+    );
+
+
+/* ================================
+   FIREBASE FUNCTIONS
+================================ */
+
+const functions =
+    getFunctions();
+
+
+const createDriver =
+    httpsCallable(
+        functions,
+        "createDriver"
     );
 
 
@@ -100,17 +116,12 @@ async function loadBuses() {
                     busSnapshot.data();
 
 
-                /*
-                 * Only show active buses.
-                 */
-
                 if (
                     bus.status &&
                     bus.status !== "active"
                 ) {
 
                     return;
-
                 }
 
 
@@ -141,7 +152,6 @@ async function loadBuses() {
     } catch (error) {
 
         console.error(
-            "LOAD BUSES ERROR:",
             error
         );
 
@@ -152,13 +162,17 @@ async function loadBuses() {
             </option>
         `;
 
+        showError(
+            "Unable to load buses."
+        );
+
     }
 
 }
 
 
 /* ================================
-   CREATE DRIVER PROFILE
+   CREATE DRIVER
 ================================ */
 
 driverForm.addEventListener(
@@ -238,134 +252,52 @@ driverForm.addEventListener(
             true;
 
         saveButton.textContent =
-            "CREATING...";
+            "CREATING DRIVER...";
 
 
         try {
 
-            /* =========================
-               DUPLICATE EMAIL CHECK
-            ========================= */
-
-            const emailQuery =
-                query(
-                    collection(
-                        db,
-                        "drivers"
-                    ),
-                    where(
-                        "email",
-                        "==",
-                        email
-                    )
-                );
-
-
-            const existing =
-                await getDocs(
-                    emailQuery
-                );
-
-
-            if (
-                !existing.empty
-            ) {
-
-                throw new Error(
-                    "A driver with this email already exists."
-                );
-
-            }
-
-
-            /* =========================
-               CHECK BUS
-            ========================= */
-
-            const busQuery =
-                query(
-                    collection(
-                        db,
-                        "drivers"
-                    ),
-                    where(
-                        "assignedBusId",
-                        "==",
-                        busId
-                    )
-                );
-
-
-            const busDriverSnapshot =
-                await getDocs(
-                    busQuery
-                );
-
-
-            if (
-                !busDriverSnapshot.empty
-            ) {
-
-                throw new Error(
-                    "This bus is already assigned to a driver."
-                );
-
-            }
-
-
-            /* =========================
-               SAVE DRIVER PROFILE
-            ========================= */
-
-            await addDoc(
-                collection(
-                    db,
-                    "drivers"
-                ),
-                {
+            const result =
+                await createDriver({
 
                     name:
-
                         name,
 
                     email:
-
                         email,
 
-                    /*
-                     * This is stored temporarily
-                     * only as a profile field.
-                     *
-                     * DO NOT use this field as
-                     * authentication.
-                     */
+                    password:
+                        password,
 
-                    assignedBusId:
+                    busId:
+                        busId
 
-                        busId,
+                });
 
-                    status:
 
-                        "active",
-
-                    role:
-
-                        "driver",
-
-                    createdAt:
-
-                        serverTimestamp()
-
-                }
+            console.log(
+                "DRIVER CREATED:",
+                result.data
             );
 
 
             showSuccess(
-                "Driver profile created. Authentication account still needs to be connected."
+                "Driver created successfully."
             );
 
 
             driverForm.reset();
+
+
+            setTimeout(
+                () => {
+
+                    window.location.href =
+                        "../admin/";
+
+                },
+                1000
+            );
 
 
         } catch (error) {
@@ -377,8 +309,9 @@ driverForm.addEventListener(
 
 
             showError(
-                error.message ||
-                "Unable to create driver."
+                getReadableError(
+                    error
+                )
             );
 
         } finally {
@@ -450,7 +383,7 @@ function showSuccess(
 
 
 /* ================================
-   HIDE
+   HIDE MESSAGE
 ================================ */
 
 function hideMessage() {
@@ -461,5 +394,26 @@ function hideMessage() {
     message.classList.add(
         "hidden"
     );
+
+}
+
+
+/* ================================
+   READABLE ERRORS
+================================ */
+
+function getReadableError(
+    error
+) {
+
+    if (
+        error?.message
+    ) {
+
+        return error.message;
+
+    }
+
+    return "Unable to create driver.";
 
 }
