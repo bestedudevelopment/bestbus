@@ -335,122 +335,66 @@ async function loadDriver() {
 /* =========================================
    LOAD TODAY'S READINGS
 ========================================= */
+async function loadSelectedReadings() {
 
-async function loadTodayReadings() {
-
-    const today =
-        getTodayKey();
-
-
-    morningRecord =
-        null;
-
-    eveningRecord =
-        null;
-
+    morningRecord = null;
+    eveningRecord = null;
 
     const readingsReference =
-        collection(
-            db,
-            "driverReadings"
-        );
-
-
-    const readingsQuery =
-        query(
-            readingsReference,
-
-            where(
-                "busId",
-                "==",
-                currentBus.id
-            ),
-
-            where(
-                "date",
-                "==",
-                today
-            )
-        );
-
+        collection(db, "driverReadings");
 
     const snapshot =
         await getDocs(
-            readingsQuery
+            query(
+                readingsReference,
+                where(
+                    "busId",
+                    "==",
+                    currentBus.id
+                )
+            )
         );
 
+    const morningSelectedDate =
+        morningDate.value;
 
-    snapshot.forEach(
-        (documentSnapshot) => {
+    const eveningSelectedDate =
+        eveningDate.value;
 
-            const data =
-                documentSnapshot.data();
+    snapshot.forEach((documentSnapshot) => {
 
+        const data =
+            documentSnapshot.data();
 
-            /*
-             * Make sure this is
-             * this driver's reading.
-             */
-
-            if (
-                data.driverId !==
-                currentUser.uid
-            ) {
-
-                return;
-
-            }
-
-
-            const record = {
-
-                id:
-                    documentSnapshot.id,
-
-                ...data
-
-            };
-
-
-            if (
-                data.type ===
-                "morning"
-            ) {
-
-                morningRecord =
-                    record;
-
-            }
-
-
-            if (
-                data.type ===
-                "evening"
-            ) {
-
-                eveningRecord =
-                    record;
-
-            }
-
+        if (
+            data.driverId !== currentUser.uid
+        ) {
+            return;
         }
-    );
 
+        const record = {
+            id: documentSnapshot.id,
+            ...data
+        };
 
-    console.log(
-        "Morning:",
-        morningRecord
-    );
+        if (
+            data.type === "morning" &&
+            data.date === morningSelectedDate
+        ) {
+            morningRecord = record;
+        }
 
+        if (
+            data.type === "evening" &&
+            data.date === eveningSelectedDate
+        ) {
+            eveningRecord = record;
+        }
 
-    console.log(
-        "Evening:",
-        eveningRecord
-    );
+    });
 
+    updateTodayUI();
 }
-
-
 /* =========================================
    SAVE MORNING
 ========================================= */
