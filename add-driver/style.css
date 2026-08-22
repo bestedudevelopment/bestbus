@@ -39,9 +39,7 @@ body {
 }
 
 
-/* ================================
-   TOPBAR
-================================ */
+/* TOP BAR */
 
 .topbar {
     height: 70px;
@@ -93,9 +91,7 @@ body {
 }
 
 
-/* ================================
-   PAGE
-================================ */
+/* PAGE */
 
 .page {
     width: 100%;
@@ -108,9 +104,7 @@ body {
 }
 
 
-/* ================================
-   HEADING
-================================ */
+/* HEADING */
 
 .heading {
     padding-bottom: 25px;
@@ -139,8 +133,6 @@ body {
     font-size: 38px;
 
     line-height: 1.1;
-
-    letter-spacing: -0.8px;
 }
 
 .heading p {
@@ -154,9 +146,7 @@ body {
 }
 
 
-/* ================================
-   FORM
-================================ */
+/* FORM */
 
 .form {
     margin-top: 28px;
@@ -166,7 +156,8 @@ body {
     margin-bottom: 19px;
 }
 
-.field label {
+.field label,
+.verify-title {
     display: block;
 
     margin-bottom: 7px;
@@ -180,7 +171,8 @@ body {
 }
 
 .field input,
-.field select {
+.field select,
+.admin-verification input {
     width: 100%;
 
     height: 46px;
@@ -202,37 +194,48 @@ body {
 }
 
 .field input:focus,
-.field select:focus {
+.field select:focus,
+.admin-verification input:focus {
     border-color: var(--black);
 }
 
-.field select {
-    cursor: pointer;
+
+/* ADMIN VERIFICATION */
+
+.admin-verification {
+    margin-top: 25px;
+    margin-bottom: 19px;
+
+    padding: 16px;
+
+    background: var(--yellow-soft);
+
+    border:
+        1px solid var(--yellow);
+
+    border-radius: 7px;
 }
 
-.field small {
-    display: block;
+.admin-verification p {
+    margin-bottom: 12px;
 
-    margin-top: 6px;
-
-    color: var(--grey-400);
+    color: var(--grey-600);
 
     font-size: 8px;
 
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 
-/* ================================
-   MESSAGE
-================================ */
+/* MESSAGE */
 
 .message {
     margin-bottom: 15px;
 
     padding: 11px 13px;
 
-    border: 1px solid var(--red);
+    border:
+        1px solid var(--red);
 
     border-radius: 6px;
 
@@ -250,9 +253,7 @@ body {
 }
 
 
-/* ================================
-   BUTTON
-================================ */
+/* BUTTON */
 
 .save-button {
     width: 100%;
@@ -289,9 +290,7 @@ body {
 }
 
 
-/* ================================
-   MOBILE
-================================ */
+/* MOBILE */
 
 @media (max-width: 500px) {
 
