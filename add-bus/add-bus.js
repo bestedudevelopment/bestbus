@@ -1,10 +1,12 @@
 import {
     collection,
-    getDocs,
     addDoc,
+    getDocs,
     query,
     where,
-    serverTimestamp
+    serverTimestamp,
+    doc,
+    getDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import {
@@ -16,130 +18,85 @@ import {
     db
 } from "../core/firebase.js";
 
-import {
-    getUserProfile
-} from "../core/auth.js";
 
-
-/* =========================================
+/* =================================
    ELEMENTS
-========================================= */
+================================= */
 
-const form =
-    document.getElementById("busForm");
+const busForm =
+    document.getElementById(
+        "busForm"
+    );
 
 const busNumber =
-    document.getElementById("busNumber");
+    document.getElementById(
+        "busNumber"
+    );
 
 const registrationNumber =
     document.getElementById(
         "registrationNumber"
     );
 
-const route =
-    document.getElementById("route");
+const startingOdometer =
+    document.getElementById(
+        "startingOdometer"
+    );
 
 const expectedMileage =
     document.getElementById(
         "expectedMileage"
     );
 
-const currentOdometer =
-    document.getElementById(
-        "currentOdometer"
-    );
-
-const active =
-    document.getElementById("active");
-
 const saveButton =
     document.getElementById(
         "saveButton"
     );
 
-const saveText =
+const message =
     document.getElementById(
-        "saveText"
-    );
-
-const spinner =
-    document.getElementById(
-        "spinner"
-    );
-
-const errorMessage =
-    document.getElementById(
-        "errorMessage"
-    );
-
-const successMessage =
-    document.getElementById(
-        "successMessage"
-    );
-
-const backButton =
-    document.getElementById(
-        "backButton"
+        "message"
     );
 
 
-/* =========================================
-   BACK
-========================================= */
-
-backButton.addEventListener(
-    "click",
-    () => {
-
-        window.location.href =
-            "../buses/";
-
-    }
-);
-
-
-/* =========================================
-   ADMIN AUTH
-========================================= */
+/* =================================
+   AUTH CHECK
+================================= */
 
 onAuthStateChanged(
     auth,
     async (user) => {
 
+        /*
+         * Login is compulsory.
+         */
+
         if (!user) {
 
-            window.location.href =
-                "../login/";
+            window.location.replace(
+                "../login/"
+            );
 
             return;
+
         }
+
 
         try {
 
-            const profile =
-                await getUserProfile(
-                    user.uid
-                );
-
-
-            if (
-                !profile ||
-                profile.role !== "admin"
-            ) {
-
-                window.location.href =
-                    "../login/";
-
-            }
+            await verifyAdmin(
+                user
+            );
 
         } catch (error) {
 
             console.error(
+                "ADMIN VERIFICATION ERROR:",
                 error
             );
 
-            showError(
-                "Unable to verify administrator."
+            window.location.replace(
+                "../login/"
             );
 
         }
@@ -148,85 +105,182 @@ onAuthStateChanged(
 );
 
 
-/* =========================================
-   FORM SUBMIT
-========================================= */
+/* =================================
+   VERIFY ADMIN
+================================= */
 
-form.addEventListener(
+async function verifyAdmin(
+    user
+) {
+
+    const userReference =
+        doc(
+            db,
+            "users",
+            user.uid
+        );
+
+
+    const userSnapshot =
+        await getDoc(
+            userReference
+        );
+
+
+    if (
+        !userSnapshot.exists()
+    ) {
+
+        throw new Error(
+            "Admin profile not found."
+        );
+
+    }
+
+
+    const userData =
+        userSnapshot.data();
+
+
+    if (
+        userData.role !==
+        "admin"
+    ) {
+
+        throw new Error(
+            "Administrator access required."
+        );
+
+    }
+
+}
+
+
+/* =================================
+   FORM SUBMIT
+================================= */
+
+busForm.addEventListener(
     "submit",
     async (event) => {
 
         event.preventDefault();
 
-        hideMessages();
+
+        hideMessage();
+
 
         const number =
             busNumber.value
                 .trim()
                 .toUpperCase();
 
+
         const registration =
             registrationNumber.value
                 .trim()
                 .toUpperCase();
 
-        const busRoute =
-            route.value
-                .trim();
 
-        const mileageValue =
-            expectedMileage.value;
-
-        const odometerValue =
-            currentOdometer.value;
-
-        const isActive =
-            active.checked;
+        const initialOdometer =
+            Number(
+                startingOdometer.value
+            );
 
 
-        /* =====================================
+        const mileage =
+            Number(
+                expectedMileage.value
+            );
+
+
+        /* -------------------------
            VALIDATION
-        ===================================== */
+        ------------------------- */
 
         if (!number) {
 
             showError(
-                "Please enter the bus number."
+                "Enter the bus number."
             );
 
             busNumber.focus();
 
             return;
+
         }
 
 
         if (!registration) {
 
             showError(
-                "Please enter the registration number."
+                "Enter the registration number."
             );
 
             registrationNumber.focus();
 
             return;
+
         }
 
 
-        setLoading(true);
+        if (
+            !Number.isFinite(
+                initialOdometer
+            ) ||
+            initialOdometer < 0
+        ) {
+
+            showError(
+                "Enter a valid starting odometer."
+            );
+
+            startingOdometer.focus();
+
+            return;
+
+        }
+
+
+        if (
+            !Number.isFinite(
+                mileage
+            ) ||
+            mileage <= 0
+        ) {
+
+            showError(
+                "Enter a valid expected mileage."
+            );
+
+            expectedMileage.focus();
+
+            return;
+
+        }
+
+
+        setSaving(
+            true
+        );
 
 
         try {
 
-            /* =================================
-               CHECK BUS NUMBER
-            ================================= */
+            /* -------------------------
+               DUPLICATE CHECK
+            ------------------------- */
 
-            const numberQuery =
+            const busesReference =
+                collection(
+                    db,
+                    "buses"
+                );
+
+
+            const duplicateQuery =
                 query(
-                    collection(
-                        db,
-                        "buses"
-                    ),
+                    busesReference,
 
                     where(
                         "busNumber",
@@ -236,62 +290,32 @@ form.addEventListener(
                 );
 
 
-            const numberSnapshot =
+            const duplicateSnapshot =
                 await getDocs(
-                    numberQuery
+                    duplicateQuery
                 );
 
 
             if (
-                !numberSnapshot.empty
+                !duplicateSnapshot.empty
             ) {
 
-                throw new Error(
-                    "This bus number already exists."
+                showError(
+                    "A bus with this bus number already exists."
                 );
+
+                setSaving(
+                    false
+                );
+
+                return;
 
             }
 
 
-            /* =================================
-               CHECK REGISTRATION
-            ================================= */
-
-            const registrationQuery =
-                query(
-                    collection(
-                        db,
-                        "buses"
-                    ),
-
-                    where(
-                        "registrationNumber",
-                        "==",
-                        registration
-                    )
-                );
-
-
-            const registrationSnapshot =
-                await getDocs(
-                    registrationQuery
-                );
-
-
-            if (
-                !registrationSnapshot.empty
-            ) {
-
-                throw new Error(
-                    "This registration number already exists."
-                );
-
-            }
-
-
-            /* =================================
+            /* -------------------------
                CREATE BUS
-            ================================= */
+            ------------------------- */
 
             const busData = {
 
@@ -301,49 +325,46 @@ form.addEventListener(
                 registrationNumber:
                     registration,
 
-                route:
-                    busRoute,
-
-                expectedMileage:
-                    mileageValue
-                        ? Number(
-                            mileageValue
-                          )
-                        : 0,
-
-                currentOdometer:
-                    odometerValue
-                        ? Number(
-                            odometerValue
-                          )
-                        : 0,
-
-                active:
-                    isActive,
+                startingOdometer:
+                    initialOdometer,
 
                 /*
-                 * No driver when a bus
-                 * is first created.
+                 * At creation, current
+                 * odometer equals the
+                 * starting odometer.
+                 */
+
+                currentOdometer:
+                    initialOdometer,
+
+                expectedMileage:
+                    mileage,
+
+                /*
+                 * No driver initially.
                  */
 
                 driverId:
-                    "",
+                    null,
+
+                driverAssigned:
+                    false,
+
+                status:
+                    "active",
 
                 createdAt:
                     serverTimestamp(),
 
-                updatedAt:
-                    serverTimestamp()
+                createdBy:
+                    auth.currentUser.uid
 
             };
 
 
             const busReference =
                 await addDoc(
-                    collection(
-                        db,
-                        "buses"
-                    ),
+                    busesReference,
                     busData
                 );
 
@@ -354,25 +375,21 @@ form.addEventListener(
             );
 
 
-            /* =================================
-               SUCCESS
-            ================================= */
-
             showSuccess(
-                `${number} has been added successfully.`
+                "Bus created successfully."
             );
 
 
-            form.reset();
+            /*
+             * Clear form after success.
+             */
+
+            busForm.reset();
 
 
             /*
-             * Keep status ON after reset.
+             * Redirect after a short delay.
              */
-
-            active.checked =
-                true;
-
 
             setTimeout(
                 () => {
@@ -381,27 +398,42 @@ form.addEventListener(
                         "../buses/";
 
                 },
-                1200
+                900
             );
 
 
         } catch (error) {
 
             console.error(
-                "ADD BUS ERROR:",
+                "CREATE BUS ERROR:",
                 error
             );
 
 
-            showError(
-                error.message ||
-                "Unable to add bus."
-            );
+            if (
+                error.code ===
+                "permission-denied"
+            ) {
+
+                showError(
+                    "Firebase denied this operation. Check your Firestore rules."
+                );
+
+            } else {
+
+                showError(
+                    error.message ||
+                    "Unable to create bus."
+                );
+
+            }
 
 
         } finally {
 
-            setLoading(false);
+            setSaving(
+                false
+            );
 
         }
 
@@ -409,80 +441,67 @@ form.addEventListener(
 );
 
 
-/* =========================================
-   LOADING
-========================================= */
+/* =================================
+   BUTTON STATE
+================================= */
 
-function setLoading(
-    loading
+function setSaving(
+    saving
 ) {
 
     saveButton.disabled =
-        loading;
+        saving;
 
 
-    saveText.classList.toggle(
-        "hidden",
-        loading
-    );
-
-
-    spinner.classList.toggle(
-        "hidden",
-        !loading
-    );
+    saveButton.textContent =
+        saving
+            ? "CREATING..."
+            : "CREATE BUS";
 
 }
 
 
-/* =========================================
+/* =================================
    MESSAGES
-========================================= */
-
-function hideMessages() {
-
-    errorMessage.classList.add(
-        "hidden"
-    );
-
-    successMessage.classList.add(
-        "hidden"
-    );
-
-}
-
+================================= */
 
 function showError(
-    message
+    text
 ) {
 
-    errorMessage.textContent =
-        message;
+    message.textContent =
+        text;
 
-    errorMessage.classList.remove(
-        "hidden"
-    );
-
-    successMessage.classList.add(
-        "hidden"
-    );
+    message.className =
+        "message";
 
 }
 
 
 function showSuccess(
-    message
+    text
 ) {
 
-    successMessage.textContent =
-        message;
+    /*
+     * Black/white design.
+     * Red is reserved for errors.
+     */
 
-    successMessage.classList.remove(
-        "hidden"
-    );
+    message.textContent =
+        text;
 
-    errorMessage.classList.add(
-        "hidden"
-    );
+    message.className =
+        "message";
+
+}
+
+
+function hideMessage() {
+
+    message.textContent =
+        "";
+
+    message.className =
+        "message hidden";
 
 }
