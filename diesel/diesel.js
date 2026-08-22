@@ -28,109 +28,67 @@ import {
 ========================================= */
 
 const loadingScreen =
-    document.getElementById(
-        "loadingScreen"
-    );
+    document.getElementById("loadingScreen");
 
 const backButton =
-    document.getElementById(
-        "backButton"
-    );
+    document.getElementById("backButton");
 
 const busNumber =
-    document.getElementById(
-        "busNumber"
-    );
+    document.getElementById("busNumber");
 
 const registrationNumber =
-    document.getElementById(
-        "registrationNumber"
-    );
+    document.getElementById("registrationNumber");
 
 const form =
-    document.getElementById(
-        "dieselForm"
-    );
+    document.getElementById("dieselForm");
 
 const litres =
-    document.getElementById(
-        "litres"
-    );
+    document.getElementById("litres");
 
 const amount =
-    document.getElementById(
-        "amount"
-    );
+    document.getElementById("amount");
 
 const pricePerLitre =
-    document.getElementById(
-        "pricePerLitre"
-    );
+    document.getElementById("pricePerLitre");
 
 const odometer =
-    document.getElementById(
-        "odometer"
-    );
+    document.getElementById("odometer");
 
 const fuelStation =
-    document.getElementById(
-        "fuelStation"
-    );
+    document.getElementById("fuelStation");
 
 const fuelPhoto =
-    document.getElementById(
-        "fuelPhoto"
-    );
+    document.getElementById("fuelPhoto");
 
 const photoButton =
-    document.getElementById(
-        "photoButton"
-    );
+    document.getElementById("photoButton");
 
 const photoPreview =
-    document.getElementById(
-        "photoPreview"
-    );
+    document.getElementById("photoPreview");
 
 const saveButton =
-    document.getElementById(
-        "saveButton"
-    );
+    document.getElementById("saveButton");
 
 const saveText =
-    document.getElementById(
-        "saveText"
-    );
+    document.getElementById("saveText");
 
 const spinner =
-    document.getElementById(
-        "spinner"
-    );
+    document.getElementById("spinner");
 
 const errorMessage =
-    document.getElementById(
-        "errorMessage"
-    );
+    document.getElementById("errorMessage");
 
 const successCard =
-    document.getElementById(
-        "successCard"
-    );
+    document.getElementById("successCard");
 
 const successLitres =
-    document.getElementById(
-        "successLitres"
-    );
+    document.getElementById("successLitres");
 
 const successAmount =
-    document.getElementById(
-        "successAmount"
-    );
+    document.getElementById("successAmount");
 
 const homeButton =
-    document.getElementById(
-        "homeButton"
-    );
+    document.getElementById("homeButton");
 
 
 /* =========================================
@@ -150,89 +108,123 @@ let selectedPhoto = null;
    BACK
 ========================================= */
 
-backButton.addEventListener(
-    "click",
-    () => {
+if (backButton) {
 
-        window.location.href =
-            "../driver/";
+    backButton.addEventListener(
+        "click",
+        () => {
 
-    }
-);
+            window.location.href =
+                "../driver/";
+
+        }
+    );
+
+}
 
 
-homeButton.addEventListener(
-    "click",
-    () => {
+if (homeButton) {
 
-        window.location.href =
-            "../driver/";
+    homeButton.addEventListener(
+        "click",
+        () => {
 
-    }
-);
+            window.location.href =
+                "../driver/";
+
+        }
+    );
+
+}
 
 
 /* =========================================
    PHOTO
 ========================================= */
 
-photoButton.addEventListener(
-    "click",
-    () => {
+if (photoButton) {
 
-        fuelPhoto.click();
+    photoButton.addEventListener(
+        "click",
+        () => {
 
-    }
-);
-
-
-fuelPhoto.addEventListener(
-    "change",
-    () => {
-
-        const file =
-            fuelPhoto.files?.[0];
-
-
-        if (!file) {
-
-            return;
+            fuelPhoto.click();
 
         }
+    );
+
+}
 
 
-        selectedPhoto =
-            file;
+if (fuelPhoto) {
+
+    fuelPhoto.addEventListener(
+        "change",
+        () => {
+
+            const file =
+                fuelPhoto.files?.[0];
 
 
-        const previewURL =
-            URL.createObjectURL(
-                file
-            );
+            if (!file) {
+
+                return;
+
+            }
 
 
-        photoPreview.src =
-            previewURL;
+            selectedPhoto =
+                file;
 
 
-        photoPreview.classList.remove(
-            "hidden"
-        );
+            const previewURL =
+                URL.createObjectURL(
+                    file
+                );
 
 
-        photoButton.querySelector(
-            "strong"
-        ).textContent =
-            "PHOTO SELECTED";
+            if (photoPreview) {
+
+                photoPreview.src =
+                    previewURL;
+
+                photoPreview.classList.remove(
+                    "hidden"
+                );
+
+            }
 
 
-        photoButton.querySelector(
-            "small"
-        ).textContent =
-            file.name;
+            const strong =
+                photoButton?.querySelector(
+                    "strong"
+                );
 
-    }
-);
+            const small =
+                photoButton?.querySelector(
+                    "small"
+                );
+
+
+            if (strong) {
+
+                strong.textContent =
+                    "PHOTO SELECTED";
+
+            }
+
+
+            if (small) {
+
+                small.textContent =
+                    file.name;
+
+            }
+
+        }
+    );
+
+}
 
 
 /* =========================================
@@ -245,6 +237,7 @@ function calculatePrice() {
         Number(
             litres.value
         );
+
 
     const amountValue =
         Number(
@@ -343,6 +336,11 @@ onAuthStateChanged(
 
 async function loadDriver() {
 
+    console.log(
+        "Loading driver..."
+    );
+
+
     const driverReference =
         doc(
             db,
@@ -370,6 +368,12 @@ async function loadDriver() {
 
     const driver =
         driverSnapshot.data();
+
+
+    console.log(
+        "Driver data:",
+        driver
+    );
 
 
     if (
@@ -416,6 +420,12 @@ async function loadDriver() {
     };
 
 
+    console.log(
+        "Assigned Bus ID:",
+        driver.assignedBusId
+    );
+
+
     const busReference =
         doc(
             db,
@@ -451,6 +461,12 @@ async function loadDriver() {
     };
 
 
+    console.log(
+        "Current bus:",
+        currentBus
+    );
+
+
     busNumber.textContent =
         currentBus.busNumber ||
         "BUS";
@@ -478,20 +494,53 @@ form.addEventListener(
         hideError();
 
 
+        /* =====================================
+           CHECK AUTH / BUS
+        ===================================== */
+
+        if (!currentUser) {
+
+            showError(
+                "You are not logged in."
+            );
+
+            return;
+
+        }
+
+
+        if (!currentBus) {
+
+            showError(
+                "Assigned bus information is not available."
+            );
+
+            return;
+
+        }
+
+
+        /* =====================================
+           READ VALUES
+        ===================================== */
+
         const litresValue =
             Number(
                 litres.value
             );
+
 
         const amountValue =
             Number(
                 amount.value
             );
 
+
         const odometerValue =
             Number(
                 odometer.value
             );
+
 
         const station =
             fuelStation.value.trim();
@@ -518,6 +567,9 @@ form.addEventListener(
 
 
         if (
+            Number.isNaN(
+                amountValue
+            ) ||
             amountValue < 0
         ) {
 
@@ -555,59 +607,6 @@ form.addEventListener(
 
         try {
 
-            let photoURL =
-                "";
-
-
-            /* =================================
-               PHOTO
-            ================================= */
-
-            if (
-                selectedPhoto
-            ) {
-
-                const today =
-                    getTodayKey();
-
-
-                const extension =
-                    selectedPhoto.name
-                        .split(".")
-                        .pop()
-                        .toLowerCase() ||
-                    "jpg";
-
-
-                const path =
-                    `dieselRecords/${currentUser.uid}/${currentBus.id}/${today}/${Date.now()}.${extension}`;
-
-
-                const storageReference =
-                    ref(
-                        storage,
-                        path
-                    );
-
-
-                await uploadBytes(
-                    storageReference,
-                    selectedPhoto,
-                    {
-                        contentType:
-                            selectedPhoto.type
-                    }
-                );
-
-
-                photoURL =
-                    await getDownloadURL(
-                        storageReference
-                    );
-
-            }
-
-
             /* =================================
                PRICE
             ================================= */
@@ -618,49 +617,163 @@ form.addEventListener(
 
 
             /* =================================
-               SAVE
+               PHOTO
             ================================= */
 
-            await addDoc(
-                collection(
-                    db,
-                    "dieselRecords"
-                ),
-                {
+            let photoURL =
+                "";
 
-                    driverId:
-                        currentUser.uid,
 
-                    busId:
-                        currentBus.id,
+            /*
+             * Photo upload is OPTIONAL.
+             *
+             * Even if Storage fails,
+             * the diesel record will still
+             * be saved to Firestore.
+             */
 
-                    date:
-                        getTodayKey(),
+            if (
+                selectedPhoto
+            ) {
 
-                    litres:
-                        litresValue,
+                try {
 
-                    amount:
-                        amountValue,
+                    const today =
+                        getTodayKey();
 
-                    pricePerLitre:
-                        Number(
-                            price.toFixed(2)
-                        ),
 
-                    odometer:
-                        odometerValue,
+                    const extension =
+                        selectedPhoto.name
+                            .split(".")
+                            .pop()
+                            .toLowerCase() ||
+                        "jpg";
 
-                    fuelStation:
-                        station,
 
-                    photo:
-                        photoURL,
+                    const path =
+                        `dieselRecords/${currentUser.uid}/${currentBus.id}/${today}/${Date.now()}.${extension}`;
 
-                    createdAt:
-                        serverTimestamp()
+
+                    console.log(
+                        "Uploading photo:",
+                        path
+                    );
+
+
+                    const storageReference =
+                        ref(
+                            storage,
+                            path
+                        );
+
+
+                    await uploadBytes(
+                        storageReference,
+                        selectedPhoto,
+                        {
+                            contentType:
+                                selectedPhoto.type
+                        }
+                    );
+
+
+                    photoURL =
+                        await getDownloadURL(
+                            storageReference
+                        );
+
+
+                    console.log(
+                        "Photo uploaded:"
+                    );
+
+                } catch (
+                    photoError
+                ) {
+
+                    console.error(
+                        "PHOTO UPLOAD FAILED:",
+                        photoError
+                    );
+
+
+                    /*
+                     * Do NOT stop the
+                     * diesel save.
+                     */
+
+                    photoURL =
+                        "";
 
                 }
+
+            }
+
+
+            /* =================================
+               DIESEL DATA
+            ================================= */
+
+            const dieselData = {
+
+                driverId:
+                    currentUser.uid,
+
+                busId:
+                    currentBus.id,
+
+                date:
+                    getTodayKey(),
+
+                litres:
+                    litresValue,
+
+                amount:
+                    amountValue,
+
+                pricePerLitre:
+                    Number(
+                        price.toFixed(2)
+                    ),
+
+                odometer:
+                    odometerValue,
+
+                fuelStation:
+                    station,
+
+                photo:
+                    photoURL,
+
+                createdAt:
+                    serverTimestamp()
+
+            };
+
+
+            console.log(
+                "Saving diesel data:",
+                dieselData
+            );
+
+
+            /* =================================
+               FIRESTORE SAVE
+            ================================= */
+
+            const dieselReference =
+                await addDoc(
+                    collection(
+                        db,
+                        "dieselRecords"
+                    ),
+                    dieselData
+                );
+
+
+            console.log(
+                "DIESEL SAVED:",
+                dieselReference.id
             );
 
 
@@ -699,9 +812,28 @@ form.addEventListener(
             );
 
 
-            showError(
+            /*
+             * Show the REAL Firebase error.
+             * This is important for testing.
+             */
+
+            let message =
                 error.message ||
-                "Unable to save diesel details."
+                "Unable to save diesel details.";
+
+
+            if (
+                error.code
+            ) {
+
+                message +=
+                    ` (${error.code})`;
+
+            }
+
+
+            showError(
+                message
             );
 
 
@@ -760,8 +892,26 @@ function showError(
     message
 ) {
 
+    console.error(
+        "DIESEL ERROR:",
+        message
+    );
+
+
+    if (!errorMessage) {
+
+        alert(
+            message
+        );
+
+        return;
+
+    }
+
+
     errorMessage.textContent =
         message;
+
 
     errorMessage.classList.remove(
         "hidden"
@@ -771,6 +921,13 @@ function showError(
 
 
 function hideError() {
+
+    if (!errorMessage) {
+
+        return;
+
+    }
+
 
     errorMessage.classList.add(
         "hidden"
@@ -787,28 +944,44 @@ function setLoading(
     loading
 ) {
 
-    saveButton.disabled =
-        loading;
+    if (saveButton) {
+
+        saveButton.disabled =
+            loading;
+
+    }
 
 
-    saveText.classList.toggle(
-        "hidden",
-        loading
-    );
+    if (saveText) {
+
+        saveText.classList.toggle(
+            "hidden",
+            loading
+        );
+
+    }
 
 
-    spinner.classList.toggle(
-        "hidden",
-        !loading
-    );
+    if (spinner) {
+
+        spinner.classList.toggle(
+            "hidden",
+            !loading
+        );
+
+    }
 
 }
 
 
 function hideLoading() {
 
-    loadingScreen.classList.add(
-        "hidden"
-    );
+    if (loadingScreen) {
+
+        loadingScreen.classList.add(
+            "hidden"
+        );
+
+    }
 
 }
