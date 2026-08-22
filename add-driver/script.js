@@ -1,23 +1,31 @@
 import {
     collection,
-    getDocs
+    getDocs,
+    doc,
+    setDoc,
+    updateDoc,
+    query,
+    where,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import {
-    getFunctions,
-    httpsCallable
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-functions.js";
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 import {
+    auth,
     db
 } from "../core/firebase.js";
 
 
-/* ================================
+/* =================================
    ELEMENTS
-================================ */
+================================= */
 
-const driverForm =
+const form =
     document.getElementById(
         "driverForm"
     );
@@ -37,6 +45,11 @@ const driverPassword =
         "driverPassword"
     );
 
+const adminPassword =
+    document.getElementById(
+        "adminPassword"
+    );
+
 const busSelect =
     document.getElementById(
         "busSelect"
@@ -53,29 +66,45 @@ const message =
     );
 
 
-/* ================================
-   FIREBASE FUNCTIONS
-================================ */
-
-const functions =
-    getFunctions();
+let adminEmail = null;
 
 
-const createDriver =
-    httpsCallable(
-        functions,
-        "createDriver"
-    );
+/* =================================
+   CHECK CURRENT ADMIN
+================================= */
+
+onAuthStateChanged(
+    auth,
+    async (user) => {
+
+        if (!user) {
+
+            showError(
+                "Admin is not logged in."
+            );
+
+            saveButton.disabled =
+                true;
+
+            return;
+        }
 
 
-/* ================================
-   LOAD BUSES
-================================ */
-
-loadBuses();
+        adminEmail =
+            user.email;
 
 
-async function loadBuses() {
+        await loadAvailableBuses();
+
+    }
+);
+
+
+/* =================================
+   LOAD AVAILABLE BUSES
+================================= */
+
+async function loadAvailableBuses() {
 
     try {
 
@@ -95,18 +124,7 @@ async function loadBuses() {
         `;
 
 
-        if (
-            snapshot.empty
-        ) {
-
-            busSelect.innerHTML = `
-                <option value="">
-                    No buses available
-                </option>
-            `;
-
-            return;
-        }
+        let availableCount = 0;
 
 
         snapshot.forEach(
@@ -116,12 +134,28 @@ async function loadBuses() {
                     busSnapshot.data();
 
 
+                /*
+                 * A bus is available if it
+                 * does NOT have an assigned
+                 * driver.
+                 */
+
+                if (
+                    bus.assignedDriverId
+                ) {
+
+                    return;
+
+                }
+
+
                 if (
                     bus.status &&
                     bus.status !== "active"
                 ) {
 
                     return;
+
                 }
 
 
@@ -145,13 +179,30 @@ async function loadBuses() {
                     option
                 );
 
+
+                availableCount++;
+
             }
         );
+
+
+        if (
+            availableCount === 0
+        ) {
+
+            busSelect.innerHTML = `
+                <option value="">
+                    No unassigned buses
+                </option>
+            `;
+
+        }
 
 
     } catch (error) {
 
         console.error(
+            "BUS LOAD ERROR:",
             error
         );
 
@@ -171,11 +222,11 @@ async function loadBuses() {
 }
 
 
-/* ================================
+/* =================================
    CREATE DRIVER
-================================ */
+================================= */
 
-driverForm.addEventListener(
+form.addEventListener(
     "submit",
     async (event) => {
 
@@ -198,6 +249,10 @@ driverForm.addEventListener(
             driverPassword.value;
 
 
+        const adminPass =
+            adminPassword.value;
+
+
         const busId =
             busSelect.value;
 
@@ -209,20 +264,22 @@ driverForm.addEventListener(
         if (!name) {
 
             showError(
-                "Enter the driver's name."
+                "Enter the driver name."
             );
 
             return;
+
         }
 
 
         if (!email) {
 
             showError(
-                "Enter the driver's email."
+                "Enter the driver email."
             );
 
             return;
+
         }
 
 
@@ -231,20 +288,33 @@ driverForm.addEventListener(
         ) {
 
             showError(
-                "Password must contain at least 6 characters."
+                "Driver password must contain at least 6 characters."
             );
 
             return;
+
         }
 
 
         if (!busId) {
 
             showError(
-                "Select a bus."
+                "Select an available bus."
             );
 
             return;
+
+        }
+
+
+        if (!adminPass) {
+
+            showError(
+                "Enter the Admin password."
+            );
+
+            return;
+
         }
 
 
@@ -257,8 +327,51 @@ driverForm.addEventListener(
 
         try {
 
-            const result =
-                await createDriver({
+            /*
+             * First verify that the
+             * Admin password is correct.
+             */
+
+            await signInWithEmailAndPassword(
+                auth,
+                adminEmail,
+                adminPass
+            );
+
+
+            /*
+             * Now create the driver
+             * Firebase Auth account.
+             *
+             * IMPORTANT:
+             * Firebase automatically signs
+             * in the newly-created driver.
+             */
+
+            const credential =
+                await createUserWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
+
+
+            const driverUid =
+                credential.user.uid;
+
+
+            /*
+             * Save the driver's profile
+             * using UID as the document ID.
+             */
+
+            await setDoc(
+                doc(
+                    db,
+                    "users",
+                    driverUid
+                ),
+                {
 
                     name:
                         name,
@@ -266,27 +379,71 @@ driverForm.addEventListener(
                     email:
                         email,
 
-                    password:
-                        password,
+                    role:
+                        "driver",
 
-                    busId:
-                        busId
+                    assignedBusId:
+                        busId,
 
-                });
+                    status:
+                        "active",
+
+                    createdAt:
+                        serverTimestamp()
+
+                }
+            );
 
 
-            console.log(
-                "DRIVER CREATED:",
-                result.data
+            /*
+             * Mark the bus as assigned.
+             */
+
+            await updateDoc(
+                doc(
+                    db,
+                    "buses",
+                    busId
+                ),
+                {
+
+                    assignedDriverId:
+                        driverUid,
+
+                    assignedDriverName:
+                        name
+
+                }
+            );
+
+
+            /*
+             * Now restore Admin login.
+             */
+
+            await signInWithEmailAndPassword(
+                auth,
+                adminEmail,
+                adminPass
             );
 
 
             showSuccess(
-                "Driver created successfully."
+                "Driver created and bus assigned successfully."
             );
 
 
-            driverForm.reset();
+            form.reset();
+
+
+            /*
+             * Reload available buses.
+             *
+             * The newly assigned bus will
+             * now disappear automatically.
+             */
+
+            await loadAvailableBuses();
 
 
             setTimeout(
@@ -308,8 +465,13 @@ driverForm.addEventListener(
             );
 
 
+            /*
+             * Convert Firebase errors
+             * into simple messages.
+             */
+
             showError(
-                getReadableError(
+                getErrorMessage(
                     error
                 )
             );
@@ -328,22 +490,70 @@ driverForm.addEventListener(
 );
 
 
-/* ================================
-   ERROR
-================================ */
+/* =================================
+   ERROR MESSAGE
+================================= */
+
+function getErrorMessage(
+    error
+) {
+
+    switch (
+        error.code
+    ) {
+
+        case "auth/email-already-in-use":
+
+            return "This driver email is already registered.";
+
+        case "auth/invalid-email":
+
+            return "Enter a valid driver email.";
+
+        case "auth/weak-password":
+
+            return "Driver password is too weak.";
+
+        case "auth/invalid-credential":
+
+            return "Admin password is incorrect.";
+
+        case "auth/wrong-password":
+
+            return "Admin password is incorrect.";
+
+        case "permission-denied":
+
+            return "Firestore permission denied.";
+
+        default:
+
+            return (
+                error.message ||
+                "Unable to create driver."
+            );
+
+    }
+
+}
+
+
+/* =================================
+   SHOW ERROR
+================================= */
 
 function showError(
     text
 ) {
 
     message.style.borderColor =
-        "";
+        "#c62828";
 
     message.style.background =
-        "";
+        "#fff1f1";
 
     message.style.color =
-        "";
+        "#c62828";
 
     message.textContent =
         text;
@@ -355,9 +565,9 @@ function showError(
 }
 
 
-/* ================================
-   SUCCESS
-================================ */
+/* =================================
+   SHOW SUCCESS
+================================= */
 
 function showSuccess(
     text
@@ -382,9 +592,9 @@ function showSuccess(
 }
 
 
-/* ================================
+/* =================================
    HIDE MESSAGE
-================================ */
+================================= */
 
 function hideMessage() {
 
@@ -395,25 +605,4 @@ function hideMessage() {
         "hidden"
     );
 
-}
-
-
-/* ================================
-   READABLE ERRORS
-================================ */
-
-function getReadableError(
-    error
-) {
-
-    if (
-        error?.message
-    ) {
-
-        return error.message;
-
-    }
-
-    return "Unable to create driver.";
-
-}
+                    }
