@@ -1,0 +1,932 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+:root {
+
+    --black: #111111;
+    --yellow: #ffc400;
+    --white: #ffffff;
+
+    --background: #f3f3f3;
+
+    --border: #dddddd;
+
+    --gray: #777777;
+
+    --light: #f8f8f8;
+
+    --green: #15803d;
+    --green-bg: #e9f8ef;
+
+    --red: #dc2626;
+    --red-bg: #fff0f0;
+
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    background:
+        var(--background);
+
+    color:
+        var(--black);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    padding-bottom: 50px;
+
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.loading-screen {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    background:
+        var(--black);
+
+    color:
+        white;
+
+}
+
+
+.loading-screen p {
+
+    color:
+        #999;
+
+    font-size: 10px;
+
+}
+
+
+.spinner {
+
+    width: 35px;
+
+    height: 35px;
+
+    border:
+        3px solid #444;
+
+    border-top-color:
+        var(--yellow);
+
+    border-radius: 50%;
+
+    animation:
+        spin .7s linear infinite;
+
+}
+
+
+@keyframes spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+.hidden {
+
+    display: none !important;
+
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.header {
+
+    min-height: 70px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding:
+        12px 15px;
+
+    background:
+        var(--black);
+
+    color:
+        white;
+
+}
+
+
+.back-button {
+
+    width: 42px;
+
+    height: 42px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background:
+        #292929;
+
+    color:
+        white;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+}
+
+
+.brand {
+
+    font-size: 17px;
+
+    font-weight: 1000;
+
+    letter-spacing: 1px;
+
+}
+
+
+.header-title {
+
+    margin-top: 3px;
+
+    color:
+        #999;
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.4px;
+
+}
+
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.container {
+
+    width: 100%;
+
+    max-width: 1100px;
+
+    margin:
+        0 auto;
+
+    padding:
+        15px;
+
+}
+
+
+/* =========================================
+   BUS CARD
+========================================= */
+
+.bus-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding:
+        17px;
+
+    border-radius: 17px;
+
+    background:
+        var(--black);
+
+    color:
+        white;
+
+}
+
+
+.bus-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 14px;
+
+    background:
+        var(--yellow);
+
+    font-size: 27px;
+
+}
+
+
+.bus-info {
+
+    flex: 1;
+
+}
+
+
+.bus-info span {
+
+    display: block;
+
+    color:
+        #999;
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+}
+
+
+.bus-info h1 {
+
+    margin-top: 4px;
+
+    font-size: 23px;
+
+    font-weight: 1000;
+
+}
+
+
+.bus-info p {
+
+    margin-top: 3px;
+
+    color:
+        #aaa;
+
+    font-size: 9px;
+
+}
+
+
+.active-badge {
+
+    padding:
+        7px 9px;
+
+    border-radius: 8px;
+
+    background:
+        var(--green-bg);
+
+    color:
+        var(--green);
+
+    font-size: 6px;
+
+    font-weight: 1000;
+
+}
+
+
+/* =========================================
+   STATS
+========================================= */
+
+.stats-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+
+    margin-top: 12px;
+
+}
+
+
+.stat-card {
+
+    padding:
+        15px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 13px;
+
+    background:
+        white;
+
+}
+
+
+.stat-card span {
+
+    display: block;
+
+    color:
+        var(--gray);
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: .7px;
+
+}
+
+
+.stat-card strong {
+
+    display: inline-block;
+
+    margin-top: 7px;
+
+    font-size: 20px;
+
+    font-weight: 1000;
+
+}
+
+
+.stat-card small {
+
+    margin-left: 3px;
+
+    color:
+        var(--gray);
+
+    font-size: 7px;
+
+}
+
+
+.main-average {
+
+    background:
+        #fff8d9;
+
+}
+
+
+.status-card strong {
+
+    font-size: 13px;
+
+}
+
+
+.status-normal {
+
+    color:
+        var(--green);
+
+}
+
+
+.status-danger {
+
+    color:
+        var(--red);
+
+}
+
+
+/* =========================================
+   RED FLAG
+========================================= */
+
+.red-flag {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 12px;
+
+    padding:
+        14px;
+
+    border:
+        1px solid #f3b2b2;
+
+    border-radius: 13px;
+
+    background:
+        var(--red-bg);
+
+    color:
+        var(--red);
+
+}
+
+
+.flag-icon {
+
+    width: 38px;
+
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background:
+        var(--red);
+
+    color:
+        white;
+
+    font-size: 18px;
+
+    font-weight: 1000;
+
+}
+
+
+.red-flag strong {
+
+    display: block;
+
+    font-size: 9px;
+
+}
+
+
+.red-flag p {
+
+    margin-top: 4px;
+
+    font-size: 8px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.table-section {
+
+    margin-top: 20px;
+
+    padding:
+        16px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 15px;
+
+    background:
+        white;
+
+}
+
+
+.section-heading span {
+
+    display: block;
+
+    color:
+        var(--gray);
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+}
+
+
+.section-heading h2 {
+
+    margin-top: 4px;
+
+    font-size: 19px;
+
+    font-weight: 1000;
+
+}
+
+
+.table-wrapper {
+
+    width: 100%;
+
+    margin-top: 13px;
+
+    overflow-x: auto;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 10px;
+
+}
+
+
+table {
+
+    width: 100%;
+
+    min-width: 850px;
+
+    border-collapse: collapse;
+
+}
+
+
+thead {
+
+    background:
+        var(--black);
+
+    color:
+        white;
+
+}
+
+
+th {
+
+    padding:
+        12px 9px;
+
+    text-align: left;
+
+    white-space: nowrap;
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: .6px;
+
+}
+
+
+td {
+
+    padding:
+        12px 9px;
+
+    border-bottom:
+        1px solid #eeeeee;
+
+    white-space: nowrap;
+
+    font-size: 8px;
+
+}
+
+
+tbody tr:hover {
+
+    background:
+        #fafafa;
+
+}
+
+
+tbody tr:last-child td {
+
+    border-bottom:
+        none;
+
+}
+
+
+.table-loading {
+
+    padding:
+        30px;
+
+    text-align: center;
+
+    color:
+        var(--gray);
+
+}
+
+
+.start-row {
+
+    background:
+        #fafafa;
+
+}
+
+
+.start-badge {
+
+    display: inline-block;
+
+    padding:
+        5px 7px;
+
+    border-radius: 6px;
+
+    background:
+        #eeeeee;
+
+    color:
+        #666;
+
+    font-size: 6px;
+
+    font-weight: 1000;
+
+}
+
+
+.normal-badge {
+
+    display: inline-block;
+
+    padding:
+        5px 7px;
+
+    border-radius: 6px;
+
+    background:
+        var(--green-bg);
+
+    color:
+        var(--green);
+
+    font-size: 6px;
+
+    font-weight: 1000;
+
+}
+
+
+.danger-badge {
+
+    display: inline-block;
+
+    padding:
+        5px 7px;
+
+    border-radius: 6px;
+
+    background:
+        var(--red-bg);
+
+    color:
+        var(--red);
+
+    font-size: 6px;
+
+    font-weight: 1000;
+
+}
+
+
+/* =========================================
+   FORMULA
+========================================= */
+
+.formula-card {
+
+    margin-top: 13px;
+
+    padding:
+        15px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 13px;
+
+    background:
+        white;
+
+}
+
+
+.formula-title {
+
+    color:
+        var(--gray);
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+}
+
+
+.formula {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 12px;
+
+}
+
+
+.formula strong {
+
+    padding:
+        9px 11px;
+
+    border-radius: 8px;
+
+    background:
+        var(--light);
+
+    font-size: 7px;
+
+}
+
+
+.formula span {
+
+    font-size: 12px;
+
+    font-weight: 1000;
+
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.message {
+
+    margin-top: 13px;
+
+    padding:
+        13px;
+
+    border-radius: 10px;
+
+    font-size: 8px;
+
+}
+
+
+.message.error {
+
+    background:
+        var(--red-bg);
+
+    color:
+        var(--red);
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 800px) {
+
+    .stats-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .container {
+
+        padding:
+            10px;
+
+    }
+
+
+    .active-badge {
+
+        display: none;
+
+    }
+
+
+    .bus-card {
+
+        padding:
+            14px;
+
+    }
+
+
+    .bus-info h1 {
+
+        font-size: 20px;
+
+    }
+
+
+    .stats-grid {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+
+    .stat-card {
+
+        padding:
+            12px;
+
+    }
+
+
+    .stat-card strong {
+
+        font-size: 17px;
+
+    }
+
+
+    .formula {
+
+        justify-content:
+            flex-start;
+
+    }
+
+}
