@@ -1,0 +1,742 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --black: #111111;
+    --dark: #1c1c1c;
+    --white: #ffffff;
+    --grey-50: #fafafa;
+    --grey-100: #f4f4f4;
+    --grey-200: #e5e5e5;
+    --grey-400: #999999;
+    --grey-600: #666666;
+    --red: #c62828;
+    --red-light: #fff5f5;
+}
+
+html {
+    background: var(--grey-100);
+}
+
+body {
+    min-height: 100vh;
+
+    background: var(--grey-100);
+    color: var(--black);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+
+/* =====================================
+   GLOBAL
+===================================== */
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =====================================
+   LOADING
+===================================== */
+
+.loading-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 14px;
+
+    background: var(--white);
+}
+
+.loading-screen p {
+    color: var(--grey-600);
+
+    font-size: 11px;
+}
+
+.loader {
+    width: 28px;
+    height: 28px;
+
+    border: 2px solid var(--grey-200);
+    border-top-color: var(--black);
+
+    border-radius: 50%;
+
+    animation: rotate 0.7s linear infinite;
+}
+
+@keyframes rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =====================================
+   HEADER
+===================================== */
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    min-height: 64px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding:
+        10px 18px;
+
+    background: var(--white);
+
+    border-bottom:
+        1px solid var(--grey-200);
+}
+
+.logo {
+    width: 44px;
+    height: 44px;
+
+    object-fit: contain;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+}
+
+.driver-mini {
+    text-align: right;
+}
+
+.driver-mini span {
+    display: block;
+
+    color: var(--grey-400);
+
+    font-size: 7px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.driver-mini strong {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 11px;
+}
+
+.logout-button {
+    padding:
+        8px 11px;
+
+    border:
+        1px solid var(--grey-200);
+
+    background: var(--white);
+    color: var(--black);
+
+    border-radius: 5px;
+
+    font-size: 7px;
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+}
+
+.logout-button:hover {
+    border-color: var(--black);
+}
+
+
+/* =====================================
+   CONTAINER
+===================================== */
+
+.container {
+    width: 100%;
+    max-width: 650px;
+
+    margin: 0 auto;
+
+    padding:
+        22px 14px 50px;
+}
+
+
+/* =====================================
+   BUS
+===================================== */
+
+.bus-section {
+    padding-bottom: 18px;
+
+    border-bottom:
+        1px solid var(--grey-200);
+}
+
+.eyebrow {
+    color: var(--grey-400);
+
+    font-size: 7px;
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
+}
+
+.bus-section h1 {
+    margin-top: 7px;
+
+    font-size: 27px;
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
+}
+
+.bus-section p {
+    margin-top: 4px;
+
+    color: var(--grey-600);
+
+    font-size: 10px;
+}
+
+
+/* =====================================
+   DATE
+===================================== */
+
+.date-section {
+    margin-top: 17px;
+
+    padding:
+        15px;
+
+    background: var(--white);
+
+    border:
+        1px solid var(--grey-200);
+
+    border-radius: 8px;
+}
+
+.date-section label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--grey-600);
+
+    font-size: 7px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.date-section input {
+    width: 100%;
+
+    padding:
+        12px;
+
+    border:
+        1px solid var(--grey-200);
+
+    border-radius: 6px;
+
+    outline: none;
+
+    background: var(--grey-50);
+    color: var(--black);
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.date-section input:focus {
+    border-color: var(--black);
+}
+
+.date-section p {
+    margin-top: 8px;
+
+    color: var(--grey-400);
+
+    font-size: 8px;
+
+    line-height: 1.5;
+}
+
+
+/* =====================================
+   MESSAGE
+===================================== */
+
+.message {
+    margin-top: 12px;
+
+    padding: 11px 12px;
+
+    border:
+        1px solid var(--red);
+
+    border-radius: 6px;
+
+    background: var(--red-light);
+    color: var(--red);
+
+    font-size: 9px;
+
+    line-height: 1.5;
+}
+
+
+/* =====================================
+   TRIP SECTION
+===================================== */
+
+.trip-section {
+    margin-top: 15px;
+
+    padding:
+        16px;
+
+    background: var(--white);
+
+    border:
+        1px solid var(--grey-200);
+
+    border-radius: 8px;
+}
+
+.section-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding-bottom: 13px;
+
+    border-bottom:
+        1px solid var(--grey-200);
+}
+
+.section-number {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--black);
+
+    font-size: 8px;
+    font-weight: 900;
+}
+
+
+/* =====================================
+   STATUS
+===================================== */
+
+.status {
+    padding:
+        5px 7px;
+
+    border:
+        1px solid var(--grey-200);
+
+    border-radius: 4px;
+
+    color: var(--grey-600);
+
+    font-size: 6px;
+    font-weight: 800;
+
+    letter-spacing: 0.6px;
+}
+
+.status.active {
+    border-color: var(--black);
+
+    background: var(--black);
+    color: var(--white);
+}
+
+.status.complete {
+    border-color: var(--black);
+
+    background: var(--white);
+    color: var(--black);
+}
+
+.status.warning {
+    border-color: var(--red);
+
+    color: var(--red);
+}
+
+
+/* =====================================
+   STEP BOX
+===================================== */
+
+.step-box {
+    margin-top: 13px;
+
+    padding:
+        14px;
+
+    border:
+        1px solid var(--grey-200);
+
+    border-radius: 6px;
+
+    background: var(--grey-50);
+}
+
+.muted-box {
+    background: var(--grey-100);
+}
+
+.step-label {
+    color: var(--grey-600);
+
+    font-size: 7px;
+    font-weight: 800;
+
+    letter-spacing: 0.8px;
+}
+
+.large-value {
+    margin-top: 7px;
+
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.small-note {
+    margin-top: 4px;
+
+    color: var(--grey-400);
+
+    font-size: 8px;
+
+    line-height: 1.4;
+}
+
+.time-note {
+    margin-top: 5px;
+
+    color: var(--grey-600);
+
+    font-size: 8px;
+}
+
+
+/* =====================================
+   INPUT
+===================================== */
+
+.input-row {
+    display: flex;
+    align-items: center;
+
+    margin-top: 10px;
+
+    border:
+        1px solid var(--grey-200);
+
+    border-radius: 6px;
+
+    background: var(--white);
+
+    overflow: hidden;
+}
+
+.input-row input {
+    width: 100%;
+
+    min-width: 0;
+
+    padding:
+        13px;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: var(--black);
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.input-row span {
+    padding:
+        0 13px;
+
+    color: var(--grey-600);
+
+    font-size: 8px;
+    font-weight: 800;
+}
+
+
+/* =====================================
+   BUTTONS
+===================================== */
+
+.primary-button,
+.secondary-button {
+    width: 100%;
+
+    margin-top: 12px;
+
+    padding:
+        13px;
+
+    border-radius: 6px;
+
+    font-size: 8px;
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+}
+
+.primary-button {
+    border:
+        1px solid var(--black);
+
+    background: var(--black);
+    color: var(--white);
+}
+
+.primary-button:hover {
+    background: var(--dark);
+}
+
+.secondary-button {
+    border:
+        1px solid var(--black);
+
+    background: var(--white);
+    color: var(--black);
+}
+
+.secondary-button:hover {
+    background: var(--grey-100);
+}
+
+.primary-button:disabled,
+.secondary-button:disabled {
+    opacity: 0.35;
+
+    cursor: not-allowed;
+}
+
+
+/* =====================================
+   RESULT
+===================================== */
+
+.result-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 10px;
+
+    padding:
+        12px 14px;
+
+    border:
+        1px solid var(--grey-200);
+
+    border-radius: 6px;
+
+    background: var(--white);
+}
+
+.result-box div {
+    color: var(--grey-600);
+
+    font-size: 7px;
+    font-weight: 800;
+
+    letter-spacing: 0.7px;
+}
+
+.result-box strong {
+    font-size: 15px;
+}
+
+
+/* =====================================
+   SUMMARY
+===================================== */
+
+.summary-section {
+    margin-top: 15px;
+
+    padding:
+        17px;
+
+    background: var(--black);
+
+    color: var(--white);
+
+    border-radius: 8px;
+}
+
+.summary-section .eyebrow {
+    color: #999999;
+}
+
+.summary-total {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 12px;
+
+    padding-bottom: 14px;
+
+    border-bottom:
+        1px solid #333333;
+}
+
+.summary-total span {
+    color: #999999;
+
+    font-size: 7px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.summary-total strong {
+    font-size: 25px;
+}
+
+.summary-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+
+    margin-top: 14px;
+}
+
+.summary-grid div {
+    min-width: 0;
+}
+
+.summary-grid span {
+    display: block;
+
+    color: #888888;
+
+    font-size: 6px;
+    font-weight: 800;
+}
+
+.summary-grid strong {
+    display: block;
+
+    margin-top: 5px;
+
+    font-size: 11px;
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 480px) {
+
+    .header {
+        padding:
+            9px 12px;
+    }
+
+    .container {
+        padding:
+            18px 10px 40px;
+    }
+
+    .bus-section h1 {
+        font-size: 24px;
+    }
+
+    .trip-section {
+        padding:
+            13px;
+    }
+
+    .summary-grid {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .summary-grid div:last-child {
+        grid-column:
+            1 / -1;
+    }
+
+}
+
+
+/* =====================================
+   VERY SMALL SCREEN
+===================================== */
+
+@media (max-width: 350px) {
+
+    .driver-mini {
+        display: none;
+    }
+
+    .summary-total {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+  }
