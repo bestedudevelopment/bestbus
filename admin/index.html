@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
 
@@ -19,27 +18,21 @@
 
 <body>
 
-    <!-- LOADING SCREEN -->
+    <!-- 2 SECOND SPLASH -->
 
-    <div id="loadingScreen">
+    <div id="splash" class="splash">
 
         <img
             src="../logo.png"
             alt="Logo"
-            class="loading-logo"
         >
 
     </div>
 
 
-    <!-- ADMIN DASHBOARD -->
+    <!-- ADMIN -->
 
-    <div
-        id="adminPage"
-        class="hidden"
-    >
-
-        <!-- TOP BAR -->
+    <div id="adminPage" class="admin-page">
 
         <header class="topbar">
 
@@ -58,32 +51,21 @@
                     </span>
 
                     <strong>
-                        English Medium School &
-                        International PU College
+                        English Medium School
+                        & International PU College
                     </strong>
 
                 </div>
 
             </div>
-<div class="top-actions">
 
-    <span id="adminName">
-        Admin
-    </span>
 
-    <button
-        id="logoutBtn"
-        type="button"
-    >
-        LOGOUT
-    </button>
-
-</div>
+            <div class="admin-label">
+                ADMIN
+            </div>
 
         </header>
 
-
-        <!-- CONTENT -->
 
         <main class="container">
 
@@ -101,95 +83,87 @@
                 </h1>
 
                 <p>
-                    Manage your school bus operations.
+                    Manage your school transportation system.
                 </p>
 
             </section>
 
 
-            <!-- FOUR BOXES -->
+            <!-- FOUR SMALL BOXES -->
 
             <section class="quick-grid">
 
 
-                <!-- TOTAL BUSES -->
-
                 <div class="quick-card">
 
-                    <div class="quick-icon yellow">
+                    <div class="icon bus-icon">
                         🚌
                     </div>
-
-                    <span>
-                        TOTAL BUSES
-                    </span>
 
                     <strong id="totalBuses">
                         0
                     </strong>
 
+                    <span>
+                        TOTAL BUSES
+                    </span>
+
                 </div>
 
 
-                <!-- TOTAL DRIVERS -->
-
                 <div class="quick-card">
 
-                    <div class="quick-icon black">
+                    <div class="icon">
                         👤
                     </div>
-
-                    <span>
-                        TOTAL DRIVERS
-                    </span>
 
                     <strong id="totalDrivers">
                         0
                     </strong>
 
+                    <span>
+                        TOTAL DRIVERS
+                    </span>
+
                 </div>
 
-
-                <!-- ADD BUS -->
 
                 <a
                     href="../add-bus/"
                     class="quick-card action-card"
                 >
 
-                    <div class="quick-icon yellow">
+                    <div class="icon yellow-icon">
                         +
                     </div>
+
+                    <strong>
+                        ADD
+                    </strong>
 
                     <span>
                         ADD BUS
                     </span>
 
-                    <strong>
-                        →
-                    </strong>
-
                 </a>
 
-
-                <!-- ADD DRIVER -->
 
                 <a
                     href="../add-driver/"
                     class="quick-card action-card"
                 >
 
-                    <div class="quick-icon black">
+                    <div class="icon yellow-icon">
                         +
                     </div>
+
+                    <strong>
+                        ADD
+                    </strong>
 
                     <span>
                         ADD DRIVER
                     </span>
-
-                    <strong>
-                        →
-                    </strong>
 
                 </a>
 
@@ -197,11 +171,11 @@
             </section>
 
 
-            <!-- BUS OVERVIEW -->
+            <!-- BUS INFORMATION -->
 
             <section class="bus-section">
 
-                <div class="section-title">
+                <div class="section-heading">
 
                     <div>
 
@@ -218,12 +192,9 @@
                 </div>
 
 
-                <div
-                    id="busList"
-                    class="bus-list"
-                >
+                <div id="busList">
 
-                    <!-- BUS CARDS WILL COME HERE -->
+                    <!-- Bus cards will load here -->
 
                 </div>
 
@@ -241,5 +212,4 @@
     ></script>
 
 </body>
-
 </html>
