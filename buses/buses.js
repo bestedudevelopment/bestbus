@@ -898,7 +898,7 @@ function renderBuses(
                 "click",
                 () => {
 window.location.href =
-    `../bus-details/?id=${encodeURIComponent(
+    `../avg/?id=${encodeURIComponent(
         bus.id
     )}`;
 
