@@ -9,7 +9,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Admin | Bus Management</title>
+    <title>Admin Dashboard</title>
 
     <link
         rel="stylesheet"
@@ -19,86 +19,97 @@
 
 <body>
 
-    <!-- HEADER -->
+    <!-- LOADING SCREEN -->
 
-    <header class="topbar">
+    <div id="loadingScreen">
 
-        <div class="brand">
+        <img
+            src="../logo.png"
+            alt="Logo"
+            class="loading-logo"
+        >
 
-            <img
-                src="../logo.png"
-                alt="Logo"
-                class="logo"
-            >
+    </div>
 
-            <div>
-                <span class="brand-small">
-                    BUS MANAGEMENT
+
+    <!-- ADMIN DASHBOARD -->
+
+    <div
+        id="adminPage"
+        class="hidden"
+    >
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div class="brand">
+
+                <img
+                    src="../logo.png"
+                    alt="Logo"
+                    class="brand-logo"
+                >
+
+                <div class="brand-text">
+
+                    <span>
+                        BEST
+                    </span>
+
+                    <strong>
+                        English Medium School &
+                        International PU College
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-label">
+                ADMIN
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+
+        <main class="container">
+
+
+            <!-- WELCOME -->
+
+            <section class="welcome">
+
+                <span>
+                    ADMINISTRATION
                 </span>
 
                 <h1>
-                    Admin
+                    Welcome, Admin
                 </h1>
-            </div>
 
-        </div>
+                <p>
+                    Manage your school bus operations.
+                </p>
 
-
-        <div class="top-actions">
-
-            <span id="adminName">
-                Admin
-            </span>
-
-            <button
-                id="logoutBtn"
-                class="logout-btn"
-                type="button"
-            >
-                Logout
-            </button>
-
-        </div>
-
-    </header>
+            </section>
 
 
-    <!-- MAIN -->
+            <!-- FOUR BOXES -->
 
-    <main class="container">
-
-
-        <!-- WELCOME -->
-
-        <section class="welcome">
-
-            <span class="section-label">
-                ADMIN PANEL
-            </span>
-
-            <h2>
-                Fleet Overview
-            </h2>
-
-            <p>
-                Manage buses, drivers and daily operations.
-            </p>
-
-        </section>
+            <section class="quick-grid">
 
 
-        <!-- DASHBOARD CARDS -->
+                <!-- TOTAL BUSES -->
 
-        <section class="dashboard-grid">
+                <div class="quick-card">
 
-
-            <div class="dashboard-card">
-
-                <div class="card-icon yellow">
-                    BUS
-                </div>
-
-                <div>
+                    <div class="quick-icon yellow">
+                        🚌
+                    </div>
 
                     <span>
                         TOTAL BUSES
@@ -110,16 +121,14 @@
 
                 </div>
 
-            </div>
 
+                <!-- TOTAL DRIVERS -->
 
-            <div class="dashboard-card">
+                <div class="quick-card">
 
-                <div class="card-icon black">
-                    DR
-                </div>
-
-                <div>
+                    <div class="quick-icon black">
+                        👤
+                    </div>
 
                     <span>
                         TOTAL DRIVERS
@@ -131,263 +140,90 @@
 
                 </div>
 
-            </div>
 
+                <!-- ADD BUS -->
 
-            <div class="dashboard-card">
-
-                <div class="card-icon yellow">
-                    AS
-                </div>
-
-                <div>
-
-                    <span>
-                        ASSIGNED
-                    </span>
-
-                    <strong id="assignedBuses">
-                        0
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            <div class="dashboard-card alert-card">
-
-                <div class="card-icon red">
-                    !
-                </div>
-
-                <div>
-
-                    <span>
-                        RED FLAGS
-                    </span>
-
-                    <strong id="redFlags">
-                        0
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-        </section>
-
-
-        <!-- MESSAGE -->
-
-        <div
-            id="message"
-            class="message hidden"
-        ></div>
-
-
-        <!-- BUS SECTION -->
-
-        <section class="panel-section">
-
-            <div class="section-header">
-
-                <div>
-
-                    <span class="section-label">
-                        FLEET
-                    </span>
-
-                    <h2>
-                        Buses
-                    </h2>
-
-                </div>
-
-
-                <button
-                    id="showAddBusBtn"
-                    class="yellow-btn"
-                    type="button"
+                <a
+                    href="../add-bus/"
+                    class="quick-card action-card"
                 >
-                    + ADD BUS
-                </button>
 
-            </div>
-
-
-            <!-- ADD BUS -->
-
-            <div
-                id="addBusPanel"
-                class="add-panel hidden"
-            >
-
-                <div class="add-panel-title">
-                    ADD NEW BUS
-                </div>
-
-
-                <div class="form-grid">
-
-                    <div class="field">
-
-                        <label for="busNumber">
-                            BUS NUMBER
-                        </label>
-
-                        <input
-                            id="busNumber"
-                            type="text"
-                            placeholder="TEST BUS 1"
-                        >
-
+                    <div class="quick-icon yellow">
+                        +
                     </div>
 
-
-                    <div class="field">
-
-                        <label for="registrationNumber">
-                            REGISTRATION NUMBER
-                        </label>
-
-                        <input
-                            id="registrationNumber"
-                            type="text"
-                            placeholder="KA 35 AB 1234"
-                        >
-
-                    </div>
-
-
-                    <div class="field">
-
-                        <label for="startingOdometer">
-                            STARTING ODOMETER
-                        </label>
-
-                        <div class="unit-input">
-
-                            <input
-                                id="startingOdometer"
-                                type="number"
-                                min="0"
-                                step="0.1"
-                                placeholder="12000"
-                            >
-
-                            <span>
-                                KM
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="field">
-
-                        <label for="expectedMileage">
-                            EXPECTED MILEAGE
-                        </label>
-
-                        <div class="unit-input">
-
-                            <input
-                                id="expectedMileage"
-                                type="number"
-                                min="0"
-                                step="0.01"
-                                placeholder="5"
-                            >
-
-                            <span>
-                                KM/L
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-actions">
-
-                    <button
-                        id="cancelBusBtn"
-                        class="cancel-btn"
-                        type="button"
-                    >
-                        CANCEL
-                    </button>
-
-                    <button
-                        id="saveBusBtn"
-                        class="black-btn"
-                        type="button"
-                    >
-                        CREATE BUS
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <!-- BUS LIST -->
-
-            <div
-                id="busList"
-                class="list"
-            >
-
-                <div class="empty">
-                    Loading buses...
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- DRIVER SECTION -->
-
-        <section class="panel-section">
-
-            <div class="section-header">
-
-                <div>
-
-                    <span class="section-label">
-                        PEOPLE
+                    <span>
+                        ADD BUS
                     </span>
 
-                    <h2>
-                        Drivers
-                    </h2>
+                    <strong>
+                        →
+                    </strong>
+
+                </a>
+
+
+                <!-- ADD DRIVER -->
+
+                <a
+                    href="../add-driver/"
+                    class="quick-card action-card"
+                >
+
+                    <div class="quick-icon black">
+                        +
+                    </div>
+
+                    <span>
+                        ADD DRIVER
+                    </span>
+
+                    <strong>
+                        →
+                    </strong>
+
+                </a>
+
+
+            </section>
+
+
+            <!-- BUS OVERVIEW -->
+
+            <section class="bus-section">
+
+                <div class="section-title">
+
+                    <div>
+
+                        <span>
+                            FLEET
+                        </span>
+
+                        <h2>
+                            Bus Overview
+                        </h2>
+
+                    </div>
 
                 </div>
 
-            </div>
 
+                <div
+                    id="busList"
+                    class="bus-list"
+                >
 
-            <div
-                id="driverList"
-                class="list"
-            >
+                    <!-- BUS CARDS WILL COME HERE -->
 
-                <div class="empty">
-                    Loading drivers...
                 </div>
 
-            </div>
-
-        </section>
+            </section>
 
 
-    </main>
+        </main>
+
+    </div>
 
 
     <script
