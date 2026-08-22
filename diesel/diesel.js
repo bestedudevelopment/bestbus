@@ -6,11 +6,6 @@ import {
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-import {
-    ref,
-    uploadBytes,
-    getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
 import {
     onAuthStateChanged
@@ -57,9 +52,6 @@ const odometer =
 const fuelStation =
     document.getElementById("fuelStation");
 
-const fuelPhoto =
-    document.getElementById("fuelPhoto");
-
 const photoButton =
     document.getElementById("photoButton");
 
@@ -91,9 +83,7 @@ const homeButton =
     document.getElementById("homeButton");
 
 
-/* =========================================
-   STATE
-========================================= */
+
 
 let currentUser = null;
 
@@ -104,9 +94,6 @@ let currentBus = null;
 let selectedPhoto = null;
 
 
-/* =========================================
-   BACK
-========================================= */
 
 if (backButton) {
 
