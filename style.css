@@ -1,0 +1,235 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --black: #111111;
+    --white: #ffffff;
+    --grey-100: #f5f5f5;
+    --grey-200: #e5e5e5;
+    --grey-500: #777777;
+    --red: #c62828;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    background: var(--grey-100);
+    color: var(--black);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.login-page {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.login-card {
+    width: 100%;
+    max-width: 390px;
+
+    padding: 32px 26px;
+
+    background: var(--white);
+
+    border: 1px solid var(--grey-200);
+    border-radius: 10px;
+}
+
+
+/* =========================
+   LOGO
+========================= */
+
+.logo {
+    display: block;
+
+    width: 58px;
+    height: 58px;
+
+    object-fit: contain;
+
+    margin-bottom: 28px;
+}
+
+
+/* =========================
+   HEADING
+========================= */
+
+.heading span {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--grey-500);
+
+    font-size: 7px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+.heading h1 {
+    font-size: 28px;
+    font-weight: 800;
+
+    letter-spacing: -0.6px;
+}
+
+.heading p {
+    margin-top: 7px;
+
+    color: var(--grey-500);
+
+    font-size: 10px;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+#loginForm {
+    margin-top: 28px;
+}
+
+.field {
+    margin-bottom: 17px;
+}
+
+.field label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--grey-500);
+
+    font-size: 7px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.field input {
+    width: 100%;
+
+    padding: 13px;
+
+    border: 1px solid var(--grey-200);
+    border-radius: 6px;
+
+    outline: none;
+
+    background: var(--white);
+    color: var(--black);
+
+    font-size: 13px;
+}
+
+.field input:focus {
+    border-color: var(--black);
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+#loginButton {
+    width: 100%;
+
+    margin-top: 5px;
+
+    padding: 14px;
+
+    border: 1px solid var(--black);
+    border-radius: 6px;
+
+    background: var(--black);
+    color: var(--white);
+
+    font-size: 8px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+}
+
+#loginButton:hover {
+    background: #222222;
+}
+
+#loginButton:disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+.error-message {
+    margin-top: 14px;
+
+    padding: 10px 12px;
+
+    border: 1px solid var(--red);
+    border-radius: 6px;
+
+    background: #fff5f5;
+    color: var(--red);
+
+    font-size: 9px;
+
+    line-height: 1.5;
+}
+
+.hidden {
+    display: none;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 480px) {
+
+    .login-page {
+        padding: 12px;
+    }
+
+    .login-card {
+        padding: 28px 20px;
+    }
+
+}
