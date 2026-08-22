@@ -1,0 +1,869 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+:root {
+
+    --black: #111111;
+    --yellow: #ffc400;
+    --white: #ffffff;
+
+    --background: #f3f3f3;
+
+    --border: #dddddd;
+
+    --gray: #777777;
+
+    --light: #f8f8f8;
+
+    --green: #15803d;
+
+    --green-bg: #e9f8ef;
+
+    --red: #dc2626;
+
+    --red-bg: #fff0f0;
+
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    background:
+        var(--background);
+
+    color:
+        var(--black);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    padding-bottom: 40px;
+
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.loading-screen {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    background:
+        var(--black);
+
+    color:
+        white;
+
+}
+
+
+.loading-screen p {
+
+    font-size: 10px;
+
+    color: #aaa;
+
+}
+
+
+.spinner {
+
+    width: 34px;
+
+    height: 34px;
+
+    border:
+        3px solid #444;
+
+    border-top-color:
+        var(--yellow);
+
+    border-radius: 50%;
+
+    animation:
+        spin .7s linear infinite;
+
+}
+
+
+@keyframes spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+.hidden {
+
+    display: none !important;
+
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.header {
+
+    min-height: 70px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding:
+        12px 15px;
+
+    background:
+        var(--black);
+
+    color:
+        white;
+
+}
+
+
+.back-button {
+
+    width: 42px;
+
+    height: 42px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background:
+        #292929;
+
+    color:
+        white;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+}
+
+
+.brand {
+
+    font-size: 17px;
+
+    font-weight: 1000;
+
+    letter-spacing: 1px;
+
+}
+
+
+.header-title {
+
+    margin-top: 3px;
+
+    color:
+        #999;
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.4px;
+
+}
+
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.container {
+
+    width: 100%;
+
+    max-width: 700px;
+
+    margin:
+        0 auto;
+
+    padding:
+        15px;
+
+}
+
+
+/* =========================================
+   BUS CARD
+========================================= */
+
+.bus-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding:
+        17px;
+
+    border-radius: 17px;
+
+    background:
+        var(--black);
+
+    color:
+        white;
+
+}
+
+
+.bus-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background:
+        var(--yellow);
+
+    font-size: 27px;
+
+}
+
+
+.label {
+
+    display: block;
+
+    color:
+        #999;
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+}
+
+
+.bus-card h1 {
+
+    margin-top: 3px;
+
+    font-size: 23px;
+
+    font-weight: 1000;
+
+}
+
+
+.bus-card p {
+
+    margin-top: 3px;
+
+    color:
+        #aaa;
+
+    font-size: 9px;
+
+}
+
+
+/* =========================================
+   SUMMARY
+========================================= */
+
+.summary-card {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 12px;
+
+}
+
+
+.summary-card > div {
+
+    padding:
+        14px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 13px;
+
+    background:
+        white;
+
+}
+
+
+.summary-card span {
+
+    display: block;
+
+    color:
+        var(--gray);
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: .7px;
+
+}
+
+
+.summary-card strong {
+
+    display: inline-block;
+
+    margin-top: 7px;
+
+    font-size: 18px;
+
+    font-weight: 1000;
+
+}
+
+
+.summary-card small {
+
+    margin-left: 3px;
+
+    color:
+        var(--gray);
+
+    font-size: 7px;
+
+}
+
+
+.status-text {
+
+    color:
+        var(--gray);
+
+}
+
+
+/* =========================================
+   READING CARD
+========================================= */
+
+.reading-card {
+
+    margin-top: 13px;
+
+    padding:
+        18px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 17px;
+
+    background:
+        white;
+
+}
+
+
+.card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+}
+
+
+.circle {
+
+    width: 38px;
+
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    font-size: 13px;
+
+    font-weight: 1000;
+
+}
+
+
+.circle.morning {
+
+    background:
+        #fff3bd;
+
+}
+
+
+.circle.evening {
+
+    background:
+        #e5e7eb;
+
+}
+
+
+.card-header span {
+
+    color:
+        var(--gray);
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+}
+
+
+.card-header h2 {
+
+    margin-top: 2px;
+
+    font-size: 18px;
+
+    font-weight: 1000;
+
+}
+
+
+.description {
+
+    margin-top: 12px;
+
+    color:
+        var(--gray);
+
+    font-size: 8px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================
+   INPUT
+========================================= */
+
+.reading-card label {
+
+    display: block;
+
+    margin-top: 17px;
+
+    margin-bottom: 6px;
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+    letter-spacing: .7px;
+
+}
+
+
+.input-wrapper {
+
+    display: flex;
+
+    align-items: center;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 11px;
+
+    overflow: hidden;
+
+    background:
+        var(--light);
+
+}
+
+
+.input-wrapper input {
+
+    width: 100%;
+
+    padding:
+        14px;
+
+    border: none;
+
+    outline: none;
+
+    background:
+        transparent;
+
+    color:
+        var(--black);
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+}
+
+
+.input-wrapper span {
+
+    padding:
+        0 14px;
+
+    color:
+        var(--gray);
+
+    font-size: 8px;
+
+    font-weight: 900;
+
+}
+
+
+/* =========================================
+   EXISTING READING
+========================================= */
+
+.existing {
+
+    margin-top: 8px;
+
+    padding:
+        9px 11px;
+
+    border-radius: 9px;
+
+    background:
+        var(--green-bg);
+
+    color:
+        var(--green);
+
+    font-size: 7px;
+
+}
+
+
+.existing strong {
+
+    margin-left: 4px;
+
+    font-size: 8px;
+
+}
+
+
+/* =========================================
+   BUTTON
+========================================= */
+
+.save-button {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-top: 13px;
+
+    padding:
+        14px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    color:
+        var(--black);
+
+    font-size: 8px;
+
+    font-weight: 1000;
+
+    cursor: pointer;
+
+}
+
+
+.morning-button {
+
+    background:
+        var(--yellow);
+
+}
+
+
+.evening-button {
+
+    background:
+        var(--black);
+
+    color:
+        white;
+
+}
+
+
+.save-button:disabled {
+
+    opacity:
+        .55;
+
+    cursor:
+        not-allowed;
+
+}
+
+
+/* =========================================
+   BUTTON SPINNER
+========================================= */
+
+.button-spinner {
+
+    width: 15px;
+
+    height: 15px;
+
+    border:
+        2px solid rgba(255,255,255,.35);
+
+    border-top-color:
+        white;
+
+    border-radius: 50%;
+
+    animation:
+        spin .7s linear infinite;
+
+}
+
+
+/* =========================================
+   CALCULATION
+========================================= */
+
+.calculation-card {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    margin-top: 13px;
+
+    padding:
+        15px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 14px;
+
+    background:
+        white;
+
+}
+
+
+.calculation-icon {
+
+    width: 38px;
+
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    background:
+        var(--yellow);
+
+    font-size: 7px;
+
+    font-weight: 1000;
+
+}
+
+
+.calculation-card span {
+
+    display: block;
+
+    color:
+        var(--gray);
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: .7px;
+
+}
+
+
+.calculation-card strong {
+
+    display: block;
+
+    margin-top: 5px;
+
+    font-size: 9px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================
+   MESSAGES
+========================================= */
+
+.message {
+
+    margin-top: 13px;
+
+    padding:
+        13px;
+
+    border-radius: 11px;
+
+    font-size: 8px;
+
+    line-height: 1.5;
+
+}
+
+
+.message.error {
+
+    background:
+        var(--red-bg);
+
+    color:
+        var(--red);
+
+}
+
+
+.message.success {
+
+    background:
+        var(--green-bg);
+
+    color:
+        var(--green);
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 450px) {
+
+    .container {
+
+        padding:
+            10px;
+
+    }
+
+
+    .reading-card {
+
+        padding:
+            15px;
+
+    }
+
+
+    .summary-card {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .bus-card h1 {
+
+        font-size: 20px;
+
+    }
+
+}
