@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body>
+
+    <!-- TOP BAR -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <img
+                src="../logo.png"
+                alt="Logo"
+                class="logo"
+            >
+
+            <div class="brand-text">
+
+                <div class="brand-name">
+                    BEST
+                </div>
+
+                <div class="brand-subtitle">
+                    English Medium School &amp;
+                    International PU College
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-label">
+            ADMIN
+        </div>
+
+    </header>
+
+
+    <!-- PAGE -->
+
+    <main class="page">
+
+        <!-- WELCOME -->
+
+        <section class="welcome">
+
+            <span class="eyebrow">
+                FLEET MANAGEMENT
+            </span>
+
+            <h1>
+                Welcome, Admin
+            </h1>
+
+            <p>
+                Manage your school transport fleet from one place.
+            </p>
+
+        </section>
+
+
+        <!-- QUICK ACTIONS -->
+
+        <section class="quick-grid">
+
+
+            <!-- TOTAL BUSES -->
+
+            <div class="quick-card">
+
+                <div class="small-icon bus-icon">
+                    <span>BUS</span>
+                </div>
+
+                <div class="quick-content">
+
+                    <span class="quick-label">
+                        TOTAL BUSES
+                    </span>
+
+                    <strong id="totalBuses">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- TOTAL DRIVERS -->
+
+            <div class="quick-card">
+
+                <div class="small-icon driver-icon">
+                    <span>DR</span>
+                </div>
+
+                <div class="quick-content">
+
+                    <span class="quick-label">
+                        TOTAL DRIVERS
+                    </span>
+
+                    <strong id="totalDrivers">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ADD BUS -->
+
+            <a
+                href="../add-bus/"
+                class="quick-card action-card"
+            >
+
+                <div class="small-icon add-icon">
+                    +
+                </div>
+
+                <div class="quick-content">
+
+                    <span class="quick-label">
+                        ACTION
+                    </span>
+
+                    <strong>
+                        Add Bus
+                    </strong>
+
+                </div>
+
+                <span class="card-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- ADD DRIVER -->
+
+            <a
+                href="../add-driver/"
+                class="quick-card action-card"
+            >
+
+                <div class="small-icon add-icon">
+                    +
+                </div>
+
+                <div class="quick-content">
+
+                    <span class="quick-label">
+                        ACTION
+                    </span>
+
+                    <strong>
+                        Add Driver
+                    </strong>
+
+                </div>
+
+                <span class="card-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+        </section>
+
+
+        <!-- BUS OVERVIEW -->
+
+        <section class="bus-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="eyebrow">
+                        FLEET
+                    </span>
+
+                    <h2>
+                        Bus Overview
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="busList"
+                class="bus-list"
+            >
+
+                <div class="loading">
+                    Loading fleet information...
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <script
+        type="module"
+        src="./script.js"
+    ></script>
+
+</body>
+
+</html>
