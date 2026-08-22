@@ -1,11 +1,19 @@
 import {
     collection,
-    getDocs,
-    query,
-    orderBy
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import {
+    doc,
+    getDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import {
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+    auth,
     db
 } from "../core/firebase.js";
 
@@ -15,27 +23,128 @@ import {
 ===================================== */
 
 const totalBuses =
-    document.getElementById(
-        "totalBuses"
-    );
+    document.getElementById("totalBuses");
 
 const totalDrivers =
-    document.getElementById(
-        "totalDrivers"
-    );
+    document.getElementById("totalDrivers");
 
 const busList =
-    document.getElementById(
-        "busList"
-    );
+    document.getElementById("busList");
+
+
+/* =====================================
+   AUTHENTICATION
+===================================== */
+
+onAuthStateChanged(
+    auth,
+    async (user) => {
+
+        /*
+         * Nobody logged in
+         */
+
+        if (!user) {
+
+            window.location.replace(
+                "../login/"
+            );
+
+            return;
+        }
+
+
+        try {
+
+            /*
+             * Get the logged-in user's
+             * Firestore profile.
+             */
+
+            const userRef =
+                doc(
+                    db,
+                    "users",
+                    user.uid
+                );
+
+
+            const userSnapshot =
+                await getDoc(
+                    userRef
+                );
+
+
+            /*
+             * User profile doesn't exist.
+             */
+
+            if (
+                !userSnapshot.exists()
+            ) {
+
+                await auth.signOut();
+
+                window.location.replace(
+                    "../login/"
+                );
+
+                return;
+            }
+
+
+            const userData =
+                userSnapshot.data();
+
+
+            /*
+             * Only ADMIN can enter.
+             */
+
+            if (
+                userData.role !== "admin"
+            ) {
+
+                await auth.signOut();
+
+                window.location.replace(
+                    "../login/"
+                );
+
+                return;
+            }
+
+
+            /*
+             * Authentication successful.
+             * Now load dashboard.
+             */
+
+            await loadDashboard();
+
+
+        } catch (error) {
+
+            console.error(
+                "ADMIN ACCESS ERROR:",
+                error
+            );
+
+            await auth.signOut();
+
+            window.location.replace(
+                "../login/"
+            );
+
+        }
+
+    }
+);
 
 
 /* =====================================
    LOAD DASHBOARD
 ===================================== */
-
-loadDashboard();
-
 
 async function loadDashboard() {
 
@@ -56,11 +165,37 @@ async function loadDashboard() {
             getDocs(
                 collection(
                     db,
-                    "drivers"
+                    "users"
                 )
             )
 
         ]);
+
+
+        /*
+         * Count only actual drivers.
+         */
+
+        let driverCount = 0;
+
+
+        driversSnapshot.forEach(
+            (snapshot) => {
+
+                const user =
+                    snapshot.data();
+
+
+                if (
+                    user.role === "driver"
+                ) {
+
+                    driverCount++;
+
+                }
+
+            }
+        );
 
 
         totalBuses.textContent =
@@ -68,35 +203,19 @@ async function loadDashboard() {
 
 
         totalDrivers.textContent =
-            driversSnapshot.size;
-
-
-        const drivers =
-            [];
-
-
-        driversSnapshot.forEach(
-            (snapshot) => {
-
-                drivers.push({
-                    id: snapshot.id,
-                    ...snapshot.data()
-                });
-
-            }
-        );
+            driverCount;
 
 
         renderBuses(
             busesSnapshot,
-            drivers
+            driversSnapshot
         );
 
 
     } catch (error) {
 
         console.error(
-            "ADMIN DASHBOARD ERROR:",
+            "DASHBOARD ERROR:",
             error
         );
 
@@ -118,7 +237,7 @@ async function loadDashboard() {
 
 function renderBuses(
     busesSnapshot,
-    drivers
+    usersSnapshot
 ) {
 
     busList.innerHTML = "";
@@ -135,8 +254,36 @@ function renderBuses(
         `;
 
         return;
-
     }
+
+
+    /*
+     * Create driver lookup.
+     */
+
+    const drivers = new Map();
+
+
+    usersSnapshot.forEach(
+        (snapshot) => {
+
+            const user =
+                snapshot.data();
+
+
+            if (
+                user.role === "driver"
+            ) {
+
+                drivers.set(
+                    snapshot.id,
+                    user
+                );
+
+            }
+
+        }
+    );
 
 
     busesSnapshot.forEach(
@@ -150,17 +297,12 @@ function renderBuses(
                 snapshot.id;
 
 
-            /*
-             * Find driver assigned
-             * to this bus.
-             */
-
             const driver =
-                drivers.find(
-                    (item) =>
-                        item.assignedBusId ===
-                        busId
-                );
+                bus.assignedDriverId
+                    ? drivers.get(
+                        bus.assignedDriverId
+                    )
+                    : null;
 
 
             const card =
@@ -354,11 +496,6 @@ function getLastOdometer(
     bus
 ) {
 
-    /*
-     * Current odometer is the
-     * primary value.
-     */
-
     if (
         bus.currentOdometer != null
     ) {
@@ -405,9 +542,7 @@ function getUpdatedDate(
         bus.createdAt;
 
 
-    if (
-        !timestamp
-    ) {
+    if (!timestamp) {
 
         return "No update date";
 
@@ -426,37 +561,18 @@ function getUpdatedDate(
     }
 
 
-    if (
-        timestamp instanceof Date
-    ) {
-
-        return formatDate(
-            timestamp
-        );
-
-    }
-
-
     return "Date unavailable";
 
 }
 
 
 /* =====================================
-   LAST DIESEL
+   DIESEL
 ===================================== */
 
 function getLastDiesel(
     bus
 ) {
-
-    /*
-     * This function reads a diesel
-     * object only if your bus document
-     * already contains one.
-     *
-     * We are NOT creating fake data.
-     */
 
     if (
         bus.lastDiesel
@@ -537,7 +653,7 @@ function formatNumber(
 
 
 /* =====================================
-   SECURITY
+   HTML SAFETY
 ===================================== */
 
 function escapeHTML(
