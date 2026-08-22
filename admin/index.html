@@ -978,20 +978,48 @@
            MOBILE MENU
         ========================================== */
 
-        document.getElementById(
-            "menuButton"
-        ).addEventListener(
+        const sidebar =
+    document.getElementById("sidebar");
+
+const menuButton =
+    document.getElementById("menuButton");
+
+
+menuButton.addEventListener(
+    "click",
+    () => {
+
+        sidebar.classList.toggle(
+            "mobile-open"
+        );
+
+    }
+);
+
+
+/*
+ * Close menu after selecting
+ * any navigation item.
+ */
+
+document.querySelectorAll(
+    ".nav-item, .quick-card"
+).forEach(
+    (item) => {
+
+        item.addEventListener(
             "click",
             () => {
 
-                document.getElementById(
-                    "sidebar"
-                ).classList.toggle(
+                sidebar.classList.remove(
                     "mobile-open"
                 );
 
             }
         );
+
+    }
+);
 
     </script>
 
