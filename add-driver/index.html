@@ -9,7 +9,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Add Driver | Admin</title>
+    <title>Add Driver</title>
 
     <link
         rel="stylesheet"
@@ -35,151 +35,165 @@
 
 <body>
 
-    <header class="topbar">
+<header class="topbar">
 
-        <a
-            href="../admin/"
-            class="back"
-        >
-            ← ADMIN
-        </a>
+    <a
+        href="../admin/"
+        class="back"
+    >
+        ← ADMIN
+    </a>
 
-        <img
-            src="../logo.png"
-            alt="Logo"
-            class="logo"
-        >
+    <img
+        src="../logo.png"
+        alt="Logo"
+        class="logo"
+    >
 
-        <span class="page-label">
-            ADD DRIVER
+    <span class="page-label">
+        ADD DRIVER
+    </span>
+
+</header>
+
+
+<main class="page">
+
+    <section class="heading">
+
+        <span class="eyebrow">
+            FLEET MANAGEMENT
         </span>
 
-    </header>
+        <h1>
+            Add Driver
+        </h1>
+
+        <p>
+            Create a driver login and assign a bus.
+        </p>
+
+    </section>
 
 
-    <main class="page">
+    <form
+        id="driverForm"
+        class="form"
+    >
 
-        <section class="heading">
+        <div class="field">
 
-            <span class="eyebrow">
-                FLEET MANAGEMENT
-            </span>
+            <label for="driverName">
+                DRIVER NAME
+            </label>
 
-            <h1>
-                Add Driver
-            </h1>
+            <input
+                id="driverName"
+                type="text"
+                placeholder="Test Driver 1"
+                required
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="driverEmail">
+                DRIVER EMAIL
+            </label>
+
+            <input
+                id="driverEmail"
+                type="email"
+                placeholder="driver1@example.com"
+                required
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="driverPassword">
+                DRIVER PASSWORD
+            </label>
+
+            <input
+                id="driverPassword"
+                type="password"
+                placeholder="Minimum 6 characters"
+                minlength="6"
+                required
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="busSelect">
+                ASSIGN BUS
+            </label>
+
+            <select
+                id="busSelect"
+                required
+            >
+
+                <option value="">
+                    Loading buses...
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="admin-verification">
+
+            <div class="verify-title">
+                ADMIN VERIFICATION
+            </div>
 
             <p>
-                Create a driver login and assign a bus.
+                Enter your current Admin password to keep your
+                Admin session active after creating the driver.
             </p>
 
-        </section>
-
-
-        <form
-            id="driverForm"
-            class="form"
-        >
-
-            <div class="field">
-
-                <label for="driverName">
-                    DRIVER NAME
-                </label>
-
-                <input
-                    id="driverName"
-                    type="text"
-                    placeholder="Test Driver 1"
-                    autocomplete="name"
-                    required
-                >
-
-            </div>
-
-
-            <div class="field">
-
-                <label for="driverEmail">
-                    EMAIL
-                </label>
-
-                <input
-                    id="driverEmail"
-                    type="email"
-                    placeholder="driver@example.com"
-                    autocomplete="email"
-                    required
-                >
-
-            </div>
-
-
-            <div class="field">
-
-                <label for="driverPassword">
-                    PASSWORD
-                </label>
-
-                <input
-                    id="driverPassword"
-                    type="password"
-                    placeholder="Minimum 6 characters"
-                    autocomplete="new-password"
-                    minlength="6"
-                    required
-                >
-
-                <small>
-                    This password will be used by the driver to log in.
-                </small>
-
-            </div>
-
-
-            <div class="field">
-
-                <label for="busSelect">
-                    ASSIGN BUS
-                </label>
-
-                <select
-                    id="busSelect"
-                    required
-                >
-
-                    <option value="">
-                        Loading buses...
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div
-                id="message"
-                class="message hidden"
-            ></div>
-
-
-            <button
-                id="saveButton"
-                type="submit"
-                class="save-button"
+            <input
+                id="adminPassword"
+                type="password"
+                placeholder="Admin password"
+                required
             >
-                CREATE DRIVER
-            </button>
 
-        </form>
-
-    </main>
+        </div>
 
 
-    <script
-        type="module"
-        src="./script.js"
-    ></script>
+        <div
+            id="message"
+            class="message hidden"
+        ></div>
+
+
+        <button
+            id="saveButton"
+            class="save-button"
+            type="submit"
+        >
+            CREATE DRIVER
+        </button>
+
+    </form>
+
+</main>
+
+
+<script
+    type="module"
+    src="./script.js"
+></script>
 
 </body>
 
