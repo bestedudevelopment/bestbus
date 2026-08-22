@@ -9,1019 +9,391 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Admin | Fleet Management</title>
+    <title>Admin | Bus Management</title>
 
     <link
         rel="stylesheet"
-        href="./admin.css"
+        href="./style.css"
     >
 </head>
 
 <body>
 
-    <!-- SIDEBAR -->
+    <!-- HEADER -->
 
-    <aside class="sidebar" id="sidebar">
+    <header class="topbar">
 
-        <div class="sidebar-brand">
+        <div class="brand">
 
             <img
                 src="../logo.png"
                 alt="Logo"
+                class="logo"
             >
 
             <div>
-                <span>FLEET</span>
-                <strong>CONTROL</strong>
+                <span class="brand-small">
+                    BUS MANAGEMENT
+                </span>
+
+                <h1>
+                    Admin
+                </h1>
             </div>
 
         </div>
 
 
-        <nav class="navigation">
+        <div class="top-actions">
+
+            <span id="adminName">
+                Admin
+            </span>
 
             <button
-                class="nav-item active"
-                type="button"
-                data-section="dashboard"
-            >
-                <span class="nav-number">01</span>
-                <span>Dashboard</span>
-            </button>
-
-
-            <button
-                class="nav-item"
-                type="button"
-                data-section="buses"
-            >
-                <span class="nav-number">02</span>
-                <span>Buses</span>
-            </button>
-
-
-            <button
-                class="nav-item"
-                type="button"
-                data-section="drivers"
-            >
-                <span class="nav-number">03</span>
-                <span>Drivers</span>
-            </button>
-
-
-            <button
-                class="nav-item"
-                type="button"
-                data-section="monitoring"
-            >
-                <span class="nav-number">04</span>
-                <span>Monitoring</span>
-            </button>
-
-        </nav>
-
-
-        <div class="sidebar-bottom">
-
-            <div class="system-status">
-
-                <span class="status-dot"></span>
-
-                <div>
-                    <span>SYSTEM</span>
-                    <strong>ONLINE</strong>
-                </div>
-
-            </div>
-
-
-            <button
-                id="logoutButton"
-                class="logout-button"
+                id="logoutBtn"
+                class="logout-btn"
                 type="button"
             >
-                LOGOUT
+                Logout
             </button>
 
         </div>
 
-    </aside>
+    </header>
 
 
     <!-- MAIN -->
 
-    <div class="main">
-
-        <!-- TOPBAR -->
-
-        <header class="topbar">
-
-            <button
-                id="menuButton"
-                class="menu-button"
-                type="button"
-                aria-label="Open menu"
-            >
-                ☰
-            </button>
+    <main class="container">
 
 
-            <div class="topbar-title">
+        <!-- WELCOME -->
 
-                <span>ADMINISTRATION</span>
+        <section class="welcome">
 
-                <strong id="pageTitle">
-                    Dashboard
-                </strong>
+            <span class="section-label">
+                ADMIN PANEL
+            </span>
+
+            <h2>
+                Fleet Overview
+            </h2>
+
+            <p>
+                Manage buses, drivers and daily operations.
+            </p>
+
+        </section>
+
+
+        <!-- DASHBOARD CARDS -->
+
+        <section class="dashboard-grid">
+
+
+            <div class="dashboard-card">
+
+                <div class="card-icon yellow">
+                    BUS
+                </div>
+
+                <div>
+
+                    <span>
+                        TOTAL BUSES
+                    </span>
+
+                    <strong id="totalBuses">
+                        0
+                    </strong>
+
+                </div>
 
             </div>
 
 
-            <div class="admin-profile">
+            <div class="dashboard-card">
 
-                <div class="profile-avatar">
-                    A
+                <div class="card-icon black">
+                    DR
                 </div>
 
-                <div class="profile-info">
+                <div>
 
-                    <span>ADMIN</span>
+                    <span>
+                        TOTAL DRIVERS
+                    </span>
 
-                    <strong id="adminName">
-                        Admin
+                    <strong id="totalDrivers">
+                        0
                     </strong>
 
                 </div>
 
             </div>
 
-        </header>
+
+            <div class="dashboard-card">
+
+                <div class="card-icon yellow">
+                    AS
+                </div>
+
+                <div>
+
+                    <span>
+                        ASSIGNED
+                    </span>
+
+                    <strong id="assignedBuses">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
 
 
-        <!-- CONTENT -->
+            <div class="dashboard-card alert-card">
 
-        <main class="content">
+                <div class="card-icon red">
+                    !
+                </div>
+
+                <div>
+
+                    <span>
+                        RED FLAGS
+                    </span>
+
+                    <strong id="redFlags">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
 
 
-            <!-- DASHBOARD -->
+        </section>
 
-            <section
-                id="dashboardSection"
-                class="page-section active-section"
+
+        <!-- MESSAGE -->
+
+        <div
+            id="message"
+            class="message hidden"
+        ></div>
+
+
+        <!-- BUS SECTION -->
+
+        <section class="panel-section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-label">
+                        FLEET
+                    </span>
+
+                    <h2>
+                        Buses
+                    </h2>
+
+                </div>
+
+
+                <button
+                    id="showAddBusBtn"
+                    class="yellow-btn"
+                    type="button"
+                >
+                    + ADD BUS
+                </button>
+
+            </div>
+
+
+            <!-- ADD BUS -->
+
+            <div
+                id="addBusPanel"
+                class="add-panel hidden"
             >
 
-                <div class="page-intro">
-
-                    <div>
-
-                        <span class="eyebrow">
-                            FLEET OVERVIEW
-                        </span>
-
-                        <h1>
-                            Dashboard
-                        </h1>
-
-                        <p>
-                            Monitor your fleet from one place.
-                        </p>
-
-                    </div>
-
-                    <div class="date-display">
-
-                        <span>
-                            TODAY
-                        </span>
-
-                        <strong id="todayDate">
-                            —
-                        </strong>
-
-                    </div>
-
+                <div class="add-panel-title">
+                    ADD NEW BUS
                 </div>
 
 
-                <!-- STATS -->
+                <div class="form-grid">
 
-                <div class="stats-grid">
+                    <div class="field">
 
-                    <div class="stat-card">
+                        <label for="busNumber">
+                            BUS NUMBER
+                        </label>
 
-                        <span class="stat-label">
-                            TOTAL BUSES
-                        </span>
-
-                        <strong id="totalBuses">
-                            0
-                        </strong>
-
-                        <span class="stat-sub">
-                            Fleet
-                        </span>
+                        <input
+                            id="busNumber"
+                            type="text"
+                            placeholder="TEST BUS 1"
+                        >
 
                     </div>
 
 
-                    <div class="stat-card">
+                    <div class="field">
 
-                        <span class="stat-label">
-                            DRIVERS
-                        </span>
+                        <label for="registrationNumber">
+                            REGISTRATION NUMBER
+                        </label>
 
-                        <strong id="totalDrivers">
-                            0
-                        </strong>
-
-                        <span class="stat-sub">
-                            Registered
-                        </span>
+                        <input
+                            id="registrationNumber"
+                            type="text"
+                            placeholder="KA 35 AB 1234"
+                        >
 
                     </div>
 
 
-                    <div class="stat-card">
+                    <div class="field">
 
-                        <span class="stat-label">
-                            ACTIVE
-                        </span>
+                        <label for="startingOdometer">
+                            STARTING ODOMETER
+                        </label>
 
-                        <strong id="activeBuses">
-                            0
-                        </strong>
+                        <div class="unit-input">
 
-                        <span class="stat-sub">
-                            On fleet
-                        </span>
+                            <input
+                                id="startingOdometer"
+                                type="number"
+                                min="0"
+                                step="0.1"
+                                placeholder="12000"
+                            >
 
-                    </div>
-
-
-                    <div class="stat-card alert-card">
-
-                        <span class="stat-label">
-                            RED FLAGS
-                        </span>
-
-                        <strong id="redFlags">
-                            0
-                        </strong>
-
-                        <span class="stat-sub">
-                            Requires attention
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <!-- QUICK ACTIONS -->
-
-                <div class="section-heading">
-
-                    <div>
-
-                        <span class="eyebrow">
-                            QUICK ACCESS
-                        </span>
-
-                        <h2>
-                            Operations
-                        </h2>
-
-                    </div>
-
-                </div>
-
-
-                <div class="quick-grid">
-
-                    <button
-                        class="quick-card"
-                        data-section="buses"
-                        type="button"
-                    >
-
-                        <span class="quick-index">
-                            01
-                        </span>
-
-                        <div>
-
-                            <strong>
-                                Manage Buses
-                            </strong>
-
-                            <p>
-                                View and manage fleet vehicles.
-                            </p>
+                            <span>
+                                KM
+                            </span>
 
                         </div>
 
-                        <span class="quick-arrow">
-                            →
-                        </span>
-
-                    </button>
+                    </div>
 
 
-                    <button
-                        class="quick-card"
-                        data-section="drivers"
-                        type="button"
-                    >
+                    <div class="field">
 
-                        <span class="quick-index">
-                            02
-                        </span>
+                        <label for="expectedMileage">
+                            EXPECTED MILEAGE
+                        </label>
 
-                        <div>
+                        <div class="unit-input">
 
-                            <strong>
-                                Manage Drivers
-                            </strong>
+                            <input
+                                id="expectedMileage"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                placeholder="5"
+                            >
 
-                            <p>
-                                Drivers and vehicle assignments.
-                            </p>
+                            <span>
+                                KM/L
+                            </span>
 
                         </div>
 
-                        <span class="quick-arrow">
-                            →
-                        </span>
+                    </div>
 
-                    </button>
+                </div>
 
+
+                <div class="form-actions">
 
                     <button
-                        class="quick-card"
-                        data-section="monitoring"
+                        id="cancelBusBtn"
+                        class="cancel-btn"
                         type="button"
                     >
-
-                        <span class="quick-index">
-                            03
-                        </span>
-
-                        <div>
-
-                            <strong>
-                                Fleet Monitoring
-                            </strong>
-
-                            <p>
-                                Mileage and performance monitoring.
-                            </p>
-
-                        </div>
-
-                        <span class="quick-arrow">
-                            →
-                        </span>
-
+                        CANCEL
                     </button>
-
-                </div>
-
-
-                <!-- RECENT ACTIVITY PLACEHOLDER -->
-
-                <div class="section-heading activity-heading">
-
-                    <div>
-
-                        <span class="eyebrow">
-                            ACTIVITY
-                        </span>
-
-                        <h2>
-                            Recent Operations
-                        </h2>
-
-                    </div>
-
-                </div>
-
-
-                <div class="empty-state">
-
-                    <div class="empty-icon">
-                        —
-                    </div>
-
-                    <strong>
-                        No operations yet
-                    </strong>
-
-                    <p>
-                        Trip and fleet activity will appear here.
-                    </p>
-
-                </div>
-
-            </section>
-
-
-            <!-- BUSES -->
-
-            <section
-                id="busesSection"
-                class="page-section"
-            >
-
-                <div class="page-intro">
-
-                    <div>
-
-                        <span class="eyebrow">
-                            FLEET
-                        </span>
-
-                        <h1>
-                            Buses
-                        </h1>
-
-                        <p>
-                            Manage all registered vehicles.
-                        </p>
-
-                    </div>
 
                     <button
-                        class="primary-button"
+                        id="saveBusBtn"
+                        class="black-btn"
                         type="button"
                     >
-                        + ADD BUS
+                        CREATE BUS
                     </button>
 
                 </div>
 
-
-                <div class="coming-section">
-
-                    <span>
-                        PART 2
-                    </span>
-
-                    <strong>
-                        Bus management will be added next.
-                    </strong>
-
-                </div>
-
-            </section>
+            </div>
 
 
-            <!-- DRIVERS -->
+            <!-- BUS LIST -->
 
-            <section
-                id="driversSection"
-                class="page-section"
+            <div
+                id="busList"
+                class="list"
             >
 
-                <div class="page-intro">
-
-                    <div>
-
-                        <span class="eyebrow">
-                            PEOPLE
-                        </span>
-
-                        <h1>
-                            Drivers
-                        </h1>
-
-                        <p>
-                            Manage drivers and assignments.
-                        </p>
-
-                    </div>
-
+                <div class="empty">
+                    Loading buses...
                 </div>
 
+            </div>
 
-                <div class="coming-section">
+        </section>
 
-                    <span>
-                        PART 4
+
+        <!-- DRIVER SECTION -->
+
+        <section class="panel-section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-label">
+                        PEOPLE
                     </span>
 
-                    <strong>
-                        Driver management will be added later.
-                    </strong>
+                    <h2>
+                        Drivers
+                    </h2>
 
                 </div>
 
-            </section>
+            </div>
 
 
-            <!-- MONITORING -->
-
-            <section
-                id="monitoringSection"
-                class="page-section"
+            <div
+                id="driverList"
+                class="list"
             >
 
-                <div class="page-intro">
-
-                    <div>
-
-                        <span class="eyebrow">
-                            PERFORMANCE
-                        </span>
-
-                        <h1>
-                            Monitoring
-                        </h1>
-
-                        <p>
-                            Fleet performance and alerts.
-                        </p>
-
-                    </div>
-
+                <div class="empty">
+                    Loading drivers...
                 </div>
 
+            </div>
 
-                <div class="coming-section">
+        </section>
 
-                    <span>
-                        PART 5
-                    </span>
 
-                    <strong>
-                        Monitoring will be connected later.
-                    </strong>
+    </main>
 
-                </div>
 
-            </section>
-
-        </main>
-
-    </div>
-
-
-    <script type="module">
-
-        import {
-            onAuthStateChanged,
-            signOut
-        } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-        import {
-            doc,
-            getDoc,
-            collection,
-            getDocs
-        } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-        import {
-            auth,
-            db
-        } from "../core/firebase.js";
-
-
-        /* ==========================================
-           AUTHENTICATION
-        ========================================== */
-
-        onAuthStateChanged(
-            auth,
-            async (user) => {
-
-                if (!user) {
-
-                    window.location.replace(
-                        "../index.html"
-                    );
-
-                    return;
-
-                }
-
-
-                try {
-
-                    const userRef =
-                        doc(
-                            db,
-                            "users",
-                            user.uid
-                        );
-
-
-                    const userSnap =
-                        await getDoc(
-                            userRef
-                        );
-
-
-                    if (
-                        !userSnap.exists()
-                    ) {
-
-                        window.location.replace(
-                            "../index.html"
-                        );
-
-                        return;
-
-                    }
-
-
-                    const userData =
-                        userSnap.data();
-
-
-                    if (
-                        userData.role !==
-                        "admin"
-                    ) {
-
-                        window.location.replace(
-                            "../index.html"
-                        );
-
-                        return;
-
-                    }
-
-
-                    document.getElementById(
-                        "adminName"
-                    ).textContent =
-                        userData.name ||
-                        "Administrator";
-
-
-                    loadDashboardStats();
-
-
-                } catch (error) {
-
-                    console.error(
-                        "ADMIN ERROR:",
-                        error
-                    );
-
-                    window.location.replace(
-                        "../index.html"
-                    );
-
-                }
-
-            }
-        );
-
-
-        /* ==========================================
-           DASHBOARD STATS
-        ========================================== */
-
-        async function loadDashboardStats() {
-
-            try {
-
-                const busesSnap =
-                    await getDocs(
-                        collection(
-                            db,
-                            "buses"
-                        )
-                    );
-
-
-                const usersSnap =
-                    await getDocs(
-                        collection(
-                            db,
-                            "users"
-                        )
-                    );
-
-
-                let drivers = 0;
-                let activeBuses = 0;
-
-
-                usersSnap.forEach(
-                    (item) => {
-
-                        const data =
-                            item.data();
-
-
-                        if (
-                            data.role ===
-                            "driver"
-                        ) {
-
-                            drivers++;
-
-                        }
-
-                    }
-                );
-
-
-                busesSnap.forEach(
-                    (item) => {
-
-                        const data =
-                            item.data();
-
-
-                        if (
-                            data.status !==
-                            "inactive"
-                        ) {
-
-                            activeBuses++;
-
-                        }
-
-                    }
-                );
-
-
-                document.getElementById(
-                    "totalBuses"
-                ).textContent =
-                    busesSnap.size;
-
-
-                document.getElementById(
-                    "totalDrivers"
-                ).textContent =
-                    drivers;
-
-
-                document.getElementById(
-                    "activeBuses"
-                ).textContent =
-                    activeBuses;
-
-
-            } catch (error) {
-
-                console.error(
-                    "STATS ERROR:",
-                    error
-                );
-
-            }
-
-        }
-
-
-        /* ==========================================
-           NAVIGATION
-        ========================================== */
-
-        const navItems =
-            document.querySelectorAll(
-                ".nav-item"
-            );
-
-
-        const quickCards =
-            document.querySelectorAll(
-                ".quick-card"
-            );
-
-
-        const sections = {
-
-            dashboard:
-                document.getElementById(
-                    "dashboardSection"
-                ),
-
-            buses:
-                document.getElementById(
-                    "busesSection"
-                ),
-
-            drivers:
-                document.getElementById(
-                    "driversSection"
-                ),
-
-            monitoring:
-                document.getElementById(
-                    "monitoringSection"
-                )
-
-        };
-
-
-        function openSection(
-            sectionName
-        ) {
-
-            Object.values(
-                sections
-            ).forEach(
-                (section) => {
-
-                    section.classList.remove(
-                        "active-section"
-                    );
-
-                }
-            );
-
-
-            if (
-                sections[sectionName]
-            ) {
-
-                sections[
-                    sectionName
-                ].classList.add(
-                    "active-section"
-                );
-
-            }
-
-
-            navItems.forEach(
-                (item) => {
-
-                    item.classList.toggle(
-                        "active",
-                        item.dataset.section ===
-                        sectionName
-                    );
-
-                }
-            );
-
-
-            const titles = {
-
-                dashboard:
-                    "Dashboard",
-
-                buses:
-                    "Buses",
-
-                drivers:
-                    "Drivers",
-
-                monitoring:
-                    "Monitoring"
-
-            };
-
-
-            document.getElementById(
-                "pageTitle"
-            ).textContent =
-                titles[sectionName];
-
-
-            /*
-             * Close mobile sidebar.
-             */
-
-            document.getElementById(
-                "sidebar"
-            ).classList.remove(
-                "mobile-open"
-            );
-
-        }
-
-
-        navItems.forEach(
-            (item) => {
-
-                item.addEventListener(
-                    "click",
-                    () => {
-
-                        openSection(
-                            item.dataset.section
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-
-        quickCards.forEach(
-            (card) => {
-
-                card.addEventListener(
-                    "click",
-                    () => {
-
-                        openSection(
-                            card.dataset.section
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-
-        /* ==========================================
-           LOGOUT
-        ========================================== */
-
-        document.getElementById(
-            "logoutButton"
-        ).addEventListener(
-            "click",
-            async () => {
-
-                await signOut(
-                    auth
-                );
-
-                window.location.replace(
-                    "../index.html"
-                );
-
-            }
-        );
-
-
-        /* ==========================================
-           TODAY
-        ========================================== */
-
-        document.getElementById(
-            "todayDate"
-        ).textContent =
-            new Date().toLocaleDateString(
-                "en-IN",
-                {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric"
-                }
-            );
-
-
-        /* ==========================================
-           MOBILE MENU
-        ========================================== */
-
-        const sidebar =
-    document.getElementById("sidebar");
-
-const menuButton =
-    document.getElementById("menuButton");
-
-
-menuButton.addEventListener(
-    "click",
-    () => {
-
-        sidebar.classList.toggle(
-            "mobile-open"
-        );
-
-    }
-);
-
-
-/*
- * Close menu after selecting
- * any navigation item.
- */
-
-document.querySelectorAll(
-    ".nav-item, .quick-card"
-).forEach(
-    (item) => {
-
-        item.addEventListener(
-            "click",
-            () => {
-
-                sidebar.classList.remove(
-                    "mobile-open"
-                );
-
-            }
-        );
-
-    }
-);
-
-    </script>
+    <script
+        type="module"
+        src="./script.js"
+    ></script>
 
 </body>
 
