@@ -1,275 +1,477 @@
-import {
-    signInWithEmailAndPassword,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-import {
-    doc,
-    getDoc
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+:root {
+    --black: #111111;
+    --white: #ffffff;
 
-import {
-    auth,
-    db
-} from "./core/firebase.js";
+    --yellow: #e7b900;
+    --yellow-soft: #fff8d9;
 
+    --red: #c62828;
+    --red-soft: #fff1f1;
 
-/* =========================
-   ELEMENTS
-========================= */
-
-const loginForm =
-    document.getElementById("loginForm");
-
-const emailInput =
-    document.getElementById("email");
-
-const passwordInput =
-    document.getElementById("password");
-
-const loginButton =
-    document.getElementById("loginButton");
-
-const errorMessage =
-    document.getElementById("errorMessage");
+    --grey-100: #f4f4f2;
+    --grey-200: #e5e5e1;
+    --grey-400: #999994;
+    --grey-600: #666660;
+}
 
 
-/* =========================
-   CHECK EXISTING LOGIN
-========================= */
+/* =================================
+   BODY
+================================= */
 
-onAuthStateChanged(
-    auth,
-    async (user) => {
+body {
 
-        if (!user) {
-            return;
-        }
+    min-height: 100vh;
 
-        /*
-         * User is already logged in.
-         * Find their role and send them
-         * directly to the correct panel.
-         */
-
-        try {
-
-            await redirectByRole(user);
-
-        } catch (error) {
-
-            console.error(error);
-
-            showError(
-                "Unable to verify your account."
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================
-   LOGIN
-========================= */
-
-loginForm.addEventListener(
-    "submit",
-    async (event) => {
-
-        event.preventDefault();
-
-        hideError();
-
-        const email =
-            emailInput.value.trim();
-
-        const password =
-            passwordInput.value;
-
-
-        if (!email || !password) {
-
-            showError(
-                "Enter your email and password."
-            );
-
-            return;
-
-        }
-
-
-        loginButton.disabled = true;
-
-        loginButton.textContent =
-            "SIGNING IN...";
-
-
-        try {
-
-            const credential =
-                await signInWithEmailAndPassword(
-                    auth,
-                    email,
-                    password
-                );
-
-
-            await redirectByRole(
-                credential.user
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "LOGIN ERROR:",
-                error
-            );
-
-
-            showError(
-                getLoginError(
-                    error
-                )
-            );
-
-
-            loginButton.disabled =
-                false;
-
-            loginButton.textContent =
-                "LOGIN";
-
-        }
-
-    }
-);
-
-
-/* =========================
-   ROLE REDIRECTION
-========================= */
-
-async function redirectByRole(
-    user
-) {
-
-    const userReference =
-        doc(
-            db,
-            "users",
-            user.uid
+    background:
+        linear-gradient(
+            180deg,
+            #f7f7f5,
+            #eeeeeb
         );
 
+    color: var(--black);
 
-    const userSnapshot =
-        await getDoc(
-            userReference
-        );
-
-
-    if (!userSnapshot.exists()) {
-
-        throw new Error(
-            "User profile not found in Firestore."
-        );
-
-    }
-
-
-    const userData =
-        userSnapshot.data();
-
-
-    const role =
-        userData.role;
-
-
-    if (role === "admin") {
-
-        window.location.replace(
-            "./admin/"
-        );
-
-        return;
-
-    }
-
-
-    if (role === "driver") {
-
-        window.location.replace(
-            "./driver/"
-        );
-
-        return;
-
-    }
-
-
-    throw new Error(
-        "This account does not have a valid role."
-    );
+    font-family:
+        "DM Sans",
+        Arial,
+        sans-serif;
 
 }
 
 
-/* =========================
-   ERROR MESSAGE
-========================= */
+/* =================================
+   TOP BAR
+================================= */
 
-function showError(
-    text
-) {
+.topbar {
 
-    errorMessage.textContent =
-        text;
+    height: 70px;
 
-    errorMessage.classList.remove(
-        "hidden"
-    );
+    display: flex;
 
-}
+    align-items: center;
 
+    justify-content: space-between;
 
-function hideError() {
+    padding: 0 5vw;
 
-    errorMessage.textContent =
-        "";
+    background: var(--black);
 
-    errorMessage.classList.add(
-        "hidden"
-    );
+    border-top:
+        4px solid var(--red);
 
 }
 
 
-/* =========================
-   FIREBASE LOGIN ERRORS
-========================= */
+.brand {
 
-function getLoginError(
-    error
-) {
+    display: flex;
 
-    switch (error.code) {
+    align-items: center;
 
-        case "auth/invalid-credential":
-            return "Incorrect email or password.";
+    gap: 10px;
 
-        case "auth/invalid-email":
-            return "Enter a valid email address.";
+}
 
-        case "auth/user-disabled":
-            return "This account has been disabled.";
 
-        case "auth/too-many-requests":
-            return "Too many attempts. Try again later.";
+.logo {
 
-        default:
-            return "Unable to sign in. Please try again.";
+    width: 42px;
+
+    height: 42px;
+
+    object-fit: contain;
+
+    background: var(--white);
+
+    border-radius: 5px;
+
+}
+
+
+.brand-text {
+
+    display: flex;
+
+    flex-direction: column;
+
+    line-height: 1;
+
+}
+
+
+.brand-text strong {
+
+    color: var(--white);
+
+    font-size: 9px;
+
+    letter-spacing: 1.4px;
+
+}
+
+
+.brand-text span {
+
+    margin-top: 4px;
+
+    color: var(--yellow);
+
+    font-size: 6px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+
+}
+
+
+.top-label {
+
+    color: var(--yellow);
+
+    font-size: 7px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+
+}
+
+
+/* =================================
+   PAGE
+================================= */
+
+.page {
+
+    width: 100%;
+
+    max-width: 520px;
+
+    margin: auto;
+
+    padding:
+        55px 20px 70px;
+
+}
+
+
+/* =================================
+   HEADING
+================================= */
+
+.heading {
+
+    padding-bottom: 25px;
+
+    border-bottom:
+        1px solid var(--grey-200);
+
+}
+
+
+.eyebrow {
+
+    color: var(--grey-400);
+
+    font-size: 7px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.8px;
+
+}
+
+
+.heading h1 {
+
+    margin-top: 8px;
+
+    font-family:
+        "Playfair Display",
+        Georgia,
+        serif;
+
+    font-size: 40px;
+
+    line-height: 1.1;
+
+    letter-spacing: -1px;
+
+}
+
+
+.heading p {
+
+    max-width: 400px;
+
+    margin-top: 9px;
+
+    color: var(--grey-600);
+
+    font-size: 10px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =================================
+   AUTH SECTION
+================================= */
+
+.auth-section {
+
+    margin-top: 30px;
+
+}
+
+
+.hidden {
+
+    display: none;
+
+}
+
+
+/* =================================
+   FORM
+================================= */
+
+.form {
+
+    width: 100%;
+
+}
+
+
+.field {
+
+    margin-bottom: 19px;
+
+}
+
+
+.field label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--grey-600);
+
+    font-size: 7px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+}
+
+
+.field input {
+
+    width: 100%;
+
+    height: 46px;
+
+    padding: 0 13px;
+
+    border:
+        1px solid var(--grey-200);
+
+    border-radius: 6px;
+
+    outline: none;
+
+    background: var(--white);
+
+    color: var(--black);
+
+    font-family:
+        "DM Sans",
+        Arial,
+        sans-serif;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+}
+
+
+.field input:focus {
+
+    border-color: var(--black);
+
+}
+
+
+/* =================================
+   BUTTON
+================================= */
+
+.primary-button {
+
+    width: 100%;
+
+    height: 48px;
+
+    border:
+        1px solid var(--black);
+
+    border-radius: 6px;
+
+    background: var(--black);
+
+    color: var(--white);
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+}
+
+
+.primary-button:hover {
+
+    background: var(--yellow);
+
+    color: var(--black);
+
+}
+
+
+.primary-button:disabled {
+
+    opacity: 0.5;
+
+    cursor: not-allowed;
+
+}
+
+
+/* =================================
+   SWITCH
+================================= */
+
+.switch-box {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 22px;
+
+    color: var(--grey-600);
+
+    font-size: 9px;
+
+}
+
+
+.text-button {
+
+    border: none;
+
+    background: transparent;
+
+    color: var(--black);
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: .5px;
+
+    cursor: pointer;
+
+}
+
+
+.text-button:hover {
+
+    color: var(--red);
+
+}
+
+
+/* =================================
+   MESSAGE
+================================= */
+
+.message {
+
+    margin-bottom: 15px;
+
+    padding:
+        11px 13px;
+
+    border:
+        1px solid var(--red);
+
+    border-radius: 6px;
+
+    background: var(--red-soft);
+
+    color: var(--red);
+
+    font-size: 9px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 500px) {
+
+    .topbar {
+
+        padding: 0 13px;
+
+    }
+
+
+    .page {
+
+        padding:
+            35px 13px 50px;
+
+    }
+
+
+    .heading h1 {
+
+        font-size: 34px;
+
+    }
+
+
+    .switch-box {
+
+        flex-direction: column;
+
+        gap: 7px;
 
     }
 
