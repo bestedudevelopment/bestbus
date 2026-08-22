@@ -9,7 +9,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Add Driver</title>
+    <title>Add Driver | Admin</title>
 
     <link
         rel="stylesheet"
@@ -23,7 +23,7 @@
 
     <link
         rel="preconnect"
-        href="https://fonts.gstatic.com"
+        href="https://fonts.googleapis.com"
         crossorigin
     >
 
@@ -35,165 +35,151 @@
 
 <body>
 
-<header class="topbar">
+    <header class="topbar">
 
-    <a
-        href="../admin/"
-        class="back"
-    >
-        ← ADMIN
-    </a>
+        <a
+            href="../admin/"
+            class="back"
+        >
+            ← ADMIN
+        </a>
 
-    <img
-        src="../logo.png"
-        alt="Logo"
-        class="logo"
-    >
+        <img
+            src="../logo.png"
+            alt="Logo"
+            class="logo"
+        >
 
-    <span class="page-label">
-        ADD DRIVER
-    </span>
-
-</header>
-
-
-<main class="page">
-
-    <section class="heading">
-
-        <span class="eyebrow">
-            FLEET MANAGEMENT
+        <span class="page-label">
+            ADD DRIVER
         </span>
 
-        <h1>
-            Add Driver
-        </h1>
-
-        <p>
-            Create a driver login and assign a bus.
-        </p>
-
-    </section>
+    </header>
 
 
-    <form
-        id="driverForm"
-        class="form"
-    >
+    <main class="page">
 
-        <div class="field">
+        <section class="heading">
 
-            <label for="driverName">
-                DRIVER NAME
-            </label>
+            <span class="eyebrow">
+                FLEET MANAGEMENT
+            </span>
 
-            <input
-                id="driverName"
-                type="text"
-                placeholder="Test Driver 1"
-                required
-            >
-
-        </div>
-
-
-        <div class="field">
-
-            <label for="driverEmail">
-                DRIVER EMAIL
-            </label>
-
-            <input
-                id="driverEmail"
-                type="email"
-                placeholder="driver1@example.com"
-                required
-            >
-
-        </div>
-
-
-        <div class="field">
-
-            <label for="driverPassword">
-                DRIVER PASSWORD
-            </label>
-
-            <input
-                id="driverPassword"
-                type="password"
-                placeholder="Minimum 6 characters"
-                minlength="6"
-                required
-            >
-
-        </div>
-
-
-        <div class="field">
-
-            <label for="busSelect">
-                ASSIGN BUS
-            </label>
-
-            <select
-                id="busSelect"
-                required
-            >
-
-                <option value="">
-                    Loading buses...
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="admin-verification">
-
-            <div class="verify-title">
-                ADMIN VERIFICATION
-            </div>
+            <h1>
+                Add Driver
+            </h1>
 
             <p>
-                Enter your current Admin password to keep your
-                Admin session active after creating the driver.
+                Create a driver profile and assign an available bus.
             </p>
 
-            <input
-                id="adminPassword"
-                type="password"
-                placeholder="Admin password"
-                required
-            >
-
-        </div>
+        </section>
 
 
-        <div
-            id="message"
-            class="message hidden"
-        ></div>
-
-
-        <button
-            id="saveButton"
-            class="save-button"
-            type="submit"
+        <form
+            id="driverForm"
+            class="form"
         >
-            CREATE DRIVER
-        </button>
 
-    </form>
+            <div class="field">
 
-</main>
+                <label for="driverName">
+                    DRIVER NAME
+                </label>
+
+                <input
+                    id="driverName"
+                    type="text"
+                    placeholder="Test Driver 1"
+                    autocomplete="name"
+                    required
+                >
+
+            </div>
 
 
-<script
-    type="module"
-    src="./script.js"
-></script>
+            <div class="field">
+
+                <label for="driverEmail">
+                    DRIVER EMAIL
+                </label>
+
+                <input
+                    id="driverEmail"
+                    type="email"
+                    placeholder="driver1@example.com"
+                    autocomplete="email"
+                    required
+                >
+
+                <small>
+                    The driver will use this email to activate their account.
+                </small>
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="busSelect">
+                    ASSIGN BUS
+                </label>
+
+                <select
+                    id="busSelect"
+                    required
+                >
+
+                    <option value="">
+                        Loading buses...
+                    </option>
+
+                </select>
+
+                <small>
+                    Only buses that are not already assigned will appear.
+                </small>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <div class="info-title">
+                    DRIVER ACCOUNT
+                </div>
+
+                <p>
+                    After this profile is created, the driver will activate
+                    their own account using their email and create a password.
+                </p>
+
+            </div>
+
+
+            <div
+                id="message"
+                class="message hidden"
+            ></div>
+
+
+            <button
+                id="saveButton"
+                type="submit"
+                class="save-button"
+            >
+                CREATE DRIVER PROFILE
+            </button>
+
+        </form>
+
+    </main>
+
+
+    <script
+        type="module"
+        src="./script.js"
+    ></script>
 
 </body>
 
