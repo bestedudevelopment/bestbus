@@ -1,342 +1,133 @@
-import {
-    onAuthStateChanged,
-    signOut
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-import {
-    collection,
-    getDocs,
-    doc,
-    getDoc
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-import {
-    auth,
-    db
-} from "../core/firebase.js";
-
-
-const loadingScreen =
-    document.getElementById(
-        "loadingScreen"
-    );
+const splash =
+    document.getElementById("splash");
 
 const adminPage =
-    document.getElementById(
-        "adminPage"
-    );
-
-const adminName =
-    document.getElementById(
-        "adminName"
-    );
-
-const totalBuses =
-    document.getElementById(
-        "totalBuses"
-    );
-
-const totalDrivers =
-    document.getElementById(
-        "totalDrivers"
-    );
+    document.getElementById("adminPage");
 
 const busList =
-    document.getElementById(
-        "busList"
+    document.getElementById("busList");
+
+const totalBuses =
+    document.getElementById("totalBuses");
+
+const totalDrivers =
+    document.getElementById("totalDrivers");
+
+
+/* =========================
+   SPLASH
+========================= */
+
+setTimeout(() => {
+
+    splash.classList.add(
+        "hide"
     );
 
-const logoutBtn =
-    document.getElementById(
-        "logoutBtn"
+    adminPage.classList.add(
+        "show"
     );
 
+}, 2000);
 
-/* =================================
-   AUTHENTICATION
-================================= */
 
-onAuthStateChanged(
-    auth,
-    async (user) => {
+/* =========================
+   TEMPORARY DASHBOARD DATA
+========================= */
 
-        /*
-         * Keep logo visible for exactly
-         * approximately 2 seconds.
-         */
+const buses = [
 
-        await wait(
-            2000
-        );
+    {
+        id: "test-bus-1",
 
+        number: "TEST BUS 1",
 
-        /*
-         * No logged-in user.
-         */
+        registration:
+            "KA 35 AB 1234",
 
-        if (!user) {
+        currentOdometer:
+            12300,
 
-            window.location.replace(
-                "../index.html"
-            );
+        odometerUpdated:
+            "22 Aug 2026",
 
-            return;
+        dieselLitres:
+            30,
 
-        }
+        dieselCost:
+            2850,
 
+        dieselOdometer:
+            12100,
 
-        try {
+        dieselUpdated:
+            "21 Aug 2026"
+    },
 
-            /*
-             * Get Firestore user profile.
-             */
 
-            const userRef =
-                doc(
-                    db,
-                    "users",
-                    user.uid
-                );
+    {
+        id: "test-bus-2",
 
+        number: "TEST BUS 2",
 
-            const userSnapshot =
-                await getDoc(
-                    userRef
-                );
+        registration:
+            "KA 35 CD 5678",
 
+        currentOdometer:
+            12640,
 
-            /*
-             * Profile doesn't exist.
-             */
+        odometerUpdated:
+            "22 Aug 2026",
 
-            if (
-                !userSnapshot.exists()
-            ) {
+        dieselLitres:
+            32,
 
-                await signOut(
-                    auth
-                );
+        dieselCost:
+            3040,
 
+        dieselOdometer:
+            12450,
 
-                window.location.replace(
-                    "../index.html"
-                );
-
-                return;
-
-            }
-
-
-            const userData =
-                userSnapshot.data();
-
-
-            /*
-             * Only Admin can enter.
-             */
-
-            if (
-                userData.role !==
-                "admin"
-            ) {
-
-                await signOut(
-                    auth
-                );
-
-
-                window.location.replace(
-                    "../index.html"
-                );
-
-                return;
-
-            }
-
-
-            /*
-             * Show admin name.
-             */
-
-            adminName.textContent =
-                userData.name ||
-                "Admin";
-
-
-            /*
-             * Load dashboard.
-             */
-
-            await loadDashboard();
-
-
-            /*
-             * Remove loading screen.
-             */
-
-            loadingScreen.classList.add(
-                "hidden"
-            );
-
-            adminPage.classList.remove(
-                "hidden"
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "ADMIN ERROR:",
-                error
-            );
-
-
-            await signOut(
-                auth
-            );
-
-
-            window.location.replace(
-                "../index.html"
-            );
-
-        }
-
-    }
-);
-
-
-/* =================================
-   DASHBOARD DATA
-================================= */
-
-async function loadDashboard() {
-
-    const busesSnapshot =
-        await getDocs(
-            collection(
-                db,
-                "buses"
-            )
-        );
-
-
-    const usersSnapshot =
-        await getDocs(
-            collection(
-                db,
-                "users"
-            )
-        );
-
-
-    /*
-     * Total buses
-     */
-
-    totalBuses.textContent =
-        busesSnapshot.size;
-
-
-    /*
-     * Total drivers
-     */
-
-    let drivers = 0;
-
-
-    usersSnapshot.forEach(
-        (snapshot) => {
-
-            const data =
-                snapshot.data();
-
-
-            if (
-                data.role ===
-                "driver"
-            ) {
-
-                drivers++;
-
-            }
-
-        }
-    );
-
-
-    totalDrivers.textContent =
-        drivers;
-
-
-    /*
-     * Render bus overview.
-     */
-
-    renderBuses(
-        busesSnapshot
-    );
-
-}
-
-
-/* =================================
-   BUS OVERVIEW
-================================= */
-
-function renderBuses(
-    busesSnapshot
-) {
-
-    busList.innerHTML =
-        "";
-
-
-    if (
-        busesSnapshot.empty
-    ) {
-
-        busList.innerHTML = `
-            <div class="empty">
-                No bus information available.
-            </div>
-        `;
-
-        return;
-
+        dieselUpdated:
+            "20 Aug 2026"
     }
 
-
-    busesSnapshot.forEach(
-        (snapshot) => {
-
-            const bus =
-                snapshot.data();
+];
 
 
-            const currentOdometer =
-                bus.currentOdometer ??
-                bus.startingOdometer ??
-                0;
+const drivers = [
+    "Test Driver 1",
+    "Test Driver 2"
+];
 
 
-            /*
-             * These are placeholders until
-             * we build the trip/diesel data
-             * structure.
-             */
+/* =========================
+   COUNTERS
+========================= */
 
-            const lastUpdated =
-                formatTimestamp(
-                    bus.updatedAt
-                );
+totalBuses.textContent =
+    buses.length;
 
+totalDrivers.textContent =
+    drivers.length;
+
+
+/* =========================
+   BUS CARDS
+========================= */
+
+function renderBuses() {
+
+    busList.innerHTML = "";
+
+
+    buses.forEach(
+        (bus) => {
 
             const card =
                 document.createElement(
-                    "div"
+                    "article"
                 );
-
 
             card.className =
                 "bus-card";
@@ -344,52 +135,84 @@ function renderBuses(
 
             card.innerHTML = `
 
-                <div>
+                <div class="bus-top">
 
-                    <div class="bus-name">
-                        ${escapeHTML(
-                            bus.busNumber ||
-                            "Bus"
-                        )}
+                    <div>
+
+                        <div class="bus-name">
+                            ${bus.number}
+                        </div>
+
+                        <div class="bus-registration">
+                            ${bus.registration}
+                        </div>
+
                     </div>
 
-                    <div class="bus-registration">
-                        ${escapeHTML(
-                            bus.registrationNumber ||
-                            "Registration not available"
-                        )}
-                    </div>
+                    <a
+                        href="../bus-details/?id=${bus.id}"
+                        class="view-button"
+                    >
+                        VIEW →
+                    </a>
 
                 </div>
 
 
                 <div class="bus-info">
 
-                    <span>
-                        LAST ODOMETER
-                    </span>
+                    <div class="info-item">
 
-                    <strong>
-                        ${formatNumber(
-                            currentOdometer
-                        )} KM
-                    </strong>
+                        <span>
+                            LAST ODOMETER
+                        </span>
 
-                    <div class="bus-registration">
-                        ${lastUpdated}
+                        <strong>
+                            ${bus.currentOdometer.toLocaleString("en-IN")}
+                            KM
+                        </strong>
+
+                        <small>
+                            ${bus.odometerUpdated}
+                        </small>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <span>
+                            LAST DIESEL
+                        </span>
+
+                        <strong>
+                            ${bus.dieselLitres} L
+                        </strong>
+
+                        <small>
+                            ${bus.dieselUpdated}
+                        </small>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <span>
+                            DIESEL DETAILS
+                        </span>
+
+                        <strong>
+                            ₹${bus.dieselCost.toLocaleString("en-IN")}
+                        </strong>
+
+                        <small>
+                            Odo ${bus.dieselOdometer.toLocaleString("en-IN")} KM
+                        </small>
+
                     </div>
 
                 </div>
-
-
-                <a
-                    class="view-button"
-                    href="../bus-details/?busId=${encodeURIComponent(
-                        snapshot.id
-                    )}"
-                >
-                    VIEW →
-                </a>
 
             `;
 
@@ -404,155 +227,4 @@ function renderBuses(
 }
 
 
-/* =================================
-   TIMESTAMP
-================================= */
-
-function formatTimestamp(
-    timestamp
-) {
-
-    if (
-        !timestamp ||
-        typeof timestamp.toDate !==
-        "function"
-    ) {
-
-        return "Not updated yet";
-
-    }
-
-
-    return timestamp
-        .toDate()
-        .toLocaleDateString(
-            "en-IN",
-            {
-                day: "2-digit",
-                month: "short",
-                year: "numeric"
-            }
-        );
-
-}
-
-
-/* =================================
-   NUMBER
-================================= */
-
-function formatNumber(
-    value
-) {
-
-    const number =
-        Number(value);
-
-
-    if (
-        !Number.isFinite(number)
-    ) {
-
-        return "0";
-
-    }
-
-
-    return number.toLocaleString(
-        "en-IN",
-        {
-            maximumFractionDigits: 2
-        }
-    );
-
-}
-
-
-/* =================================
-   HTML SAFETY
-================================= */
-
-function escapeHTML(
-    value
-) {
-
-    return String(
-        value ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-/* =================================
-   WAIT
-================================= */
-
-function wait(
-    milliseconds
-) {
-
-    return new Promise(
-        (resolve) => {
-
-            setTimeout(
-                resolve,
-                milliseconds
-            );
-
-        }
-    );
-
-}
-
-
-/* =================================
-   LOGOUT
-================================= */
-
-logoutBtn.addEventListener(
-    "click",
-    async () => {
-
-        try {
-
-            await signOut(
-                auth
-            );
-
-
-            window.location.replace(
-                "../index.html"
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "LOGOUT ERROR:",
-                error
-            );
-
-        }
-
-    }
-);
+renderBuses();
