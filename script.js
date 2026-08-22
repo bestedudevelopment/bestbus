@@ -1,478 +1,653 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-:root {
-    --black: #111111;
-    --white: #ffffff;
+import {
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-    --yellow: #e7b900;
-    --yellow-soft: #fff8d9;
-
-    --red: #c62828;
-    --red-soft: #fff1f1;
-
-    --grey-100: #f4f4f2;
-    --grey-200: #e5e5e1;
-    --grey-400: #999994;
-    --grey-600: #666660;
-}
+import {
+    auth,
+    db
+} from "./core/firebase.js";
 
 
 /* =================================
-   BODY
+   ELEMENTS
 ================================= */
 
-body {
+const loginSection =
+    document.getElementById(
+        "loginSection"
+    );
 
-    min-height: 100vh;
+const registerSection =
+    document.getElementById(
+        "registerSection"
+    );
 
-    background:
-        linear-gradient(
-            180deg,
-            #f7f7f5,
-            #eeeeeb
+
+const loginForm =
+    document.getElementById(
+        "loginForm"
+    );
+
+const registerForm =
+    document.getElementById(
+        "registerForm"
+    );
+
+
+const showRegister =
+    document.getElementById(
+        "showRegister"
+    );
+
+const showLogin =
+    document.getElementById(
+        "showLogin"
+    );
+
+
+const loginButton =
+    document.getElementById(
+        "loginButton"
+    );
+
+const registerButton =
+    document.getElementById(
+        "registerButton"
+    );
+
+
+const loginMessage =
+    document.getElementById(
+        "loginMessage"
+    );
+
+const registerMessage =
+    document.getElementById(
+        "registerMessage"
+    );
+
+
+/* =================================
+   SHOW REGISTER
+================================= */
+
+showRegister.addEventListener(
+    "click",
+    () => {
+
+        loginSection.classList.add(
+            "hidden"
         );
 
-    color: var(--black);
+        registerSection.classList.remove(
+            "hidden"
+        );
 
-    font-family:
-        "DM Sans",
-        Arial,
-        sans-serif;
+        hideMessage(
+            loginMessage
+        );
 
-}
-
-
-/* =================================
-   TOP BAR
-================================= */
-
-.topbar {
-
-    height: 70px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    padding: 0 5vw;
-
-    background: var(--black);
-
-    border-top:
-        4px solid var(--red);
-
-}
-
-
-.brand {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-}
-
-
-.logo {
-
-    width: 42px;
-
-    height: 42px;
-
-    object-fit: contain;
-
-    background: var(--white);
-
-    border-radius: 5px;
-
-}
-
-
-.brand-text {
-
-    display: flex;
-
-    flex-direction: column;
-
-    line-height: 1;
-
-}
-
-
-.brand-text strong {
-
-    color: var(--white);
-
-    font-size: 9px;
-
-    letter-spacing: 1.4px;
-
-}
-
-
-.brand-text span {
-
-    margin-top: 4px;
-
-    color: var(--yellow);
-
-    font-size: 6px;
-
-    font-weight: 700;
-
-    letter-spacing: 1.2px;
-
-}
-
-
-.top-label {
-
-    color: var(--yellow);
-
-    font-size: 7px;
-
-    font-weight: 700;
-
-    letter-spacing: 1.2px;
-
-}
+    }
+);
 
 
 /* =================================
-   PAGE
+   SHOW LOGIN
 ================================= */
 
-.page {
+showLogin.addEventListener(
+    "click",
+    () => {
 
-    width: 100%;
+        registerSection.classList.add(
+            "hidden"
+        );
 
-    max-width: 520px;
+        loginSection.classList.remove(
+            "hidden"
+        );
 
-    margin: auto;
+        hideMessage(
+            registerMessage
+        );
 
-    padding:
-        55px 20px 70px;
-
-}
+    }
+);
 
 
 /* =================================
-   HEADING
+   LOGIN
 ================================= */
 
-.heading {
+loginForm.addEventListener(
+    "submit",
+    async (event) => {
 
-    padding-bottom: 25px;
+        event.preventDefault();
 
-    border-bottom:
-        1px solid var(--grey-200);
-
-}
-
-
-.eyebrow {
-
-    color: var(--grey-400);
-
-    font-size: 7px;
-
-    font-weight: 700;
-
-    letter-spacing: 1.8px;
-
-}
+        hideMessage(
+            loginMessage
+        );
 
 
-.heading h1 {
-
-    margin-top: 8px;
-
-    font-family:
-        "Playfair Display",
-        Georgia,
-        serif;
-
-    font-size: 40px;
-
-    line-height: 1.1;
-
-    letter-spacing: -1px;
-
-}
+        const email =
+            document
+                .getElementById(
+                    "loginEmail"
+                )
+                .value
+                .trim()
+                .toLowerCase();
 
 
-.heading p {
+        const password =
+            document
+                .getElementById(
+                    "loginPassword"
+                )
+                .value;
 
-    max-width: 400px;
 
-    margin-top: 9px;
+        loginButton.disabled =
+            true;
 
-    color: var(--grey-600);
+        loginButton.textContent =
+            "SIGNING IN...";
 
-    font-size: 10px;
 
-    line-height: 1.6;
+        try {
 
-}
+            const credential =
+                await signInWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
+
+
+            await routeUser(
+                credential.user
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "LOGIN ERROR:",
+                error
+            );
+
+
+            showError(
+                loginMessage,
+                getAuthError(
+                    error
+                )
+            );
+
+
+        } finally {
+
+            loginButton.disabled =
+                false;
+
+            loginButton.textContent =
+                "SIGN IN";
+
+        }
+
+    }
+);
 
 
 /* =================================
-   AUTH SECTION
+   CREATE ACCOUNT
 ================================= */
 
-.auth-section {
+registerForm.addEventListener(
+    "submit",
+    async (event) => {
 
-    margin-top: 30px;
+        event.preventDefault();
 
-}
+        hideMessage(
+            registerMessage
+        );
 
 
-.hidden {
+        const name =
+            document
+                .getElementById(
+                    "registerName"
+                )
+                .value
+                .trim();
 
-    display: none;
 
-}
+        const email =
+            document
+                .getElementById(
+                    "registerEmail"
+                )
+                .value
+                .trim()
+                .toLowerCase();
+
+
+        const password =
+            document
+                .getElementById(
+                    "registerPassword"
+                )
+                .value;
+
+
+        const confirmPassword =
+            document
+                .getElementById(
+                    "registerConfirm"
+                )
+                .value;
+
+
+        if (!name) {
+
+            showError(
+                registerMessage,
+                "Enter your full name."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            password.length < 6
+        ) {
+
+            showError(
+                registerMessage,
+                "Password must contain at least 6 characters."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            password !==
+            confirmPassword
+        ) {
+
+            showError(
+                registerMessage,
+                "Passwords do not match."
+            );
+
+            return;
+
+        }
+
+
+        registerButton.disabled =
+            true;
+
+        registerButton.textContent =
+            "CREATING ACCOUNT...";
+
+
+        try {
+
+            /*
+             * Create Firebase Authentication
+             * account.
+             */
+
+            const credential =
+                await createUserWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
+
+
+            const uid =
+                credential.user.uid;
+
+
+            /*
+             * New accounts are NOT admins.
+             *
+             * They enter the waiting state.
+             */
+
+            await setDoc(
+                doc(
+                    db,
+                    "users",
+                    uid
+                ),
+                {
+
+                    name:
+                        name,
+
+                    email:
+                        email,
+
+                    role:
+                        "driver",
+
+                    status:
+                        "pending",
+
+                    assignedBusId:
+                        null,
+
+                    createdAt:
+                        serverTimestamp()
+
+                }
+            );
+
+
+            /*
+             * Send new driver to waiting page.
+             */
+
+            window.location.replace(
+                "./waiting/"
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "REGISTER ERROR:",
+                error
+            );
+
+
+            showError(
+                registerMessage,
+                getAuthError(
+                    error
+                )
+            );
+
+
+        } finally {
+
+            registerButton.disabled =
+                false;
+
+            registerButton.textContent =
+                "CREATE ACCOUNT";
+
+        }
+
+    }
+);
 
 
 /* =================================
-   FORM
+   ROUTE USER
 ================================= */
 
-.form {
+async function routeUser(
+    user
+) {
 
-    width: 100%;
+    try {
 
-}
+        const userRef =
+            doc(
+                db,
+                "users",
+                user.uid
+            );
 
 
-.field {
+        const snapshot =
+            await getDoc(
+                userRef
+            );
 
-    margin-bottom: 19px;
 
-}
+        /*
+         * No Firestore profile.
+         *
+         * Treat as waiting.
+         */
 
+        if (
+            !snapshot.exists()
+        ) {
 
-.field label {
+            window.location.replace(
+                "./waiting/"
+            );
 
-    display: block;
+            return;
 
-    margin-bottom: 7px;
+        }
 
-    color: var(--grey-600);
 
-    font-size: 7px;
+        const data =
+            snapshot.data();
 
-    font-weight: 700;
 
-    letter-spacing: 1px;
+        /* =========================
+           ADMIN
+        ========================= */
 
-}
+        if (
+            data.role === "admin"
+        ) {
 
+            window.location.replace(
+                "./admin/"
+            );
 
-.field input {
+            return;
 
-    width: 100%;
+        }
 
-    height: 46px;
 
-    padding: 0 13px;
+        /* =========================
+           DRIVER
+        ========================= */
 
-    border:
-        1px solid var(--grey-200);
+        if (
+            data.role === "driver"
+        ) {
 
-    border-radius: 6px;
+            /*
+             * Driver is still waiting.
+             */
 
-    outline: none;
+            if (
+                data.status ===
+                "pending"
+            ) {
 
-    background: var(--white);
+                window.location.replace(
+                    "./waiting/"
+                );
 
-    color: var(--black);
+                return;
 
-    font-family:
-        "DM Sans",
-        Arial,
-        sans-serif;
+            }
 
-    font-size: 13px;
 
-    font-weight: 500;
+            /*
+             * Driver approved but
+             * doesn't have a bus yet.
+             */
 
-}
+            if (
+                data.status === "approved" &&
+                !data.assignedBusId
+            ) {
 
+                window.location.replace(
+                    "./waiting/"
+                );
 
-.field input:focus {
+                return;
 
-    border-color: var(--black);
+            }
 
-}
 
+            /*
+             * Driver is approved and
+             * has a bus.
+             */
 
-/* =================================
-   BUTTON
-================================= */
+            if (
+                data.status === "approved" &&
+                data.assignedBusId
+            ) {
 
-.primary-button {
+                window.location.replace(
+                    "./driver/"
+                );
 
-    width: 100%;
+                return;
 
-    height: 48px;
+            }
 
-    border:
-        1px solid var(--black);
 
-    border-radius: 6px;
+            /*
+             * Anything else = waiting.
+             */
 
-    background: var(--black);
+            window.location.replace(
+                "./waiting/"
+            );
 
-    color: var(--white);
+            return;
 
-    font-size: 8px;
+        }
 
-    font-weight: 700;
 
-    letter-spacing: 1px;
+        /*
+         * Unknown/null role.
+         */
 
-    cursor: pointer;
+        window.location.replace(
+            "./waiting/"
+        );
 
-}
 
+    } catch (error) {
 
-.primary-button:hover {
+        console.error(
+            "ROUTING ERROR:",
+            error
+        );
 
-    background: var(--yellow);
 
-    color: var(--black);
-
-}
-
-
-.primary-button:disabled {
-
-    opacity: 0.5;
-
-    cursor: not-allowed;
-
-}
-
-
-/* =================================
-   SWITCH
-================================= */
-
-.switch-box {
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    gap: 6px;
-
-    margin-top: 22px;
-
-    color: var(--grey-600);
-
-    font-size: 9px;
-
-}
-
-
-.text-button {
-
-    border: none;
-
-    background: transparent;
-
-    color: var(--black);
-
-    font-size: 8px;
-
-    font-weight: 700;
-
-    letter-spacing: .5px;
-
-    cursor: pointer;
-
-}
-
-
-.text-button:hover {
-
-    color: var(--red);
-
-}
-
-
-/* =================================
-   MESSAGE
-================================= */
-
-.message {
-
-    margin-bottom: 15px;
-
-    padding:
-        11px 13px;
-
-    border:
-        1px solid var(--red);
-
-    border-radius: 6px;
-
-    background: var(--red-soft);
-
-    color: var(--red);
-
-    font-size: 9px;
-
-    line-height: 1.5;
-
-}
-
-
-/* =================================
-   MOBILE
-================================= */
-
-@media (max-width: 500px) {
-
-    .topbar {
-
-        padding: 0 13px;
+        window.location.replace(
+            "./waiting/"
+        );
 
     }
 
-
-    .page {
-
-        padding:
-            35px 13px 50px;
-
-    }
+}
 
 
-    .heading h1 {
+/* =================================
+   AUTH ERROR
+================================= */
 
-        font-size: 34px;
+function getAuthError(
+    error
+) {
 
-    }
+    switch (
+        error.code
+    ) {
 
+        case "auth/invalid-credential":
 
-    .switch-box {
+            return "Email or password is incorrect.";
 
-        flex-direction: column;
+        case "auth/invalid-email":
 
-        gap: 7px;
+            return "Please enter a valid email.";
+
+        case "auth/email-already-in-use":
+
+            return "An account with this email already exists.";
+
+        case "auth/weak-password":
+
+            return "Password must contain at least 6 characters.";
+
+        case "auth/user-disabled":
+
+            return "This account has been disabled.";
+
+        case "auth/too-many-requests":
+
+            return "Too many attempts. Please try again later.";
+
+        default:
+
+            return (
+                error.message ||
+                "Something went wrong. Please try again."
+            );
 
     }
 
 }
+
+
+/* =================================
+   ERROR
+================================= */
+
+function showError(
+    element,
+    text
+) {
+
+    element.textContent =
+        text;
+
+    element.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+/* =================================
+   HIDE MESSAGE
+================================= */
+
+function hideMessage(
+    element
+) {
+
+    element.textContent =
+        "";
+
+    element.classList.add(
+        "hidden"
+    );
+
+                }
