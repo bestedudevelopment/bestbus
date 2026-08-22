@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin Panel</title>
+
+</head>
+
+
+<body>
+
+    <h1>ADMIN PANEL</h1>
+
+    <p id="adminName">
+        Checking admin...
+    </p>
+
+
+    <script type="module">
+
+        import {
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+        import {
+            doc,
+            getDoc
+        } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+        import {
+            auth,
+            db
+        } from "../core/firebase.js";
+
+
+        onAuthStateChanged(
+            auth,
+            async (user) => {
+
+                /* Not logged in */
+
+                if (!user) {
+
+                    window.location.replace(
+                        "../index.html"
+                    );
+
+                    return;
+                }
+
+
+                try {
+
+                    /* Get user's Firestore document */
+
+                    const userRef =
+                        doc(
+                            db,
+                            "users",
+                            user.uid
+                        );
+
+
+                    const userSnap =
+                        await getDoc(
+                            userRef
+                        );
+
+
+                    /* User document missing */
+
+                    if (!userSnap.exists()) {
+
+                        alert(
+                            "User profile not found."
+                        );
+
+                        window.location.replace(
+                            "../index.html"
+                        );
+
+                        return;
+                    }
+
+
+                    const userData =
+                        userSnap.data();
+
+
+                    /* Check admin role */
+
+                    if (
+                        userData.role !==
+                        "admin"
+                    ) {
+
+                        alert(
+                            "Admin access required."
+                        );
+
+                        window.location.replace(
+                            "../index.html"
+                        );
+
+                        return;
+                    }
+
+
+                    /* Admin verified */
+
+                    document.getElementById(
+                        "adminName"
+                    ).textContent =
+                        "Welcome, " +
+                        (
+                            userData.name ||
+                            "Administrator"
+                        );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "ADMIN ERROR:",
+                        error
+                    );
+
+                    alert(
+                        "Unable to verify admin account."
+                    );
+
+                    window.location.replace(
+                        "../index.html"
+                    );
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
