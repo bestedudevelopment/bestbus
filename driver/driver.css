@@ -73,6 +73,40 @@ body {
     display: none !important;
 }
 
+.date-label {
+    display: block;
+
+    margin-top: 14px;
+    margin-bottom: 5px;
+
+    color: var(--gray);
+
+    font-size: 6px;
+    font-weight: 900;
+
+    letter-spacing: 0.7px;
+}
+
+.date-input {
+    width: 100%;
+
+    padding: 13px;
+
+    border: 1px solid var(--border);
+    border-radius: 11px;
+
+    outline: none;
+
+    background: var(--light);
+    color: var(--black);
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.date-input:focus {
+    border-color: var(--yellow);
+}
 /* =========================
    HEADER
 ========================= */
