@@ -185,8 +185,7 @@ body {
 
     height: 46px;
 
-    padding:
-        0 13px;
+    padding: 0 13px;
 
     border:
         1px solid var(--grey-200);
@@ -200,7 +199,6 @@ body {
     color: var(--black);
 
     font-size: 13px;
-    font-weight: 500;
 }
 
 .field input:focus,
@@ -232,11 +230,9 @@ body {
 .message {
     margin-bottom: 15px;
 
-    padding:
-        11px 13px;
+    padding: 11px 13px;
 
-    border:
-        1px solid var(--red);
+    border: 1px solid var(--red);
 
     border-radius: 6px;
 
