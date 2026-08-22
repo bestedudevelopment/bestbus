@@ -26,8 +26,8 @@ body {
     background:
         linear-gradient(
             180deg,
-            #f7f7f5,
-            #eeeeeb
+            #f7f7f5 0%,
+            #eeeeeb 100%
         );
 
     color: var(--black);
@@ -39,7 +39,9 @@ body {
 }
 
 
-/* TOP BAR */
+/* =================================
+   TOP BAR
+================================= */
 
 .topbar {
     height: 70px;
@@ -91,7 +93,9 @@ body {
 }
 
 
-/* PAGE */
+/* =================================
+   PAGE
+================================= */
 
 .page {
     width: 100%;
@@ -104,7 +108,9 @@ body {
 }
 
 
-/* HEADING */
+/* =================================
+   HEADING
+================================= */
 
 .heading {
     padding-bottom: 25px;
@@ -133,6 +139,8 @@ body {
     font-size: 38px;
 
     line-height: 1.1;
+
+    letter-spacing: -0.8px;
 }
 
 .heading p {
@@ -146,18 +154,19 @@ body {
 }
 
 
-/* FORM */
+/* =================================
+   FORM
+================================= */
 
 .form {
     margin-top: 28px;
 }
 
 .field {
-    margin-bottom: 19px;
+    margin-bottom: 20px;
 }
 
-.field label,
-.verify-title {
+.field label {
     display: block;
 
     margin-bottom: 7px;
@@ -171,13 +180,13 @@ body {
 }
 
 .field input,
-.field select,
-.admin-verification input {
+.field select {
     width: 100%;
 
     height: 46px;
 
-    padding: 0 13px;
+    padding:
+        0 13px;
 
     border:
         1px solid var(--grey-200);
@@ -190,23 +199,45 @@ body {
 
     color: var(--black);
 
+    font-family:
+        "DM Sans",
+        Arial,
+        sans-serif;
+
     font-size: 13px;
 }
 
 .field input:focus,
-.field select:focus,
-.admin-verification input:focus {
+.field select:focus {
     border-color: var(--black);
 }
 
+.field select {
+    cursor: pointer;
+}
 
-/* ADMIN VERIFICATION */
+.field small {
+    display: block;
 
-.admin-verification {
-    margin-top: 25px;
-    margin-bottom: 19px;
+    margin-top: 6px;
 
-    padding: 16px;
+    color: var(--grey-400);
+
+    font-size: 8px;
+
+    line-height: 1.5;
+}
+
+
+/* =================================
+   INFO BOX
+================================= */
+
+.info-box {
+    margin-top: 8px;
+    margin-bottom: 20px;
+
+    padding: 15px;
 
     background: var(--yellow-soft);
 
@@ -216,9 +247,18 @@ body {
     border-radius: 7px;
 }
 
-.admin-verification p {
-    margin-bottom: 12px;
+.info-title {
+    margin-bottom: 6px;
 
+    color: var(--black);
+
+    font-size: 7px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.info-box p {
     color: var(--grey-600);
 
     font-size: 8px;
@@ -227,12 +267,15 @@ body {
 }
 
 
-/* MESSAGE */
+/* =================================
+   MESSAGE
+================================= */
 
 .message {
     margin-bottom: 15px;
 
-    padding: 11px 13px;
+    padding:
+        11px 13px;
 
     border:
         1px solid var(--red);
@@ -248,12 +291,22 @@ body {
     line-height: 1.5;
 }
 
+.message.success {
+    border-color: var(--yellow);
+
+    background: var(--yellow-soft);
+
+    color: var(--black);
+}
+
 .hidden {
     display: none;
 }
 
 
-/* BUTTON */
+/* =================================
+   BUTTON
+================================= */
 
 .save-button {
     width: 100%;
@@ -275,6 +328,10 @@ body {
     letter-spacing: 1px;
 
     cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
 }
 
 .save-button:hover {
@@ -290,7 +347,9 @@ body {
 }
 
 
-/* MOBILE */
+/* =================================
+   MOBILE
+================================= */
 
 @media (max-width: 500px) {
 
