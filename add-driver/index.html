@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Add Driver | Admin</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body>
+
+    <header class="topbar">
+
+        <a
+            href="../admin/"
+            class="back"
+        >
+            ← ADMIN
+        </a>
+
+        <img
+            src="../logo.png"
+            alt="Logo"
+            class="logo"
+        >
+
+        <span class="page-label">
+            ADD DRIVER
+        </span>
+
+    </header>
+
+
+    <main class="page">
+
+        <section class="heading">
+
+            <span class="eyebrow">
+                FLEET MANAGEMENT
+            </span>
+
+            <h1>
+                Add Driver
+            </h1>
+
+            <p>
+                Create a driver account and assign a bus.
+            </p>
+
+        </section>
+
+
+        <form
+            id="driverForm"
+            class="form"
+        >
+
+            <div class="field">
+
+                <label for="driverName">
+                    DRIVER NAME
+                </label>
+
+                <input
+                    id="driverName"
+                    type="text"
+                    placeholder="Test Driver 1"
+                    autocomplete="name"
+                    required
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="driverEmail">
+                    EMAIL
+                </label>
+
+                <input
+                    id="driverEmail"
+                    type="email"
+                    placeholder="driver@example.com"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="driverPassword">
+                    PASSWORD
+                </label>
+
+                <input
+                    id="driverPassword"
+                    type="password"
+                    placeholder="Minimum 6 characters"
+                    autocomplete="new-password"
+                    minlength="6"
+                    required
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="busSelect">
+                    ASSIGN BUS
+                </label>
+
+                <select
+                    id="busSelect"
+                    required
+                >
+
+                    <option value="">
+                        Loading buses...
+                    </option>
+
+                </select>
+
+                <small>
+                    The driver will operate this assigned bus.
+                </small>
+
+            </div>
+
+
+            <div
+                id="message"
+                class="message hidden"
+            ></div>
+
+
+            <button
+                id="saveButton"
+                type="submit"
+                class="save-button"
+            >
+                CREATE DRIVER
+            </button>
+
+        </form>
+
+    </main>
+
+
+    <script
+        type="module"
+        src="./script.js"
+    ></script>
+
+</body>
+
+</html>
