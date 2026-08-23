@@ -1,40 +1,84 @@
 import {
-    auth,
-    db
-} from "../../firebase-config.js";
+    collection,
+    getDocs,
+    doc,
+    getDoc,
+    updateDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 import {
-    collection,
-    getDocs,
-    doc,
-    updateDoc,
-    getDoc
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+    db,
+    auth
+} from "../../firebase-config.js";
 
 
-const driverSelect =
-    document.getElementById("driverSelect");
 
-const busSelect =
-    document.getElementById("busSelect");
+/* =========================================================
+   ELEMENTS
+========================================================= */
 
-const assignForm =
-    document.getElementById("assignForm");
+const assignedList =
+    document.getElementById(
+        "assignedList"
+    );
 
-const assignmentList =
-    document.getElementById("assignmentList");
+const unassignedDrivers =
+    document.getElementById(
+        "unassignedDrivers"
+    );
 
-const assignmentCount =
-    document.getElementById("assignmentCount");
+const unassignedBuses =
+    document.getElementById(
+        "unassignedBuses"
+    );
+
+const assignedCount =
+    document.getElementById(
+        "assignedCount"
+    );
+
+const selectionSummary =
+    document.getElementById(
+        "selectionSummary"
+    );
+
+const selectedDriverName =
+    document.getElementById(
+        "selectedDriverName"
+    );
+
+const selectedBusName =
+    document.getElementById(
+        "selectedBusName"
+    );
+
+const assignBtn =
+    document.getElementById(
+        "assignBtn"
+    );
+
+const message =
+    document.getElementById(
+        "message"
+    );
 
 
-let drivers = [];
 
-let buses = [];
+/* =========================================================
+   DATA
+========================================================= */
+
+let allDrivers = [];
+
+let allBuses = [];
+
+let selectedDriverId = null;
+
+let selectedBusId = null;
 
 
 
@@ -66,17 +110,19 @@ onAuthStateChanged(
                     user.uid
                 );
 
-            const userSnap =
-                await getDoc(userRef);
+            const userSnapshot =
+                await getDoc(
+                    userRef
+                );
 
 
             if (
-                !userSnap.exists() ||
-                userSnap.data().role !== "admin"
+                !userSnapshot.exists() ||
+                userSnapshot.data().role !== "admin"
             ) {
 
                 window.location.replace(
-                    "../../waiting/index.html"
+                    "../../waiting/"
                 );
 
                 return;
@@ -89,12 +135,13 @@ onAuthStateChanged(
         } catch (error) {
 
             console.error(
-                "Authentication error:",
+                "ADMIN CHECK ERROR:",
                 error
             );
 
-            alert(
-                "Unable to load assignment page."
+            showMessage(
+                "Unable to verify admin account.",
+                true
             );
 
         }
@@ -105,7 +152,7 @@ onAuthStateChanged(
 
 
 /* =========================================================
-   LOAD DATA
+   LOAD ALL DRIVERS + BUSES
 ========================================================= */
 
 async function loadData() {
@@ -134,29 +181,30 @@ async function loadData() {
         ]);
 
 
-        drivers = [];
+        allDrivers = [];
 
-        buses = [];
+        allBuses = [];
 
+
+        /* =========================
+           DRIVERS
+        ========================= */
 
         driversSnapshot.forEach(
-            (item) => {
+            (snapshot) => {
 
                 const data =
-                    item.data();
+                    snapshot.data();
 
-
-                /*
-                    Only driver accounts.
-                */
 
                 if (
                     data.role === "driver"
                 ) {
 
-                    drivers.push({
+                    allDrivers.push({
 
-                        id: item.id,
+                        id:
+                            snapshot.id,
 
                         ...data
 
@@ -168,14 +216,19 @@ async function loadData() {
         );
 
 
+        /* =========================
+           BUSES
+        ========================= */
+
         busesSnapshot.forEach(
-            (item) => {
+            (snapshot) => {
 
-                buses.push({
+                allBuses.push({
 
-                    id: item.id,
+                    id:
+                        snapshot.id,
 
-                    ...item.data()
+                    ...snapshot.data()
 
                 });
 
@@ -183,295 +236,29 @@ async function loadData() {
         );
 
 
-        populateDrivers();
+        renderAssigned();
 
-        populateBuses();
+        renderUnassignedDrivers();
 
-        renderAssignments();
+        renderUnassignedBuses();
+
+        clearSelection();
 
     } catch (error) {
 
         console.error(
-            "Loading error:",
+            "LOAD ASSIGNMENT ERROR:",
             error
         );
 
-        assignmentList.innerHTML = `
-            <div class="empty">
-                Unable to load assignments.
-            </div>
-        `;
-
-    }
-
-}
-
-
-
-/* =========================================================
-   POPULATE DRIVERS
-========================================================= */
-
-function populateDrivers() {
-
-    driverSelect.innerHTML = `
-        <option value="">
-            Select driver
-        </option>
-    `;
-
-
-    const availableDrivers =
-        drivers.filter(
-            driver =>
-                !driver.assignedBusId
+        showMessage(
+            "Unable to load drivers and buses.",
+            true
         );
 
-
-    availableDrivers.forEach(
-        driver => {
-
-            const option =
-                document.createElement(
-                    "option"
-                );
-
-
-            option.value =
-                driver.id;
-
-
-            option.textContent =
-                driver.name ||
-                driver.fullName ||
-                driver.email ||
-                "Unnamed Driver";
-
-
-            driverSelect.appendChild(
-                option
-            );
-
-        }
-    );
-
-
-    if (
-        availableDrivers.length === 0
-    ) {
-
-        driverSelect.innerHTML = `
-            <option value="">
-                No available drivers
-            </option>
-        `;
-
     }
 
 }
-
-
-
-/* =========================================================
-   POPULATE BUSES
-========================================================= */
-
-function populateBuses() {
-
-    busSelect.innerHTML = `
-        <option value="">
-            Select available bus
-        </option>
-    `;
-
-
-    const availableBuses =
-        buses.filter(
-            bus =>
-                !bus.assignedDriverId
-        );
-
-
-    availableBuses.forEach(
-        bus => {
-
-            const option =
-                document.createElement(
-                    "option"
-                );
-
-
-            option.value =
-                bus.id;
-
-
-            option.textContent =
-                bus.busNumber ||
-                bus.registrationNumber ||
-                bus.registration ||
-                bus.name ||
-                "Unnamed Bus";
-
-
-            busSelect.appendChild(
-                option
-            );
-
-        }
-    );
-
-
-    if (
-        availableBuses.length === 0
-    ) {
-
-        busSelect.innerHTML = `
-            <option value="">
-                No available buses
-            </option>
-        `;
-
-    }
-
-}
-
-
-
-/* =========================================================
-   ASSIGN
-========================================================= */
-
-assignForm.addEventListener(
-    "submit",
-    async (event) => {
-
-        event.preventDefault();
-
-
-        const driverId =
-            driverSelect.value;
-
-        const busId =
-            busSelect.value;
-
-
-        if (
-            !driverId ||
-            !busId
-        ) {
-
-            alert(
-                "Please select both a driver and a bus."
-            );
-
-            return;
-
-        }
-
-
-        const driver =
-            drivers.find(
-                item =>
-                    item.id === driverId
-            );
-
-
-        const bus =
-            buses.find(
-                item =>
-                    item.id === busId
-            );
-
-
-        if (!driver || !bus) {
-
-            alert(
-                "Driver or bus not found."
-            );
-
-            return;
-
-        }
-
-
-        try {
-
-            /*
-                Save assignment on driver
-            */
-
-            await updateDoc(
-                doc(
-                    db,
-                    "users",
-                    driverId
-                ),
-                {
-
-                    assignedBusId:
-                        busId,
-
-                    assignedBusNumber:
-                        bus.busNumber ||
-                        bus.registrationNumber ||
-                        bus.registration ||
-                        bus.name ||
-                        ""
-
-                }
-            );
-
-
-            /*
-                Save assignment on bus
-            */
-
-            await updateDoc(
-                doc(
-                    db,
-                    "buses",
-                    busId
-                ),
-                {
-
-                    assignedDriverId:
-                        driverId,
-
-                    assignedDriverName:
-                        driver.name ||
-                        driver.fullName ||
-                        driver.email ||
-                        ""
-
-                }
-            );
-
-
-            alert(
-                "Bus assigned successfully."
-            );
-
-
-            await loadData();
-
-
-            assignForm.reset();
-
-        } catch (error) {
-
-            console.error(
-                "Assignment error:",
-                error
-            );
-
-            alert(
-                "Unable to assign bus."
-            );
-
-        }
-
-    }
-);
 
 
 
@@ -479,26 +266,26 @@ assignForm.addEventListener(
    CURRENT ASSIGNMENTS
 ========================================================= */
 
-function renderAssignments() {
+function renderAssigned() {
 
-    const assignments =
-        buses.filter(
-            bus =>
-                bus.assignedDriverId
+    const assignedDrivers =
+        allDrivers.filter(
+            driver =>
+                driver.assignedBusId
         );
 
 
-    assignmentCount.textContent =
-        assignments.length;
+    assignedCount.textContent =
+        assignedDrivers.length;
 
 
     if (
-        assignments.length === 0
+        assignedDrivers.length === 0
     ) {
 
-        assignmentList.innerHTML = `
+        assignedList.innerHTML = `
             <div class="empty">
-                No buses are currently assigned.
+                No current assignments.
             </div>
         `;
 
@@ -507,34 +294,18 @@ function renderAssignments() {
     }
 
 
-    assignmentList.innerHTML = "";
+    assignedList.innerHTML = "";
 
 
-    assignments.forEach(
-        bus => {
+    assignedDrivers.forEach(
+        (driver) => {
 
-            const driver =
-                drivers.find(
+            const bus =
+                allBuses.find(
                     item =>
                         item.id ===
-                        bus.assignedDriverId
+                        driver.assignedBusId
                 );
-
-
-            const driverName =
-                bus.assignedDriverName ||
-                driver?.name ||
-                driver?.fullName ||
-                driver?.email ||
-                "Unknown Driver";
-
-
-            const busName =
-                bus.busNumber ||
-                bus.registrationNumber ||
-                bus.registration ||
-                bus.name ||
-                "Unnamed Bus";
 
 
             const card =
@@ -547,29 +318,64 @@ function renderAssignments() {
                 "assignment-card";
 
 
+            const driverName =
+                driver.name ||
+                "Unnamed Driver";
+
+
+            const driverInfo =
+                driver.phone ||
+                driver.email ||
+                "Driver";
+
+
+            const busName =
+                bus?.busNumber ||
+                "Bus not found";
+
+
+            const registration =
+                bus?.registrationNumber ||
+                "";
+
+
             card.innerHTML = `
 
-                <div class="assignment-main">
+                <div>
 
-                    <div class="assignment-driver">
+                    <div class="driver-name">
                         ${escapeHTML(driverName)}
                     </div>
 
-                    <div class="assignment-bus">
-                        Bus: ${escapeHTML(busName)}
+                    <div class="driver-details">
+                        ${escapeHTML(driverInfo)}
                     </div>
 
-                    <span class="assignment-status">
-                        ASSIGNED
-                    </span>
+                </div>
+
+
+                <div class="arrow">
+                    →
+                </div>
+
+
+                <div>
+
+                    <div class="bus-name">
+                        ${escapeHTML(busName)}
+                    </div>
+
+                    <div class="bus-registration">
+                        ${escapeHTML(registration)}
+                    </div>
 
                 </div>
 
 
                 <button
                     class="deassign-btn"
-                    data-bus-id="${bus.id}"
-                    data-driver-id="${bus.assignedDriverId}"
+                    data-driver-id="${driver.id}"
+                    data-bus-id="${driver.assignedBusId}"
                 >
                     DEASSIGN
                 </button>
@@ -577,7 +383,7 @@ function renderAssignments() {
             `;
 
 
-            assignmentList.appendChild(
+            assignedList.appendChild(
                 card
             );
 
@@ -586,7 +392,9 @@ function renderAssignments() {
 
 
     document
-        .querySelectorAll(".deassign-btn")
+        .querySelectorAll(
+            ".deassign-btn"
+        )
         .forEach(
             button => {
 
@@ -594,9 +402,9 @@ function renderAssignments() {
                     "click",
                     () => {
 
-                        deassignBus(
-                            button.dataset.busId,
-                            button.dataset.driverId
+                        deassign(
+                            button.dataset.driverId,
+                            button.dataset.busId
                         );
 
                     }
@@ -610,17 +418,618 @@ function renderAssignments() {
 
 
 /* =========================================================
-   DEASSIGN
+   UNASSIGNED DRIVERS
 ========================================================= */
 
-async function deassignBus(
-    busId,
+function renderUnassignedDrivers() {
+
+    const availableDrivers =
+        allDrivers.filter(
+            driver =>
+                !driver.assignedBusId
+        );
+
+
+    if (
+        availableDrivers.length === 0
+    ) {
+
+        unassignedDrivers.innerHTML = `
+            <div class="empty">
+                All drivers are assigned.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    unassignedDrivers.innerHTML = "";
+
+
+    availableDrivers.forEach(
+        driver => {
+
+            const item =
+                document.createElement(
+                    "button"
+                );
+
+
+            item.type =
+                "button";
+
+
+            item.className =
+                "selection-item";
+
+
+            item.dataset.id =
+                driver.id;
+
+
+            item.innerHTML = `
+
+                <div class="selection-item-main">
+
+                    <span class="selection-item-name">
+                        ${escapeHTML(
+                            driver.name ||
+                            "Unnamed Driver"
+                        )}
+                    </span>
+
+                    <span class="selection-item-info">
+                        ${escapeHTML(
+                            driver.phone ||
+                            driver.email ||
+                            "Driver"
+                        )}
+                    </span>
+
+                </div>
+
+                <span class="selection-item-status">
+                    AVAILABLE
+                </span>
+
+            `;
+
+
+            item.addEventListener(
+                "click",
+                () => {
+
+                    selectDriver(
+                        driver.id
+                    );
+
+                }
+            );
+
+
+            unassignedDrivers.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   UNASSIGNED BUSES
+========================================================= */
+
+function renderUnassignedBuses() {
+
+    const availableBuses =
+        allBuses.filter(
+            bus =>
+                !bus.assignedDriverId
+        );
+
+
+    if (
+        availableBuses.length === 0
+    ) {
+
+        unassignedBuses.innerHTML = `
+            <div class="empty">
+                All buses are assigned.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    unassignedBuses.innerHTML = "";
+
+
+    availableBuses.forEach(
+        bus => {
+
+            const item =
+                document.createElement(
+                    "button"
+                );
+
+
+            item.type =
+                "button";
+
+
+            item.className =
+                "selection-item";
+
+
+            item.dataset.id =
+                bus.id;
+
+
+            item.innerHTML = `
+
+                <div class="selection-item-main">
+
+                    <span class="selection-item-name">
+                        ${escapeHTML(
+                            bus.busNumber ||
+                            "Unnamed Bus"
+                        )}
+                    </span>
+
+                    <span class="selection-item-info">
+                        ${escapeHTML(
+                            bus.registrationNumber ||
+                            "Registration not available"
+                        )}
+                    </span>
+
+                </div>
+
+                <span class="selection-item-status">
+                    AVAILABLE
+                </span>
+
+            `;
+
+
+            item.addEventListener(
+                "click",
+                () => {
+
+                    selectBus(
+                        bus.id
+                    );
+
+                }
+            );
+
+
+            unassignedBuses.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   SELECT DRIVER
+========================================================= */
+
+function selectDriver(
     driverId
 ) {
 
+    const driver =
+        allDrivers.find(
+            item =>
+                item.id ===
+                driverId
+        );
+
+
+    if (!driver) {
+        return;
+    }
+
+
+    /*
+     * Protection:
+     * If assigned, don't allow
+     * another assignment.
+     */
+
+    if (
+        driver.assignedBusId
+    ) {
+
+        const bus =
+            allBuses.find(
+                item =>
+                    item.id ===
+                    driver.assignedBusId
+            );
+
+
+        showMessage(
+            `${driver.name || "This driver"} is already assigned to ${
+                bus?.busNumber || "another bus"
+            }. Deassign first to assign another bus.`,
+            true
+        );
+
+        return;
+
+    }
+
+
+    selectedDriverId =
+        driverId;
+
+
+    document
+        .querySelectorAll(
+            "#unassignedDrivers .selection-item"
+        )
+        .forEach(
+            item => {
+
+                item.classList.toggle(
+                    "selected",
+                    item.dataset.id ===
+                    driverId
+                );
+
+            }
+        );
+
+
+    updateSummary();
+
+}
+
+
+
+/* =========================================================
+   SELECT BUS
+========================================================= */
+
+function selectBus(
+    busId
+) {
+
+    const bus =
+        allBuses.find(
+            item =>
+                item.id ===
+                busId
+        );
+
+
+    if (!bus) {
+        return;
+    }
+
+
+    /*
+     * Protection:
+     * If assigned, show current
+     * driver and don't allow it.
+     */
+
+    if (
+        bus.assignedDriverId
+    ) {
+
+        const driver =
+            allDrivers.find(
+                item =>
+                    item.id ===
+                    bus.assignedDriverId
+            );
+
+
+        showMessage(
+            `${bus.busNumber || "This bus"} is already assigned to ${
+                driver?.name || "another driver"
+            }. Deassign first to assign this bus.`,
+            true
+        );
+
+        return;
+
+    }
+
+
+    selectedBusId =
+        busId;
+
+
+    document
+        .querySelectorAll(
+            "#unassignedBuses .selection-item"
+        )
+        .forEach(
+            item => {
+
+                item.classList.toggle(
+                    "selected",
+                    item.dataset.id ===
+                    busId
+                );
+
+            }
+        );
+
+
+    updateSummary();
+
+}
+
+
+
+/* =========================================================
+   UPDATE SUMMARY
+========================================================= */
+
+function updateSummary() {
+
+    const driver =
+        allDrivers.find(
+            item =>
+                item.id ===
+                selectedDriverId
+        );
+
+
+    const bus =
+        allBuses.find(
+            item =>
+                item.id ===
+                selectedBusId
+        );
+
+
+    if (
+        !driver &&
+        !bus
+    ) {
+
+        selectionSummary.classList.add(
+            "hidden"
+        );
+
+        assignBtn.disabled =
+            true;
+
+        return;
+
+    }
+
+
+    selectionSummary.classList.remove(
+        "hidden"
+    );
+
+
+    selectedDriverName.textContent =
+        driver?.name ||
+        "Select driver";
+
+
+    selectedBusName.textContent =
+        bus?.busNumber ||
+        "Select bus";
+
+
+    assignBtn.disabled =
+        !driver ||
+        !bus;
+
+}
+
+
+
+/* =========================================================
+   ASSIGN
+========================================================= */
+
+assignBtn.addEventListener(
+    "click",
+    async () => {
+
+        if (
+            !selectedDriverId ||
+            !selectedBusId
+        ) {
+
+            return;
+
+        }
+
+
+        const driver =
+            allDrivers.find(
+                item =>
+                    item.id ===
+                    selectedDriverId
+            );
+
+
+        const bus =
+            allBuses.find(
+                item =>
+                    item.id ===
+                    selectedBusId
+            );
+
+
+        if (!driver || !bus) {
+
+            return;
+
+        }
+
+
+        /*
+         * FINAL SAFETY CHECK
+         */
+
+        if (
+            driver.assignedBusId
+        ) {
+
+            showMessage(
+                "This driver is already assigned. Deassign first.",
+                true
+            );
+
+            return;
+
+        }
+
+
+        if (
+            bus.assignedDriverId
+        ) {
+
+            showMessage(
+                "This bus is already assigned. Deassign first.",
+                true
+            );
+
+            return;
+
+        }
+
+
+        assignBtn.disabled =
+            true;
+
+        assignBtn.textContent =
+            "ASSIGNING...";
+
+
+        try {
+
+            /*
+             * Update DRIVER
+             */
+
+            await updateDoc(
+                doc(
+                    db,
+                    "users",
+                    selectedDriverId
+                ),
+                {
+
+                    assignedBusId:
+                        selectedBusId,
+
+                    status:
+                        "approved"
+
+                }
+            );
+
+
+            /*
+             * Update BUS
+             */
+
+            await updateDoc(
+                doc(
+                    db,
+                    "buses",
+                    selectedBusId
+                ),
+                {
+
+                    assignedDriverId:
+                        selectedDriverId
+
+                }
+            );
+
+
+            showMessage(
+                `${driver.name || "Driver"} assigned to ${
+                    bus.busNumber || "bus"
+                }.`,
+                false
+            );
+
+
+            await loadData();
+
+        } catch (error) {
+
+            console.error(
+                "ASSIGN ERROR:",
+                error
+            );
+
+            showMessage(
+                error?.message ||
+                "Unable to assign bus.",
+                true
+            );
+
+        } finally {
+
+            assignBtn.textContent =
+                "ASSIGN BUS";
+
+        }
+
+    }
+);
+
+
+
+/* =========================================================
+   DEASSIGN
+========================================================= */
+
+async function deassign(
+    driverId,
+    busId
+) {
+
+    const driver =
+        allDrivers.find(
+            item =>
+                item.id ===
+                driverId
+        );
+
+
+    const bus =
+        allBuses.find(
+            item =>
+                item.id ===
+                busId
+        );
+
+
     const confirmed =
         confirm(
-            "Are you sure you want to deassign this bus?"
+            `Deassign ${
+                driver?.name || "this driver"
+            } from ${
+                bus?.busNumber || "this bus"
+            }?`
         );
 
 
@@ -634,8 +1043,8 @@ async function deassignBus(
     try {
 
         /*
-            Remove bus from driver
-        */
+         * Remove bus from driver
+         */
 
         await updateDoc(
             doc(
@@ -645,17 +1054,16 @@ async function deassignBus(
             ),
             {
 
-                assignedBusId: null,
-
-                assignedBusNumber: null
+                assignedBusId:
+                    null
 
             }
         );
 
 
         /*
-            Remove driver from bus
-        */
+         * Remove driver from bus
+         */
 
         await updateDoc(
             doc(
@@ -665,16 +1073,16 @@ async function deassignBus(
             ),
             {
 
-                assignedDriverId: null,
-
-                assignedDriverName: null
+                assignedDriverId:
+                    null
 
             }
         );
 
 
-        alert(
-            "Bus deassigned successfully."
+        showMessage(
+            "Bus deassigned successfully.",
+            false
         );
 
 
@@ -683,12 +1091,14 @@ async function deassignBus(
     } catch (error) {
 
         console.error(
-            "Deassign error:",
+            "DEASSIGN ERROR:",
             error
         );
 
-        alert(
-            "Unable to deassign bus."
+        showMessage(
+            error?.message ||
+            "Unable to deassign bus.",
+            true
         );
 
     }
@@ -698,14 +1108,60 @@ async function deassignBus(
 
 
 /* =========================================================
-   HTML SAFETY
+   CLEAR SELECTION
+========================================================= */
+
+function clearSelection() {
+
+    selectedDriverId =
+        null;
+
+    selectedBusId =
+        null;
+
+    selectionSummary.classList.add(
+        "hidden"
+    );
+
+    assignBtn.disabled =
+        true;
+
+}
+
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+function showMessage(
+    text,
+    isError
+) {
+
+    message.textContent =
+        text;
+
+    message.className =
+        isError
+            ? "message error"
+            : "message success";
+
+}
+
+
+
+/* =========================================================
+   HTML ESCAPE
 ========================================================= */
 
 function escapeHTML(
     value
 ) {
 
-    return String(value)
+    return String(
+        value ?? ""
+    )
         .replace(
             /&/g,
             "&amp;"
