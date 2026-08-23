@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>BEST Bus — Super Admin</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+    <div class="brand-area">
+
+        <div class="brand">
+            BEST
+        </div>
+
+        <div class="brand-sub">
+            SUPER ADMIN
+        </div>
+
+    </div>
+
+
+    <div class="secure">
+
+        <span class="secure-dot"></span>
+
+        SECURE
+
+    </div>
+
+</header>
+
+
+
+<main class="page">
+
+
+    <section class="welcome">
+
+        <span class="eyebrow">
+            SYSTEM CONTROL
+        </span>
+
+        <h1>
+            Super Admin
+        </h1>
+
+        <p id="adminName">
+            Loading administrator...
+        </p>
+
+    </section>
+
+
+
+    <!-- OVERVIEW -->
+
+    <section class="section">
+
+        <div class="section-label">
+            OVERVIEW
+        </div>
+
+
+        <div class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <span class="stat-icon">
+                    🚌
+                </span>
+
+                <div>
+
+                    <strong id="busCount">
+                        0
+                    </strong>
+
+                    <small>
+                        BUSES
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span class="stat-icon">
+                    👤
+                </span>
+
+                <div>
+
+                    <strong id="driverCount">
+                        0
+                    </strong>
+
+                    <small>
+                        DRIVERS
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span class="stat-icon">
+                    🔔
+                </span>
+
+                <div>
+
+                    <strong id="notificationCount">
+                        0
+                    </strong>
+
+                    <small>
+                        NOTIFICATIONS
+                    </small>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- NOTIFICATIONS -->
+
+    <section class="section">
+
+        <div class="section-label">
+            COMMUNICATION
+        </div>
+
+
+        <div
+            class="control-card"
+            id="notificationCard"
+        >
+
+            <div class="control-icon">
+                🔔
+            </div>
+
+
+            <div class="control-content">
+
+                <h2>
+                    Send Notification
+                </h2>
+
+                <p>
+                    Send announcements and important
+                    updates to drivers.
+                </p>
+
+            </div>
+
+
+            <span class="arrow">
+                →
+            </span>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- MANAGEMENT -->
+
+    <section class="section">
+
+        <div class="section-label">
+            MANAGEMENT
+        </div>
+
+
+        <div
+            class="control-card"
+            id="driversCard"
+        >
+
+            <div class="control-icon">
+                👤
+            </div>
+
+            <div class="control-content">
+
+                <h2>
+                    Drivers
+                </h2>
+
+                <p>
+                    View and manage all drivers.
+                </p>
+
+            </div>
+
+            <span class="arrow">
+                →
+            </span>
+
+        </div>
+
+
+        <div
+            class="control-card"
+            id="busesCard"
+        >
+
+            <div class="control-icon">
+                🚌
+            </div>
+
+            <div class="control-content">
+
+                <h2>
+                    Fleet
+                </h2>
+
+                <p>
+                    View and manage all buses.
+                </p>
+
+            </div>
+
+            <span class="arrow">
+                →
+            </span>
+
+        </div>
+
+
+        <div
+            class="control-card"
+            id="logsCard"
+        >
+
+            <div class="control-icon">
+                📋
+            </div>
+
+            <div class="control-content">
+
+                <h2>
+                    Activity Logs
+                </h2>
+
+                <p>
+                    Monitor important system activity.
+                </p>
+
+            </div>
+
+            <span class="arrow">
+                →
+            </span>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- SYSTEM -->
+
+    <section class="section">
+
+        <div class="section-label">
+            SYSTEM
+        </div>
+
+
+        <div
+            class="control-card"
+            id="settingsCard"
+        >
+
+            <div class="control-icon">
+                ⚙️
+            </div>
+
+            <div class="control-content">
+
+                <h2>
+                    System Settings
+                </h2>
+
+                <p>
+                    Configure BEST Bus system settings.
+                </p>
+
+            </div>
+
+            <span class="arrow">
+                →
+            </span>
+
+        </div>
+
+    </section>
+
+
+
+    <button
+        id="logoutButton"
+        class="logout-button"
+    >
+        LOG OUT
+    </button>
+
+
+    <div
+        id="message"
+        class="message"
+    ></div>
+
+
+</main>
+
+
+
+<script
+    type="module"
+    src="./script.js"
+></script>
+
+
+</body>
+
+</html>
