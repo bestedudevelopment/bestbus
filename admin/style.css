@@ -730,24 +730,180 @@ body {
     }
 
 }
-
 /* =====================================
-   BUS OVERVIEW - FULL WIDTH
+   FLEET / BUS OVERVIEW - FULL WIDTH
 ===================================== */
 
 .bus-section {
     width: 100%;
+    max-width: none;
+    margin-top: 55px;
 }
 
 .bus-list {
     width: 100%;
+    max-width: none;
 
     display: flex;
     flex-direction: column;
 
-    gap: 10px;
+    gap: 14px;
+
+    margin-top: 18px;
 }
 
 .bus-card {
     width: 100%;
+    max-width: none;
+
+    display: grid;
+
+    grid-template-columns: minmax(0, 1fr) 220px;
+
+    gap: 35px;
+
+    align-items: center;
+
+    margin: 0;
+
+    padding: 24px 28px;
+
+    background: var(--white);
+
+    border: 1px solid var(--grey-200);
+
+    border-left: 4px solid var(--yellow);
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 5px 20px rgba(
+            0,
+            0,
+            0,
+            0.035
+        );
 }
+
+.bus-left {
+    min-width: 0;
+}
+
+.bus-right {
+    min-width: 220px;
+
+    text-align: right;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.last-odometer {
+    font-size: 24px;
+}
+
+.view-btn {
+    margin-top: 14px;
+}
+
+
+/* =====================================
+   MAKE PAGE USE MORE SCREEN
+===================================== */
+
+.page {
+    width: 100%;
+    max-width: none;
+
+    margin: 0;
+
+    padding:
+        48px 5vw 70px;
+}
+
+
+/* =====================================
+   SECTION HEADING
+===================================== */
+
+.section-heading {
+    width: 100%;
+}
+
+
+/* =====================================
+   DESKTOP
+===================================== */
+
+@media (min-width: 1000px) {
+
+    .bus-section {
+        width: 100%;
+    }
+
+    .bus-card {
+        grid-template-columns:
+            minmax(0, 1fr)
+            220px;
+    }
+
+}
+
+
+/* =====================================
+   TABLET
+===================================== */
+
+@media (max-width: 850px) {
+
+    .bus-card {
+        grid-template-columns:
+            1fr;
+
+        gap: 20px;
+    }
+
+    .bus-right {
+        min-width: 0;
+
+        align-items: flex-start;
+
+        text-align: left;
+    }
+
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 600px) {
+
+    .page {
+        padding:
+            30px 12px 50px;
+    }
+
+    .bus-card {
+        padding: 18px;
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .bus-right {
+        min-width: 0;
+
+        align-items: flex-start;
+
+        text-align: left;
+    }
+
+    .last-odometer {
+        font-size: 21px;
+    }
+
+}
+
