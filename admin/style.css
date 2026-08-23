@@ -1086,3 +1086,318 @@
     }
 
 }
+/* =========================================================
+   FLEET — FULL WIDTH BUS CARDS
+========================================================= */
+
+.bus-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+/* Main generated bus card */
+.bus-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 230px;
+
+    box-sizing: border-box;
+
+    display: grid !important;
+    grid-template-columns: 1fr auto;
+
+    gap: 30px;
+
+    padding: 28px 30px;
+
+    background: #ffffff;
+
+    border: 1px solid #deded9;
+
+    border-left: 5px solid #e7b900;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.035);
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* Bus information area */
+
+.bus-card .bus-info {
+    min-width: 0;
+}
+
+
+/* Bus name */
+
+.bus-card h3,
+.bus-card h2 {
+
+    margin: 0;
+
+    color: #111;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+}
+
+
+/* Registration number */
+
+.bus-card .bus-number {
+
+    margin-top: 6px;
+
+    color: #999;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+}
+
+
+/* Driver / starting / expected information */
+
+.bus-card .bus-meta {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 22px;
+
+}
+
+
+.bus-card .bus-meta span {
+
+    padding: 9px 12px;
+
+    background: #f3f3f1;
+
+    border-radius: 6px;
+
+    color: #555;
+
+    font-size: 9px;
+
+}
+
+
+/* Right side */
+
+.bus-card .bus-right {
+
+    min-width: 220px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+}
+
+
+/* ACTIVE */
+
+.bus-card .status {
+
+    padding: 7px 11px;
+
+    background: #fff8d9;
+
+    color: #665300;
+
+    border-radius: 5px;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* Last odometer */
+
+.bus-card .odometer {
+
+    text-align: right;
+
+}
+
+
+.bus-card .odometer-label {
+
+    display: block;
+
+    color: #999;
+
+    font-size: 8px;
+
+    letter-spacing: 1.5px;
+
+    font-weight: 700;
+
+}
+
+
+.bus-card .odometer-value {
+
+    display: block;
+
+    margin-top: 5px;
+
+    color: #111;
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+}
+
+
+/* Date */
+
+.bus-card .date {
+
+    color: #999;
+
+    font-size: 9px;
+
+}
+
+
+/* View details */
+
+.bus-card .view-details {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 135px;
+
+    padding: 11px 15px;
+
+    background: #111;
+
+    color: #fff;
+
+    border-radius: 5px;
+
+    text-decoration: none;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: .8px;
+
+    transition: .2s ease;
+
+}
+
+
+.bus-card .view-details:hover {
+
+    background: #333;
+
+}
+
+
+/* =========================================================
+   MOBILE FLEET
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .bus-list {
+
+        gap: 12px;
+
+    }
+
+
+    .bus-card {
+
+        display: flex !important;
+
+        flex-direction: column;
+
+        gap: 20px;
+
+        min-height: auto;
+
+        padding: 21px;
+
+        border-left-width: 4px;
+
+    }
+
+
+    .bus-card .bus-right {
+
+        width: 100%;
+
+        min-width: 0;
+
+        align-items: flex-start;
+
+        gap: 15px;
+
+    }
+
+
+    .bus-card .odometer {
+
+        text-align: left;
+
+    }
+
+
+    .bus-card .odometer-value {
+
+        font-size: 25px;
+
+    }
+
+
+    .bus-card .view-details {
+
+        width: 100%;
+
+        box-sizing: border-box;
+
+    }
+
+
+    .bus-card .bus-meta {
+
+        margin-top: 17px;
+
+    }
+
+}
