@@ -14,7 +14,7 @@ import {
 import {
     auth,
     db
-} from "../core/firebase.js";
+} from "../../core/firebase.js";
 
 
 /* =====================================================
