@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Bus Details | Admin</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a
+        href="../"
+        class="back"
+    >
+        ← ADMIN
+    </a>
+
+    <div class="brand">
+
+        <img
+            src="../../logo.png"
+            alt="Logo"
+            class="logo"
+        >
+
+        <div>
+
+            <div class="brand-name">
+                BEST
+            </div>
+
+            <div class="brand-subtitle">
+                English Medium School &amp;
+                International PU College
+            </div>
+
+        </div>
+
+    </div>
+
+    <span class="page-label">
+        BUS DETAILS
+    </span>
+
+</header>
+
+
+<main class="page">
+
+    <!-- HEADER -->
+
+    <section class="heading">
+
+        <span class="eyebrow">
+            FLEET
+        </span>
+
+        <h1 id="busNumber">
+            Loading...
+        </h1>
+
+        <p id="registration">
+            --
+        </p>
+
+    </section>
+
+
+    <!-- SUMMARY -->
+
+    <section class="summary">
+
+        <div class="summary-card">
+
+            <span>
+                DRIVER
+            </span>
+
+            <strong id="driver">
+                --
+            </strong>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <span>
+                STARTING ODOMETER
+            </span>
+
+            <strong id="startingOdometer">
+                --
+            </strong>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <span>
+                CURRENT ODOMETER
+            </span>
+
+            <strong id="currentOdometer">
+                --
+            </strong>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <span>
+                EXPECTED MILEAGE
+            </span>
+
+            <strong id="expectedMileage">
+                --
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <!-- TRIP RECORDS -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <span class="eyebrow">
+                TRIP RECORDS
+            </span>
+
+            <h2>
+                Bus History
+            </h2>
+
+        </div>
+
+
+        <div
+            id="tripList"
+            class="record-list"
+        >
+
+            <div class="empty">
+                Loading trip records...
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- DIESEL -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <span class="eyebrow">
+                FUEL
+            </span>
+
+            <h2>
+                Diesel History
+            </h2>
+
+        </div>
+
+
+        <div
+            id="dieselList"
+            class="record-list"
+        >
+
+            <div class="empty">
+                Loading diesel records...
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script
+    type="module"
+    src="./script.js"
+></script>
+
+</body>
+
+</html>
