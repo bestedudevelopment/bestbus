@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>BEST Bus — Live Location</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+
+</head>
+
+
+<body>
+
+<header class="topbar">
+
+    <div class="top-left">
+
+        <a
+            href="../"
+            class="back"
+        >
+            ←
+        </a>
+
+        <div>
+
+            <div class="brand">
+                BEST
+            </div>
+
+            <div class="subtitle">
+                LIVE LOCATION
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="live-status">
+
+        <span class="live-dot"></span>
+
+        LIVE
+
+    </div>
+
+</header>
+
+
+<main class="page">
+
+    <section class="heading">
+
+        <div>
+
+            <span class="eyebrow">
+                FLEET MONITORING
+            </span>
+
+            <h1>
+                Live Location
+            </h1>
+
+            <p>
+                Monitor buses currently on route.
+            </p>
+
+        </div>
+
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <strong id="liveCount">
+                    0
+                </strong>
+
+                <span>
+                    LIVE
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                <strong id="totalCount">
+                    0
+                </strong>
+
+                <span>
+                    ACTIVE
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="map-section">
+
+        <div
+            id="map"
+            class="map"
+        ></div>
+
+
+        <div
+            id="mapMessage"
+            class="map-message"
+        >
+            Loading map...
+        </div>
+
+    </section>
+
+
+    <section class="bus-section">
+
+        <div class="section-title">
+
+            <span class="eyebrow">
+                VEHICLES
+            </span>
+
+            <h2>
+                Active Buses
+            </h2>
+
+        </div>
+
+
+        <div
+            id="busList"
+            class="bus-list"
+        >
+
+            <div class="loading">
+                Loading buses...
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<nav class="bottom-nav">
+
+    <a href="../">
+        <span>⌂</span>
+        <small>Home</small>
+    </a>
+
+    <a href="../assignment/">
+        <span>↔</span>
+        <small>Assign</small>
+    </a>
+
+    <a
+        href="./"
+        class="active"
+    >
+        <span>⌖</span>
+        <small>Location</small>
+    </a>
+
+    <a href="../drivers/">
+        <span>●</span>
+        <small>Drivers</small>
+    </a>
+
+</nav>
+
+
+<script
+    type="module"
+    src="./script.js"
+></script>
+
+
+<!--
+    REPLACE YOUR_API_KEY with your
+    Google Maps JavaScript API key.
+-->
+<script
+    async
+    defer
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
+></script>
+
+</body>
+
+</html>
