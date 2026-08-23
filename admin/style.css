@@ -277,7 +277,24 @@ body {
             0.07
         );
 }
+/* =====================================
+   DOWNLOAD REPORTS CARD
+===================================== */
 
+.download-card {
+    color: var(--black);
+    text-decoration: none;
+}
+
+.download-card:visited {
+    color: var(--black);
+    text-decoration: none;
+}
+
+.download-card:hover {
+    color: var(--black);
+    text-decoration: none;
+}
 
 /* =====================================
    SMALL ICON
