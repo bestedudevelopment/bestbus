@@ -466,7 +466,7 @@ function renderBuses(
 
                     <a
                         class="view-btn"
-                        href="../bus-details/?id=${encodeURIComponent(
+                        href="../admin/bus-details/?id=${encodeURIComponent(
                             busId
                         )}"
                     >
