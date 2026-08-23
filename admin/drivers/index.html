@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Drivers | Admin</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body>
+
+<header class="topbar">
+
+    <a
+        href="../"
+        class="back"
+    >
+        ← ADMIN
+    </a>
+
+
+    <div class="brand">
+
+        <img
+            src="../../logo.png"
+            alt="Logo"
+            class="logo"
+        >
+
+        <div class="brand-text">
+
+            <div class="brand-name">
+                BEST
+            </div>
+
+            <div class="brand-subtitle">
+                English Medium School &amp;
+                International PU College
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="admin-label">
+        DRIVERS
+    </div>
+
+</header>
+
+
+<main class="page">
+
+
+    <section class="welcome">
+
+        <span class="eyebrow">
+            FLEET MANAGEMENT
+        </span>
+
+        <h1>
+            Drivers
+        </h1>
+
+        <p>
+            Review driver accounts and assign available buses.
+        </p>
+
+    </section>
+
+
+    <section class="summary-grid">
+
+        <div class="summary-card">
+
+            <span>
+                TOTAL DRIVERS
+            </span>
+
+            <strong id="totalDrivers">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="summary-card pending-card">
+
+            <span>
+                PENDING APPROVAL
+            </span>
+
+            <strong id="pendingDrivers">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <span>
+                APPROVED
+            </span>
+
+            <strong id="approvedDrivers">
+                0
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <section class="driver-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    APPROVAL
+                </span>
+
+                <h2>
+                    Pending Drivers
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="pendingList"
+            class="driver-list"
+        >
+
+            <div class="loading">
+                Loading drivers...
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="driver-section approved-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    ACTIVE
+                </span>
+
+                <h2>
+                    Approved Drivers
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="approvedList"
+            class="driver-list"
+        >
+
+            <div class="loading">
+                Loading drivers...
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<script
+    type="module"
+    src="./script.js"
+></script>
+
+</body>
+
+</html>
