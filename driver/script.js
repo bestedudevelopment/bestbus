@@ -131,7 +131,8 @@ let busData = null;
 let busId = null;
 
 let activeRecord = null;
-
+let locationWatchId = null;
+let currentLiveLocation = null;
 
 /* =================================
    DATE
@@ -469,7 +470,202 @@ async function loadActiveRecord() {
     }
 
 }
+/* =========================================
+   START LIVE LOCATION
+========================================= */
 
+function startLiveLocation() {
+
+    if (!navigator.geolocation) {
+
+        showError(
+            "Location is not supported on this device."
+        );
+
+        return;
+
+    }
+
+    if (locationWatchId !== null) {
+
+        navigator.geolocation.clearWatch(
+            locationWatchId
+        );
+
+    }
+
+
+    locationWatchId =
+        navigator.geolocation.watchPosition(
+
+            async (position) => {
+
+                const latitude =
+                    position.coords.latitude;
+
+                const longitude =
+                    position.coords.longitude;
+
+                const accuracy =
+                    position.coords.accuracy;
+
+                const speed =
+                    position.coords.speed;
+
+
+                currentLiveLocation = {
+
+                    latitude,
+                    longitude,
+                    accuracy,
+                    speed
+
+                };
+
+
+                console.log(
+                    "LIVE LOCATION:",
+                    currentLiveLocation
+                );
+
+
+                /*
+                 * Save location to the active
+                 * driver record.
+                 */
+
+                if (
+                    activeRecord &&
+                    activeRecord.id
+                ) {
+
+                    try {
+
+                        await updateDoc(
+
+                            doc(
+                                db,
+                                "driverRecords",
+                                activeRecord.id
+                            ),
+
+                            {
+
+                                liveLocation: {
+
+                                    latitude:
+                                        latitude,
+
+                                    longitude:
+                                        longitude,
+
+                                    accuracy:
+                                        accuracy,
+
+                                    speed:
+                                        speed || 0,
+
+                                    updatedAt:
+                                        serverTimestamp()
+
+                                }
+
+                            }
+
+                        );
+
+                    } catch (error) {
+
+                        console.error(
+                            "LOCATION SAVE ERROR:",
+                            error
+                        );
+
+                    }
+
+                }
+
+            },
+
+
+            (error) => {
+
+                console.error(
+                    "LOCATION ERROR:",
+                    error
+                );
+
+
+                if (
+                    error.code ===
+                    error.PERMISSION_DENIED
+                ) {
+
+                    showError(
+                        "Location permission was denied. Please allow location access."
+                    );
+
+                }
+
+                else if (
+                    error.code ===
+                    error.POSITION_UNAVAILABLE
+                ) {
+
+                    showError(
+                        "Unable to get your current location."
+                    );
+
+                }
+
+                else if (
+                    error.code ===
+                    error.TIMEOUT
+                ) {
+
+                    showError(
+                        "Location request timed out. Trying again..."
+                    );
+
+                }
+
+            },
+
+
+            {
+
+                enableHighAccuracy: true,
+
+                maximumAge: 5000,
+
+                timeout: 15000
+
+            }
+
+        );
+
+}
+
+
+/* =========================================
+   STOP LIVE LOCATION
+========================================= */
+
+function stopLiveLocation() {
+
+    if (
+        locationWatchId !== null
+    ) {
+
+        navigator.geolocation.clearWatch(
+            locationWatchId
+        );
+
+        locationWatchId = null;
+
+    }
+
+}
 
 /* =================================
    MORNING START
@@ -610,7 +806,8 @@ morningStartButton.addEventListener(
                 "Morning pickup started."
             );
 
-
+startLiveLocation();
+            
         } catch (error) {
 
             console.error(
