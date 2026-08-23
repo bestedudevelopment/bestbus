@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>BEST Bus — Settings</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a
+        href="../"
+        class="back"
+    >
+        ←
+    </a>
+
+    <div class="top-title">
+
+        <div class="brand">
+            BEST
+        </div>
+
+        <div class="subtitle">
+            ADMIN SETTINGS
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="page">
+
+    <section class="heading">
+
+        <span class="eyebrow">
+            ADMIN PANEL
+        </span>
+
+        <h1>
+            Settings
+        </h1>
+
+        <p>
+            Manage your account and system preferences.
+        </p>
+
+    </section>
+
+
+    <!-- ACCOUNT -->
+
+    <section class="settings-section">
+
+        <div class="section-title">
+            ACCOUNT
+        </div>
+
+
+        <div class="settings-card">
+
+            <div class="card-icon">
+                👤
+            </div>
+
+            <div class="card-content">
+
+                <h3>
+                    Admin Profile
+                </h3>
+
+                <p>
+                    View your administrator account details.
+                </p>
+
+            </div>
+
+            <span class="arrow">
+                →
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- FLEET -->
+
+    <section class="settings-section">
+
+        <div class="section-title">
+            FLEET
+        </div>
+
+
+        <a
+            href="../buses/"
+            class="settings-card"
+        >
+
+            <div class="card-icon">
+                🚌
+            </div>
+
+            <div class="card-content">
+
+                <h3>
+                    Bus Settings
+                </h3>
+
+                <p>
+                    Manage buses and fleet information.
+                </p>
+
+            </div>
+
+            <span class="arrow">
+                →
+            </span>
+
+        </a>
+
+
+        <a
+            href="../assignment/"
+            class="settings-card"
+        >
+
+            <div class="card-icon">
+                ↔
+            </div>
+
+            <div class="card-content">
+
+                <h3>
+                    Assign / Deassign
+                </h3>
+
+                <p>
+                    Manage driver and bus assignments.
+                </p>
+
+            </div>
+
+            <span class="arrow">
+                →
+            </span>
+
+        </a>
+
+    </section>
+
+
+    <!-- SYSTEM -->
+
+    <section class="settings-section">
+
+        <div class="section-title">
+            SYSTEM
+        </div>
+
+
+        <div
+            class="settings-card"
+            id="notificationSetting"
+        >
+
+            <div class="card-icon">
+                🔔
+            </div>
+
+            <div class="card-content">
+
+                <h3>
+                    Notifications
+                </h3>
+
+                <p>
+                    Manage admin alerts and notifications.
+                </p>
+
+            </div>
+
+            <span class="arrow">
+                →
+            </span>
+
+        </div>
+
+
+        <div
+            class="settings-card"
+            id="appInfo"
+        >
+
+            <div class="card-icon">
+                ℹ️
+            </div>
+
+            <div class="card-content">
+
+                <h3>
+                    App Information
+                </h3>
+
+                <p>
+                    BEST Bus administration system.
+                </p>
+
+            </div>
+
+            <span class="arrow">
+                →
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- LOGOUT -->
+
+    <button
+        id="logoutButton"
+        class="logout-button"
+    >
+        LOG OUT
+    </button>
+
+
+    <div
+        id="message"
+        class="message"
+    ></div>
+
+</main>
+
+
+<nav class="bottom-nav">
+
+    <a href="../">
+        <span>⌂</span>
+        <small>Home</small>
+    </a>
+
+    <a href="../buses/">
+        <span>🚌</span>
+        <small>Buses</small>
+    </a>
+
+    <a href="../drivers/">
+        <span>●</span>
+        <small>Drivers</small>
+    </a>
+
+    <a
+        href="./"
+        class="active"
+    >
+        <span>⚙</span>
+        <small>Settings</small>
+    </a>
+
+</nav>
+
+
+<script
+    type="module"
+    src="./script.js"
+></script>
+
+</body>
+
+</html>
