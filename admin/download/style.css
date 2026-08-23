@@ -1,0 +1,1284 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+:root {
+
+    --black: #111111;
+    --white: #ffffff;
+
+    --yellow: #e7b900;
+    --red: #c62828;
+
+    --grey-50: #fafafa;
+    --grey-100: #f4f4f2;
+    --grey-200: #e4e4e0;
+    --grey-400: #999994;
+    --grey-600: #666660;
+
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f7f7f5,
+            #eeeeeb
+        );
+
+    color: var(--black);
+
+    font-family:
+        "DM Sans",
+        Arial,
+        sans-serif;
+
+}
+
+
+/* =================================
+   TOPBAR
+================================= */
+
+.topbar {
+
+    min-height: 76px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding:
+        10px 5vw;
+
+    background:
+        var(--black);
+
+    border-top:
+        4px solid var(--red);
+
+}
+
+
+.back-button {
+
+    color:
+        var(--white);
+
+    text-decoration:
+        none;
+
+    font-size:
+        8px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+.back-button:hover {
+
+    color:
+        var(--yellow);
+
+}
+
+
+.brand {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+}
+
+
+.logo {
+
+    width:
+        45px;
+
+    height:
+        45px;
+
+    object-fit:
+        contain;
+
+    background:
+        var(--white);
+
+    border-radius:
+        5px;
+
+}
+
+
+.brand-name {
+
+    color:
+        var(--yellow);
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        2px;
+
+}
+
+
+.brand-subtitle {
+
+    margin-top:
+        2px;
+
+    color:
+        #dddddd;
+
+    font-size:
+        8px;
+
+}
+
+
+.page-title {
+
+    color:
+        #eeeeee;
+
+    font-size:
+        7px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+/* =================================
+   PAGE
+================================= */
+
+.page {
+
+    width:
+        100%;
+
+    max-width:
+        1100px;
+
+    margin:
+        auto;
+
+    padding:
+        45px 20px 70px;
+
+}
+
+
+/* =================================
+   SELECTION
+================================= */
+
+.selection-section {
+
+    max-width:
+        650px;
+
+    margin:
+        0 auto;
+
+}
+
+
+.eyebrow {
+
+    display:
+        block;
+
+    color:
+        var(--grey-400);
+
+    font-size:
+        7px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1.8px;
+
+}
+
+
+.selection-section h1 {
+
+    margin-top:
+        7px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:
+        42px;
+
+}
+
+
+.description {
+
+    margin-top:
+        8px;
+
+    color:
+        var(--grey-600);
+
+    font-size:
+        10px;
+
+}
+
+
+.selector-card {
+
+    margin-top:
+        28px;
+
+    padding:
+        25px;
+
+    background:
+        var(--white);
+
+    border:
+        1px solid var(--grey-200);
+
+    border-radius:
+        8px;
+
+}
+
+
+.selector-card > label {
+
+    display:
+        block;
+
+    margin-bottom:
+        8px;
+
+    color:
+        var(--grey-600);
+
+    font-size:
+        7px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+#busSelect {
+
+    width:
+        100%;
+
+    height:
+        48px;
+
+    padding:
+        0 12px;
+
+    border:
+        1px solid var(--grey-200);
+
+    border-radius:
+        5px;
+
+    background:
+        var(--white);
+
+    color:
+        var(--black);
+
+    font-family:
+        inherit;
+
+    font-size:
+        11px;
+
+    outline:
+        none;
+
+}
+
+
+#busSelect:focus {
+
+    border-color:
+        var(--black);
+
+}
+
+
+/* =================================
+   BUS INFO
+================================= */
+
+.bus-info {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap:
+        8px;
+
+    margin-top:
+        12px;
+
+}
+
+
+.bus-info > div {
+
+    padding:
+        12px;
+
+    background:
+        var(--grey-100);
+
+    border-radius:
+        5px;
+
+}
+
+
+.bus-info span {
+
+    display:
+        block;
+
+    color:
+        var(--grey-400);
+
+    font-size:
+        6px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        .7px;
+
+}
+
+
+.bus-info strong {
+
+    display:
+        block;
+
+    margin-top:
+        5px;
+
+    font-size:
+        10px;
+
+}
+
+
+/* =================================
+   DATE
+================================= */
+
+.date-section {
+
+    margin-top:
+        20px;
+
+    padding-top:
+        20px;
+
+    border-top:
+        1px solid var(--grey-200);
+
+}
+
+
+.date-heading {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    margin-bottom:
+        10px;
+
+}
+
+
+.date-heading span {
+
+    color:
+        var(--grey-600);
+
+    font-size:
+        7px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+.date-heading small {
+
+    color:
+        var(--red);
+
+    font-size:
+        7px;
+
+}
+
+
+.date-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        10px;
+
+}
+
+
+.date-grid label {
+
+    display:
+        block;
+
+    margin-bottom:
+        6px;
+
+    color:
+        var(--grey-600);
+
+    font-size:
+        7px;
+
+    font-weight:
+        700;
+
+}
+
+
+.date-grid input {
+
+    width:
+        100%;
+
+    height:
+        43px;
+
+    padding:
+        0 10px;
+
+    border:
+        1px solid var(--grey-200);
+
+    border-radius:
+        5px;
+
+    background:
+        var(--white);
+
+    font-family:
+        inherit;
+
+    outline:
+        none;
+
+}
+
+
+.date-message {
+
+    min-height:
+        15px;
+
+    margin-top:
+        7px;
+
+    color:
+        var(--red);
+
+    font-size:
+        7px;
+
+}
+
+
+/* =================================
+   GENERATE
+================================= */
+
+.generate-button {
+
+    width:
+        100%;
+
+    height:
+        48px;
+
+    margin-top:
+        18px;
+
+    border:
+        none;
+
+    border-radius:
+        5px;
+
+    background:
+        var(--black);
+
+    color:
+        var(--white);
+
+    font-size:
+        8px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1px;
+
+    cursor:
+        pointer;
+
+}
+
+
+.generate-button:hover:not(:disabled) {
+
+    background:
+        var(--yellow);
+
+    color:
+        var(--black);
+
+}
+
+
+.generate-button:disabled {
+
+    opacity:
+        .35;
+
+    cursor:
+        not-allowed;
+
+}
+
+
+/* =================================
+   REPORT ACTIONS
+================================= */
+
+.report-section {
+
+    margin-top:
+        20px;
+
+}
+
+
+.report-actions {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    gap:
+        10px;
+
+    margin-bottom:
+        15px;
+
+}
+
+
+.back-report-button,
+.download-button {
+
+    height:
+        42px;
+
+    padding:
+        0 18px;
+
+    border-radius:
+        5px;
+
+    font-family:
+        inherit;
+
+    font-size:
+        7px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        .8px;
+
+    cursor:
+        pointer;
+
+}
+
+
+.back-report-button {
+
+    border:
+        1px solid var(--grey-200);
+
+    background:
+        var(--white);
+
+    color:
+        var(--black);
+
+}
+
+
+.download-button {
+
+    border:
+        1px solid var(--black);
+
+    background:
+        var(--black);
+
+    color:
+        var(--white);
+
+}
+
+
+.download-button:hover {
+
+    background:
+        var(--yellow);
+
+    color:
+        var(--black);
+
+}
+
+
+/* =================================
+   A4 REPORT PREVIEW
+================================= */
+
+.report-page {
+
+    width:
+        210mm;
+
+    min-height:
+        297mm;
+
+    margin:
+        0 auto;
+
+    padding:
+        12mm 10mm;
+
+    background:
+        white;
+
+    color:
+        #111111;
+
+    box-shadow:
+        0 5px 30px rgba(
+            0,
+            0,
+            0,
+            .12
+        );
+
+}
+
+
+/* =================================
+   REPORT HEADER
+================================= */
+
+.report-header {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        35mm 1fr 55mm;
+
+    gap:
+        7mm;
+
+    align-items:
+        center;
+
+    padding-bottom:
+        5mm;
+
+    border-bottom:
+        0.4mm solid #111111;
+
+}
+
+
+.report-logo img {
+
+    width:
+        30mm;
+
+    height:
+        30mm;
+
+    object-fit:
+        contain;
+
+}
+
+
+.school-heading {
+
+    text-align:
+        center;
+
+}
+
+
+.school-heading h2 {
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size:
+        14pt;
+
+    line-height:
+        1.25;
+
+}
+
+
+.school-heading h3 {
+
+    margin-top:
+        7mm;
+
+    font-size:
+        11pt;
+
+}
+
+
+.report-meta {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        2mm;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size:
+        7pt;
+
+}
+
+
+.report-meta div {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        24mm 1fr;
+
+    gap:
+        2mm;
+
+}
+
+
+.report-meta strong {
+
+    font-weight:
+        700;
+
+}
+
+
+.report-meta span {
+
+    word-break:
+        break-word;
+
+}
+
+
+/* =================================
+   TABLE
+================================= */
+
+.table-wrapper {
+
+    margin-top:
+        5mm;
+
+    width:
+        100%;
+
+}
+
+
+#reportTable {
+
+    width:
+        100%;
+
+    border-collapse:
+        collapse;
+
+    table-layout:
+        fixed;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size:
+        6.5pt;
+
+}
+
+
+#reportTable th,
+#reportTable td {
+
+    border:
+        0.25mm solid #bcbcbc;
+
+    padding:
+        2.2mm 1.5mm;
+
+    text-align:
+        center;
+
+    vertical-align:
+        middle;
+
+}
+
+
+#reportTable th {
+
+    font-weight:
+        700;
+
+    background:
+        #fafafa;
+
+}
+
+
+#reportTable th:nth-child(1) {
+    width: 11%;
+}
+
+#reportTable th:nth-child(2) {
+    width: 11%;
+}
+
+#reportTable th:nth-child(3) {
+    width: 17%;
+}
+
+#reportTable th:nth-child(4) {
+    width: 11%;
+}
+
+#reportTable th:nth-child(5) {
+    width: 8%;
+}
+
+#reportTable th:nth-child(6) {
+    width: 8%;
+}
+
+#reportTable th:nth-child(7) {
+    width: 9%;
+}
+
+#reportTable th:nth-child(8) {
+    width: 12%;
+}
+
+#reportTable th:nth-child(9) {
+    width: 6%;
+}
+
+#reportTable th:nth-child(10) {
+    width: 12%;
+}
+
+
+/* =================================
+   NOTE
+================================= */
+
+.report-note {
+
+    margin-top:
+        5mm;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size:
+        7pt;
+
+}
+
+
+.report-note ol {
+
+    margin-top:
+        2mm;
+
+    padding-left:
+        5mm;
+
+}
+
+
+.report-note li {
+
+    margin-bottom:
+        1mm;
+
+}
+
+
+/* =================================
+   SIGNATURES
+================================= */
+
+.signatures {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap:
+        20mm;
+
+    margin-top:
+        18mm;
+
+    text-align:
+        center;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size:
+        8pt;
+
+}
+
+
+.signature-line {
+
+    width:
+        32mm;
+
+    margin:
+        9mm auto 0;
+
+    border-bottom:
+        0.3mm solid #111111;
+
+}
+
+
+/* =================================
+   MESSAGE
+================================= */
+
+.message {
+
+    position:
+        fixed;
+
+    left:
+        50%;
+
+    bottom:
+        20px;
+
+    transform:
+        translateX(-50%);
+
+    padding:
+        12px 18px;
+
+    background:
+        var(--black);
+
+    color:
+        white;
+
+    border-radius:
+        5px;
+
+    font-size:
+        8px;
+
+    z-index:
+        100;
+
+}
+
+
+.message.error {
+
+    background:
+        var(--red);
+
+}
+
+
+.hidden {
+
+    display:
+        none !important;
+
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 800px) {
+
+    .bus-info {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .report-page {
+
+        transform-origin:
+            top left;
+
+        width:
+            210mm;
+
+        box-shadow:
+            none;
+
+    }
+
+
+    .report-section {
+
+        overflow-x:
+            auto;
+
+    }
+
+}
+
+
+@media (max-width: 550px) {
+
+    .brand-subtitle {
+
+        display:
+            none;
+
+    }
+
+
+    .topbar {
+
+        padding:
+            10px 13px;
+
+    }
+
+
+    .page {
+
+        padding:
+            30px 12px 50px;
+
+    }
+
+
+    .selection-section h1 {
+
+        font-size:
+            34px;
+
+    }
+
+
+    .date-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .report-actions {
+
+        flex-direction:
+            column;
+
+    }
+
+
+    .back-report-button,
+    .download-button {
+
+        width:
+            100%;
+
+    }
+
+}
+
+
+/* =================================
+   PRINT
+================================= */
+
+@media print {
+
+    body {
+
+        background:
+            white;
+
+    }
+
+
+    .topbar,
+    .report-actions {
+
+        display:
+            none !important;
+
+    }
+
+
+    .page {
+
+        padding:
+            0;
+
+        max-width:
+            none;
+
+    }
+
+
+    .report-section {
+
+        margin:
+            0;
+
+    }
+
+
+    .report-page {
+
+        box-shadow:
+            none;
+
+        margin:
+            0;
+
+    }
+
+} 
