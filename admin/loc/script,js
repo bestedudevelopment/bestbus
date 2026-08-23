@@ -1,0 +1,991 @@
+import {
+    collection,
+    getDocs,
+    query,
+    where,
+    onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import {
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+    auth,
+    db
+} from "../../core/firebase.js";
+
+
+/* =================================
+   STATE
+================================= */
+
+let map = null;
+
+let buses = [];
+
+let drivers = [];
+
+let markers = new Map();
+
+let recordsUnsubscribe = null;
+
+
+/*
+ * Default map center.
+ * Change this later if you want
+ * your main operating area centered.
+ */
+
+const DEFAULT_CENTER = {
+    lat: 15.1394,
+    lng: 76.9214
+};
+
+
+/* =================================
+   GOOGLE MAP
+================================= */
+
+window.initMap = function () {
+
+    map =
+        new google.maps.Map(
+            document.getElementById(
+                "map"
+            ),
+            {
+
+                center:
+                    DEFAULT_CENTER,
+
+                zoom: 12,
+
+                mapTypeControl: true,
+
+                streetViewControl: false,
+
+                fullscreenControl: true
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "mapMessage"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+
+    /*
+     * If Firebase data has already
+     * loaded, draw markers.
+     */
+
+    renderMarkers();
+
+};
+
+
+/* =================================
+   AUTH
+================================= */
+
+onAuthStateChanged(
+    auth,
+    async (user) => {
+
+        if (!user) {
+
+            window.location.href =
+                "../login/";
+
+            return;
+
+        }
+
+
+        try {
+
+            const profileSnapshot =
+                await getDocs(
+                    query(
+                        collection(
+                            db,
+                            "users"
+                        ),
+                        where(
+                            "__name__",
+                            "==",
+                            user.uid
+                        )
+                    )
+                );
+
+
+            if (
+                profileSnapshot.empty
+            ) {
+
+                throw new Error(
+                    "Admin profile not found."
+                );
+
+            }
+
+
+            const profile =
+                profileSnapshot
+                    .docs[0]
+                    .data();
+
+
+            if (
+                profile.role !== "admin"
+            ) {
+
+                throw new Error(
+                    "Administrator access required."
+                );
+
+            }
+
+
+            await loadFleet();
+
+            startLiveListener();
+
+        } catch (error) {
+
+            console.error(
+                "AUTH ERROR:",
+                error
+            );
+
+            showMessage(
+                error.message
+            );
+
+        }
+
+    }
+);
+
+
+/* =================================
+   LOAD FLEET
+================================= */
+
+async function loadFleet() {
+
+    const [
+        usersSnapshot,
+        busesSnapshot
+    ] = await Promise.all([
+
+        getDocs(
+            collection(
+                db,
+                "users"
+            )
+        ),
+
+        getDocs(
+            collection(
+                db,
+                "buses"
+            )
+        )
+
+    ]);
+
+
+    drivers = [];
+
+
+    usersSnapshot.forEach(
+        snapshot => {
+
+            const data =
+                snapshot.data();
+
+
+            if (
+                data.role === "driver"
+            ) {
+
+                drivers.push({
+
+                    id:
+                        snapshot.id,
+
+                    ...data
+
+                });
+
+            }
+
+        }
+    );
+
+
+    buses = [];
+
+
+    busesSnapshot.forEach(
+        snapshot => {
+
+            buses.push({
+
+                id:
+                    snapshot.id,
+
+                ...snapshot.data()
+
+            });
+
+        }
+    );
+
+
+    document
+        .getElementById(
+            "totalCount"
+        )
+        .textContent =
+        buses.length;
+
+
+    renderBusList();
+
+}
+
+
+/* =================================
+   REAL-TIME LOCATION LISTENER
+================================= */
+
+function startLiveListener() {
+
+    /*
+     * Listen to driverRecords in real time.
+     *
+     * Every time the driver's
+     * liveLocation changes, this
+     * callback runs automatically.
+     */
+
+    recordsUnsubscribe =
+        onSnapshot(
+
+            collection(
+                db,
+                "driverRecords"
+            ),
+
+            snapshot => {
+
+                const records = [];
+
+
+                snapshot.forEach(
+                    documentSnapshot => {
+
+                        records.push({
+
+                            id:
+                                documentSnapshot.id,
+
+                            ...documentSnapshot.data()
+
+                        });
+
+                    }
+                );
+
+
+                /*
+                 * Only records with
+                 * liveLocation are useful.
+                 */
+
+                window.liveRecords =
+                    records.filter(
+                        record =>
+                            record.liveLocation &&
+                            record.liveLocation.latitude &&
+                            record.liveLocation.longitude
+                    );
+
+
+                updateLiveCount();
+
+                renderBusList();
+
+                renderMarkers();
+
+            },
+
+
+            error => {
+
+                console.error(
+                    "LIVE LOCATION ERROR:",
+                    error
+                );
+
+                showMessage(
+                    "Unable to receive live locations."
+                );
+
+            }
+
+        );
+
+}
+
+
+/* =================================
+   MARKERS
+================================= */
+
+function renderMarkers() {
+
+    if (!map) {
+        return;
+    }
+
+
+    const records =
+        window.liveRecords || [];
+
+
+    const activeMarkerIds =
+        new Set();
+
+
+    records.forEach(
+        record => {
+
+            const location =
+                record.liveLocation;
+
+
+            if (
+                !location ||
+                !location.latitude ||
+                !location.longitude
+            ) {
+
+                return;
+
+            }
+
+
+            const markerId =
+                record.id;
+
+
+            activeMarkerIds.add(
+                markerId
+            );
+
+
+            const bus =
+                buses.find(
+                    item =>
+                        item.id ===
+                        record.busId
+                );
+
+
+            const driver =
+                drivers.find(
+                    item =>
+                        item.id ===
+                        record.driverId
+                );
+
+
+            const busNumber =
+                record.busNumber ||
+                bus?.busNumber ||
+                "BUS";
+
+
+            const driverName =
+                record.driverName ||
+                driver?.name ||
+                "Driver";
+
+
+            const position = {
+
+                lat:
+                    Number(
+                        location.latitude
+                    ),
+
+                lng:
+                    Number(
+                        location.longitude
+                    )
+
+            };
+
+
+            if (
+                markers.has(
+                    markerId
+                )
+            ) {
+
+                /*
+                 * Move existing marker.
+                 */
+
+                const marker =
+                    markers.get(
+                        markerId
+                    );
+
+
+                marker.setPosition(
+                    position
+                );
+
+
+                marker.infoWindow.setContent(
+
+                    createInfoWindow(
+                        busNumber,
+                        driverName,
+                        location
+                    )
+
+                );
+
+            }
+
+            else {
+
+                /*
+                 * Create new marker.
+                 */
+
+                const marker =
+                    new google.maps.Marker({
+
+                        map:
+                            map,
+
+                        position:
+                            position,
+
+                        title:
+                            busNumber,
+
+                        label: {
+
+                            text:
+                                "🚌",
+
+                            fontSize:
+                                "22px"
+
+                        }
+
+                    });
+
+
+                const infoWindow =
+                    new google.maps.InfoWindow({
+
+                        content:
+                            createInfoWindow(
+                                busNumber,
+                                driverName,
+                                location
+                            )
+
+                    });
+
+
+                marker.infoWindow =
+                    infoWindow;
+
+
+                marker.addListener(
+                    "click",
+                    () => {
+
+                        infoWindow.open({
+
+                            map:
+                                map,
+
+                            anchor:
+                                marker
+
+                        });
+
+                    }
+                );
+
+
+                markers.set(
+                    markerId,
+                    marker
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+     * Remove markers that are
+     * no longer reporting.
+     */
+
+    markers.forEach(
+        (marker, id) => {
+
+            if (
+                !activeMarkerIds.has(
+                    id
+                )
+            ) {
+
+                marker.setMap(
+                    null
+                );
+
+                markers.delete(
+                    id
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =================================
+   INFO WINDOW
+================================= */
+
+function createInfoWindow(
+    busNumber,
+    driverName,
+    location
+) {
+
+    const speed =
+        Number(
+            location.speed || 0
+        );
+
+
+    return `
+
+        <div style="
+            min-width:180px;
+            font-family:Arial,sans-serif;
+            padding:4px;
+        ">
+
+            <strong style="
+                font-size:16px;
+            ">
+                🚌 ${escapeHTML(
+                    busNumber
+                )}
+            </strong>
+
+            <div style="
+                margin-top:8px;
+                color:#555;
+            ">
+                Driver:
+                <strong>
+                    ${escapeHTML(
+                        driverName
+                    )}
+                </strong>
+            </div>
+
+            <div style="
+                margin-top:6px;
+                color:#555;
+            ">
+                Speed:
+                ${speed.toFixed(1)}
+                m/s
+            </div>
+
+            <div style="
+                margin-top:6px;
+                color:#27863b;
+                font-weight:bold;
+                font-size:11px;
+            ">
+                ● LIVE
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =================================
+   BUS LIST
+================================= */
+
+function renderBusList() {
+
+    const list =
+        document.getElementById(
+            "busList"
+        );
+
+
+    const records =
+        window.liveRecords || [];
+
+
+    if (
+        buses.length === 0
+    ) {
+
+        list.innerHTML = `
+            <div class="empty">
+                No buses found.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    buses.forEach(
+        bus => {
+
+            /*
+             * Find the latest live
+             * record for this bus.
+             */
+
+            const record =
+                records
+                    .filter(
+                        item =>
+                            item.busId ===
+                            bus.id
+                    )
+                    .sort(
+                        (a, b) => {
+
+                            const aTime =
+                                getRecordTime(
+                                    a
+                                );
+
+                            const bTime =
+                                getRecordTime(
+                                    b
+                                );
+
+                            return bTime - aTime;
+
+                        }
+                    )[0];
+
+
+            const driver =
+                record
+                    ? drivers.find(
+                        item =>
+                            item.id ===
+                            record.driverId
+                    )
+                    : null;
+
+
+            const isLive =
+                !!record;
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "bus-card";
+
+
+            card.innerHTML = `
+
+                <div class="bus-info">
+
+                    <div class="bus-number">
+                        ${escapeHTML(
+                            bus.busNumber ||
+                            "BUS"
+                        )}
+                    </div>
+
+                    <div class="driver-name">
+                        Driver:
+                        ${escapeHTML(
+                            record?.driverName ||
+                            driver?.name ||
+                            "Not available"
+                        )}
+                    </div>
+
+                    ${
+                        record
+                        ? `
+                            <div class="location-info">
+                                ${Number(
+                                    record.liveLocation.latitude
+                                ).toFixed(5)},
+                                ${Number(
+                                    record.liveLocation.longitude
+                                ).toFixed(5)}
+                            </div>
+                        `
+                        : ""
+                    }
+
+                </div>
+
+
+                <div
+                    class="${
+                        isLive
+                            ? "bus-live"
+                            : "bus-live bus-offline"
+                    }"
+                >
+
+                    ${
+                        isLive
+                            ? "● LIVE"
+                            : "OFFLINE"
+                    }
+
+                </div>
+
+            `;
+
+
+            /*
+             * Click bus card
+             * → center map.
+             */
+
+            if (record) {
+
+                card.addEventListener(
+                    "click",
+                    () => {
+
+                        if (!map) {
+                            return;
+                        }
+
+
+                        const position = {
+
+                            lat:
+                                Number(
+                                    record.liveLocation.latitude
+                                ),
+
+                            lng:
+                                Number(
+                                    record.liveLocation.longitude
+                                )
+
+                        };
+
+
+                        map.panTo(
+                            position
+                        );
+
+
+                        map.setZoom(
+                            16
+                        );
+
+                    }
+                );
+
+            }
+
+
+            list.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =================================
+   LIVE COUNT
+================================= */
+
+function updateLiveCount() {
+
+    const records =
+        window.liveRecords || [];
+
+
+    const uniqueBuses =
+        new Set();
+
+
+    records.forEach(
+        record => {
+
+            if (
+                record.busId
+            ) {
+
+                uniqueBuses.add(
+                    record.busId
+                );
+
+            }
+
+        }
+    );
+
+
+    document
+        .getElementById(
+            "liveCount"
+        )
+        .textContent =
+        uniqueBuses.size;
+
+}
+
+
+/* =================================
+   TIME
+================================= */
+
+function getRecordTime(
+    record
+) {
+
+    if (
+        record.createdAt &&
+        record.createdAt.toMillis
+    ) {
+
+        return record
+            .createdAt
+            .toMillis();
+
+    }
+
+
+    if (
+        record.liveLocation &&
+        record.liveLocation.updatedAt &&
+        record.liveLocation.updatedAt.toMillis
+    ) {
+
+        return record
+            .liveLocation
+            .updatedAt
+            .toMillis();
+
+    }
+
+
+    return 0;
+
+}
+
+
+/* =================================
+   MESSAGE
+================================= */
+
+function showMessage(
+    text
+) {
+
+    const element =
+        document.getElementById(
+            "mapMessage"
+        );
+
+
+    element.textContent =
+        text;
+
+
+    element.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+/* =================================
+   ESCAPE
+================================= */
+
+function escapeHTML(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
