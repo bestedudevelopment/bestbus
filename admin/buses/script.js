@@ -349,7 +349,7 @@ async function loadBuses() {
 
 
                         window.location.href =
-                            `../bus/?id=${encodeURIComponent(
+                            `../bus-details/?id=${encodeURIComponent(
                                 busId
                             )}`;
 
