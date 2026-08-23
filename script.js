@@ -232,7 +232,10 @@ registerForm.addEventListener(
                 .value
                 .trim();
 
-
+const phone =
+    document.getElementById("phone")
+        .value
+        .trim();
         const email =
             document
                 .getElementById(
@@ -342,7 +345,7 @@ registerForm.addEventListener(
 
                     name:
                         name,
-
+phone: phone,
                     email:
                         email,
 
