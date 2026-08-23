@@ -906,4 +906,28 @@ body {
     }
 
 }
+.logout-btn {
+    height: 36px;
 
+    padding: 0 16px;
+
+    border: 1px solid #c62828;
+    border-radius: 5px;
+
+    background: transparent;
+    color: #ffffff;
+
+    font-size: 8px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.logout-btn:hover {
+    background: #c62828;
+    color: #ffffff;
+}
