@@ -105,7 +105,7 @@ onAuthStateChanged(
 
             if (
                 userData.role !==
-                "superadmin"
+                "admin"
             ) {
 
                 document.body.innerHTML = `
