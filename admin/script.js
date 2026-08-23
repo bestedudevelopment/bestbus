@@ -16,6 +16,9 @@ import {
     auth,
     db
 } from "../core/firebase.js";
+import {
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 
 /* =====================================
@@ -685,3 +688,26 @@ function escapeHTML(
         );
 
 }
+const logoutBtn =
+    document.getElementById("logoutBtn");
+
+logoutBtn.addEventListener("click", async () => {
+
+    try {
+
+        await signOut(auth);
+
+        window.location.replace("../index.html");
+
+    } catch (error) {
+
+        console.error(
+            "Logout error:",
+            error
+        );
+
+        alert("Unable to logout. Please try again.");
+
+    }
+
+});
