@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Download Reports | Admin</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+        crossorigin
+    >
+
+    <!-- PDF LIBRARIES -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+    <a
+        href="../"
+        class="back-button"
+    >
+        ← ADMIN
+    </a>
+
+
+    <div class="brand">
+
+        <img
+            src="../../logo.png"
+            alt="BEST"
+            class="logo"
+        >
+
+        <div>
+
+            <div class="brand-name">
+                BEST
+            </div>
+
+            <div class="brand-subtitle">
+                English Medium School &amp;
+                International PU College
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="page-title">
+        DOWNLOAD REPORT
+    </div>
+
+</header>
+
+
+<main class="page">
+
+
+    <!-- SELECT BUS -->
+
+    <section
+        id="selectionSection"
+        class="selection-section"
+    >
+
+        <span class="eyebrow">
+            REPORTS
+        </span>
+
+        <h1>
+            Download Report
+        </h1>
+
+        <p class="description">
+            Select a bus to generate its transport report.
+        </p>
+
+
+        <div class="selector-card">
+
+
+            <label for="busSelect">
+                SELECT BUS
+            </label>
+
+
+            <select id="busSelect">
+
+                <option value="">
+                    Loading buses...
+                </option>
+
+            </select>
+
+
+            <div
+                id="busInfo"
+                class="bus-info hidden"
+            >
+
+                <div>
+
+                    <span>
+                        REGISTRATION
+                    </span>
+
+                    <strong id="selectedRegistration">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        DRIVER
+                    </span>
+
+                    <strong id="selectedDriver">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        AVAILABLE DAYS
+                    </span>
+
+                    <strong id="availableDays">
+                        —
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- DATE SELECTION -->
+
+            <div
+                id="dateSection"
+                class="date-section hidden"
+            >
+
+                <div class="date-heading">
+
+                    <span>
+                        REPORT PERIOD
+                    </span>
+
+                    <small>
+                        Maximum 30 days
+                    </small>
+
+                </div>
+
+
+                <div class="date-grid">
+
+                    <div>
+
+                        <label for="fromDate">
+                            FROM DATE
+                        </label>
+
+                        <input
+                            type="date"
+                            id="fromDate"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="toDate">
+                            TO DATE
+                        </label>
+
+                        <input
+                            type="date"
+                            id="toDate"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <p
+                    id="dateMessage"
+                    class="date-message"
+                ></p>
+
+            </div>
+
+
+            <button
+                id="generateButton"
+                class="generate-button"
+                disabled
+            >
+                GENERATE REPORT
+            </button>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- REPORT AREA -->
+
+    <section
+        id="reportSection"
+        class="report-section hidden"
+    >
+
+
+        <div class="report-actions">
+
+            <button
+                id="backButton"
+                class="back-report-button"
+            >
+                ← CHANGE BUS / DATES
+            </button>
+
+
+            <button
+                id="downloadButton"
+                class="download-button"
+            >
+                DOWNLOAD PDF
+            </button>
+
+        </div>
+
+
+        <!-- A4 REPORT -->
+
+        <div
+            id="report"
+            class="report-page"
+        >
+
+
+            <!-- REPORT HEADER -->
+
+            <div class="report-header">
+
+
+                <div class="report-logo">
+
+                    <img
+                        src="../../logo.png"
+                        alt="BEST"
+                    >
+
+                </div>
+
+
+                <div class="school-heading">
+
+                    <h2>
+                        BEST English Medium School &amp;
+                        International PU College
+                    </h2>
+
+                    <h3>
+                        BUS TRANSPORT REPORT
+                    </h3>
+
+                </div>
+
+
+                <div class="report-meta">
+
+                    <div>
+                        <strong>
+                            Bus Number
+                        </strong>
+
+                        <span id="reportBus">
+                            —
+                        </span>
+                    </div>
+
+
+                    <div>
+                        <strong>
+                            Registration No
+                        </strong>
+
+                        <span id="reportRegistration">
+                            —
+                        </span>
+                    </div>
+
+
+                    <div>
+                        <strong>
+                            Driver
+                        </strong>
+
+                        <span id="reportDriver">
+                            —
+                        </span>
+                    </div>
+
+
+                    <div>
+                        <strong>
+                            Report Period
+                        </strong>
+
+                        <span id="reportPeriod">
+                            —
+                        </span>
+                    </div>
+
+
+                    <div>
+                        <strong>
+                            Generated On
+                        </strong>
+
+                        <span id="reportGenerated">
+                            —
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TABLE -->
+
+            <div class="table-wrapper">
+
+                <table id="reportTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Morning Start
+                            </th>
+
+                            <th>
+                                Morning Stop /
+                                Evening Start
+                            </th>
+
+                            <th>
+                                Evening Stop
+                            </th>
+
+                            <th>
+                                Diesel
+                            </th>
+
+                            <th>
+                                Liters
+                            </th>
+
+                            <th>
+                                Cost
+                            </th>
+
+                            <th>
+                                Odometer
+                                at Diesel
+                            </th>
+
+                            <th>
+                                Avg
+                            </th>
+
+                            <th>
+                                Avg
+                                (From - To)
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="reportBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- NOTE -->
+
+            <div class="report-note">
+
+                <strong>
+                    Note:
+                </strong>
+
+                <ol>
+
+                    <li>
+                        Avg (KM/L) =
+                        (Current Diesel Odometer -
+                        Previous Diesel Odometer)
+                        ÷ Current Diesel Liters.
+                    </li>
+
+                    <li>
+                        If previous diesel record is
+                        not available, Avg and
+                        Avg (From - To) are shown as
+                        "—".
+                    </li>
+
+                </ol>
+
+            </div>
+
+
+            <!-- SIGNATURES -->
+
+            <div class="signatures">
+
+                <div>
+                    <span>
+                        Prepared By
+                    </span>
+
+                    <div class="signature-line"></div>
+                </div>
+
+
+                <div>
+                    <span>
+                        Checked By
+                    </span>
+
+                    <div class="signature-line"></div>
+                </div>
+
+
+                <div>
+                    <span>
+                        Authorized By
+                    </span>
+
+                    <div class="signature-line"></div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<div
+    id="message"
+    class="message hidden"
+></div>
+
+
+<script
+    type="module"
+    src="./script.js"
+></script>
+
+
+</body>
+
+                      </html>
