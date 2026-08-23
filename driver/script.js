@@ -33,10 +33,7 @@ import {
     db
 } from "../core/firebase.js";
 
-import {
-    auth,
-    db
-} from "../core/firebase.js";
+
 
 const storage = getStorage(auth.app);
 /* =================================
