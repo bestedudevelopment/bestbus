@@ -52,7 +52,9 @@ const message =
 
 onAuthStateChanged(
     auth,
-    async user => {
+    async (user) => {
+
+        console.log("LOGGED IN USER:", user);
 
         if (!user) {
 
@@ -60,15 +62,9 @@ onAuthStateChanged(
                 "../login/";
 
             return;
-
         }
 
-
         try {
-
-            /*
-             * Get user's Firestore profile
-             */
 
             const userRef =
                 doc(
@@ -77,11 +73,16 @@ onAuthStateChanged(
                     user.uid
                 );
 
-
             const userSnapshot =
                 await getDoc(
                     userRef
                 );
+
+
+            console.log(
+                "USER DOCUMENT EXISTS:",
+                userSnapshot.exists()
+            );
 
 
             if (
@@ -89,7 +90,7 @@ onAuthStateChanged(
             ) {
 
                 throw new Error(
-                    "User profile not found."
+                    "User profile not found in Firestore."
                 );
 
             }
@@ -99,13 +100,18 @@ onAuthStateChanged(
                 userSnapshot.data();
 
 
+            console.log(
+                "USER DATA:",
+                userData
+            );
+
+
             /*
-             * SUPER ADMIN CHECK
+             * ADMIN ACCESS
              */
 
             if (
-                userData.role !==
-                "admin"
+                userData.role !== "admin"
             ) {
 
                 document.body.innerHTML = `
@@ -127,22 +133,8 @@ onAuthStateChanged(
                             </h1>
 
                             <p>
-                                Super Admin access is required.
+                                Admin access is required.
                             </p>
-
-                            <button
-                                onclick="history.back()"
-                                style="
-                                    padding:12px 20px;
-                                    border:0;
-                                    border-radius:7px;
-                                    background:#111;
-                                    color:white;
-                                    cursor:pointer;
-                                "
-                            >
-                                GO BACK
-                            </button>
 
                         </div>
 
@@ -156,7 +148,7 @@ onAuthStateChanged(
 
 
             /*
-             * Show name
+             * SHOW ADMIN NAME
              */
 
             adminName.textContent =
@@ -169,7 +161,7 @@ onAuthStateChanged(
 
 
             /*
-             * Load dashboard numbers
+             * LOAD DASHBOARD
              */
 
             await loadStats();
@@ -191,8 +183,6 @@ onAuthStateChanged(
 
     }
 );
-
-
 /* =================================
    STATS
 ================================= */
