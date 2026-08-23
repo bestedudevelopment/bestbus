@@ -13,7 +13,7 @@ import {
 import {
     db,
     auth
-} from "../../firebase.js";
+} from "../core/firebase.js";
 
 
 
