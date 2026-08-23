@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>BEST Bus — Assign / Deassign</title>
+
+    <link rel="stylesheet" href="./style.css">
+
+</head>
+
+
+<body>
+
+<!-- =========================================
+     HEADER
+========================================= -->
+
+<header class="app-header">
+
+    <div class="header-left">
+
+        <a
+            href="../"
+            class="back-btn"
+        >
+            ←
+        </a>
+
+        <div class="brand">
+
+            <img
+                src="../../logo.png"
+                alt="BEST"
+                class="logo"
+            >
+
+            <div class="brand-text">
+
+                <div class="brand-name">
+                    BEST
+                </div>
+
+                <div class="brand-subtitle">
+                    Fleet Management
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="header-admin">
+        ADMIN
+    </div>
+
+</header>
+
+
+
+<!-- =========================================
+     MAIN
+========================================= -->
+
+<main class="app-main">
+
+
+    <section class="page-heading">
+
+        <span class="eyebrow">
+            FLEET MANAGEMENT
+        </span>
+
+        <h1>
+            Assign / Deassign
+        </h1>
+
+        <p>
+            Manage which driver operates each bus.
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================
+         ASSIGN
+    ====================================== -->
+
+    <section class="panel">
+
+        <div class="panel-heading">
+
+            <div>
+
+                <span class="section-label">
+                    ASSIGN
+                </span>
+
+                <h2>
+                    Assign Bus
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <form id="assignForm">
+
+
+            <!-- DRIVER -->
+
+            <div class="field">
+
+                <label for="driverSelect">
+                    DRIVER
+                </label>
+
+                <select
+                    id="driverSelect"
+                    required
+                >
+
+                    <option value="">
+                        Select driver
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- BUS -->
+
+            <div class="field">
+
+                <label for="busSelect">
+                    BUS
+                </label>
+
+                <select
+                    id="busSelect"
+                    required
+                >
+
+                    <option value="">
+                        Select available bus
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <button
+                type="submit"
+                class="primary-btn"
+            >
+                ASSIGN BUS
+            </button>
+
+
+        </form>
+
+    </section>
+
+
+
+    <!-- =====================================
+         CURRENT ASSIGNMENTS
+    ====================================== -->
+
+    <section class="assignments-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="section-label">
+                    ACTIVE
+                </span>
+
+                <h2>
+                    Current Assignments
+                </h2>
+
+            </div>
+
+            <span
+                id="assignmentCount"
+                class="count-badge"
+            >
+                0
+            </span>
+
+        </div>
+
+
+        <div
+            id="assignmentList"
+            class="assignment-list"
+        >
+
+            <div class="loading">
+                Loading assignments...
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+</main>
+
+
+
+<!-- =========================================
+     MOBILE BOTTOM NAV
+========================================= -->
+
+<nav class="bottom-nav">
+
+
+    <a
+        href="../"
+        class="bottom-link"
+    >
+
+        <span>⌂</span>
+
+        <small>
+            Home
+        </small>
+
+    </a>
+
+
+    <a
+        href="../#fleet"
+        class="bottom-link"
+    >
+
+        <span>▣</span>
+
+        <small>
+            Fleet
+        </small>
+
+    </a>
+
+
+    <a
+        href="../drivers/"
+        class="bottom-link"
+    >
+
+        <span>●</span>
+
+        <small>
+            Drivers
+        </small>
+
+    </a>
+
+
+    <button
+        id="moreBtn"
+        class="bottom-link active"
+    >
+
+        <span>⋮</span>
+
+        <small>
+            More
+        </small>
+
+    </button>
+
+
+</nav>
+
+
+
+<script
+    type="module"
+    src="./script.js"
+></script>
+
+</body>
+
+</html>
