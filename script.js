@@ -457,7 +457,7 @@ async function routeUser(
         ) {
 
             window.location.replace(
-                "./admin/"
+                "./admin/index.html"
             );
 
             return;
