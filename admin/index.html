@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>BEST Bus — Admin</title>
+
+    <link rel="stylesheet" href="./style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     TOP APP BAR
+========================================= -->
+
+<header class="app-header">
+
+    <div class="header-left">
+
+        <button
+            id="menuBtn"
+            class="menu-btn"
+            aria-label="Open menu"
+        >
+            ☰
+        </button>
+
+
+        <div class="brand">
+
+            <img
+                src="../logo.png"
+                alt="BEST"
+                class="logo"
+            >
+
+            <div class="brand-text">
+
+                <div class="brand-name">
+                    BEST
+                </div>
+
+                <div class="brand-subtitle">
+                    English Medium School &amp;
+                    International PU College
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="header-admin">
+        ADMIN
+    </div>
+
+</header>
+
+
+
+<!-- =========================================
+     SIDE MENU
+========================================= -->
+
+<div
+    id="menuOverlay"
+    class="menu-overlay"
+></div>
+
+
+<aside
+    id="sideMenu"
+    class="side-menu"
+>
+
+    <div class="side-menu-header">
+
+        <div>
+
+            <span class="menu-eyebrow">
+                BEST BUS
+            </span>
+
+            <strong>
+                Fleet Management
+            </strong>
+
+        </div>
+
+
+        <button
+            id="closeMenu"
+            class="close-menu"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <nav class="side-navigation">
+
+        <a
+            href="./"
+            class="side-link active"
+        >
+            <span>⌂</span>
+            Dashboard
+        </a>
+
+
+        <a
+            href="#fleet"
+            class="side-link"
+            data-close-menu
+        >
+            <span>▣</span>
+            Fleet
+        </a>
+
+
+        <a
+            href="./drivers/"
+            class="side-link"
+        >
+            <span>●</span>
+            Drivers
+        </a>
+
+
+        <a
+            href="./assignment/"
+            class="side-link"
+        >
+            <span>↔</span>
+            Assign / Deassign
+        </a>
+
+
+        <a
+            href="./live/"
+            class="side-link"
+        >
+            <span>⌾</span>
+            Live Fleet
+        </a>
+
+
+        <a
+            href="./download/"
+            class="side-link"
+        >
+            <span>↓</span>
+            Reports
+        </a>
+
+
+        <a
+            href="./settings/"
+            class="side-link"
+        >
+            <span>⚙</span>
+            Settings
+        </a>
+
+    </nav>
+
+
+    <div class="side-menu-bottom">
+
+        <button
+            id="logoutMenuBtn"
+            class="menu-logout"
+        >
+            <span>↪</span>
+            Logout
+        </button>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =========================================
+     MAIN
+========================================= -->
+
+<main class="app-main">
+
+
+    <!-- WELCOME -->
+
+    <section class="welcome">
+
+        <span class="eyebrow">
+            FLEET MANAGEMENT
+        </span>
+
+        <h1>
+            Welcome, Admin
+        </h1>
+
+        <p>
+            Manage your school transport fleet
+            from one place.
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================
+         QUICK CARDS
+    ====================================== -->
+
+    <section class="quick-grid">
+
+
+        <!-- TOTAL BUSES -->
+
+        <div class="quick-card">
+
+            <div class="card-icon bus-icon">
+                BUS
+            </div>
+
+            <div class="quick-content">
+
+                <span>
+                    TOTAL BUSES
+                </span>
+
+                <strong id="totalBuses">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- DRIVERS -->
+
+        <a
+            href="./drivers/"
+            class="quick-card"
+        >
+
+            <div class="card-icon driver-icon">
+                DR
+            </div>
+
+            <div class="quick-content">
+
+                <span>
+                    DRIVERS
+                </span>
+
+                <strong id="totalDrivers">
+                    0
+                </strong>
+
+            </div>
+
+            <div class="card-arrow">
+                →
+            </div>
+
+        </a>
+
+
+
+        <!-- ADD BUS -->
+
+        <a
+            href="../add-bus/"
+            class="quick-card action-card"
+        >
+
+            <div class="card-icon add-icon">
+                +
+            </div>
+
+            <div class="quick-content">
+
+                <span>
+                    ACTION
+                </span>
+
+                <strong>
+                    Add Bus
+                </strong>
+
+            </div>
+
+            <div class="card-arrow">
+                →
+            </div>
+
+        </a>
+
+
+
+        <!-- REPORTS -->
+
+        <a
+            href="./download/"
+            class="quick-card action-card"
+        >
+
+            <div class="card-icon report-icon">
+                ↓
+            </div>
+
+            <div class="quick-content">
+
+                <span>
+                    REPORTS
+                </span>
+
+                <strong>
+                    Download Reports
+                </strong>
+
+            </div>
+
+            <div class="card-arrow">
+                →
+            </div>
+
+        </a>
+
+    </section>
+
+
+
+    <!-- =====================================
+         MANAGEMENT SHORTCUTS
+    ====================================== -->
+
+    <section class="management-section">
+
+        <div class="section-title">
+
+            <span class="eyebrow">
+                MANAGEMENT
+            </span>
+
+            <h2>
+                Control Center
+            </h2>
+
+        </div>
+
+
+        <div class="management-grid">
+
+
+            <a
+                href="./assignment/"
+                class="management-card"
+            >
+
+                <div class="management-icon">
+                    ↔
+                </div>
+
+                <div>
+
+                    <strong>
+                        Assign / Deassign
+                    </strong>
+
+                    <p>
+                        Manage driver and bus assignments.
+                    </p>
+
+                </div>
+
+                <span>
+                    →
+                </span>
+
+            </a>
+
+
+
+            <a
+                href="./live/"
+                class="management-card"
+            >
+
+                <div class="management-icon live-icon">
+                    ●
+                </div>
+
+                <div>
+
+                    <strong>
+                        Live Fleet
+                    </strong>
+
+                    <p>
+                        Monitor active buses and drivers.
+                    </p>
+
+                </div>
+
+                <span>
+                    →
+                </span>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================
+         FLEET
+    ====================================== -->
+
+    <section
+        id="fleet"
+        class="fleet-section"
+    >
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    FLEET
+                </span>
+
+                <h2>
+                    Bus Overview
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="busList"
+            class="bus-list"
+        >
+
+            <div class="loading">
+                Loading fleet information...
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =========================================
+     MOBILE BOTTOM NAVIGATION
+========================================= -->
+
+<nav class="bottom-nav">
+
+
+    <a
+        href="./"
+        class="bottom-link active"
+    >
+
+        <span>
+            ⌂
+        </span>
+
+        <small>
+            Home
+        </small>
+
+    </a>
+
+
+
+    <a
+        href="#fleet"
+        class="bottom-link"
+    >
+
+        <span>
+            ▣
+        </span>
+
+        <small>
+            Fleet
+        </small>
+
+    </a>
+
+
+
+    <a
+        href="./drivers/"
+        class="bottom-link"
+    >
+
+        <span>
+            ●
+        </span>
+
+        <small>
+            Drivers
+        </small>
+
+    </a>
+
+
+
+    <button
+        id="moreBtn"
+        class="bottom-link"
+    >
+
+        <span>
+            ⋮
+        </span>
+
+        <small>
+            More
+        </small>
+
+    </button>
+
+
+</nav>
+
+
+
+<!-- KEEP YOUR EXISTING FIREBASE SCRIPT -->
+
+<script
+    type="module"
+    src="./script.js"
+></script>
+
+
+<!-- UI NAVIGATION ONLY -->
+
+<script>
+
+const menuBtn =
+    document.getElementById("menuBtn");
+
+const closeMenu =
+    document.getElementById("closeMenu");
+
+const moreBtn =
+    document.getElementById("moreBtn");
+
+const sideMenu =
+    document.getElementById("sideMenu");
+
+const menuOverlay =
+    document.getElementById("menuOverlay");
+
+
+function openMenu() {
+
+    sideMenu.classList.add("open");
+
+    menuOverlay.classList.add("show");
+
+}
+
+
+function closeSideMenu() {
+
+    sideMenu.classList.remove("open");
+
+    menuOverlay.classList.remove("show");
+
+}
+
+
+menuBtn.addEventListener(
+    "click",
+    openMenu
+);
+
+
+closeMenu.addEventListener(
+    "click",
+    closeSideMenu
+);
+
+
+menuOverlay.addEventListener(
+    "click",
+    closeSideMenu
+);
+
+
+moreBtn.addEventListener(
+    "click",
+    openMenu
+);
+
+
+document
+    .querySelectorAll("[data-close-menu]")
+    .forEach(link => {
+
+        link.addEventListener(
+            "click",
+            closeSideMenu
+        );
+
+    });
+
+
+
+/*
+    Use the EXISTING Firebase logout
+    button from script.js.
+
+    This button simply triggers it.
+*/
+
+const logoutMenuBtn =
+    document.getElementById(
+        "logoutMenuBtn"
+    );
+
+
+logoutMenuBtn.addEventListener(
+    "click",
+    () => {
+
+        const existingLogout =
+            document.getElementById(
+                "logoutBtn"
+            );
+
+        if (existingLogout) {
+
+            existingLogout.click();
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
