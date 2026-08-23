@@ -285,10 +285,7 @@ body {
             0.07
         );
 }
-.add-bus-card {
-    grid-column: 1 / -1;
-    min-height: 130px;
-}
+
 
 /* =====================================
    SMALL ICON
