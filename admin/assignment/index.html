@@ -36,7 +36,7 @@
                 class="logo"
             >
 
-            <div class="brand-text">
+            <div>
 
                 <div class="brand-name">
                     BEST
@@ -77,7 +77,7 @@
         </h1>
 
         <p>
-            Manage driver and bus assignments.
+            Manage drivers and buses.
         </p>
 
     </section>
@@ -95,14 +95,15 @@
             <div>
 
                 <span class="section-label">
-                    ASSIGNED
+                    CURRENT
                 </span>
 
                 <h2>
-                    Current Assignments
+                    Assigned
                 </h2>
 
             </div>
+
 
             <span
                 id="assignedCount"
@@ -116,7 +117,7 @@
 
         <div
             id="assignedList"
-            class="assignment-list"
+            class="assigned-list"
         >
 
             <div class="loading">
@@ -130,7 +131,7 @@
 
 
     <!-- =====================================================
-         ASSIGN NEW BUS
+         AVAILABLE DRIVERS
     ====================================================== -->
 
     <section class="section">
@@ -140,126 +141,145 @@
             <div>
 
                 <span class="section-label">
-                    NEW ASSIGNMENT
+                    AVAILABLE
                 </span>
 
                 <h2>
-                    Assign Driver to Bus
+                    Drivers
                 </h2>
 
             </div>
 
-        </div>
 
-
-        <div class="assign-panel">
-
-
-            <!-- DRIVER -->
-
-            <div class="selection-block">
-
-                <div class="selection-title">
-                    SELECT DRIVER
-                </div>
-
-                <div
-                    id="unassignedDrivers"
-                    class="selection-list"
-                >
-
-                    <div class="loading">
-                        Loading drivers...
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- BUS -->
-
-            <div class="selection-block">
-
-                <div class="selection-title">
-                    SELECT BUS
-                </div>
-
-                <div
-                    id="unassignedBuses"
-                    class="selection-list"
-                >
-
-                    <div class="loading">
-                        Loading buses...
-                    </div>
-
-                </div>
-
-            </div>
-
+            <span
+                id="driverCount"
+                class="count-badge"
+            >
+                0
+            </span>
 
         </div>
 
-
-        <!-- SELECTED -->
 
         <div
-            id="selectionSummary"
-            class="selection-summary hidden"
+            id="driverList"
+            class="selection-list"
         >
 
+            <div class="loading">
+                Loading drivers...
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         AVAILABLE BUSES
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
             <div>
 
-                <span>
-                    DRIVER
+                <span class="section-label">
+                    AVAILABLE
                 </span>
 
-                <strong id="selectedDriverName">
-                    —
-                </strong>
+                <h2>
+                    Buses
+                </h2>
 
             </div>
 
 
-            <div class="plus">
-                +
-            </div>
-
-
-            <div>
-
-                <span>
-                    BUS
-                </span>
-
-                <strong id="selectedBusName">
-                    —
-                </strong>
-
-            </div>
-
-
-            <button
-                id="assignBtn"
-                class="assign-btn"
-                disabled
+            <span
+                id="busCount"
+                class="count-badge"
             >
-                ASSIGN BUS
-            </button>
+                0
+            </span>
 
         </div>
 
 
-        <!-- MESSAGE -->
-
         <div
-            id="message"
-            class="message hidden"
-        ></div>
+            id="busList"
+            class="selection-list"
+        >
+
+            <div class="loading">
+                Loading buses...
+            </div>
+
+        </div>
 
     </section>
+
+
+
+    <!-- =====================================================
+         ASSIGN PANEL
+    ====================================================== -->
+
+    <section
+        id="assignPanel"
+        class="assign-panel hidden"
+    >
+
+        <div class="selected-box">
+
+            <span>
+                DRIVER
+            </span>
+
+            <strong id="selectedDriver">
+                —
+            </strong>
+
+        </div>
+
+
+        <div class="plus">
+            +
+        </div>
+
+
+        <div class="selected-box">
+
+            <span>
+                BUS
+            </span>
+
+            <strong id="selectedBus">
+                —
+            </strong>
+
+        </div>
+
+
+        <button
+            id="assignButton"
+            class="assign-button"
+            disabled
+        >
+            ASSIGN BUS
+        </button>
+
+    </section>
+
+
+
+    <!-- MESSAGE -->
+
+    <div
+        id="message"
+        class="message hidden"
+    ></div>
 
 
 </main>
@@ -276,13 +296,8 @@
         href="../"
         class="bottom-link"
     >
-
         <span>⌂</span>
-
-        <small>
-            Home
-        </small>
-
+        <small>Home</small>
     </a>
 
 
@@ -290,13 +305,8 @@
         href="../#fleet"
         class="bottom-link"
     >
-
         <span>▣</span>
-
-        <small>
-            Fleet
-        </small>
-
+        <small>Fleet</small>
     </a>
 
 
@@ -304,13 +314,8 @@
         href="../drivers/"
         class="bottom-link"
     >
-
         <span>●</span>
-
-        <small>
-            Drivers
-        </small>
-
+        <small>Drivers</small>
     </a>
 
 
@@ -318,13 +323,8 @@
         href="./"
         class="bottom-link active"
     >
-
         <span>↔</span>
-
-        <small>
-            Assign
-        </small>
-
+        <small>Assign</small>
     </a>
 
 </nav>
