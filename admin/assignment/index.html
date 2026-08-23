@@ -19,18 +19,12 @@
 
 <body>
 
-<!-- =========================================
-     HEADER
-========================================= -->
 
 <header class="app-header">
 
     <div class="header-left">
 
-        <a
-            href="../"
-            class="back-btn"
-        >
+        <a href="../" class="back-btn">
             ←
         </a>
 
@@ -67,12 +61,10 @@
 
 
 
-<!-- =========================================
-     MAIN
-========================================= -->
-
 <main class="app-main">
 
+
+    <!-- PAGE HEADER -->
 
     <section class="page-heading">
 
@@ -85,111 +77,25 @@
         </h1>
 
         <p>
-            Manage which driver operates each bus.
+            Manage driver and bus assignments.
         </p>
 
     </section>
 
 
 
-    <!-- =====================================
-         ASSIGN
-    ====================================== -->
-
-    <section class="panel">
-
-        <div class="panel-heading">
-
-            <div>
-
-                <span class="section-label">
-                    ASSIGN
-                </span>
-
-                <h2>
-                    Assign Bus
-                </h2>
-
-            </div>
-
-        </div>
-
-
-        <form id="assignForm">
-
-
-            <!-- DRIVER -->
-
-            <div class="field">
-
-                <label for="driverSelect">
-                    DRIVER
-                </label>
-
-                <select
-                    id="driverSelect"
-                    required
-                >
-
-                    <option value="">
-                        Select driver
-                    </option>
-
-                </select>
-
-            </div>
-
-
-
-            <!-- BUS -->
-
-            <div class="field">
-
-                <label for="busSelect">
-                    BUS
-                </label>
-
-                <select
-                    id="busSelect"
-                    required
-                >
-
-                    <option value="">
-                        Select available bus
-                    </option>
-
-                </select>
-
-            </div>
-
-
-
-            <button
-                type="submit"
-                class="primary-btn"
-            >
-                ASSIGN BUS
-            </button>
-
-
-        </form>
-
-    </section>
-
-
-
-    <!-- =====================================
+    <!-- =====================================================
          CURRENT ASSIGNMENTS
-    ====================================== -->
+    ====================================================== -->
 
-    <section class="assignments-section">
+    <section class="section">
 
         <div class="section-heading">
 
             <div>
 
                 <span class="section-label">
-                    ACTIVE
+                    ASSIGNED
                 </span>
 
                 <h2>
@@ -199,7 +105,7 @@
             </div>
 
             <span
-                id="assignmentCount"
+                id="assignedCount"
                 class="count-badge"
             >
                 0
@@ -209,7 +115,7 @@
 
 
         <div
-            id="assignmentList"
+            id="assignedList"
             class="assignment-list"
         >
 
@@ -223,16 +129,148 @@
 
 
 
+    <!-- =====================================================
+         ASSIGN NEW BUS
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="section-label">
+                    NEW ASSIGNMENT
+                </span>
+
+                <h2>
+                    Assign Driver to Bus
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="assign-panel">
+
+
+            <!-- DRIVER -->
+
+            <div class="selection-block">
+
+                <div class="selection-title">
+                    SELECT DRIVER
+                </div>
+
+                <div
+                    id="unassignedDrivers"
+                    class="selection-list"
+                >
+
+                    <div class="loading">
+                        Loading drivers...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- BUS -->
+
+            <div class="selection-block">
+
+                <div class="selection-title">
+                    SELECT BUS
+                </div>
+
+                <div
+                    id="unassignedBuses"
+                    class="selection-list"
+                >
+
+                    <div class="loading">
+                        Loading buses...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- SELECTED -->
+
+        <div
+            id="selectionSummary"
+            class="selection-summary hidden"
+        >
+
+            <div>
+
+                <span>
+                    DRIVER
+                </span>
+
+                <strong id="selectedDriverName">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="plus">
+                +
+            </div>
+
+
+            <div>
+
+                <span>
+                    BUS
+                </span>
+
+                <strong id="selectedBusName">
+                    —
+                </strong>
+
+            </div>
+
+
+            <button
+                id="assignBtn"
+                class="assign-btn"
+                disabled
+            >
+                ASSIGN BUS
+            </button>
+
+        </div>
+
+
+        <!-- MESSAGE -->
+
+        <div
+            id="message"
+            class="message hidden"
+        ></div>
+
+    </section>
+
+
 </main>
 
 
 
-<!-- =========================================
-     MOBILE BOTTOM NAV
-========================================= -->
+<!-- =====================================================
+     MOBILE NAV
+====================================================== -->
 
 <nav class="bottom-nav">
-
 
     <a
         href="../"
@@ -276,19 +314,18 @@
     </a>
 
 
-    <button
-        id="moreBtn"
+    <a
+        href="./"
         class="bottom-link active"
     >
 
-        <span>⋮</span>
+        <span>↔</span>
 
         <small>
-            More
+            Assign
         </small>
 
-    </button>
-
+    </a>
 
 </nav>
 
@@ -298,6 +335,7 @@
     type="module"
     src="./script.js"
 ></script>
+
 
 </body>
 
