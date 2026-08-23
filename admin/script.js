@@ -47,7 +47,7 @@ onAuthStateChanged(
         if (!user) {
 
             window.location.replace(
-                "index.html"
+                "../index.html"
             );
 
             return;
@@ -86,7 +86,7 @@ onAuthStateChanged(
                 await auth.signOut();
 
                 window.location.replace(
-                    "index.html"
+                    "../index.html"
                 );
 
                 return;
@@ -108,7 +108,7 @@ onAuthStateChanged(
                 await auth.signOut();
 
                 window.location.replace(
-                    "index.html"
+                    "../index.html"
                 );
 
                 return;
@@ -133,7 +133,7 @@ onAuthStateChanged(
             await auth.signOut();
 
             window.location.replace(
-                "index.html"
+                "../index.html"
             );
 
         }
