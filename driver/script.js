@@ -3,6 +3,7 @@ import {
     signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
+
 import {
     doc,
     getDoc,
@@ -17,11 +18,20 @@ import {
     getDocs,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
 import {
+    getStorage,
     ref,
     uploadBytes,
     getDownloadURL
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
+
+
+import {
+    auth,
+    db
+} from "../core/firebase.js";
 
 import {
     auth,
