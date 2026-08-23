@@ -3,7 +3,7 @@ import {
     getDocs,
     doc,
     getDoc,
-    updateDoc
+    writeBatch
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import {
@@ -11,9 +11,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 import {
-    db,
-    auth
+    auth,
+    db
 } from "../core/firebase.js";
+
+import {
+    getUserProfile
+} from "../core/auth.js";
 
 
 
@@ -26,14 +30,14 @@ const assignedList =
         "assignedList"
     );
 
-const unassignedDrivers =
+const driverList =
     document.getElementById(
-        "unassignedDrivers"
+        "driverList"
     );
 
-const unassignedBuses =
+const busList =
     document.getElementById(
-        "unassignedBuses"
+        "busList"
     );
 
 const assignedCount =
@@ -41,24 +45,34 @@ const assignedCount =
         "assignedCount"
     );
 
-const selectionSummary =
+const driverCount =
     document.getElementById(
-        "selectionSummary"
+        "driverCount"
     );
 
-const selectedDriverName =
+const busCount =
     document.getElementById(
-        "selectedDriverName"
+        "busCount"
     );
 
-const selectedBusName =
+const assignPanel =
     document.getElementById(
-        "selectedBusName"
+        "assignPanel"
     );
 
-const assignBtn =
+const selectedDriver =
     document.getElementById(
-        "assignBtn"
+        "selectedDriver"
+    );
+
+const selectedBus =
+    document.getElementById(
+        "selectedBus"
+    );
+
+const assignButton =
+    document.getElementById(
+        "assignButton"
     );
 
 const message =
@@ -69,12 +83,12 @@ const message =
 
 
 /* =========================================================
-   DATA
+   STATE
 ========================================================= */
 
-let allDrivers = [];
+let drivers = [];
 
-let allBuses = [];
+let buses = [];
 
 let selectedDriverId = null;
 
@@ -92,9 +106,8 @@ onAuthStateChanged(
 
         if (!user) {
 
-            window.location.replace(
-                "../../index.html"
-            );
+            window.location.href =
+                "../login/";
 
             return;
 
@@ -103,27 +116,19 @@ onAuthStateChanged(
 
         try {
 
-            const userRef =
-                doc(
-                    db,
-                    "users",
+            const profile =
+                await getUserProfile(
                     user.uid
-                );
-
-            const userSnapshot =
-                await getDoc(
-                    userRef
                 );
 
 
             if (
-                !userSnapshot.exists() ||
-                userSnapshot.data().role !== "admin"
+                !profile ||
+                profile.role !== "admin"
             ) {
 
-                window.location.replace(
-                    "../../waiting/"
-                );
+                window.location.href =
+                    "../login/";
 
                 return;
 
@@ -135,12 +140,13 @@ onAuthStateChanged(
         } catch (error) {
 
             console.error(
-                "ADMIN CHECK ERROR:",
+                "ASSIGNMENT AUTH ERROR:",
                 error
             );
 
             showMessage(
-                "Unable to verify admin account.",
+                error.message ||
+                "Unable to verify administrator.",
                 true
             );
 
@@ -152,15 +158,18 @@ onAuthStateChanged(
 
 
 /* =========================================================
-   LOAD ALL DRIVERS + BUSES
+   LOAD FIRESTORE
 ========================================================= */
 
 async function loadData() {
 
     try {
 
+        showLoading();
+
+
         const [
-            driversSnapshot,
+            usersSnapshot,
             busesSnapshot
         ] = await Promise.all([
 
@@ -181,80 +190,79 @@ async function loadData() {
         ]);
 
 
-        allDrivers = [];
+        /*
+         * ALL USERS WITH ROLE DRIVER
+         *
+         * We intentionally DO NOT filter
+         * active == true here because you asked
+         * to see all drivers.
+         */
 
-        allBuses = [];
-
-
-        /* =========================
-           DRIVERS
-        ========================= */
-
-        driversSnapshot.forEach(
-            (snapshot) => {
-
-                const data =
-                    snapshot.data();
-
-
-                if (
-                    data.role === "driver"
-                ) {
-
-                    allDrivers.push({
+        drivers =
+            usersSnapshot.docs
+                .filter(
+                    snapshot =>
+                        snapshot.data().role ===
+                        "driver"
+                )
+                .map(
+                    snapshot => ({
 
                         id:
                             snapshot.id,
 
-                        ...data
+                        ...snapshot.data()
 
-                    });
-
-                }
-
-            }
-        );
+                    })
+                );
 
 
-        /* =========================
-           BUSES
-        ========================= */
+        /*
+         * ALL BUSES
+         */
 
-        busesSnapshot.forEach(
-            (snapshot) => {
+        buses =
+            busesSnapshot.docs
+                .map(
+                    snapshot => ({
 
-                allBuses.push({
+                        id:
+                            snapshot.id,
 
-                    id:
-                        snapshot.id,
+                        ...snapshot.data()
 
-                    ...snapshot.data()
-
-                });
-
-            }
-        );
+                    })
+                );
 
 
         renderAssigned();
 
-        renderUnassignedDrivers();
+        renderDrivers();
 
-        renderUnassignedBuses();
+        renderBuses();
 
-        clearSelection();
+        resetSelection();
 
     } catch (error) {
 
         console.error(
-            "LOAD ASSIGNMENT ERROR:",
+            "FIRESTORE LOAD ERROR:",
             error
         );
 
-        showMessage(
-            "Unable to load drivers and buses.",
-            true
-        );
+        assignedList.innerHTML = `
+            <div class="empty">
+                Unable to load assignment data.
+                <br><br>
+                ${escapeHTML(
+                    error.message
+                )}
+            </div>
+        `;
+
+        driverList.innerHTML = "";
+
+        busList.innerHTML = "";
 
     }
 
@@ -263,13 +271,18 @@ async function loadData() {
 
 
 /* =========================================================
-   CURRENT ASSIGNMENTS
+   ASSIGNED
 ========================================================= */
 
 function renderAssigned() {
 
+    /*
+     * Driver assignment is considered
+     * assigned when assignedBusId exists.
+     */
+
     const assignedDrivers =
-        allDrivers.filter(
+        drivers.filter(
             driver =>
                 driver.assignedBusId
         );
@@ -285,7 +298,7 @@ function renderAssigned() {
 
         assignedList.innerHTML = `
             <div class="empty">
-                No current assignments.
+                No drivers are currently assigned.
             </div>
         `;
 
@@ -298,10 +311,15 @@ function renderAssigned() {
 
 
     assignedDrivers.forEach(
-        (driver) => {
+        driver => {
+
+            /*
+             * Find the bus from driver's
+             * assignedBusId.
+             */
 
             const bus =
-                allBuses.find(
+                buses.find(
                     item =>
                         item.id ===
                         driver.assignedBusId
@@ -310,7 +328,7 @@ function renderAssigned() {
 
             const card =
                 document.createElement(
-                    "div"
+                    "article"
                 );
 
 
@@ -318,43 +336,29 @@ function renderAssigned() {
                 "assignment-card";
 
 
-            const driverName =
-                driver.name ||
-                "Unnamed Driver";
-
-
-            const driverInfo =
-                driver.phone ||
-                driver.email ||
-                "Driver";
-
-
-            const busName =
-                bus?.busNumber ||
-                "Bus not found";
-
-
-            const registration =
-                bus?.registrationNumber ||
-                "";
-
-
             card.innerHTML = `
 
                 <div>
 
                     <div class="driver-name">
-                        ${escapeHTML(driverName)}
+                        ${escapeHTML(
+                            driver.name ||
+                            "Unnamed Driver"
+                        )}
                     </div>
 
-                    <div class="driver-details">
-                        ${escapeHTML(driverInfo)}
+                    <div class="driver-info">
+                        ${escapeHTML(
+                            driver.phone ||
+                            driver.email ||
+                            "No contact"
+                        )}
                     </div>
 
                 </div>
 
 
-                <div class="arrow">
+                <div class="assignment-arrow">
                     →
                 </div>
 
@@ -362,18 +366,25 @@ function renderAssigned() {
                 <div>
 
                     <div class="bus-name">
-                        ${escapeHTML(busName)}
+                        ${escapeHTML(
+                            bus?.busNumber ||
+                            "Bus not found"
+                        )}
                     </div>
 
-                    <div class="bus-registration">
-                        ${escapeHTML(registration)}
+                    <div class="bus-info">
+                        ${escapeHTML(
+                            bus?.registrationNumber ||
+                            ""
+                        )}
                     </div>
 
                 </div>
 
 
                 <button
-                    class="deassign-btn"
+                    type="button"
+                    class="deassign-button"
                     data-driver-id="${driver.id}"
                     data-bus-id="${driver.assignedBusId}"
                 >
@@ -393,7 +404,7 @@ function renderAssigned() {
 
     document
         .querySelectorAll(
-            ".deassign-btn"
+            ".deassign-button"
         )
         .forEach(
             button => {
@@ -418,25 +429,36 @@ function renderAssigned() {
 
 
 /* =========================================================
-   UNASSIGNED DRIVERS
+   ALL DRIVERS
 ========================================================= */
 
-function renderUnassignedDrivers() {
+function renderDrivers() {
 
-    const availableDrivers =
-        allDrivers.filter(
+    /*
+     * Only UNASSIGNED drivers are selectable.
+     *
+     * Assigned drivers remain visible in
+     * Current Assignments above.
+     */
+
+    const available =
+        drivers.filter(
             driver =>
                 !driver.assignedBusId
         );
 
 
+    driverCount.textContent =
+        available.length;
+
+
     if (
-        availableDrivers.length === 0
+        available.length === 0
     ) {
 
-        unassignedDrivers.innerHTML = `
+        driverList.innerHTML = `
             <div class="empty">
-                All drivers are assigned.
+                All drivers are currently assigned.
             </div>
         `;
 
@@ -445,10 +467,10 @@ function renderUnassignedDrivers() {
     }
 
 
-    unassignedDrivers.innerHTML = "";
+    driverList.innerHTML = "";
 
 
-    availableDrivers.forEach(
+    available.forEach(
         driver => {
 
             const item =
@@ -471,26 +493,27 @@ function renderUnassignedDrivers() {
 
             item.innerHTML = `
 
-                <div class="selection-item-main">
+                <div class="selection-main">
 
-                    <span class="selection-item-name">
+                    <span class="selection-name">
                         ${escapeHTML(
                             driver.name ||
                             "Unnamed Driver"
                         )}
                     </span>
 
-                    <span class="selection-item-info">
+                    <span class="selection-info">
                         ${escapeHTML(
                             driver.phone ||
                             driver.email ||
-                            "Driver"
+                            "No contact"
                         )}
                     </span>
 
                 </div>
 
-                <span class="selection-item-status">
+
+                <span class="selection-status">
                     AVAILABLE
                 </span>
 
@@ -509,7 +532,7 @@ function renderUnassignedDrivers() {
             );
 
 
-            unassignedDrivers.appendChild(
+            driverList.appendChild(
                 item
             );
 
@@ -521,25 +544,39 @@ function renderUnassignedDrivers() {
 
 
 /* =========================================================
-   UNASSIGNED BUSES
+   ALL BUSES
 ========================================================= */
 
-function renderUnassignedBuses() {
+function renderBuses() {
 
-    const availableBuses =
-        allBuses.filter(
+    /*
+     * A bus is available when it has
+     * no assignedDriverId.
+     *
+     * We also check driverId because
+     * older bus records/code in your
+     * project use that field.
+     */
+
+    const available =
+        buses.filter(
             bus =>
-                !bus.assignedDriverId
+                !bus.assignedDriverId &&
+                !bus.driverId
         );
 
 
+    busCount.textContent =
+        available.length;
+
+
     if (
-        availableBuses.length === 0
+        available.length === 0
     ) {
 
-        unassignedBuses.innerHTML = `
+        busList.innerHTML = `
             <div class="empty">
-                All buses are assigned.
+                All buses are currently assigned.
             </div>
         `;
 
@@ -548,10 +585,10 @@ function renderUnassignedBuses() {
     }
 
 
-    unassignedBuses.innerHTML = "";
+    busList.innerHTML = "";
 
 
-    availableBuses.forEach(
+    available.forEach(
         bus => {
 
             const item =
@@ -574,25 +611,27 @@ function renderUnassignedBuses() {
 
             item.innerHTML = `
 
-                <div class="selection-item-main">
+                <div class="selection-main">
 
-                    <span class="selection-item-name">
+                    <span class="selection-name">
                         ${escapeHTML(
                             bus.busNumber ||
                             "Unnamed Bus"
                         )}
                     </span>
 
-                    <span class="selection-item-info">
+                    <span class="selection-info">
                         ${escapeHTML(
                             bus.registrationNumber ||
-                            "Registration not available"
+                            bus.registrationNo ||
+                            "No registration"
                         )}
                     </span>
 
                 </div>
 
-                <span class="selection-item-status">
+
+                <span class="selection-status">
                     AVAILABLE
                 </span>
 
@@ -611,7 +650,7 @@ function renderUnassignedBuses() {
             );
 
 
-            unassignedBuses.appendChild(
+            busList.appendChild(
                 item
             );
 
@@ -626,12 +665,12 @@ function renderUnassignedBuses() {
    SELECT DRIVER
 ========================================================= */
 
-function selectDriver(
+async function selectDriver(
     driverId
 ) {
 
     const driver =
-        allDrivers.find(
+        drivers.find(
             item =>
                 item.id ===
                 driverId
@@ -644,27 +683,69 @@ function selectDriver(
 
 
     /*
-     * Protection:
-     * If assigned, don't allow
-     * another assignment.
+     * Fresh Firestore check.
+     *
+     * This prevents an old page from
+     * accidentally assigning a driver
+     * who has already been assigned.
      */
 
-    if (
-        driver.assignedBusId
-    ) {
+    try {
 
-        const bus =
-            allBuses.find(
-                item =>
-                    item.id ===
-                    driver.assignedBusId
+        const snapshot =
+            await getDoc(
+                doc(
+                    db,
+                    "users",
+                    driverId
+                )
             );
 
 
+        if (
+            snapshot.exists()
+        ) {
+
+            const fresh =
+                snapshot.data();
+
+
+            if (
+                fresh.assignedBusId
+            ) {
+
+                const bus =
+                    buses.find(
+                        item =>
+                            item.id ===
+                            fresh.assignedBusId
+                    );
+
+
+                showMessage(
+                    `${
+                        fresh.name ||
+                        "This driver"
+                    } is already assigned to ${
+                        bus?.busNumber ||
+                        "another bus"
+                    }. Deassign first.`,
+                    true
+                );
+
+
+                await loadData();
+
+                return;
+
+            }
+
+        }
+
+    } catch (error) {
+
         showMessage(
-            `${driver.name || "This driver"} is already assigned to ${
-                bus?.busNumber || "another bus"
-            }. Deassign first to assign another bus.`,
+            "Unable to check driver assignment.",
             true
         );
 
@@ -679,7 +760,7 @@ function selectDriver(
 
     document
         .querySelectorAll(
-            "#unassignedDrivers .selection-item"
+            "#driverList .selection-item"
         )
         .forEach(
             item => {
@@ -694,7 +775,7 @@ function selectDriver(
         );
 
 
-    updateSummary();
+    updateSelection();
 
 }
 
@@ -704,12 +785,12 @@ function selectDriver(
    SELECT BUS
 ========================================================= */
 
-function selectBus(
+async function selectBus(
     busId
 ) {
 
     const bus =
-        allBuses.find(
+        buses.find(
             item =>
                 item.id ===
                 busId
@@ -722,27 +803,83 @@ function selectBus(
 
 
     /*
-     * Protection:
-     * If assigned, show current
-     * driver and don't allow it.
+     * Fresh Firestore check.
      */
 
-    if (
-        bus.assignedDriverId
-    ) {
+    try {
 
-        const driver =
-            allDrivers.find(
-                item =>
-                    item.id ===
-                    bus.assignedDriverId
+        const snapshot =
+            await getDoc(
+                doc(
+                    db,
+                    "buses",
+                    busId
+                )
             );
 
 
+        if (
+            snapshot.exists()
+        ) {
+
+            const fresh =
+                snapshot.data();
+
+
+            if (
+                fresh.assignedDriverId ||
+                fresh.driverId
+            ) {
+
+                let driverName =
+                    "another driver";
+
+
+                const driverId =
+                    fresh.assignedDriverId ||
+                    fresh.driverId;
+
+
+                const driver =
+                    drivers.find(
+                        item =>
+                            item.id ===
+                            driverId
+                    );
+
+
+                if (driver) {
+
+                    driverName =
+                        driver.name ||
+                        driverName;
+
+                }
+
+
+                showMessage(
+                    `${
+                        fresh.busNumber ||
+                        "This bus"
+                    } is already assigned to ${
+                        driverName
+                    }. Deassign first.`,
+                    true
+                );
+
+
+                await loadData();
+
+                return;
+
+            }
+
+        }
+
+    } catch (error) {
+
         showMessage(
-            `${bus.busNumber || "This bus"} is already assigned to ${
-                driver?.name || "another driver"
-            }. Deassign first to assign this bus.`,
+            "Unable to check bus assignment.",
             true
         );
 
@@ -757,7 +894,7 @@ function selectBus(
 
     document
         .querySelectorAll(
-            "#unassignedBuses .selection-item"
+            "#busList .selection-item"
         )
         .forEach(
             item => {
@@ -772,20 +909,20 @@ function selectBus(
         );
 
 
-    updateSummary();
+    updateSelection();
 
 }
 
 
 
 /* =========================================================
-   UPDATE SUMMARY
+   UPDATE SELECTION
 ========================================================= */
 
-function updateSummary() {
+function updateSelection() {
 
     const driver =
-        allDrivers.find(
+        drivers.find(
             item =>
                 item.id ===
                 selectedDriverId
@@ -793,7 +930,7 @@ function updateSummary() {
 
 
     const bus =
-        allBuses.find(
+        buses.find(
             item =>
                 item.id ===
                 selectedBusId
@@ -805,11 +942,11 @@ function updateSummary() {
         !bus
     ) {
 
-        selectionSummary.classList.add(
+        assignPanel.classList.add(
             "hidden"
         );
 
-        assignBtn.disabled =
+        assignButton.disabled =
             true;
 
         return;
@@ -817,22 +954,22 @@ function updateSummary() {
     }
 
 
-    selectionSummary.classList.remove(
+    assignPanel.classList.remove(
         "hidden"
     );
 
 
-    selectedDriverName.textContent =
+    selectedDriver.textContent =
         driver?.name ||
         "Select driver";
 
 
-    selectedBusName.textContent =
+    selectedBus.textContent =
         bus?.busNumber ||
         "Select bus";
 
 
-    assignBtn.disabled =
+    assignButton.disabled =
         !driver ||
         !bus;
 
@@ -841,10 +978,10 @@ function updateSummary() {
 
 
 /* =========================================================
-   ASSIGN
+   ASSIGN BUTTON
 ========================================================= */
 
-assignBtn.addEventListener(
+assignButton.addEventListener(
     "click",
     async () => {
 
@@ -858,114 +995,181 @@ assignBtn.addEventListener(
         }
 
 
-        const driver =
-            allDrivers.find(
-                item =>
-                    item.id ===
-                    selectedDriverId
-            );
-
-
-        const bus =
-            allBuses.find(
-                item =>
-                    item.id ===
-                    selectedBusId
-            );
-
-
-        if (!driver || !bus) {
-
-            return;
-
-        }
-
-
-        /*
-         * FINAL SAFETY CHECK
-         */
-
-        if (
-            driver.assignedBusId
-        ) {
-
-            showMessage(
-                "This driver is already assigned. Deassign first.",
-                true
-            );
-
-            return;
-
-        }
-
-
-        if (
-            bus.assignedDriverId
-        ) {
-
-            showMessage(
-                "This bus is already assigned. Deassign first.",
-                true
-            );
-
-            return;
-
-        }
-
-
-        assignBtn.disabled =
+        assignButton.disabled =
             true;
 
-        assignBtn.textContent =
-            "ASSIGNING...";
+        assignButton.textContent =
+            "CHECKING...";
 
 
         try {
 
             /*
-             * Update DRIVER
+             * FINAL FRESH CHECK
              */
 
-            await updateDoc(
+            const driverRef =
                 doc(
                     db,
                     "users",
                     selectedDriverId
+                );
+
+
+            const busRef =
+                doc(
+                    db,
+                    "buses",
+                    selectedBusId
+                );
+
+
+            const [
+                driverSnapshot,
+                busSnapshot
+            ] = await Promise.all([
+
+                getDoc(
+                    driverRef
                 ),
+
+                getDoc(
+                    busRef
+                )
+
+            ]);
+
+
+            if (
+                !driverSnapshot.exists()
+            ) {
+
+                throw new Error(
+                    "Driver no longer exists."
+                );
+
+            }
+
+
+            if (
+                !busSnapshot.exists()
+            ) {
+
+                throw new Error(
+                    "Bus no longer exists."
+                );
+
+            }
+
+
+            const driver =
+                driverSnapshot.data();
+
+
+            const bus =
+                busSnapshot.data();
+
+
+            /*
+             * DRIVER ALREADY ASSIGNED
+             */
+
+            if (
+                driver.assignedBusId
+            ) {
+
+                throw new Error(
+                    `${
+                        driver.name ||
+                        "Driver"
+                    } is already assigned. Deassign first.`
+                );
+
+            }
+
+
+            /*
+             * BUS ALREADY ASSIGNED
+             *
+             * Check both fields because
+             * your existing project has
+             * both schemas in use.
+             */
+
+            if (
+                bus.assignedDriverId ||
+                bus.driverId
+            ) {
+
+                throw new Error(
+                    `${
+                        bus.busNumber ||
+                        "Bus"
+                    } is already assigned. Deassign first.`
+                );
+
+            }
+
+
+            assignButton.textContent =
+                "ASSIGNING...";
+
+
+            /*
+             * ONE BATCH
+             *
+             * Driver:
+             * assignedBusId = bus document ID
+             *
+             * Bus:
+             * assignedDriverId = driver UID
+             *
+             * driverId = driver UID
+             *
+             * The driverId field is maintained
+             * for compatibility with the older
+             * buses.js in your project.
+             */
+
+            const batch =
+                writeBatch(db);
+
+
+            batch.update(
+                driverRef,
                 {
 
                     assignedBusId:
-                        selectedBusId,
-
-                    status:
-                        "approved"
+                        selectedBusId
 
                 }
             );
 
 
-            /*
-             * Update BUS
-             */
-
-            await updateDoc(
-                doc(
-                    db,
-                    "buses",
-                    selectedBusId
-                ),
+            batch.update(
+                busRef,
                 {
 
                     assignedDriverId:
+                        selectedDriverId,
+
+                    driverId:
                         selectedDriverId
 
                 }
             );
 
 
+            await batch.commit();
+
+
             showMessage(
-                `${driver.name || "Driver"} assigned to ${
-                    bus.busNumber || "bus"
+                `${
+                    driver.name ||
+                    "Driver"
+                } assigned to ${
+                    bus.busNumber ||
+                    "bus"
                 }.`,
                 false
             );
@@ -980,15 +1184,16 @@ assignBtn.addEventListener(
                 error
             );
 
+
             showMessage(
-                error?.message ||
+                error.message ||
                 "Unable to assign bus.",
                 true
             );
 
         } finally {
 
-            assignBtn.textContent =
+            assignButton.textContent =
                 "ASSIGN BUS";
 
         }
@@ -1008,7 +1213,7 @@ async function deassign(
 ) {
 
     const driver =
-        allDrivers.find(
+        drivers.find(
             item =>
                 item.id ===
                 driverId
@@ -1016,42 +1221,130 @@ async function deassign(
 
 
     const bus =
-        allBuses.find(
+        buses.find(
             item =>
                 item.id ===
                 busId
         );
 
 
+    const driverName =
+        driver?.name ||
+        "this driver";
+
+
+    const busName =
+        bus?.busNumber ||
+        "this bus";
+
+
     const confirmed =
-        confirm(
-            `Deassign ${
-                driver?.name || "this driver"
-            } from ${
-                bus?.busNumber || "this bus"
-            }?`
+        window.confirm(
+            `Deassign ${driverName} from ${busName}?`
         );
 
 
     if (!confirmed) {
-
         return;
-
     }
 
 
     try {
 
-        /*
-         * Remove bus from driver
-         */
-
-        await updateDoc(
+        const driverRef =
             doc(
                 db,
                 "users",
                 driverId
+            );
+
+
+        const busRef =
+            doc(
+                db,
+                "buses",
+                busId
+            );
+
+
+        /*
+         * Fresh check:
+         * Don't accidentally clear a newer
+         * assignment.
+         */
+
+        const [
+            driverSnapshot,
+            busSnapshot
+        ] = await Promise.all([
+
+            getDoc(
+                driverRef
             ),
+
+            getDoc(
+                busRef
+            )
+
+        ]);
+
+
+        if (
+            !driverSnapshot.exists() ||
+            !busSnapshot.exists()
+        ) {
+
+            throw new Error(
+                "Driver or bus no longer exists."
+            );
+
+        }
+
+
+        const freshDriver =
+            driverSnapshot.data();
+
+
+        const freshBus =
+            busSnapshot.data();
+
+
+        if (
+            freshDriver.assignedBusId &&
+            freshDriver.assignedBusId !==
+            busId
+        ) {
+
+            throw new Error(
+                "This driver has already been assigned to another bus."
+            );
+
+        }
+
+
+        if (
+            freshBus.assignedDriverId &&
+            freshBus.assignedDriverId !==
+            driverId
+        ) {
+
+            throw new Error(
+                "This bus has already been assigned to another driver."
+            );
+
+        }
+
+
+        const batch =
+            writeBatch(db);
+
+
+        /*
+         * Remove assignment from driver.
+         */
+
+        batch.update(
+            driverRef,
             {
 
                 assignedBusId:
@@ -1062,26 +1355,29 @@ async function deassign(
 
 
         /*
-         * Remove driver from bus
+         * Remove BOTH bus assignment
+         * fields for compatibility.
          */
 
-        await updateDoc(
-            doc(
-                db,
-                "buses",
-                busId
-            ),
+        batch.update(
+            busRef,
             {
 
                 assignedDriverId:
+                    null,
+
+                driverId:
                     null
 
             }
         );
 
 
+        await batch.commit();
+
+
         showMessage(
-            "Bus deassigned successfully.",
+            `${driverName} has been deassigned from ${busName}.`,
             false
         );
 
@@ -1095,8 +1391,9 @@ async function deassign(
             error
         );
 
+
         showMessage(
-            error?.message ||
+            error.message ||
             "Unable to deassign bus.",
             true
         );
@@ -1108,10 +1405,38 @@ async function deassign(
 
 
 /* =========================================================
-   CLEAR SELECTION
+   LOADING
 ========================================================= */
 
-function clearSelection() {
+function showLoading() {
+
+    assignedList.innerHTML = `
+        <div class="loading">
+            Loading assignments...
+        </div>
+    `;
+
+    driverList.innerHTML = `
+        <div class="loading">
+            Loading drivers...
+        </div>
+    `;
+
+    busList.innerHTML = `
+        <div class="loading">
+            Loading buses...
+        </div>
+    `;
+
+}
+
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetSelection() {
 
     selectedDriverId =
         null;
@@ -1119,11 +1444,11 @@ function clearSelection() {
     selectedBusId =
         null;
 
-    selectionSummary.classList.add(
+    assignPanel.classList.add(
         "hidden"
     );
 
-    assignBtn.disabled =
+    assignButton.disabled =
         true;
 
 }
@@ -1136,14 +1461,14 @@ function clearSelection() {
 
 function showMessage(
     text,
-    isError
+    error = false
 ) {
 
     message.textContent =
         text;
 
     message.className =
-        isError
+        error
             ? "message error"
             : "message success";
 
@@ -1152,7 +1477,7 @@ function showMessage(
 
 
 /* =========================================================
-   HTML ESCAPE
+   ESCAPE HTML
 ========================================================= */
 
 function escapeHTML(
@@ -1162,22 +1487,27 @@ function escapeHTML(
     return String(
         value ?? ""
     )
+
         .replace(
             /&/g,
             "&amp;"
         )
+
         .replace(
             /</g,
             "&lt;"
         )
+
         .replace(
             />/g,
             "&gt;"
         )
+
         .replace(
             /"/g,
             "&quot;"
         )
+
         .replace(
             /'/g,
             "&#039;"
