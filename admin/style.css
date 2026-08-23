@@ -730,3 +730,24 @@ body {
     }
 
 }
+
+/* =====================================
+   BUS OVERVIEW - FULL WIDTH
+===================================== */
+
+.bus-section {
+    width: 100%;
+}
+
+.bus-list {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.bus-card {
+    width: 100%;
+}
