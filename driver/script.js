@@ -120,12 +120,7 @@ let busData = null;
 let busId = null;
 
 let activeRecord = null;
-toolsButton.addEventListener(
-    "click",
-    () => {
-        window.location.href = "./tools/";
-    }
-);
+
 
 /* =================================
    DATE
@@ -141,7 +136,12 @@ workDate.value =
 /* =================================
    AUTHENTICATION
 ================================= */
-
+toolsButton.addEventListener(
+    "click",
+    () => {
+        window.location.href = "./tools/";
+    }
+);
 onAuthStateChanged(
     auth,
     async (user) => {
