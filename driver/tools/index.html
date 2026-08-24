@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Tools — BEST Bus</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a
+        href="../"
+        class="back"
+    >
+        ←
+    </a>
+
+    <div class="title-area">
+
+        <div class="brand">
+            BEST
+        </div>
+
+        <div class="subtitle">
+            DRIVER TOOLS
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="page">
+
+    <div class="heading">
+
+        <span class="eyebrow">
+            VEHICLE MAINTENANCE
+        </span>
+
+        <h1>
+            Report a Problem
+        </h1>
+
+        <p>
+            Found a problem with your bus? Report it here.
+        </p>
+
+    </div>
+
+
+    <form
+        id="problemForm"
+        class="form"
+    >
+
+
+        <!-- BUS -->
+
+        <div class="field">
+
+            <label>
+                BUS
+            </label>
+
+            <div
+                id="busDisplay"
+                class="bus-display"
+            >
+                Loading bus...
+            </div>
+
+        </div>
+
+
+        <!-- PROBLEM -->
+
+        <div class="field">
+
+            <label for="problem">
+                WHAT IS THE PROBLEM?
+            </label>
+
+            <textarea
+                id="problem"
+                rows="5"
+                placeholder="Describe the problem you noticed..."
+                required
+            ></textarea>
+
+        </div>
+
+
+        <!-- TYPE -->
+
+        <div class="field">
+
+            <label>
+                PROBLEM TYPE
+            </label>
+
+
+            <div class="type-grid">
+
+                <label
+                    class="type-option"
+                >
+
+                    <input
+                        type="radio"
+                        name="problemType"
+                        value="service"
+                        required
+                    >
+
+                    <div class="type-box">
+
+                        <span class="type-icon">
+                            🔧
+                        </span>
+
+                        <span>
+
+                            <strong>
+                                Service / Repair
+                            </strong>
+
+                            <small>
+                                Something needs checking
+                            </small>
+
+                        </span>
+
+                    </div>
+
+                </label>
+
+
+                <label
+                    class="type-option"
+                >
+
+                    <input
+                        type="radio"
+                        name="problemType"
+                        value="replacement"
+                    >
+
+                    <div class="type-box">
+
+                        <span class="type-icon">
+                            ⚙️
+                        </span>
+
+                        <span>
+
+                            <strong>
+                                Part Replacement
+                            </strong>
+
+                            <small>
+                                A part may need replacement
+                            </small>
+
+                        </span>
+
+                    </div>
+
+                </label>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUBMIT -->
+
+        <button
+            type="submit"
+            id="submitButton"
+            class="submit-button"
+        >
+            SUBMIT PROBLEM
+        </button>
+
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+
+    </form>
+
+</main>
+
+
+<script
+    type="module"
+    src="./script.js"
+></script>
+
+</body>
+
+</html>
