@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Driver Panel | Fleet Management</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <img
+            src="../logo.png"
+            alt="Logo"
+            class="logo"
+        >
+
+        <div>
+
+            <div class="brand-name">
+                BEST
+            </div>
+
+            <div class="brand-subtitle">
+                English Medium School &amp;
+                International PU College
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <button
+        id="logoutButton"
+        class="logout-top"
+    >
+        LOG OUT
+    </button>
+
+</header>
+
+
+<main class="page">
+
+
+    <!-- DRIVER HEADER -->
+
+    <section class="welcome">
+
+        <span class="eyebrow">
+            DRIVER PANEL
+        </span>
+
+        <h1 id="driverName">
+            Welcome
+        </h1>
+
+        <p>
+            Manage today's bus movement and odometer records.
+        </p>
+
+    </section>
+
+
+    <!-- BUS INFORMATION -->
+
+    <section class="bus-banner">
+
+        <div>
+
+            <span class="banner-label">
+                ASSIGNED BUS
+            </span>
+
+            <strong id="busNumber">
+                Loading...
+            </strong>
+
+            <span
+                id="busRegistration"
+                class="registration"
+            >
+                --
+            </span>
+
+        </div>
+
+
+        <div class="meter-box">
+
+            <span>
+                CURRENT ODOMETER
+            </span>
+
+            <strong id="currentOdometer">
+                -- KM
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <!-- DATE -->
+
+    <section class="date-section">
+
+        <label for="workDate">
+            SELECT DATE
+        </label>
+
+        <input
+            id="workDate"
+            type="date"
+        >
+
+    </section>
+
+
+    <!-- MORNING -->
+
+    <section class="trip-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    MORNING
+                </span>
+
+                <h2>
+                    Morning Pickup
+                </h2>
+
+            </div>
+
+            <span
+                id="morningStatus"
+                class="status pending"
+            >
+                NOT STARTED
+            </span>
+
+        </div>
+
+
+        <div class="trip-card">
+
+            <div class="automatic-row">
+
+                <div>
+
+                    <span>
+                        STARTING ODOMETER
+                    </span>
+
+                    <strong id="morningStartOdometer">
+                        --
+                    </strong>
+
+                </div>
+
+                <small>
+                    AUTOMATIC
+                </small>
+
+            </div>
+
+
+            <button
+                id="morningStartButton"
+                class="primary-button"
+            >
+                START MORNING PICKUP
+            </button>
+
+
+            <div
+                id="morningEndArea"
+                class="end-area hidden"
+            >
+
+                <label for="morningEndOdometer">
+                    ENTER ODOMETER AT SCHOOL
+                </label>
+
+                <input
+                    id="morningEndOdometer"
+                    type="number"
+                    min="0"
+                    step="0.1"
+                    placeholder="Example: 12035"
+                >
+
+                <button
+                    id="morningEndButton"
+                    class="secondary-button"
+                >
+                    END MORNING PICKUP
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- EVENING -->
+
+    <section class="trip-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    EVENING
+                </span>
+
+                <h2>
+                    Evening Pickup
+                </h2>
+
+            </div>
+
+            <span
+                id="eveningStatus"
+                class="status pending"
+            >
+                NOT STARTED
+            </span>
+
+        </div>
+
+
+        <div class="trip-card">
+
+            <div class="automatic-row">
+
+                <div>
+
+                    <span>
+                        STARTING ODOMETER
+                    </span>
+
+                    <strong id="eveningStartOdometer">
+                        --
+                    </strong>
+
+                </div>
+
+                <small>
+                    AUTOMATIC
+                </small>
+
+            </div>
+
+
+            <button
+                id="eveningStartButton"
+                class="primary-button"
+                disabled
+            >
+                START EVENING PICKUP
+            </button>
+
+
+            <div
+                id="eveningEndArea"
+                class="end-area hidden"
+            >
+
+                <label for="eveningEndOdometer">
+                    ENTER ODOMETER AT HALTING POINT
+                </label>
+
+                <input
+                    id="eveningEndOdometer"
+                    type="number"
+                    min="0"
+                    step="0.1"
+                    placeholder="Example: 12090"
+                >
+
+                <button
+                    id="eveningEndButton"
+                    class="secondary-button"
+                >
+                    END EVENING PICKUP
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- DIESEL -->
+
+    <section class="trip-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    FUEL
+                </span>
+
+                <h2>
+                    Diesel Entry
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="trip-card">
+
+            <div class="field">
+
+                <label for="dieselOdometer">
+                    ODOMETER AT DIESEL POINT
+                </label>
+
+                <input
+                    id="dieselOdometer"
+                    type="number"
+                    min="0"
+                    step="0.1"
+                    placeholder="Example: 12100"
+                >
+
+            </div>
+
+
+            <div class="two-column">
+
+                <div class="field">
+
+                    <label for="dieselLitres">
+                        DIESEL LITRES
+                    </label>
+
+                    <input
+                        id="dieselLitres"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        placeholder="30"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="dieselAmount">
+                        COST
+                    </label>
+
+                    <input
+                        id="dieselAmount"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        placeholder="3000"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="dieselButton"
+                class="secondary-button"
+            >
+                SAVE DIESEL ENTRY
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- HISTORY -->
+
+    <section class="history-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    RECORDS
+                </span>
+
+                <h2>
+                    Recent History
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="historyList"
+            class="history-list"
+        >
+            Loading...
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<div
+    id="message"
+    class="message hidden"
+></div>
+
+
+<script
+    type="module"
+    src="./script.js"
+></script>
+
+</body>
+
+</html>
