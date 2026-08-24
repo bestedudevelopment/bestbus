@@ -1,15 +1,15 @@
 import {
-    collection,
-    addDoc,
-    getDocs,
-    query,
-    where,
-    serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+    collection,
+    query,
+    where,
+    getDocs,
+    addDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import {
     auth,
@@ -17,18 +17,28 @@ import {
 } from "../../core/firebase.js";
 
 
-/* ================================
+/* =================================
    ELEMENTS
-================================ */
+================================= */
 
-const form =
+const busNumber =
     document.getElementById(
-        "problemForm"
+        "busNumber"
     );
 
-const busDisplay =
+const busRegistration =
     document.getElementById(
-        "busDisplay"
+        "busRegistration"
+    );
+
+const busStatus =
+    document.getElementById(
+        "busStatus"
+    );
+
+const problemForm =
+    document.getElementById(
+        "problemForm"
     );
 
 const problemInput =
@@ -47,9 +57,9 @@ const message =
     );
 
 
-/* ================================
-   STATE
-================================ */
+/* =================================
+   CURRENT USER / DRIVER / BUS
+================================= */
 
 let currentUser = null;
 
@@ -58,13 +68,17 @@ let currentDriver = null;
 let currentBus = null;
 
 
-/* ================================
-   AUTH
-================================ */
+/* =================================
+   LOGIN
+================================= */
 
 onAuthStateChanged(
     auth,
     async (user) => {
+
+        /*
+         * NOT LOGGED IN
+         */
 
         if (!user) {
 
@@ -76,32 +90,37 @@ onAuthStateChanged(
         }
 
 
-        currentUser =
-            user;
+        currentUser = user;
 
 
         try {
 
-            await loadDriver();
+            /*
+             * Find logged-in driver's
+             * driver document.
+             */
 
-            await loadAssignedBus();
+            await findDriver();
+
+
+            /*
+             * Find ONLY the bus assigned
+             * to this driver.
+             */
+
+            await findAssignedBus();
 
 
         } catch (error) {
 
             console.error(
-                "TOOLS ERROR:",
+                "TOOLS LOAD ERROR:",
                 error
             );
 
 
-            busDisplay.textContent =
-                "Unable to load bus";
-
-
-            showMessage(
-                error.message,
-                "error"
+            showError(
+                error.message
             );
 
         }
@@ -110,161 +129,86 @@ onAuthStateChanged(
 );
 
 
-/* ================================
-   LOAD DRIVER
-================================ */
+/* =================================
+   FIND DRIVER
+================================= */
 
-async function loadDriver() {
+async function findDriver() {
 
     /*
-     * Drivers collection uses
-     * document ID as the driver ID.
+     * We support both common structures:
+     *
+     * drivers/{uid}
+     *
+     * OR
+     *
+     * drivers document containing uid
      */
 
-    const driverQuery =
-        query(
-            collection(
-                db,
-                "drivers"
-            ),
-            where(
-                "uid",
-                "==",
-                currentUser.uid
-            )
-        );
-
-
-    const snapshot =
+    let driverSnapshot =
         await getDocs(
-            driverQuery
-        );
 
+            query(
+                collection(
+                    db,
+                    "drivers"
+                ),
 
-    if (
-        snapshot.empty
-    ) {
-
-        throw new Error(
-            "Driver profile not found."
-        );
-
-    }
-
-
-    const driverDocument =
-        snapshot.docs[0];
-
-
-    currentDriver = {
-
-        id:
-            driverDocument.id,
-
-        ...driverDocument.data()
-
-    };
-
-}
-
-
-/* ================================
-   LOAD ASSIGNED BUS
-================================ */
-
-async function loadAssignedBus() {
-
-    /*
-     * First try the driver's
-     * assignedBusId.
-     */
-
-    if (
-        currentDriver.assignedBusId
-    ) {
-
-        const busesSnapshot =
-            await getDocs(
-                query(
-                    collection(
-                        db,
-                        "buses"
-                    ),
-                    where(
-                        "__name__",
-                        "==",
-                        currentDriver.assignedBusId
-                    )
+                where(
+                    "uid",
+                    "==",
+                    currentUser.uid
                 )
-            );
+            )
 
-
-        if (
-            !busesSnapshot.empty
-        ) {
-
-            const document =
-                busesSnapshot.docs[0];
-
-
-            currentBus = {
-
-                id:
-                    document.id,
-
-                ...document.data()
-
-            };
-
-        }
-
-    }
+        );
 
 
     /*
-     * If no bus was found,
-     * search buses by driver ID.
+     * If no document was found using uid,
+     * try document ID = Firebase UID.
      */
 
     if (
-        !currentBus
+        driverSnapshot.empty
     ) {
 
-        const busesSnapshot =
+        /*
+         * We cannot use getDoc here
+         * because we're keeping this file
+         * simple and compatible with the
+         * existing Firebase setup.
+         *
+         * Instead get all drivers and
+         * match document ID.
+         */
+
+        const allDrivers =
             await getDocs(
                 collection(
                     db,
-                    "buses"
+                    "drivers"
                 )
             );
 
 
-        busesSnapshot.forEach(
-            document => {
-
-                const bus =
-                    document.data();
+        let found = null;
 
 
-                const assignedDriver =
-                    bus.assignedDriverId ||
-                    bus.driverId;
-
+        allDrivers.forEach(
+            (document) => {
 
                 if (
-                    assignedDriver ===
-                    currentDriver.id
-                    ||
-                    assignedDriver ===
+                    document.id ===
                     currentUser.uid
                 ) {
 
-                    currentBus = {
+                    found = {
 
                         id:
                             document.id,
 
-                        ...bus
+                        ...document.data()
 
                     };
 
@@ -273,51 +217,228 @@ async function loadAssignedBus() {
             }
         );
 
-    }
+
+        if (!found) {
+
+            throw new Error(
+                "Your driver profile was not found."
+            );
+
+        }
 
 
-    if (
-        !currentBus
-    ) {
+        currentDriver =
+            found;
 
-        busDisplay.textContent =
-            "No bus assigned";
 
         return;
 
     }
 
 
-    busDisplay.innerHTML = `
-        🚌
-        ${escapeHTML(
-            currentBus.busNumber ||
-            currentBus.registrationNumber ||
-            "Assigned Bus"
-        )}
-    `;
+    const document =
+        driverSnapshot.docs[0];
+
+
+    currentDriver = {
+
+        id:
+            document.id,
+
+        ...document.data()
+
+    };
 
 }
 
 
-/* ================================
-   SUBMIT PROBLEM
-================================ */
+/* =================================
+   FIND ASSIGNED BUS
+================================= */
 
-form.addEventListener(
+async function findAssignedBus() {
+
+    /*
+     * IMPORTANT:
+     *
+     * We do NOT show a bus selector.
+     *
+     * We automatically find the bus
+     * assigned to this driver.
+     */
+
+
+    const allBuses =
+        await getDocs(
+            collection(
+                db,
+                "buses"
+            )
+        );
+
+
+    let assignedBus = null;
+
+
+    allBuses.forEach(
+        (document) => {
+
+            const bus =
+                document.data();
+
+
+            /*
+             * Possible assignment fields.
+             */
+
+            const assignedDriverId =
+                bus.assignedDriverId ||
+                bus.driverId ||
+                bus.driverUid;
+
+
+            /*
+             * Match driver's document ID.
+             */
+
+            if (
+                assignedDriverId ===
+                currentDriver.id
+            ) {
+
+                assignedBus = {
+
+                    id:
+                        document.id,
+
+                    ...bus
+
+                };
+
+            }
+
+
+            /*
+             * Also match Firebase UID.
+             */
+
+            if (
+                assignedDriverId ===
+                currentUser.uid
+            ) {
+
+                assignedBus = {
+
+                    id:
+                        document.id,
+
+                    ...bus
+
+                };
+
+            }
+
+        }
+    );
+
+
+    /*
+     * No bus assigned.
+     */
+
+    if (
+        !assignedBus
+    ) {
+
+        currentBus = null;
+
+
+        busNumber.textContent =
+            "No bus assigned";
+
+        busRegistration.textContent =
+            "Contact administration";
+
+        busStatus.textContent =
+            "●";
+
+        busStatus.className =
+            "bus-status";
+
+
+        submitButton.disabled =
+            true;
+
+
+        showError(
+            "You do not have a bus assigned to you."
+        );
+
+
+        return;
+
+    }
+
+
+    currentBus =
+        assignedBus;
+
+
+    /*
+     * DISPLAY BUS
+     */
+
+    busNumber.textContent =
+        currentBus.busNumber ||
+        currentBus.name ||
+        "Bus";
+
+
+    busRegistration.textContent =
+        currentBus.registrationNumber ||
+        currentBus.registrationNo ||
+        "Assigned vehicle";
+
+
+    busStatus.textContent =
+        "●";
+
+    busStatus.className =
+        "bus-status";
+
+
+    /*
+     * NOW DRIVER CAN SUBMIT
+     */
+
+    submitButton.disabled =
+        false;
+
+}
+
+
+/* =================================
+   SUBMIT PROBLEM
+================================= */
+
+problemForm.addEventListener(
     "submit",
     async (event) => {
 
         event.preventDefault();
 
 
+        /*
+         * Security check on client side.
+         */
+
         if (
-            !currentUser
+            !currentUser ||
+            !currentDriver
         ) {
 
-            showMessage(
-                "Please login again.",
-                "error"
+            showError(
+                "Driver login could not be verified."
             );
 
             return;
@@ -329,9 +450,8 @@ form.addEventListener(
             !currentBus
         ) {
 
-            showMessage(
-                "No bus is currently assigned to you.",
-                "error"
+            showError(
+                "No bus is assigned to you."
             );
 
             return;
@@ -343,7 +463,7 @@ form.addEventListener(
             problemInput.value.trim();
 
 
-        const typeElement =
+        const selectedType =
             document.querySelector(
                 'input[name="problemType"]:checked'
             );
@@ -353,9 +473,8 @@ form.addEventListener(
             !problem
         ) {
 
-            showMessage(
-                "Please describe the problem.",
-                "error"
+            showError(
+                "Please describe the problem."
             );
 
             return;
@@ -364,12 +483,11 @@ form.addEventListener(
 
 
         if (
-            !typeElement
+            !selectedType
         ) {
 
-            showMessage(
-                "Please select the problem type.",
-                "error"
+            showError(
+                "Please select the problem type."
             );
 
             return;
@@ -378,7 +496,7 @@ form.addEventListener(
 
 
         const problemType =
-            typeElement.value;
+            selectedType.value;
 
 
         submitButton.disabled =
@@ -388,11 +506,13 @@ form.addEventListener(
             "SUBMITTING...";
 
 
+        clearMessage();
+
+
         try {
 
             /*
-             * Create a maintenance
-             * ticket.
+             * CREATE MAINTENANCE TICKET
              */
 
             await addDoc(
@@ -404,22 +524,23 @@ form.addEventListener(
 
                 {
 
-                    /*
-                     * BUS
-                     */
+                    /* BUS */
 
                     busId:
                         currentBus.id,
 
                     busNumber:
                         currentBus.busNumber ||
+                        currentBus.name ||
+                        "",
+
+                    busRegistration:
                         currentBus.registrationNumber ||
-                        "Unknown",
+                        currentBus.registrationNo ||
+                        "",
 
 
-                    /*
-                     * DRIVER
-                     */
+                    /* DRIVER */
 
                     driverId:
                         currentDriver.id,
@@ -431,12 +552,10 @@ form.addEventListener(
                         currentDriver.name ||
                         currentUser.displayName ||
                         currentUser.email ||
-                        "Unknown",
+                        "",
 
 
-                    /*
-                     * PROBLEM
-                     */
+                    /* PROBLEM */
 
                     problem:
                         problem,
@@ -445,29 +564,22 @@ form.addEventListener(
                         problemType,
 
 
-                    /*
-                     * STATUS
-                     */
+                    /* STATUS */
 
                     status:
                         "reported",
 
+                    solved:
+                        false,
 
-                    /*
-                     * TIME
-                     */
+
+                    /* TIMESTAMP */
 
                     reportedAt:
                         serverTimestamp(),
 
 
-                    /*
-                     * Admin will fill these
-                     * later.
-                     */
-
-                    solved:
-                        false,
+                    /* ADMIN FIELDS */
 
                     solvedBy:
                         "",
@@ -478,10 +590,10 @@ form.addEventListener(
                     partsReplaced:
                         [],
 
-                    labourCost:
+                    partsCost:
                         0,
 
-                    partsCost:
+                    labourCost:
                         0,
 
                     totalCost:
@@ -492,89 +604,87 @@ form.addEventListener(
             );
 
 
-            form.reset();
+            /*
+             * SUCCESS
+             */
+
+            problemForm.reset();
 
 
-            showMessage(
-                "Problem reported successfully.",
-                "success"
+            showSuccess(
+                "Problem reported successfully."
             );
 
 
         } catch (error) {
 
             console.error(
-                "SUBMIT ERROR:",
+                "PROBLEM SUBMIT ERROR:",
                 error
             );
 
 
-            showMessage(
-                "Unable to submit problem. Please try again.",
-                "error"
+            showError(
+                "Could not submit the problem. Please try again."
             );
 
         }
 
 
         submitButton.disabled =
-            false;
+            !currentBus;
 
         submitButton.textContent =
-            "SUBMIT PROBLEM";
+            "REPORT PROBLEM";
 
     }
 );
 
 
-/* ================================
-   MESSAGE
-================================ */
+/* =================================
+   SUCCESS
+================================= */
 
-function showMessage(
-    text,
-    type
+function showSuccess(
+    text
 ) {
 
     message.textContent =
         text;
 
     message.className =
-        `message ${type || ""}`;
+        "message success";
 
 }
 
 
-/* ================================
-   ESCAPE HTML
-================================ */
+/* =================================
+   ERROR
+================================= */
 
-function escapeHTML(
-    value
+function showError(
+    text
 ) {
 
-    return String(
-        value ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+    message.textContent =
+        text;
+
+    message.className =
+        "message error";
+
+}
+
+
+/* =================================
+   CLEAR
+================================= */
+
+function clearMessage() {
+
+    message.textContent =
+        "";
+
+    message.className =
+        "message";
 
 }
