@@ -1,13 +1,17 @@
 import {
-    onAuthStateChanged
+    onAuthStateChanged,
+    signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 import {
+    doc,
+    getDoc,
     collection,
+    addDoc,
+    getDocs,
     query,
     where,
-    getDocs,
-    addDoc,
+    orderBy,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
@@ -17,13 +21,19 @@ import {
 } from "../../core/firebase.js";
 
 
-/* =================================
-   ELEMENTS
-================================= */
 
-const busNumber =
+/* ============================================
+   ELEMENTS
+============================================ */
+
+const driverName =
     document.getElementById(
-        "busNumber"
+        "driverName"
+    );
+
+const busName =
+    document.getElementById(
+        "busName"
     );
 
 const busRegistration =
@@ -31,24 +41,34 @@ const busRegistration =
         "busRegistration"
     );
 
-const busStatus =
-    document.getElementById(
-        "busStatus"
-    );
-
-const problemForm =
-    document.getElementById(
-        "problemForm"
-    );
-
-const problemInput =
+const problem =
     document.getElementById(
         "problem"
+    );
+
+const characterCount =
+    document.getElementById(
+        "characterCount"
     );
 
 const submitButton =
     document.getElementById(
         "submitButton"
+    );
+
+const reportsList =
+    document.getElementById(
+        "reportsList"
+    );
+
+const logoutButton =
+    document.getElementById(
+        "logoutButton"
+    );
+
+const backButton =
+    document.getElementById(
+        "backButton"
     );
 
 const message =
@@ -57,9 +77,10 @@ const message =
     );
 
 
-/* =================================
-   CURRENT USER / DRIVER / BUS
-================================= */
+
+/* ============================================
+   STATE
+============================================ */
 
 let currentUser = null;
 
@@ -67,60 +88,56 @@ let currentDriver = null;
 
 let currentBus = null;
 
+let selectedType =
+    "service";
 
-/* =================================
-   LOGIN
-================================= */
+let selectedPriority =
+    "normal";
+
+
+
+/* ============================================
+   AUTH
+============================================ */
 
 onAuthStateChanged(
     auth,
     async (user) => {
 
-        /*
-         * NOT LOGGED IN
-         */
-
         if (!user) {
 
             window.location.href =
-                "../login/";
+                "../../login/";
 
             return;
 
         }
 
 
-        currentUser = user;
+        currentUser =
+            user;
 
 
         try {
 
-            /*
-             * Find logged-in driver's
-             * driver document.
-             */
+            await loadDriver();
 
-            await findDriver();
+            await loadAssignedBus();
 
-
-            /*
-             * Find ONLY the bus assigned
-             * to this driver.
-             */
-
-            await findAssignedBus();
-
+            await loadReports();
 
         } catch (error) {
 
             console.error(
-                "TOOLS LOAD ERROR:",
+                "TOOLS ERROR:",
                 error
             );
 
 
-            showError(
-                error.message
+            showMessage(
+                error.message ||
+                "Unable to load tools.",
+                "error"
             );
 
         }
@@ -129,317 +146,350 @@ onAuthStateChanged(
 );
 
 
-/* =================================
-   FIND DRIVER
-================================= */
 
-async function findDriver() {
+/* ============================================
+   LOAD DRIVER
+============================================ */
+
+async function loadDriver() {
 
     /*
-     * We support both common structures:
+     * EXACT STRUCTURE FROM YOUR FIRESTORE:
      *
-     * drivers/{uid}
+     * users/{uid}
      *
-     * OR
-     *
-     * drivers document containing uid
+     * name
+     * phone
+     * role
+     * status
+     * assignedBusId
      */
 
-    let driverSnapshot =
-        await getDocs(
 
-            query(
-                collection(
-                    db,
-                    "drivers"
-                ),
-
-                where(
-                    "uid",
-                    "==",
-                    currentUser.uid
-                )
-            )
-
+    const userRef =
+        doc(
+            db,
+            "users",
+            currentUser.uid
         );
 
 
-    /*
-     * If no document was found using uid,
-     * try document ID = Firebase UID.
-     */
+    const userSnap =
+        await getDoc(
+            userRef
+        );
+
 
     if (
-        driverSnapshot.empty
+        !userSnap.exists()
     ) {
 
-        /*
-         * We cannot use getDoc here
-         * because we're keeping this file
-         * simple and compatible with the
-         * existing Firebase setup.
-         *
-         * Instead get all drivers and
-         * match document ID.
-         */
-
-        const allDrivers =
-            await getDocs(
-                collection(
-                    db,
-                    "drivers"
-                )
-            );
-
-
-        let found = null;
-
-
-        allDrivers.forEach(
-            (document) => {
-
-                if (
-                    document.id ===
-                    currentUser.uid
-                ) {
-
-                    found = {
-
-                        id:
-                            document.id,
-
-                        ...document.data()
-
-                    };
-
-                }
-
-            }
+        throw new Error(
+            "Driver account was not found."
         );
-
-
-        if (!found) {
-
-            throw new Error(
-                "Your driver profile was not found."
-            );
-
-        }
-
-
-        currentDriver =
-            found;
-
-
-        return;
 
     }
 
 
-    const document =
-        driverSnapshot.docs[0];
+    const data =
+        userSnap.data();
 
+
+    /*
+     * ROLE CHECK
+     */
+
+    if (
+        data.role !==
+        "driver"
+    ) {
+
+        await signOut(
+            auth
+        );
+
+
+        window.location.href =
+            "../../login/";
+
+
+        throw new Error(
+            "Only driver accounts can access Tools."
+        );
+
+    }
+
+
+    /*
+     * APPROVAL CHECK
+     */
+
+    if (
+        data.status &&
+        data.status !==
+        "approved"
+    ) {
+
+        await signOut(
+            auth
+        );
+
+
+        window.location.href =
+            "../../login/";
+
+
+        throw new Error(
+            "Your driver account is not approved."
+        );
+
+    }
+
+
+    /*
+     * DRIVER DATA
+     */
 
     currentDriver = {
 
         id:
-            document.id,
+            userSnap.id,
 
-        ...document.data()
+        uid:
+            currentUser.uid,
+
+        ...data
 
     };
+
+
+    driverName.textContent =
+        currentDriver.name ||
+        "Driver";
 
 }
 
 
-/* =================================
-   FIND ASSIGNED BUS
-================================= */
 
-async function findAssignedBus() {
+/* ============================================
+   LOAD ASSIGNED BUS
+============================================ */
+
+async function loadAssignedBus() {
 
     /*
-     * IMPORTANT:
+     * THIS IS THE IMPORTANT PART.
      *
-     * We do NOT show a bus selector.
+     * Firestore screenshot shows:
      *
-     * We automatically find the bus
-     * assigned to this driver.
+     * users/{uid}
+     * assignedBusId: "5VK..."
+     *
+     * So we directly open:
+     *
+     * buses/{assignedBusId}
      */
 
 
-    const allBuses =
-        await getDocs(
-            collection(
-                db,
-                "buses"
-            )
-        );
+    const assignedBusId =
+        currentDriver.assignedBusId;
 
-
-    let assignedBus = null;
-
-
-    allBuses.forEach(
-        (document) => {
-
-            const bus =
-                document.data();
-
-
-            /*
-             * Possible assignment fields.
-             */
-
-            const assignedDriverId =
-                bus.assignedDriverId ||
-                bus.driverId ||
-                bus.driverUid;
-
-
-            /*
-             * Match driver's document ID.
-             */
-
-            if (
-                assignedDriverId ===
-                currentDriver.id
-            ) {
-
-                assignedBus = {
-
-                    id:
-                        document.id,
-
-                    ...bus
-
-                };
-
-            }
-
-
-            /*
-             * Also match Firebase UID.
-             */
-
-            if (
-                assignedDriverId ===
-                currentUser.uid
-            ) {
-
-                assignedBus = {
-
-                    id:
-                        document.id,
-
-                    ...bus
-
-                };
-
-            }
-
-        }
-    );
-
-
-    /*
-     * No bus assigned.
-     */
 
     if (
-        !assignedBus
+        !assignedBusId
     ) {
 
-        currentBus = null;
-
-
-        busNumber.textContent =
-            "No bus assigned";
-
-        busRegistration.textContent =
-            "Contact administration";
-
-        busStatus.textContent =
-            "●";
-
-        busStatus.className =
-            "bus-status";
-
-
-        submitButton.disabled =
-            true;
-
-
-        showError(
-            "You do not have a bus assigned to you."
+        throw new Error(
+            "No bus is assigned to your account."
         );
-
-
-        return;
 
     }
 
 
-    currentBus =
-        assignedBus;
+    const busRef =
+        doc(
+            db,
+            "buses",
+            assignedBusId
+        );
+
+
+    const busSnap =
+        await getDoc(
+            busRef
+        );
+
+
+    if (
+        !busSnap.exists()
+    ) {
+
+        throw new Error(
+            "Your assigned bus could not be found."
+        );
+
+    }
+
+
+    currentBus = {
+
+        id:
+            busSnap.id,
+
+        ...busSnap.data()
+
+    };
 
 
     /*
-     * DISPLAY BUS
+     * We display only this bus.
+     *
+     * No dropdown.
+     * No bus selection.
      */
 
-    busNumber.textContent =
-        currentBus.busNumber ||
+
+    busName.textContent =
         currentBus.name ||
-        "Bus";
+        currentBus.busNumber ||
+        currentBus.number ||
+        "Assigned Bus";
 
 
     busRegistration.textContent =
         currentBus.registrationNumber ||
         currentBus.registrationNo ||
-        "Assigned vehicle";
-
-
-    busStatus.textContent =
-        "●";
-
-    busStatus.className =
-        "bus-status";
-
-
-    /*
-     * NOW DRIVER CAN SUBMIT
-     */
-
-    submitButton.disabled =
-        false;
+        currentBus.registration ||
+        "--";
 
 }
 
 
-/* =================================
-   SUBMIT PROBLEM
-================================= */
 
-problemForm.addEventListener(
-    "submit",
-    async (event) => {
+/* ============================================
+   PROBLEM TYPE
+============================================ */
 
-        event.preventDefault();
+document
+    .querySelectorAll(
+        ".type-option"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(
+                            ".type-option"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList.remove(
+                                    "active"
+                                )
+                        );
 
 
-        /*
-         * Security check on client side.
-         */
+                    button.classList.add(
+                        "active"
+                    );
+
+
+                    selectedType =
+                        button.dataset.type;
+
+                }
+            );
+
+        }
+    );
+
+
+
+/* ============================================
+   PRIORITY
+============================================ */
+
+document
+    .querySelectorAll(
+        ".priority-option"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(
+                            ".priority-option"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList.remove(
+                                    "active"
+                                )
+                        );
+
+
+                    button.classList.add(
+                        "active"
+                    );
+
+
+                    selectedPriority =
+                        button.dataset.priority;
+
+                }
+            );
+
+        }
+    );
+
+
+
+/* ============================================
+   CHARACTER COUNT
+============================================ */
+
+problem.addEventListener(
+    "input",
+    () => {
+
+        characterCount.textContent =
+            problem.value.length;
+
+    }
+);
+
+
+
+/* ============================================
+   SUBMIT
+============================================ */
+
+submitButton.addEventListener(
+    "click",
+    async () => {
+
+        const description =
+            problem.value.trim();
+
 
         if (
-            !currentUser ||
-            !currentDriver
+            !description
         ) {
 
-            showError(
-                "Driver login could not be verified."
+            showMessage(
+                "Please describe the problem.",
+                "error"
             );
+
+            problem.focus();
 
             return;
 
@@ -447,56 +497,18 @@ problemForm.addEventListener(
 
 
         if (
+            !currentDriver ||
             !currentBus
         ) {
 
-            showError(
-                "No bus is assigned to you."
+            showMessage(
+                "Driver or bus information is not ready.",
+                "error"
             );
 
             return;
 
         }
-
-
-        const problem =
-            problemInput.value.trim();
-
-
-        const selectedType =
-            document.querySelector(
-                'input[name="problemType"]:checked'
-            );
-
-
-        if (
-            !problem
-        ) {
-
-            showError(
-                "Please describe the problem."
-            );
-
-            return;
-
-        }
-
-
-        if (
-            !selectedType
-        ) {
-
-            showError(
-                "Please select the problem type."
-            );
-
-            return;
-
-        }
-
-
-        const problemType =
-            selectedType.value;
 
 
         submitButton.disabled =
@@ -506,14 +518,14 @@ problemForm.addEventListener(
             "SUBMITTING...";
 
 
-        clearMessage();
-
-
         try {
 
             /*
-             * CREATE MAINTENANCE TICKET
+             * NEW COLLECTION:
+             *
+             * maintenanceTickets
              */
+
 
             await addDoc(
 
@@ -524,6 +536,19 @@ problemForm.addEventListener(
 
                 {
 
+                    /* DRIVER */
+
+                    driverUid:
+                        currentUser.uid,
+
+                    driverId:
+                        currentDriver.id,
+
+                    driverName:
+                        currentDriver.name ||
+                        "",
+
+
                     /* BUS */
 
                     busId:
@@ -532,36 +557,26 @@ problemForm.addEventListener(
                     busNumber:
                         currentBus.busNumber ||
                         currentBus.name ||
+                        currentBus.number ||
                         "",
 
                     busRegistration:
                         currentBus.registrationNumber ||
                         currentBus.registrationNo ||
-                        "",
-
-
-                    /* DRIVER */
-
-                    driverId:
-                        currentDriver.id,
-
-                    driverUid:
-                        currentUser.uid,
-
-                    driverName:
-                        currentDriver.name ||
-                        currentUser.displayName ||
-                        currentUser.email ||
+                        currentBus.registration ||
                         "",
 
 
                     /* PROBLEM */
 
                     problem:
-                        problem,
+                        description,
 
                     problemType:
-                        problemType,
+                        selectedType,
+
+                    priority:
+                        selectedPriority,
 
 
                     /* STATUS */
@@ -569,35 +584,14 @@ problemForm.addEventListener(
                     status:
                         "reported",
 
-                    solved:
-                        false,
 
-
-                    /* TIMESTAMP */
+                    /* TIME */
 
                     reportedAt:
                         serverTimestamp(),
 
-
-                    /* ADMIN FIELDS */
-
-                    solvedBy:
-                        "",
-
-                    solution:
-                        "",
-
-                    partsReplaced:
-                        [],
-
-                    partsCost:
-                        0,
-
-                    labourCost:
-                        0,
-
-                    totalCost:
-                        0
+                    createdAt:
+                        serverTimestamp()
 
                 }
 
@@ -605,86 +599,385 @@ problemForm.addEventListener(
 
 
             /*
-             * SUCCESS
+             * CLEAR FORM
              */
 
-            problemForm.reset();
+            problem.value =
+                "";
+
+            characterCount.textContent =
+                "0";
 
 
-            showSuccess(
-                "Problem reported successfully."
+            showMessage(
+                "Problem reported successfully.",
+                "success"
             );
+
+
+            await loadReports();
 
 
         } catch (error) {
 
             console.error(
-                "PROBLEM SUBMIT ERROR:",
+                "SUBMIT ERROR:",
                 error
             );
 
 
-            showError(
-                "Could not submit the problem. Please try again."
+            showMessage(
+                "Unable to submit the problem.",
+                "error"
             );
 
         }
 
 
         submitButton.disabled =
-            !currentBus;
+            false;
 
         submitButton.textContent =
-            "REPORT PROBLEM";
+            "SUBMIT PROBLEM";
 
     }
 );
 
 
-/* =================================
-   SUCCESS
-================================= */
 
-function showSuccess(
-    text
+/* ============================================
+   LOAD DRIVER REPORTS
+============================================ */
+
+async function loadReports() {
+
+    if (
+        !currentUser
+    ) {
+
+        return;
+
+    }
+
+
+    reportsList.innerHTML =
+        "Loading...";
+
+
+    try {
+
+        const reportsQuery =
+            query(
+
+                collection(
+                    db,
+                    "maintenanceTickets"
+                ),
+
+                where(
+                    "driverUid",
+                    "==",
+                    currentUser.uid
+                )
+
+            );
+
+
+        const snapshot =
+            await getDocs(
+                reportsQuery
+            );
+
+
+        const reports =
+            snapshot.docs
+                .map(
+                    item => ({
+
+                        id:
+                            item.id,
+
+                        ...item.data()
+
+                    })
+                )
+                .sort(
+                    (a, b) => {
+
+                        const aTime =
+                            a.createdAt?.seconds ||
+                            0;
+
+                        const bTime =
+                            b.createdAt?.seconds ||
+                            0;
+
+                        return bTime - aTime;
+
+                    }
+                );
+
+
+        if (
+            reports.length === 0
+        ) {
+
+            reportsList.innerHTML = `
+                <div class="empty">
+                    You have not reported
+                    any problems yet.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        reportsList.innerHTML =
+            reports
+                .slice(
+                    0,
+                    10
+                )
+                .map(
+                    createReportCard
+                )
+                .join("");
+
+
+    } catch (error) {
+
+        console.error(
+            "REPORT LOAD ERROR:",
+            error
+        );
+
+
+        reportsList.innerHTML = `
+            <div class="empty">
+                Unable to load reports.
+            </div>
+        `;
+
+    }
+
+}
+
+
+
+/* ============================================
+   REPORT CARD
+============================================ */
+
+function createReportCard(
+    report
+) {
+
+    const type =
+        report.problemType ===
+        "part"
+            ?
+        "PART REPLACEMENT"
+            :
+        "SERVICE / REPAIR";
+
+
+    const status =
+        String(
+            report.status ||
+            "reported"
+        )
+        .replace(
+            /_/g,
+            " "
+        )
+        .toUpperCase();
+
+
+    return `
+
+        <div class="report">
+
+            <div class="report-top">
+
+                <span class="report-type">
+                    ${type}
+                </span>
+
+                <span class="report-date">
+                    ${formatTimestamp(
+                        report.createdAt
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="report-problem">
+                ${escapeHTML(
+                    report.problem ||
+                    ""
+                )}
+            </div>
+
+
+            <span class="report-status">
+                ${status}
+            </span>
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* ============================================
+   BACK
+============================================ */
+
+backButton.addEventListener(
+    "click",
+    () => {
+
+        window.location.href =
+            "../";
+
+    }
+);
+
+
+
+/* ============================================
+   LOGOUT
+============================================ */
+
+logoutButton.addEventListener(
+    "click",
+    async () => {
+
+        try {
+
+            await signOut(
+                auth
+            );
+
+
+            window.location.href =
+                "../../login/";
+
+        } catch (error) {
+
+            showMessage(
+                "Unable to log out.",
+                "error"
+            );
+
+        }
+
+    }
+);
+
+
+
+/* ============================================
+   HELPERS
+============================================ */
+
+function formatTimestamp(
+    timestamp
+) {
+
+    if (
+        !timestamp ||
+        !timestamp.toDate
+    ) {
+
+        return "JUST NOW";
+
+    }
+
+
+    const date =
+        timestamp.toDate();
+
+
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+
+function escapeHTML(
+    value
+) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+
+function showMessage(
+    text,
+    type = ""
 ) {
 
     message.textContent =
         text;
 
     message.className =
-        "message success";
+        `message ${type}`;
 
-}
-
-
-/* =================================
-   ERROR
-================================= */
-
-function showError(
-    text
-) {
-
-    message.textContent =
-        text;
-
-    message.className =
-        "message error";
-
-}
+    message.classList.remove(
+        "hidden"
+    );
 
 
-/* =================================
-   CLEAR
-================================= */
+    clearTimeout(
+        window.messageTimer
+    );
 
-function clearMessage() {
 
-    message.textContent =
-        "";
+    window.messageTimer =
+        setTimeout(
+            () => {
 
-    message.className =
-        "message";
+                message.classList.add(
+                    "hidden"
+                );
+
+            },
+            3500
+        );
 
 }
