@@ -17,18 +17,13 @@ import {
     getDocs,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-import {
-    ref,
-    uploadBytes,
-    getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
 import {
     auth,
     db
 } from "../core/firebase.js";
 
-const storage = getStorage(auth.app);
+
 /* =================================
    ELEMENTS
 ================================= */
@@ -98,8 +93,7 @@ const dieselAmount =
 
 const dieselButton =
     document.getElementById("dieselButton");
-const dieselBillPhoto =
-    document.getElementById("dieselBillPhoto");
+
 
 const historyList =
     document.getElementById("historyList");
@@ -1203,101 +1197,46 @@ dieselButton.addEventListener(
         dieselButton.disabled =
             true;
 
-try {
 
-    /* ===============================
-       CHECK DIESEL BILL PHOTO
-    =============================== */
+        try {
 
-    const photoFile =
-        dieselBillPhoto.files[0];
+            await addDoc(
+                collection(
+                    db,
+                    "dieselRecords"
+                ),
+                {
 
-    if (!photoFile) {
+                    driverId:
+                        currentUser.uid,
 
-        showError(
-            "Please upload the diesel bill photo."
-        );
+                    driverName:
+                        driverData.name || "",
 
-        dieselButton.disabled = false;
+                    busId:
+                        busId,
 
-        return;
-    }
+                    busNumber:
+                        busData.busNumber || "",
 
+                    selectedDate:
+                        workDate.value,
 
-    /* ===============================
-       UPLOAD PHOTO TO FIREBASE STORAGE
-    =============================== */
+                    odometer:
+                        odometer,
 
-    const fileExtension =
-        photoFile.name
-            .split(".")
-            .pop();
+                    litres:
+                        litres,
 
-    const fileName =
-        `${currentUser.uid}_${busId}_${Date.now()}.${fileExtension}`;
+                    amount:
+                        amount,
 
+                    createdAt:
+                        serverTimestamp()
 
-    const storageRef =
-        ref(
-            storage,
-            `dieselBills/${busId}/${fileName}`
-        );
+                }
+            );
 
-
-    await uploadBytes(
-        storageRef,
-        photoFile
-    );
-
-
-    const billPhotoUrl =
-        await getDownloadURL(
-            storageRef
-        );
-
-
-    /* ===============================
-       SAVE DIESEL RECORD
-    =============================== */
-
-    await addDoc(
-        collection(
-            db,
-            "dieselRecords"
-        ),
-        {
-
-            driverId:
-                currentUser.uid,
-
-            driverName:
-                driverData.name || "",
-
-            busId:
-                busId,
-
-            busNumber:
-                busData.busNumber || "",
-
-            selectedDate:
-                workDate.value,
-
-            odometer:
-                odometer,
-
-            litres:
-                litres,
-
-            amount:
-                amount,
-
-            billPhotoUrl:
-                billPhotoUrl,
-
-            createdAt:
-                serverTimestamp()
-        }
-    );
 
             dieselOdometer.value =
                 "";
