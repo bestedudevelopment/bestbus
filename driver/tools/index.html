@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
 
@@ -9,7 +8,9 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Tools — BEST Bus</title>
+    <meta name="theme-color" content="#0b0b0b">
+
+    <title>Tools | BEST Bus</title>
 
     <link
         rel="stylesheet"
@@ -21,23 +22,13 @@
 
 <header class="topbar">
 
-    <a
-        href="../"
-        class="back"
-    >
+    <a href="../" class="back-btn">
         ←
     </a>
 
-    <div class="title-area">
-
-        <div class="brand">
-            BEST
-        </div>
-
-        <div class="subtitle">
-            DRIVER TOOLS
-        </div>
-
+    <div class="brand-block">
+        <div class="brand">BEST</div>
+        <div class="brand-sub">DRIVER TOOLS</div>
     </div>
 
 </header>
@@ -45,48 +36,65 @@
 
 <main class="page">
 
-    <div class="heading">
+    <section class="intro">
 
-        <span class="eyebrow">
+        <div class="eyebrow">
             VEHICLE MAINTENANCE
-        </span>
+        </div>
 
         <h1>
-            Report a Problem
+            Report a<br>
+            Problem
         </h1>
 
         <p>
-            Found a problem with your bus? Report it here.
+            Found something wrong with your assigned bus?
+            Report it to the administration.
         </p>
 
-    </div>
+    </section>
 
+
+    <!-- ASSIGNED BUS -->
+
+    <section class="bus-card">
+
+        <div class="bus-icon">
+            🚌
+        </div>
+
+        <div class="bus-info">
+
+            <span class="label">
+                YOUR ASSIGNED BUS
+            </span>
+
+            <strong id="busNumber">
+                Loading...
+            </strong>
+
+            <span id="busRegistration">
+                Checking assignment...
+            </span>
+
+        </div>
+
+        <div
+            id="busStatus"
+            class="bus-status loading"
+        >
+            ●
+        </div>
+
+    </section>
+
+
+    <!-- FORM -->
 
     <form
         id="problemForm"
         class="form"
     >
-
-
-        <!-- BUS -->
-
-        <div class="field">
-
-            <label>
-                BUS
-            </label>
-
-            <div
-                id="busDisplay"
-                class="bus-display"
-            >
-                Loading bus...
-            </div>
-
-        </div>
-
-
-        <!-- PROBLEM -->
 
         <div class="field">
 
@@ -96,15 +104,13 @@
 
             <textarea
                 id="problem"
-                rows="5"
-                placeholder="Describe the problem you noticed..."
+                placeholder="Describe what you noticed..."
+                rows="6"
                 required
             ></textarea>
 
         </div>
 
-
-        <!-- TYPE -->
 
         <div class="field">
 
@@ -112,12 +118,10 @@
                 PROBLEM TYPE
             </label>
 
+            <div class="type-list">
 
-            <div class="type-grid">
 
-                <label
-                    class="type-option"
-                >
+                <label class="type-option">
 
                     <input
                         type="radio"
@@ -126,32 +130,32 @@
                         required
                     >
 
-                    <div class="type-box">
+                    <div class="type-card">
 
-                        <span class="type-icon">
+                        <div class="type-icon">
                             🔧
-                        </span>
+                        </div>
 
-                        <span>
+                        <div class="type-text">
 
                             <strong>
                                 Service / Repair
                             </strong>
 
-                            <small>
-                                Something needs checking
-                            </small>
+                            <span>
+                                Something needs to be checked or serviced.
+                            </span>
 
-                        </span>
+                        </div>
+
+                        <div class="radio-circle"></div>
 
                     </div>
 
                 </label>
 
 
-                <label
-                    class="type-option"
-                >
+                <label class="type-option">
 
                     <input
                         type="radio"
@@ -159,41 +163,43 @@
                         value="replacement"
                     >
 
-                    <div class="type-box">
+                    <div class="type-card">
 
-                        <span class="type-icon">
+                        <div class="type-icon">
                             ⚙️
-                        </span>
+                        </div>
 
-                        <span>
+                        <div class="type-text">
 
                             <strong>
                                 Part Replacement
                             </strong>
 
-                            <small>
-                                A part may need replacement
-                            </small>
+                            <span>
+                                A vehicle part may need replacement.
+                            </span>
 
-                        </span>
+                        </div>
+
+                        <div class="radio-circle"></div>
 
                     </div>
 
                 </label>
+
 
             </div>
 
         </div>
 
 
-        <!-- SUBMIT -->
-
         <button
             type="submit"
             id="submitButton"
-            class="submit-button"
+            class="submit-btn"
+            disabled
         >
-            SUBMIT PROBLEM
+            REPORT PROBLEM
         </button>
 
 
@@ -201,7 +207,6 @@
             id="message"
             class="message"
         ></div>
-
 
     </form>
 
@@ -214,5 +219,4 @@
 ></script>
 
 </body>
-
 </html>
