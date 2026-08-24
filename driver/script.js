@@ -3,7 +3,6 @@ import {
     signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-
 import {
     doc,
     getDoc,
@@ -19,23 +18,12 @@ import {
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-
-import {
-    getStorage,
-    ref,
-    uploadBytes,
-    getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
-
-
 import {
     auth,
     db
 } from "../core/firebase.js";
 
 
-
-const storage = getStorage(auth.app);
 /* =================================
    ELEMENTS
 ================================= */
@@ -105,8 +93,7 @@ const dieselAmount =
 
 const dieselButton =
     document.getElementById("dieselButton");
-const dieselBillPhoto =
-    document.getElementById("dieselBillPhoto");
+
 
 const historyList =
     document.getElementById("historyList");
@@ -131,8 +118,7 @@ let busData = null;
 let busId = null;
 
 let activeRecord = null;
-let locationWatchId = null;
-let currentLiveLocation = null;
+
 
 /* =================================
    DATE
@@ -470,202 +456,7 @@ async function loadActiveRecord() {
     }
 
 }
-/* =========================================
-   START LIVE LOCATION
-========================================= */
 
-function startLiveLocation() {
-
-    if (!navigator.geolocation) {
-
-        showError(
-            "Location is not supported on this device."
-        );
-
-        return;
-
-    }
-
-    if (locationWatchId !== null) {
-
-        navigator.geolocation.clearWatch(
-            locationWatchId
-        );
-
-    }
-
-
-    locationWatchId =
-        navigator.geolocation.watchPosition(
-
-            async (position) => {
-
-                const latitude =
-                    position.coords.latitude;
-
-                const longitude =
-                    position.coords.longitude;
-
-                const accuracy =
-                    position.coords.accuracy;
-
-                const speed =
-                    position.coords.speed;
-
-
-                currentLiveLocation = {
-
-                    latitude,
-                    longitude,
-                    accuracy,
-                    speed
-
-                };
-
-
-                console.log(
-                    "LIVE LOCATION:",
-                    currentLiveLocation
-                );
-
-
-                /*
-                 * Save location to the active
-                 * driver record.
-                 */
-
-                if (
-                    activeRecord &&
-                    activeRecord.id
-                ) {
-
-                    try {
-
-                        await updateDoc(
-
-                            doc(
-                                db,
-                                "driverRecords",
-                                activeRecord.id
-                            ),
-
-                            {
-
-                                liveLocation: {
-
-                                    latitude:
-                                        latitude,
-
-                                    longitude:
-                                        longitude,
-
-                                    accuracy:
-                                        accuracy,
-
-                                    speed:
-                                        speed || 0,
-
-                                    updatedAt:
-                                        serverTimestamp()
-
-                                }
-
-                            }
-
-                        );
-
-                    } catch (error) {
-
-                        console.error(
-                            "LOCATION SAVE ERROR:",
-                            error
-                        );
-
-                    }
-
-                }
-
-            },
-
-
-            (error) => {
-
-                console.error(
-                    "LOCATION ERROR:",
-                    error
-                );
-
-
-                if (
-                    error.code ===
-                    error.PERMISSION_DENIED
-                ) {
-
-                    showError(
-                        "Location permission was denied. Please allow location access."
-                    );
-
-                }
-
-                else if (
-                    error.code ===
-                    error.POSITION_UNAVAILABLE
-                ) {
-
-                    showError(
-                        "Unable to get your current location."
-                    );
-
-                }
-
-                else if (
-                    error.code ===
-                    error.TIMEOUT
-                ) {
-
-                    showError(
-                        "Location request timed out. Trying again..."
-                    );
-
-                }
-
-            },
-
-
-            {
-
-                enableHighAccuracy: true,
-
-                maximumAge: 5000,
-
-                timeout: 15000
-
-            }
-
-        );
-
-}
-
-
-/* =========================================
-   STOP LIVE LOCATION
-========================================= */
-
-function stopLiveLocation() {
-
-    if (
-        locationWatchId !== null
-    ) {
-
-        navigator.geolocation.clearWatch(
-            locationWatchId
-        );
-
-        locationWatchId = null;
-
-    }
-
-}
 
 /* =================================
    MORNING START
@@ -806,8 +597,7 @@ morningStartButton.addEventListener(
                 "Morning pickup started."
             );
 
-startLiveLocation();
-            
+
         } catch (error) {
 
             console.error(
@@ -1407,101 +1197,46 @@ dieselButton.addEventListener(
         dieselButton.disabled =
             true;
 
-try {
 
-    /* ===============================
-       CHECK DIESEL BILL PHOTO
-    =============================== */
+        try {
 
-    const photoFile =
-        dieselBillPhoto.files[0];
+            await addDoc(
+                collection(
+                    db,
+                    "dieselRecords"
+                ),
+                {
 
-    if (!photoFile) {
+                    driverId:
+                        currentUser.uid,
 
-        showError(
-            "Please upload the diesel bill photo."
-        );
+                    driverName:
+                        driverData.name || "",
 
-        dieselButton.disabled = false;
+                    busId:
+                        busId,
 
-        return;
-    }
+                    busNumber:
+                        busData.busNumber || "",
 
+                    selectedDate:
+                        workDate.value,
 
-    /* ===============================
-       UPLOAD PHOTO TO FIREBASE STORAGE
-    =============================== */
+                    odometer:
+                        odometer,
 
-    const fileExtension =
-        photoFile.name
-            .split(".")
-            .pop();
+                    litres:
+                        litres,
 
-    const fileName =
-        `${currentUser.uid}_${busId}_${Date.now()}.${fileExtension}`;
+                    amount:
+                        amount,
 
+                    createdAt:
+                        serverTimestamp()
 
-    const storageRef =
-        ref(
-            storage,
-            `dieselBills/${busId}/${fileName}`
-        );
+                }
+            );
 
-
-    await uploadBytes(
-        storageRef,
-        photoFile
-    );
-
-
-    const billPhotoUrl =
-        await getDownloadURL(
-            storageRef
-        );
-
-
-    /* ===============================
-       SAVE DIESEL RECORD
-    =============================== */
-
-    await addDoc(
-        collection(
-            db,
-            "dieselRecords"
-        ),
-        {
-
-            driverId:
-                currentUser.uid,
-
-            driverName:
-                driverData.name || "",
-
-            busId:
-                busId,
-
-            busNumber:
-                busData.busNumber || "",
-
-            selectedDate:
-                workDate.value,
-
-            odometer:
-                odometer,
-
-            litres:
-                litres,
-
-            amount:
-                amount,
-
-            billPhotoUrl:
-                billPhotoUrl,
-
-            createdAt:
-                serverTimestamp()
-        }
-    );
 
             dieselOdometer.value =
                 "";
