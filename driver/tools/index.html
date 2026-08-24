@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -8,54 +10,134 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <meta name="theme-color" content="#0b0b0b">
+    <meta
+        name="theme-color"
+        content="#111111"
+    >
 
     <title>Tools | BEST Bus</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
 
     <link
         rel="stylesheet"
         href="./style.css"
     >
+
 </head>
+
 
 <body>
 
+
 <header class="topbar">
 
-    <a href="../" class="back-btn">
-        ←
-    </a>
+    <div class="brand">
 
-    <div class="brand-block">
-        <div class="brand">BEST</div>
-        <div class="brand-sub">DRIVER TOOLS</div>
+        <div class="brand-logo">
+            BEST
+        </div>
+
+        <div>
+
+            <div class="brand-name">
+                BEST
+            </div>
+
+            <div class="brand-subtitle">
+                DRIVER TOOLS
+            </div>
+
+        </div>
+
     </div>
+
+
+    <button
+        id="logoutButton"
+        class="logout"
+    >
+        LOG OUT
+    </button>
 
 </header>
 
 
+
 <main class="page">
+
+
+    <!-- BACK -->
+
+    <button
+        id="backButton"
+        class="back-button"
+    >
+        ← BACK
+    </button>
+
+
+
+    <!-- TITLE -->
 
     <section class="intro">
 
-        <div class="eyebrow">
-            VEHICLE MAINTENANCE
-        </div>
+        <span class="eyebrow">
+            DRIVER TOOLS
+        </span>
 
         <h1>
-            Report a<br>
-            Problem
+            Report a Problem
         </h1>
 
         <p>
-            Found something wrong with your assigned bus?
-            Report it to the administration.
+            Tell us about any problem found
+            in your assigned bus.
         </p>
 
     </section>
 
 
-    <!-- ASSIGNED BUS -->
+
+    <!-- DRIVER -->
+
+    <section class="driver-card">
+
+        <div class="driver-icon">
+            👤
+        </div>
+
+        <div>
+
+            <span class="small-label">
+                DRIVER
+            </span>
+
+            <strong id="driverName">
+                Loading...
+            </strong>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- BUS -->
 
     <section class="bus-card">
 
@@ -65,52 +147,48 @@
 
         <div class="bus-info">
 
-            <span class="label">
+            <span class="small-label">
                 YOUR ASSIGNED BUS
             </span>
 
-            <strong id="busNumber">
+            <strong id="busName">
                 Loading...
             </strong>
 
             <span id="busRegistration">
-                Checking assignment...
+                --
             </span>
 
         </div>
 
-        <div
-            id="busStatus"
-            class="bus-status loading"
-        >
-            ●
-        </div>
+        <span class="assigned">
+            ASSIGNED
+        </span>
 
     </section>
 
 
+
     <!-- FORM -->
 
-    <form
-        id="problemForm"
-        class="form"
-    >
+    <section class="form-card">
 
-        <div class="field">
 
-            <label for="problem">
-                WHAT IS THE PROBLEM?
-            </label>
+        <div class="form-title">
 
-            <textarea
-                id="problem"
-                placeholder="Describe what you noticed..."
-                rows="6"
-                required
-            ></textarea>
+            <span class="eyebrow">
+                MAINTENANCE
+            </span>
+
+            <h2>
+                What's the problem?
+            </h2>
 
         </div>
 
+
+
+        <!-- TYPE -->
 
         <div class="field">
 
@@ -118,99 +196,181 @@
                 PROBLEM TYPE
             </label>
 
-            <div class="type-list">
+
+            <div class="type-grid">
+
+                <button
+                    type="button"
+                    class="type-option active"
+                    data-type="service"
+                >
+
+                    <span class="type-icon">
+                        🔧
+                    </span>
+
+                    <span>
+                        Service / Repair
+                    </span>
+
+                </button>
 
 
-                <label class="type-option">
+                <button
+                    type="button"
+                    class="type-option"
+                    data-type="part"
+                >
 
-                    <input
-                        type="radio"
-                        name="problemType"
-                        value="service"
-                        required
-                    >
+                    <span class="type-icon">
+                        ⚙️
+                    </span>
 
-                    <div class="type-card">
+                    <span>
+                        Part Replacement
+                    </span>
 
-                        <div class="type-icon">
-                            🔧
-                        </div>
-
-                        <div class="type-text">
-
-                            <strong>
-                                Service / Repair
-                            </strong>
-
-                            <span>
-                                Something needs to be checked or serviced.
-                            </span>
-
-                        </div>
-
-                        <div class="radio-circle"></div>
-
-                    </div>
-
-                </label>
-
-
-                <label class="type-option">
-
-                    <input
-                        type="radio"
-                        name="problemType"
-                        value="replacement"
-                    >
-
-                    <div class="type-card">
-
-                        <div class="type-icon">
-                            ⚙️
-                        </div>
-
-                        <div class="type-text">
-
-                            <strong>
-                                Part Replacement
-                            </strong>
-
-                            <span>
-                                A vehicle part may need replacement.
-                            </span>
-
-                        </div>
-
-                        <div class="radio-circle"></div>
-
-                    </div>
-
-                </label>
-
+                </button>
 
             </div>
 
         </div>
 
 
+
+        <!-- PROBLEM -->
+
+        <div class="field">
+
+            <label for="problem">
+                PROBLEM DESCRIPTION
+            </label>
+
+            <textarea
+                id="problem"
+                rows="6"
+                maxlength="1000"
+                placeholder="Example: Front brake making noise while driving..."
+            ></textarea>
+
+            <div class="counter">
+
+                <span>
+                    Describe the problem clearly.
+                </span>
+
+                <span>
+                    <b id="characterCount">0</b>/1000
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- URGENCY -->
+
+        <div class="field">
+
+            <label>
+                PRIORITY
+            </label>
+
+
+            <div class="priority-grid">
+
+                <button
+                    type="button"
+                    class="priority-option"
+                    data-priority="low"
+                >
+                    LOW
+                </button>
+
+
+                <button
+                    type="button"
+                    class="priority-option active"
+                    data-priority="normal"
+                >
+                    NORMAL
+                </button>
+
+
+                <button
+                    type="button"
+                    class="priority-option"
+                    data-priority="urgent"
+                >
+                    URGENT
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SUBMIT -->
+
         <button
-            type="submit"
             id="submitButton"
-            class="submit-btn"
-            disabled
+            class="submit-button"
         >
-            REPORT PROBLEM
+            SUBMIT PROBLEM
         </button>
 
 
-        <div
-            id="message"
-            class="message"
-        ></div>
+        <p class="note">
+            This report will be sent to the
+            school transport administration.
+        </p>
 
-    </form>
+    </section>
+
+
+
+    <!-- PREVIOUS REPORTS -->
+
+    <section class="reports-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    HISTORY
+                </span>
+
+                <h2>
+                    My Reports
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="reportsList"
+            class="reports-list"
+        >
+            Loading...
+        </div>
+
+    </section>
+
 
 </main>
+
+
+
+<div
+    id="message"
+    class="message hidden"
+></div>
+
 
 
 <script
@@ -218,5 +378,7 @@
     src="./script.js"
 ></script>
 
+
 </body>
+
 </html>
