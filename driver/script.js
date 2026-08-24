@@ -4,17 +4,16 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 import {
+    collection,
     doc,
     getDoc,
-    setDoc,
-    updateDoc,
-    collection,
-    addDoc,
+    getDocs,
     query,
     where,
+    addDoc,
+    updateDoc,
     orderBy,
     limit,
-    getDocs,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
@@ -24,30 +23,30 @@ import {
 } from "../core/firebase.js";
 
 
-/* =================================
+/* =====================================================
    ELEMENTS
-================================= */
+===================================================== */
 
-const driverName =
+const driverNameEl =
     document.getElementById("driverName");
 
-const busNumber =
+const busNumberEl =
     document.getElementById("busNumber");
 
-const busRegistration =
+const busRegistrationEl =
     document.getElementById("busRegistration");
 
-const currentOdometer =
+const currentOdometerEl =
     document.getElementById("currentOdometer");
 
-const workDate =
+const workDateEl =
     document.getElementById("workDate");
 
 
-const morningStatus =
+const morningStatusEl =
     document.getElementById("morningStatus");
 
-const morningStartOdometer =
+const morningStartOdometerEl =
     document.getElementById("morningStartOdometer");
 
 const morningStartButton =
@@ -63,10 +62,10 @@ const morningEndButton =
     document.getElementById("morningEndButton");
 
 
-const eveningStatus =
+const eveningStatusEl =
     document.getElementById("eveningStatus");
 
-const eveningStartOdometer =
+const eveningStartOdometerEl =
     document.getElementById("eveningStartOdometer");
 
 const eveningStartButton =
@@ -101,39 +100,23 @@ const historyList =
 const logoutButton =
     document.getElementById("logoutButton");
 
-const message =
+const messageEl =
     document.getElementById("message");
 
 
-/* =================================
-   GLOBAL DATA
-================================= */
+/* =====================================================
+   STATE
+===================================================== */
 
 let currentUser = null;
-
-let driverData = null;
-
-let busData = null;
-
-let busId = null;
-
-let activeRecord = null;
+let currentDriver = null;
+let currentBus = null;
+let currentRecord = null;
 
 
-/* =================================
-   DATE
-================================= */
-
-const today =
-    new Date();
-
-workDate.value =
-    formatDateInput(today);
-
-
-/* =================================
-   AUTHENTICATION
-================================= */
+/* =====================================================
+   START
+===================================================== */
 
 onAuthStateChanged(
     auth,
@@ -141,118 +124,40 @@ onAuthStateChanged(
 
         if (!user) {
 
-            window.location.replace(
-                "../index.html"
-            );
+            window.location.href =
+                "../login/";
 
             return;
         }
 
 
-        currentUser =
-            user;
+        currentUser = user;
 
 
         try {
 
-            const userRef =
-                doc(
-                    db,
-                    "users",
-                    user.uid
-                );
-
-
-            const userSnapshot =
-                await getDoc(
-                    userRef
-                );
-
-
-            if (
-                !userSnapshot.exists()
-            ) {
-
-                await signOut(auth);
-
-                window.location.replace(
-                    "../index.html"
-                );
-
-                return;
-            }
-
-
-            driverData =
-                userSnapshot.data();
-
-
-            /*
-             * Must be a driver.
-             */
-
-            if (
-                driverData.role !==
-                "driver"
-            ) {
-
-                window.location.replace(
-                    "../waiting/"
-                );
-
-                return;
-            }
-
-
-            /*
-             * Must be approved.
-             */
-
-            if (
-                driverData.status !==
-                "approved"
-            ) {
-
-                window.location.replace(
-                    "../waiting/"
-                );
-
-                return;
-            }
-
-
-            /*
-             * Must have a bus.
-             */
-
-            if (
-                !driverData.assignedBusId
-            ) {
-
-                window.location.replace(
-                    "../waiting/"
-                );
-
-                return;
-            }
-
-
-            busId =
-                driverData.assignedBusId;
-
-
             await loadDriver();
+
+            await loadAssignedBus();
+
+            setDefaultDate();
+
+            await loadSelectedDate();
+
+            await loadHistory();
 
 
         } catch (error) {
 
             console.error(
-                "DRIVER AUTH ERROR:",
+                "DRIVER PANEL ERROR:",
                 error
             );
 
-            showError(
-                "Unable to load your driver account."
+            showMessage(
+                error.message ||
+                "Unable to load driver panel.",
+                "error"
             );
 
         }
@@ -261,218 +166,843 @@ onAuthStateChanged(
 );
 
 
-/* =================================
-   LOAD DRIVER + BUS
-================================= */
+/* =====================================================
+   LOAD DRIVER
+===================================================== */
 
 async function loadDriver() {
 
-    driverName.textContent =
-        driverData.name ||
-        "Driver";
+    /*
+     * First try:
+     *
+     * drivers document containing uid
+     */
 
-
-    const busRef =
-        doc(
-            db,
-            "buses",
-            busId
+    const driverQuery =
+        query(
+            collection(db, "drivers"),
+            where(
+                "uid",
+                "==",
+                currentUser.uid
+            )
         );
 
 
-    const busSnapshot =
-        await getDoc(
-            busRef
+    const snapshot =
+        await getDocs(
+            driverQuery
         );
 
 
-    if (
-        !busSnapshot.exists()
-    ) {
+    if (!snapshot.empty) {
 
-        showError(
-            "Your assigned bus could not be found."
-        );
+        const driverDoc =
+            snapshot.docs[0];
 
-        return;
+        currentDriver = {
+            id: driverDoc.id,
+            ...driverDoc.data()
+        };
+
+    } else {
+
+        /*
+         * Fallback:
+         * drivers/{Firebase UID}
+         */
+
+        const driverRef =
+            doc(
+                db,
+                "drivers",
+                currentUser.uid
+            );
+
+        const driverSnap =
+            await getDoc(
+                driverRef
+            );
+
+
+        if (!driverSnap.exists()) {
+
+            throw new Error(
+                "Driver profile not found."
+            );
+
+        }
+
+
+        currentDriver = {
+
+            id:
+                driverSnap.id,
+
+            ...driverSnap.data()
+
+        };
+
     }
 
 
-    busData =
-        busSnapshot.data();
-
-
-    busNumber.textContent =
-        busData.busNumber ||
-        "BUS";
-
-
-    busRegistration.textContent =
-        busData.registrationNumber ||
-        "Registration not available";
-
-
-    currentOdometer.textContent =
-        formatNumber(
-            busData.currentOdometer ??
-            busData.startingOdometer ??
-            0
-        ) + " KM";
-
-
-    /*
-     * Load existing incomplete record
-     * for the selected date.
-     */
-
-    await loadActiveRecord();
-
-
-    await loadHistory();
+    driverNameEl.textContent =
+        `Welcome ${
+            currentDriver.name ||
+            currentUser.displayName ||
+            "Driver"
+        }`;
 
 }
 
 
-/* =================================
-   DATE CHANGE
-================================= */
+/* =====================================================
+   LOAD ASSIGNED BUS
+===================================================== */
 
-workDate.addEventListener(
+async function loadAssignedBus() {
+
+    const busesSnapshot =
+        await getDocs(
+            collection(
+                db,
+                "buses"
+            )
+        );
+
+
+    let foundBus = null;
+
+
+    busesSnapshot.forEach(
+        busDoc => {
+
+            const bus =
+                busDoc.data();
+
+
+            const assignedDriver =
+                bus.assignedDriverId ||
+                bus.driverId ||
+                bus.driverUid;
+
+
+            /*
+             * Match either:
+             *
+             * driver document ID
+             * OR Firebase Auth UID
+             */
+
+            if (
+                assignedDriver ===
+                currentDriver.id
+                ||
+                assignedDriver ===
+                currentUser.uid
+            ) {
+
+                foundBus = {
+
+                    id:
+                        busDoc.id,
+
+                    ...bus
+
+                };
+
+            }
+
+        }
+    );
+
+
+    if (!foundBus) {
+
+        throw new Error(
+            "No bus is currently assigned to you."
+        );
+
+    }
+
+
+    currentBus =
+        foundBus;
+
+
+    busNumberEl.textContent =
+        currentBus.busNumber ||
+        currentBus.name ||
+        currentBus.number ||
+        "BUS";
+
+
+    busRegistrationEl.textContent =
+        currentBus.registrationNumber ||
+        currentBus.registrationNo ||
+        "--";
+
+
+    await loadCurrentOdometer();
+
+}
+
+
+/* =====================================================
+   DEFAULT DATE
+===================================================== */
+
+function setDefaultDate() {
+
+    const today =
+        new Date();
+
+
+    const year =
+        today.getFullYear();
+
+
+    const month =
+        String(
+            today.getMonth() + 1
+        ).padStart(2, "0");
+
+
+    const day =
+        String(
+            today.getDate()
+        ).padStart(2, "0");
+
+
+    workDateEl.value =
+        `${year}-${month}-${day}`;
+
+}
+
+
+/* =====================================================
+   DATE CHANGE
+===================================================== */
+
+workDateEl.addEventListener(
     "change",
     async () => {
 
-        resetTripUI();
+        resetScreen();
 
-        await loadActiveRecord();
-
-        await loadHistory();
+        await loadSelectedDate();
 
     }
 );
 
 
-/* =================================
-   LOAD ACTIVE RECORD
-================================= */
+/* =====================================================
+   LOAD SELECTED DATE
+===================================================== */
 
-async function loadActiveRecord() {
+async function loadSelectedDate() {
 
-    activeRecord =
-        null;
+    if (
+        !workDateEl.value ||
+        !currentBus ||
+        !currentDriver
+    ) {
+
+        return;
+
+    }
 
 
-    try {
+    const selectedDate =
+        workDateEl.value;
 
-        const recordsRef =
+
+    currentRecord = null;
+
+
+    /*
+     * Find existing record for:
+     *
+     * driver + bus + operation date
+     */
+
+    const q =
+        query(
             collection(
                 db,
                 "driverRecords"
-            );
+            ),
+
+            where(
+                "driverId",
+                "==",
+                currentDriver.id
+            ),
+
+            where(
+                "busId",
+                "==",
+                currentBus.id
+            ),
+
+            where(
+                "operationDate",
+                "==",
+                selectedDate
+            ),
+
+            limit(1)
+        );
 
 
-        const q =
-            query(
-                recordsRef,
+    const snapshot =
+        await getDocs(q);
 
-                where(
-                    "driverId",
-                    "==",
-                    currentUser.uid
-                ),
 
-                where(
-                    "busId",
-                    "==",
-                    busId
-                ),
+    if (
+        !snapshot.empty
+    ) {
 
-                where(
-                    "selectedDate",
-                    "==",
-                    workDate.value
-                ),
+        const recordDoc =
+            snapshot.docs[0];
 
-                where(
-                    "completed",
-                    "==",
-                    false
-                ),
 
-                orderBy(
-                    "createdAt",
-                    "desc"
-                ),
+        currentRecord = {
 
-                limit(1)
-            );
+            id:
+                recordDoc.id,
 
+            ...recordDoc.data()
+
+        };
+
+
+        displayExistingRecord();
+
+    } else {
+
+        /*
+         * New date
+         */
+
+        prepareNewDate();
+
+    }
+
+
+    /*
+     * Starting odometer is based
+     * on previous available record.
+     */
+
+    await setAutomaticStartingOdometer();
+
+}
+
+
+/* =====================================================
+   NEW DATE
+===================================================== */
+
+function prepareNewDate() {
+
+    morningStatusEl.textContent =
+        "NOT STARTED";
+
+    morningStatusEl.className =
+        "status pending";
+
+
+    eveningStatusEl.textContent =
+        "NOT STARTED";
+
+    eveningStatusEl.className =
+        "status pending";
+
+
+    morningStartOdometerEl.textContent =
+        "--";
+
+
+    eveningStartOdometerEl.textContent =
+        "--";
+
+
+    morningEndArea.classList.add(
+        "hidden"
+    );
+
+    eveningEndArea.classList.add(
+        "hidden"
+    );
+
+
+    morningStartButton.disabled =
+        false;
+
+
+    morningEndButton.disabled =
+        false;
+
+
+    eveningStartButton.disabled =
+        true;
+
+
+    eveningEndButton.disabled =
+        false;
+
+}
+
+
+/* =====================================================
+   DISPLAY EXISTING RECORD
+===================================================== */
+
+function displayExistingRecord() {
+
+    const record =
+        currentRecord;
+
+
+    /*
+     * MORNING
+     */
+
+    if (
+        record.morningStartOdometer !==
+        undefined &&
+        record.morningStartOdometer !==
+        null
+    ) {
+
+        morningStartOdometerEl.textContent =
+            `${formatNumber(
+                record.morningStartOdometer
+            )} KM`;
+
+    }
+
+
+    if (
+        record.morningEndOdometer !==
+        undefined &&
+        record.morningEndOdometer !==
+        null
+    ) {
+
+        morningEndArea.classList.remove(
+            "hidden"
+        );
+
+        morningEndOdometer.value =
+            record.morningEndOdometer;
+
+
+        morningStatusEl.textContent =
+            "COMPLETED";
+
+        morningStatusEl.className =
+            "status complete";
+
+
+        morningStartButton.disabled =
+            true;
+
+        morningEndButton.disabled =
+            true;
+
+
+    } else if (
+        record.morningStartOdometer !==
+        undefined
+    ) {
+
+        morningEndArea.classList.remove(
+            "hidden"
+        );
+
+
+        morningStatusEl.textContent =
+            "IN PROGRESS";
+
+        morningStatusEl.className =
+            "status active";
+
+
+        morningStartButton.disabled =
+            true;
+
+        morningEndButton.disabled =
+            false;
+
+    }
+
+
+    /*
+     * EVENING
+     */
+
+    if (
+        record.eveningStartOdometer !==
+        undefined &&
+        record.eveningStartOdometer !==
+        null
+    ) {
+
+        eveningStartOdometerEl.textContent =
+            `${formatNumber(
+                record.eveningStartOdometer
+            )} KM`;
+
+    }
+
+
+    if (
+        record.eveningEndOdometer !==
+        undefined &&
+        record.eveningEndOdometer !==
+        null
+    ) {
+
+        eveningEndArea.classList.remove(
+            "hidden"
+        );
+
+        eveningEndOdometer.value =
+            record.eveningEndOdometer;
+
+
+        eveningStatusEl.textContent =
+            "COMPLETED";
+
+        eveningStatusEl.className =
+            "status complete";
+
+
+        eveningStartButton.disabled =
+            true;
+
+        eveningEndButton.disabled =
+            true;
+
+    } else if (
+        record.eveningStartOdometer !==
+        undefined
+    ) {
+
+        eveningEndArea.classList.remove(
+            "hidden"
+        );
+
+
+        eveningStatusEl.textContent =
+            "IN PROGRESS";
+
+        eveningStatusEl.className =
+            "status active";
+
+
+        eveningStartButton.disabled =
+            true;
+
+        eveningEndButton.disabled =
+            false;
+
+    }
+
+
+    /*
+     * EVENING CAN ONLY START
+     * AFTER MORNING IS COMPLETE
+     */
+
+    if (
+        record.morningEndOdometer !==
+        undefined &&
+        record.morningEndOdometer !==
+        null &&
+        record.eveningStartOdometer ===
+        undefined
+    ) {
+
+        eveningStartButton.disabled =
+            false;
+
+    }
+
+
+    /*
+     * DIESEL
+     */
+
+    if (
+        record.diesel
+    ) {
+
+        dieselOdometer.value =
+            record.diesel.odometer ||
+            "";
+
+        dieselLitres.value =
+            record.diesel.litres ||
+            "";
+
+        dieselAmount.value =
+            record.diesel.amount ||
+            "";
+
+    }
+
+}
+
+
+/* =====================================================
+   AUTOMATIC STARTING ODOMETER
+===================================================== */
+
+async function setAutomaticStartingOdometer() {
+
+    if (
+        !currentBus ||
+        !workDateEl.value
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * If selected day's record already
+     * has readings, don't overwrite.
+     */
+
+    if (
+        currentRecord
+    ) {
+
+        if (
+            currentRecord.morningStartOdometer
+            !== undefined
+        ) {
+
+            currentOdometerEl.textContent =
+                `${formatNumber(
+                    currentRecord.morningStartOdometer
+                )} KM`;
+
+            return;
+
+        }
+
+    }
+
+
+    /*
+     * Find latest previous driver record
+     */
+
+    const q =
+        query(
+            collection(
+                db,
+                "driverRecords"
+            ),
+
+            where(
+                "busId",
+                "==",
+                currentBus.id
+            ),
+
+            orderBy(
+                "operationDate",
+                "desc"
+            ),
+
+            limit(20)
+        );
+
+
+    try {
 
         const snapshot =
             await getDocs(q);
 
 
-        if (
-            snapshot.empty
+        let previousEnd =
+            null;
+
+
+        for (
+            const document of
+            snapshot.docs
         ) {
 
-            resetTripUI();
+            const data =
+                document.data();
 
-            return;
+
+            if (
+                data.operationDate >=
+                workDateEl.value
+            ) {
+
+                continue;
+
+            }
+
+
+            if (
+                data.eveningEndOdometer !==
+                undefined &&
+                data.eveningEndOdometer !==
+                null
+            ) {
+
+                previousEnd =
+                    Number(
+                        data.eveningEndOdometer
+                    );
+
+                break;
+
+            }
+
+
+            if (
+                data.morningEndOdometer !==
+                undefined &&
+                data.morningEndOdometer !==
+                null
+            ) {
+
+                previousEnd =
+                    Number(
+                        data.morningEndOdometer
+                    );
+
+                break;
+
+            }
+
         }
 
 
-        const recordSnapshot =
-            snapshot.docs[0];
+        if (
+            previousEnd !== null
+        ) {
+
+            currentOdometerEl.textContent =
+                `${formatNumber(
+                    previousEnd
+                )} KM`;
+
+            morningStartOdometerEl.textContent =
+                `${formatNumber(
+                    previousEnd
+                )} KM`;
+
+        } else {
+
+            /*
+             * First-ever record:
+             * use bus current odometer
+             */
+
+            const busOdometer =
+                Number(
+                    currentBus.currentOdometer ||
+                    currentBus.odometer ||
+                    0
+                );
 
 
-        activeRecord = {
+            if (
+                busOdometer > 0
+            ) {
 
-            id:
-                recordSnapshot.id,
+                currentOdometerEl.textContent =
+                    `${formatNumber(
+                        busOdometer
+                    )} KM`;
 
-            ...recordSnapshot.data()
+            } else {
 
-        };
+                currentOdometerEl.textContent =
+                    "-- KM";
 
+            }
 
-        updateTripUI();
-
+        }
 
     } catch (error) {
 
         /*
-         * If there is no Firestore index yet,
-         * the page should still work for a
-         * new record.
+         * If Firestore index isn't available,
+         * fallback to current bus odometer.
          */
 
-        console.error(
-            "ACTIVE RECORD ERROR:",
+        console.warn(
+            "Previous odometer lookup:",
             error
         );
 
-        resetTripUI();
+
+        const busOdometer =
+            Number(
+                currentBus.currentOdometer ||
+                currentBus.odometer ||
+                0
+            );
+
+
+        currentOdometerEl.textContent =
+            busOdometer
+                ? `${formatNumber(
+                    busOdometer
+                  )} KM`
+                : "-- KM";
 
     }
 
 }
 
 
-/* =================================
+/* =====================================================
    MORNING START
-================================= */
+===================================================== */
 
 morningStartButton.addEventListener(
     "click",
     async () => {
 
-        if (!busData) {
+        if (
+            !currentBus ||
+            !currentDriver
+        ) {
 
-            showError(
-                "Bus information is not loaded."
+            return;
+
+        }
+
+
+        const startingOdometer =
+            await getStartingOdometer();
+
+
+        if (
+            startingOdometer === null
+        ) {
+
+            showMessage(
+                "Starting odometer is not available.",
+                "error"
             );
 
             return;
+
         }
 
 
@@ -482,110 +1012,143 @@ morningStartButton.addEventListener(
 
         try {
 
-            /*
-             * IMPORTANT:
-             * No odometer is entered here.
-             *
-             * We automatically use the
-             * bus's current odometer.
-             */
+            if (
+                currentRecord
+            ) {
 
-            const startOdometer =
-                Number(
-                    busData.currentOdometer ??
-                    busData.startingOdometer ??
-                    0
-                );
+                await updateDoc(
 
-
-            const recordData = {
-
-                driverId:
-                    currentUser.uid,
-
-                driverName:
-                    driverData.name || "",
-
-                busId:
-                    busId,
-
-                busNumber:
-                    busData.busNumber || "",
-
-                selectedDate:
-                    workDate.value,
-
-                morningStartOdometer:
-                    startOdometer,
-
-                morningStartAt:
-                    serverTimestamp(),
-
-                morningEndOdometer:
-                    null,
-
-                morningEndAt:
-                    null,
-
-                eveningStartOdometer:
-                    null,
-
-                eveningStartAt:
-                    null,
-
-                eveningEndOdometer:
-                    null,
-
-                eveningEndAt:
-                    null,
-
-                completed:
-                    false,
-
-                createdAt:
-                    serverTimestamp()
-
-            };
-
-
-            const reference =
-                await addDoc(
-                    collection(
+                    doc(
                         db,
-                        "driverRecords"
+                        "driverRecords",
+                        currentRecord.id
                     ),
-                    recordData
+
+                    {
+
+                        morningStartOdometer:
+                            startingOdometer,
+
+                        morningStartedAt:
+                            serverTimestamp(),
+
+                        updatedAt:
+                            serverTimestamp()
+
+                    }
+
                 );
 
+            } else {
 
-            activeRecord = {
+                const newRecord =
+                    await addDoc(
 
-                id:
-                    reference.id,
+                        collection(
+                            db,
+                            "driverRecords"
+                        ),
 
-                ...recordData,
+                        {
 
-                morningStartOdometer:
-                    startOdometer
+                            driverId:
+                                currentDriver.id,
 
-            };
+                            driverUid:
+                                currentUser.uid,
+
+                            driverName:
+                                currentDriver.name ||
+                                currentUser.displayName ||
+                                "",
+
+                            busId:
+                                currentBus.id,
+
+                            busNumber:
+                                currentBus.busNumber ||
+                                "",
+
+                            operationDate:
+                                workDateEl.value,
+
+                            morningStartOdometer:
+                                startingOdometer,
+
+                            morningEndOdometer:
+                                null,
+
+                            eveningStartOdometer:
+                                null,
+
+                            eveningEndOdometer:
+                                null,
+
+                            createdAt:
+                                serverTimestamp(),
+
+                            updatedAt:
+                                serverTimestamp()
+
+                        }
+
+                    );
 
 
-            morningStartOdometer.textContent =
-                formatNumber(
-                    startOdometer
-                ) + " KM";
+                currentRecord = {
+
+                    id:
+                        newRecord.id,
+
+                    driverId:
+                        currentDriver.id,
+
+                    driverUid:
+                        currentUser.uid,
+
+                    driverName:
+                        currentDriver.name ||
+                        currentUser.displayName ||
+                        "",
+
+                    busId:
+                        currentBus.id,
+
+                    busNumber:
+                        currentBus.busNumber ||
+                        "",
+
+                    operationDate:
+                        workDateEl.value,
+
+                    morningStartOdometer:
+                        startingOdometer,
+
+                    morningEndOdometer:
+                        null,
+
+                    eveningStartOdometer:
+                        null,
+
+                    eveningEndOdometer:
+                        null
+
+                };
+
+            }
 
 
-            morningStatus.textContent =
+            morningStartOdometerEl.textContent =
+                `${formatNumber(
+                    startingOdometer
+                )} KM`;
+
+
+            morningStatusEl.textContent =
                 "IN PROGRESS";
 
-            morningStatus.className =
+            morningStatusEl.className =
                 "status active";
-
-
-            morningStartButton.style.display =
-                "none";
 
 
             morningEndArea.classList.remove(
@@ -593,23 +1156,22 @@ morningStartButton.addEventListener(
             );
 
 
-            showSuccess(
-                "Morning pickup started."
+            showMessage(
+                "Morning pickup started.",
+                "success"
             );
 
 
         } catch (error) {
 
-            console.error(
-                "MORNING START ERROR:",
-                error
-            );
+            console.error(error);
 
             morningStartButton.disabled =
                 false;
 
-            showError(
-                "Unable to start morning pickup."
+            showMessage(
+                "Unable to start morning pickup.",
+                "error"
             );
 
         }
@@ -618,9 +1180,9 @@ morningStartButton.addEventListener(
 );
 
 
-/* =================================
+/* =====================================================
    MORNING END
-================================= */
+===================================================== */
 
 morningEndButton.addEventListener(
     "click",
@@ -634,30 +1196,22 @@ morningEndButton.addEventListener(
 
         if (
             !Number.isFinite(value) ||
-            value < 0
+            value <= 0
         ) {
 
-            showError(
-                "Enter a valid morning odometer."
+            showMessage(
+                "Enter a valid morning ending odometer.",
+                "error"
             );
 
             return;
-        }
 
-
-        if (!activeRecord) {
-
-            showError(
-                "No active morning record."
-            );
-
-            return;
         }
 
 
         const start =
             Number(
-                activeRecord.morningStartOdometer
+                currentRecord?.morningStartOdometer
             );
 
 
@@ -665,130 +1219,77 @@ morningEndButton.addEventListener(
             value < start
         ) {
 
-            showError(
-                "Morning ending odometer cannot be lower than the starting odometer."
+            showMessage(
+                "Ending odometer cannot be lower than starting odometer.",
+                "error"
             );
 
             return;
+
         }
-
-
-        morningEndButton.disabled =
-            true;
 
 
         try {
 
-            const recordRef =
+            await updateDoc(
+
                 doc(
                     db,
                     "driverRecords",
-                    activeRecord.id
-                );
+                    currentRecord.id
+                ),
 
-
-            await updateDoc(
-                recordRef,
                 {
 
                     morningEndOdometer:
                         value,
 
-                    morningEndAt:
+                    morningEndedAt:
                         serverTimestamp(),
 
-                    morningDistance:
-                        value - start
-
-                }
-            );
-
-
-            /*
-             * Update bus current odometer.
-             *
-             * Evening starting odometer
-             * will automatically use this.
-             */
-
-            const busRef =
-                doc(
-                    db,
-                    "buses",
-                    busId
-                );
-
-
-            await updateDoc(
-                busRef,
-                {
-
-                    currentOdometer:
-                        value,
-
-                    odometerUpdatedAt:
+                    updatedAt:
                         serverTimestamp()
 
                 }
+
             );
 
 
-            busData.currentOdometer =
+            currentRecord.morningEndOdometer =
                 value;
 
 
-            currentOdometer.textContent =
-                formatNumber(
-                    value
-                ) + " KM";
-
-
-            activeRecord.morningEndOdometer =
-                value;
-
-
-            morningStatus.textContent =
+            morningStatusEl.textContent =
                 "COMPLETED";
 
-            morningStatus.className =
+            morningStatusEl.className =
                 "status complete";
 
 
-            morningEndArea.classList.add(
-                "hidden"
-            );
-
-
-            eveningStartOdometer.textContent =
-                formatNumber(
-                    value
-                ) + " KM";
+            morningEndButton.disabled =
+                true;
 
 
             eveningStartButton.disabled =
                 false;
 
 
-            showSuccess(
-                "Morning pickup completed."
+            showMessage(
+                "Morning pickup completed.",
+                "success"
             );
 
 
-            await loadHistory();
+            await loadCurrentOdometer();
 
 
         } catch (error) {
 
-            console.error(
-                "MORNING END ERROR:",
-                error
-            );
+            console.error(error);
 
-            morningEndButton.disabled =
-                false;
-
-            showError(
-                "Unable to save morning odometer."
+            showMessage(
+                "Unable to save morning odometer.",
+                "error"
             );
 
         }
@@ -797,18 +1298,21 @@ morningEndButton.addEventListener(
 );
 
 
-/* =================================
+/* =====================================================
    EVENING START
-================================= */
+===================================================== */
 
 eveningStartButton.addEventListener(
     "click",
     async () => {
 
-        if (!activeRecord) {
+        if (
+            !currentRecord
+        ) {
 
-            showError(
-                "Complete morning pickup first."
+            showMessage(
+                "Complete morning pickup first.",
+                "error"
             );
 
             return;
@@ -817,12 +1321,15 @@ eveningStartButton.addEventListener(
 
 
         if (
-            activeRecord.morningEndOdometer ==
-            null
+            currentRecord.morningEndOdometer
+            === undefined ||
+            currentRecord.morningEndOdometer
+            === null
         ) {
 
-            showError(
-                "Morning odometer must be entered first."
+            showMessage(
+                "Complete morning pickup first.",
+                "error"
             );
 
             return;
@@ -830,59 +1337,57 @@ eveningStartButton.addEventListener(
         }
 
 
-        eveningStartButton.disabled =
-            true;
+        const startingOdometer =
+            Number(
+                currentRecord.morningEndOdometer
+            );
 
 
         try {
 
-            const eveningStart =
-                Number(
-                    activeRecord.morningEndOdometer
-                );
+            await updateDoc(
 
-
-            const recordRef =
                 doc(
                     db,
                     "driverRecords",
-                    activeRecord.id
-                );
+                    currentRecord.id
+                ),
 
-
-            await updateDoc(
-                recordRef,
                 {
 
                     eveningStartOdometer:
-                        eveningStart,
+                        startingOdometer,
 
-                    eveningStartAt:
+                    eveningStartedAt:
+                        serverTimestamp(),
+
+                    updatedAt:
                         serverTimestamp()
 
                 }
+
             );
 
 
-            activeRecord.eveningStartOdometer =
-                eveningStart;
+            currentRecord.eveningStartOdometer =
+                startingOdometer;
 
 
-            eveningStartOdometer.textContent =
-                formatNumber(
-                    eveningStart
-                ) + " KM";
+            eveningStartOdometerEl.textContent =
+                `${formatNumber(
+                    startingOdometer
+                )} KM`;
 
 
-            eveningStatus.textContent =
+            eveningStatusEl.textContent =
                 "IN PROGRESS";
 
-            eveningStatus.className =
+            eveningStatusEl.className =
                 "status active";
 
 
-            eveningStartButton.style.display =
-                "none";
+            eveningStartButton.disabled =
+                true;
 
 
             eveningEndArea.classList.remove(
@@ -890,23 +1395,19 @@ eveningStartButton.addEventListener(
             );
 
 
-            showSuccess(
-                "Evening pickup started."
+            showMessage(
+                "Evening pickup started.",
+                "success"
             );
 
 
         } catch (error) {
 
-            console.error(
-                "EVENING START ERROR:",
-                error
-            );
+            console.error(error);
 
-            eveningStartButton.disabled =
-                false;
-
-            showError(
-                "Unable to start evening pickup."
+            showMessage(
+                "Unable to start evening pickup.",
+                "error"
             );
 
         }
@@ -915,9 +1416,9 @@ eveningStartButton.addEventListener(
 );
 
 
-/* =================================
+/* =====================================================
    EVENING END
-================================= */
+===================================================== */
 
 eveningEndButton.addEventListener(
     "click",
@@ -931,22 +1432,12 @@ eveningEndButton.addEventListener(
 
         if (
             !Number.isFinite(value) ||
-            value < 0
+            value <= 0
         ) {
 
-            showError(
-                "Enter a valid evening odometer."
-            );
-
-            return;
-
-        }
-
-
-        if (!activeRecord) {
-
-            showError(
-                "No active record."
+            showMessage(
+                "Enter a valid evening ending odometer.",
+                "error"
             );
 
             return;
@@ -956,7 +1447,7 @@ eveningEndButton.addEventListener(
 
         const start =
             Number(
-                activeRecord.eveningStartOdometer
+                currentRecord?.eveningStartOdometer
             );
 
 
@@ -964,8 +1455,9 @@ eveningEndButton.addEventListener(
             value < start
         ) {
 
-            showError(
-                "Evening ending odometer cannot be lower than the starting odometer."
+            showMessage(
+                "Ending odometer cannot be lower than starting odometer.",
+                "error"
             );
 
             return;
@@ -973,153 +1465,65 @@ eveningEndButton.addEventListener(
         }
 
 
-        eveningEndButton.disabled =
-            true;
-
-
         try {
 
-            const recordRef =
+            await updateDoc(
+
                 doc(
                     db,
                     "driverRecords",
-                    activeRecord.id
-                );
+                    currentRecord.id
+                ),
 
-
-            await updateDoc(
-                recordRef,
                 {
 
                     eveningEndOdometer:
                         value,
 
-                    eveningEndAt:
+                    eveningEndedAt:
                         serverTimestamp(),
 
-                    eveningDistance:
-                        value - start,
-
-                    totalDistance:
-                        (
-                            Number(
-                                activeRecord.morningEndOdometer
-                            ) -
-                            Number(
-                                activeRecord.morningStartOdometer
-                            )
-                        ) +
-                        (
-                            value -
-                            Number(
-                                activeRecord.eveningStartOdometer
-                            )
-                        ),
-
-                    completed:
-                        true,
-
-                    completedAt:
+                    updatedAt:
                         serverTimestamp()
 
                 }
+
             );
 
 
-            /*
-             * Update bus current odometer.
-             */
-
-            const busRef =
-                doc(
-                    db,
-                    "buses",
-                    busId
-                );
-
-
-            await updateDoc(
-                busRef,
-                {
-
-                    currentOdometer:
-                        value,
-
-                    odometerUpdatedAt:
-                        serverTimestamp()
-
-                }
-            );
-
-
-            busData.currentOdometer =
+            currentRecord.eveningEndOdometer =
                 value;
 
 
-            currentOdometer.textContent =
-                formatNumber(
-                    value
-                ) + " KM";
-
-
-            activeRecord.eveningEndOdometer =
-                value;
-
-
-            activeRecord.completed =
-                true;
-
-
-            eveningStatus.textContent =
+            eveningStatusEl.textContent =
                 "COMPLETED";
 
-            eveningStatus.className =
+            eveningStatusEl.className =
                 "status complete";
 
 
-            eveningEndArea.classList.add(
-                "hidden"
-            );
-
-
-            eveningStartButton.style.display =
-                "";
-
-
-            eveningStartButton.disabled =
+            eveningEndButton.disabled =
                 true;
 
 
-            /*
-             * Clear active record so the
-             * driver can start another
-             * test record for the same date.
-             */
-
-            activeRecord =
-                null;
-
-
-            showSuccess(
-                "Evening pickup completed and odometer saved."
-            );
-
+            await loadCurrentOdometer();
 
             await loadHistory();
 
 
-        } catch (error) {
-
-            console.error(
-                "EVENING END ERROR:",
-                error
+            showMessage(
+                "Evening pickup completed.",
+                "success"
             );
 
-            eveningEndButton.disabled =
-                false;
 
-            showError(
-                "Unable to save evening odometer."
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Unable to save evening odometer.",
+                "error"
             );
 
         }
@@ -1128,9 +1532,197 @@ eveningEndButton.addEventListener(
 );
 
 
-/* =================================
+/* =====================================================
+   GET STARTING ODOMETER
+===================================================== */
+
+async function getStartingOdometer() {
+
+    /*
+     * Existing record
+     */
+
+    if (
+        currentRecord?.morningStartOdometer
+        !== undefined &&
+        currentRecord?.morningStartOdometer
+        !== null
+    ) {
+
+        return Number(
+            currentRecord.morningStartOdometer
+        );
+
+    }
+
+
+    /*
+     * Search previous records.
+     */
+
+    try {
+
+        const snapshot =
+            await getDocs(
+
+                query(
+                    collection(
+                        db,
+                        "driverRecords"
+                    ),
+
+                    where(
+                        "busId",
+                        "==",
+                        currentBus.id
+                    ),
+
+                    orderBy(
+                        "operationDate",
+                        "desc"
+                    ),
+
+                    limit(20)
+                )
+
+            );
+
+
+        for (
+            const document of
+            snapshot.docs
+        ) {
+
+            const record =
+                document.data();
+
+
+            if (
+                record.operationDate >=
+                workDateEl.value
+            ) {
+
+                continue;
+
+            }
+
+
+            if (
+                record.eveningEndOdometer
+                !== undefined &&
+                record.eveningEndOdometer
+                !== null
+            ) {
+
+                return Number(
+                    record.eveningEndOdometer
+                );
+
+            }
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Previous record search failed:",
+            error
+        );
+
+    }
+
+
+    /*
+     * Fallback to bus current odometer.
+     */
+
+    const busOdometer =
+        Number(
+            currentBus.currentOdometer ||
+            currentBus.odometer ||
+            0
+        );
+
+
+    if (
+        busOdometer > 0
+    ) {
+
+        return busOdometer;
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =====================================================
+   CURRENT ODOMETER
+===================================================== */
+
+async function loadCurrentOdometer() {
+
+    let value = null;
+
+
+    if (
+        currentRecord?.eveningEndOdometer
+        !== undefined &&
+        currentRecord?.eveningEndOdometer
+        !== null
+    ) {
+
+        value =
+            Number(
+                currentRecord.eveningEndOdometer
+            );
+
+    }
+
+
+    if (
+        value === null &&
+        currentRecord?.morningEndOdometer
+        !== undefined &&
+        currentRecord?.morningEndOdometer
+        !== null
+    ) {
+
+        value =
+            Number(
+                currentRecord.morningEndOdometer
+            );
+
+    }
+
+
+    if (
+        value === null
+    ) {
+
+        value =
+            Number(
+                currentBus?.currentOdometer ||
+                currentBus?.odometer ||
+                0
+            );
+
+    }
+
+
+    currentOdometerEl.textContent =
+        value > 0
+            ? `${formatNumber(value)} KM`
+            : "-- KM";
+
+}
+
+
+/* =====================================================
    DIESEL
-================================= */
+===================================================== */
 
 dieselButton.addEventListener(
     "click",
@@ -1153,12 +1745,13 @@ dieselButton.addEventListener(
 
 
         if (
-            !Number.isFinite(odometer) ||
-            odometer < 0
+            !odometer ||
+            odometer <= 0
         ) {
 
-            showError(
-                "Enter the diesel-point odometer."
+            showMessage(
+                "Enter diesel odometer.",
+                "error"
             );
 
             return;
@@ -1167,12 +1760,13 @@ dieselButton.addEventListener(
 
 
         if (
-            !Number.isFinite(litres) ||
+            !litres ||
             litres <= 0
         ) {
 
-            showError(
-                "Enter diesel litres."
+            showMessage(
+                "Enter diesel litres.",
+                "error"
             );
 
             return;
@@ -1181,76 +1775,133 @@ dieselButton.addEventListener(
 
 
         if (
-            !Number.isFinite(amount) ||
-            amount < 0
+            !amount ||
+            amount <= 0
         ) {
 
-            showError(
-                "Enter diesel cost."
+            showMessage(
+                "Enter diesel cost.",
+                "error"
             );
 
             return;
 
         }
-
-
-        dieselButton.disabled =
-            true;
 
 
         try {
 
-            await addDoc(
-                collection(
-                    db,
-                    "dieselRecords"
-                ),
-                {
+            /*
+             * If today's driver record
+             * exists, save diesel inside it.
+             */
 
-                    driverId:
-                        currentUser.uid,
+            if (
+                currentRecord
+            ) {
 
-                    driverName:
-                        driverData.name || "",
+                await updateDoc(
 
-                    busId:
-                        busId,
+                    doc(
+                        db,
+                        "driverRecords",
+                        currentRecord.id
+                    ),
 
-                    busNumber:
-                        busData.busNumber || "",
+                    {
 
-                    selectedDate:
-                        workDate.value,
+                        diesel: {
 
-                    odometer:
-                        odometer,
+                            odometer:
+                                odometer,
 
-                    litres:
-                        litres,
+                            litres:
+                                litres,
 
-                    amount:
-                        amount,
+                            amount:
+                                amount
 
-                    createdAt:
-                        serverTimestamp()
+                        },
 
-                }
+                        updatedAt:
+                            serverTimestamp()
+
+                    }
+
+                );
+
+
+                currentRecord.diesel = {
+
+                    odometer,
+                    litres,
+                    amount
+
+                };
+
+            } else {
+
+                /*
+                 * Diesel can be saved even
+                 * before a trip record.
+                 */
+
+                const dieselDoc =
+                    await addDoc(
+
+                        collection(
+                            db,
+                            "dieselRecords"
+                        ),
+
+                        {
+
+                            driverId:
+                                currentDriver.id,
+
+                            driverUid:
+                                currentUser.uid,
+
+                            driverName:
+                                currentDriver.name ||
+                                "",
+
+                            busId:
+                                currentBus.id,
+
+                            busNumber:
+                                currentBus.busNumber ||
+                                "",
+
+                            operationDate:
+                                workDateEl.value,
+
+                            odometer:
+                                odometer,
+
+                            litres:
+                                litres,
+
+                            amount:
+                                amount,
+
+                            createdAt:
+                                serverTimestamp()
+
+                        }
+
+                    );
+
+            }
+
+
+            showMessage(
+                "Diesel entry saved.",
+                "success"
             );
 
 
-            dieselOdometer.value =
-                "";
-
-            dieselLitres.value =
-                "";
-
-            dieselAmount.value =
-                "";
-
-
-            showSuccess(
-                "Diesel entry saved."
-            );
+            await loadHistory();
 
 
         } catch (error) {
@@ -1260,14 +1911,11 @@ dieselButton.addEventListener(
                 error
             );
 
-            showError(
-                "Unable to save diesel entry."
+
+            showMessage(
+                "Unable to save diesel entry.",
+                "error"
             );
-
-        } finally {
-
-            dieselButton.disabled =
-                false;
 
         }
 
@@ -1275,58 +1923,109 @@ dieselButton.addEventListener(
 );
 
 
-/* =================================
+/* =====================================================
    HISTORY
-================================= */
+===================================================== */
 
 async function loadHistory() {
 
+    if (
+        !currentDriver ||
+        !currentBus
+    ) {
+
+        return;
+
+    }
+
+
     historyList.innerHTML =
-        `<div class="empty">Loading history...</div>`;
+        "Loading...";
 
 
     try {
 
-        const recordsQuery =
-            query(
-                collection(
-                    db,
-                    "driverRecords"
-                ),
+        const snapshot =
+            await getDocs(
 
-                where(
-                    "driverId",
-                    "==",
-                    currentUser.uid
-                ),
+                query(
+                    collection(
+                        db,
+                        "driverRecords"
+                    ),
 
-                where(
-                    "busId",
-                    "==",
-                    busId
-                ),
+                    where(
+                        "busId",
+                        "==",
+                        currentBus.id
+                    ),
 
-                orderBy(
-                    "createdAt",
-                    "desc"
-                ),
+                    limit(50)
+                )
 
-                limit(10)
             );
 
 
-        const snapshot =
-            await getDocs(
-                recordsQuery
+        const records = [];
+
+
+        snapshot.forEach(
+            document => {
+
+                const data =
+                    document.data();
+
+
+                records.push({
+
+                    id:
+                        document.id,
+
+                    ...data
+
+                });
+
+            }
+        );
+
+
+        /*
+         * Sort locally.
+         * This avoids requiring another
+         * Firestore composite index.
+         */
+
+        records.sort(
+            (a, b) => {
+
+                return String(
+                    b.operationDate || ""
+                ).localeCompare(
+                    String(
+                        a.operationDate || ""
+                    )
+                );
+
+            }
+        );
+
+
+        const latest =
+            records.slice(
+                0,
+                10
             );
 
 
         if (
-            snapshot.empty
+            latest.length === 0
         ) {
 
-            historyList.innerHTML =
-                `<div class="empty">No trip records yet.</div>`;
+            historyList.innerHTML = `
+                <div class="empty">
+                    No records yet.
+                </div>
+            `;
 
             return;
 
@@ -1334,107 +2033,12 @@ async function loadHistory() {
 
 
         historyList.innerHTML =
-            "";
-
-
-        snapshot.forEach(
-            (recordSnapshot) => {
-
-                const record =
-                    recordSnapshot.data();
-
-
-                const card =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                card.className =
-                    "history-card";
-
-
-                const morningDistance =
-                    record.morningDistance ??
-                    0;
-
-
-                const eveningDistance =
-                    record.eveningDistance ??
-                    0;
-
-
-                const totalDistance =
-                    record.totalDistance ??
-                    (
-                        Number(
-                            morningDistance
-                        ) +
-                        Number(
-                            eveningDistance
-                        )
-                    );
-
-
-                card.innerHTML = `
-
-                    <div class="history-date">
-                        ${escapeHTML(
-                            record.selectedDate ||
-                            "--"
-                        )}
-                    </div>
-
-                    <div class="history-row">
-
-                        <div class="history-item">
-                            <span>
-                                MORNING
-                            </span>
-
-                            <strong>
-                                ${formatNumber(
-                                    morningDistance
-                                )} KM
-                            </strong>
-                        </div>
-
-
-                        <div class="history-item">
-                            <span>
-                                EVENING
-                            </span>
-
-                            <strong>
-                                ${formatNumber(
-                                    eveningDistance
-                                )} KM
-                            </strong>
-                        </div>
-
-
-                        <div class="history-item">
-                            <span>
-                                TOTAL
-                            </span>
-
-                            <strong>
-                                ${formatNumber(
-                                    totalDistance
-                                )} KM
-                            </strong>
-                        </div>
-
-                    </div>
-                `;
-
-
-                historyList.appendChild(
-                    card
-                );
-
-            }
-        );
+            latest.map(
+                record =>
+                    historyCard(
+                        record
+                    )
+            ).join("");
 
 
     } catch (error) {
@@ -1445,225 +2049,281 @@ async function loadHistory() {
         );
 
 
-        historyList.innerHTML =
-            `<div class="empty">
-                History will appear here after records are saved.
-            </div>`;
+        historyList.innerHTML = `
+            <div class="empty">
+                Unable to load history.
+            </div>
+        `;
 
     }
 
 }
 
 
-/* =================================
-   UPDATE TRIP UI
-================================= */
+/* =====================================================
+   HISTORY CARD
+===================================================== */
 
-function updateTripUI() {
+function historyCard(
+    record
+) {
 
-    if (!activeRecord) {
-
-        resetTripUI();
-
-        return;
-
-    }
-
-
-    const morningStart =
-        activeRecord.morningStartOdometer;
-
-
-    morningStartOdometer.textContent =
-        formatNumber(
-            morningStart
-        ) + " KM";
-
-
-    morningStartButton.style.display =
-        "none";
-
-
-    if (
-        activeRecord.morningEndOdometer ==
-        null
-    ) {
-
-        morningStatus.textContent =
-            "IN PROGRESS";
-
-        morningStatus.className =
-            "status active";
-
-
-        morningEndArea.classList.remove(
-            "hidden"
+    const morningDistance =
+        calculateDistance(
+            record.morningStartOdometer,
+            record.morningEndOdometer
         );
 
 
-        return;
-
-    }
-
-
-    morningStatus.textContent =
-        "COMPLETED";
-
-    morningStatus.className =
-        "status complete";
+    const eveningDistance =
+        calculateDistance(
+            record.eveningStartOdometer,
+            record.eveningEndOdometer
+        );
 
 
-    morningEndArea.classList.add(
-        "hidden"
-    );
+    const totalDistance =
+        (
+            morningDistance || 0
+        ) +
+        (
+            eveningDistance || 0
+        );
 
 
-    eveningStartOdometer.textContent =
-        formatNumber(
-            activeRecord.morningEndOdometer
-        ) + " KM";
+    return `
+
+        <div class="history-card">
+
+            <div class="history-date">
+                ${formatDate(
+                    record.operationDate
+                )}
+            </div>
 
 
-    eveningStartButton.disabled =
-        false;
+            <div class="history-row">
+
+                <div class="history-item">
+
+                    <span>
+                        MORNING
+                    </span>
+
+                    <strong>
+                        ${
+                            record.morningEndOdometer
+                            !== null &&
+                            record.morningEndOdometer
+                            !== undefined
+                                ?
+                            `${formatNumber(
+                                record.morningEndOdometer -
+                                record.morningStartOdometer
+                            )} KM`
+                                :
+                            "--"
+                        }
+                    </strong>
+
+                </div>
 
 
-    if (
-        activeRecord.eveningStartOdometer ==
-        null
-    ) {
+                <div class="history-item">
 
-        return;
+                    <span>
+                        EVENING
+                    </span>
 
-    }
+                    <strong>
+                        ${
+                            record.eveningEndOdometer
+                            !== null &&
+                            record.eveningEndOdometer
+                            !== undefined
+                                ?
+                            `${formatNumber(
+                                record.eveningEndOdometer -
+                                record.eveningStartOdometer
+                            )} KM`
+                                :
+                            "--"
+                        }
+                    </strong>
 
-
-    eveningStartOdometer.textContent =
-        formatNumber(
-            activeRecord.eveningStartOdometer
-        ) + " KM";
-
-
-    eveningStartButton.style.display =
-        "none";
-
-
-    eveningStatus.textContent =
-        "IN PROGRESS";
-
-    eveningStatus.className =
-        "status active";
+                </div>
 
 
-    eveningEndArea.classList.remove(
-        "hidden"
-    );
+                <div class="history-item">
+
+                    <span>
+                        TOTAL
+                    </span>
+
+                    <strong>
+                        ${
+                            totalDistance > 0
+                                ?
+                            `${formatNumber(
+                                totalDistance
+                            )} KM`
+                                :
+                            "--"
+                        }
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
 
 }
 
 
-/* =================================
-   RESET UI
-================================= */
+/* =====================================================
+   RESET SCREEN
+===================================================== */
 
-function resetTripUI() {
+function resetScreen() {
 
-    activeRecord =
-        null;
+    currentRecord = null;
 
 
-    morningStatus.textContent =
+    morningStatusEl.textContent =
         "NOT STARTED";
 
-    morningStatus.className =
+    morningStatusEl.className =
         "status pending";
 
 
-    eveningStatus.textContent =
+    eveningStatusEl.textContent =
         "NOT STARTED";
 
-    eveningStatus.className =
+    eveningStatusEl.className =
         "status pending";
 
 
-    morningStartOdometer.textContent =
-        formatNumber(
-            busData?.currentOdometer ??
-            busData?.startingOdometer ??
-            0
-        ) + " KM";
-
-
-    eveningStartOdometer.textContent =
+    morningStartOdometerEl.textContent =
         "--";
 
 
-    morningStartButton.style.display =
+    eveningStartOdometerEl.textContent =
+        "--";
+
+
+    morningEndOdometer.value =
+        "";
+
+    eveningEndOdometer.value =
         "";
 
 
-    morningStartButton.disabled =
-        false;
+    dieselOdometer.value =
+        "";
+
+    dieselLitres.value =
+        "";
+
+    dieselAmount.value =
+        "";
 
 
     morningEndArea.classList.add(
         "hidden"
     );
-
-
-    eveningStartButton.style.display =
-        "";
-
-
-    eveningStartButton.disabled =
-        true;
-
 
     eveningEndArea.classList.add(
         "hidden"
     );
 
+
+    morningStartButton.disabled =
+        false;
+
+    morningEndButton.disabled =
+        false;
+
+    eveningStartButton.disabled =
+        true;
+
+    eveningEndButton.disabled =
+        false;
+
 }
 
 
-/* =================================
-   DATE FORMAT
-================================= */
+/* =====================================================
+   LOGOUT
+===================================================== */
 
-function formatDateInput(
-    date
+logoutButton.addEventListener(
+    "click",
+    async () => {
+
+        try {
+
+            await signOut(
+                auth
+            );
+
+
+            window.location.href =
+                "../login/";
+
+        } catch (error) {
+
+            console.error(
+                "LOGOUT ERROR:",
+                error
+            );
+
+
+            showMessage(
+                "Unable to log out.",
+                "error"
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function calculateDistance(
+    start,
+    end
 ) {
 
-    const year =
-        date.getFullYear();
+    if (
+        start === undefined ||
+        start === null ||
+        end === undefined ||
+        end === null
+    ) {
+
+        return 0;
+
+    }
 
 
-    const month =
-        String(
-            date.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
+    const distance =
+        Number(end) -
+        Number(start);
 
 
-    const day =
-        String(
-            date.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    return `${year}-${month}-${day}`;
+    return distance > 0
+        ? distance
+        : 0;
 
 }
 
-
-/* =================================
-   NUMBER
-================================= */
 
 function formatNumber(
     value
@@ -1677,7 +2337,7 @@ function formatNumber(
         !Number.isFinite(number)
     ) {
 
-        return "0";
+        return "--";
 
     }
 
@@ -1685,134 +2345,74 @@ function formatNumber(
     return number.toLocaleString(
         "en-IN",
         {
-            maximumFractionDigits: 2
+            maximumFractionDigits: 1
         }
     );
 
 }
 
 
-/* =================================
-   SUCCESS
-================================= */
-
-function showSuccess(
-    text
+function formatDate(
+    dateString
 ) {
 
-    message.textContent =
-        text;
+    if (!dateString) {
 
-    message.className =
-        "message success";
+        return "--";
+
+    }
 
 
-    setTimeout(
-        () => {
+    const parts =
+        dateString.split("-");
 
-            message.classList.add(
-                "hidden"
-            );
 
-        },
-        3000
-    );
+    if (
+        parts.length !== 3
+    ) {
+
+        return dateString;
+
+    }
+
+
+    return `${parts[2]}-${parts[1]}-${parts[0]}`;
 
 }
 
 
-/* =================================
-   ERROR
-================================= */
-
-function showError(
-    text
+function showMessage(
+    text,
+    type = ""
 ) {
 
-    message.textContent =
+    messageEl.textContent =
         text;
 
-    message.className =
-        "message error";
+    messageEl.className =
+        `message ${type}`;
 
 
-    setTimeout(
-        () => {
-
-            message.classList.add(
-                "hidden"
-            );
-
-        },
-        4000
+    messageEl.classList.remove(
+        "hidden"
     );
 
-}
+
+    clearTimeout(
+        window.messageTimer
+    );
 
 
-/* =================================
-   HTML SAFETY
-================================= */
+    window.messageTimer =
+        setTimeout(
+            () => {
 
-function escapeHTML(
-    value
-) {
+                messageEl.classList.add(
+                    "hidden"
+                );
 
-    return String(
-        value ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
+            },
+            3500
         );
 
 }
-
-
-/* =================================
-   LOGOUT
-================================= */
-
-logoutButton.addEventListener(
-    "click",
-    async () => {
-
-        try {
-
-            await signOut(
-                auth
-            );
-
-
-            window.location.replace(
-                "../index.html"
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "LOGOUT ERROR:",
-                error
-            );
-
-        }
-
-    }
-);
