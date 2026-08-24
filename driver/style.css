@@ -22,7 +22,36 @@
     --grey-600: #666660;
 
 }
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
+.tools-button {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #444;
+    border-radius: 5px;
+
+    background: transparent;
+    color: white;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+.tools-button:hover {
+    background: #e8ba00;
+    border-color: #e8ba00;
+    color: #111;
+}
 
 body {
 
