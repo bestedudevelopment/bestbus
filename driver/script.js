@@ -104,6 +104,8 @@ const logoutButton =
 const message =
     document.getElementById("message");
 
+const toolsButton =
+    document.getElementById("toolsButton");
 
 /* =================================
    GLOBAL DATA
@@ -118,7 +120,12 @@ let busData = null;
 let busId = null;
 
 let activeRecord = null;
-
+toolsButton.addEventListener(
+    "click",
+    () => {
+        window.location.href = "./tools/";
+    }
+);
 
 /* =================================
    DATE
