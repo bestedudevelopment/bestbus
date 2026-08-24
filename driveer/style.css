@@ -1,0 +1,938 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+
+    --black: #111111;
+    --white: #ffffff;
+
+    --yellow: #e7b900;
+    --yellow-soft: #fff8d9;
+
+    --red: #c62828;
+    --red-soft: #fff1f1;
+
+    --grey-50: #fafafa;
+    --grey-100: #f4f4f2;
+    --grey-200: #e5e5e1;
+    --grey-400: #999994;
+    --grey-600: #666660;
+
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f7f7f5 0%,
+            #eeeeeb 100%
+        );
+
+    color: var(--black);
+
+    font-family:
+        "DM Sans",
+        Arial,
+        sans-serif;
+
+}
+
+
+/* =================================
+   TOP BAR
+================================= */
+
+.topbar {
+
+    min-height: 76px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding:
+        10px 5vw;
+
+    background: var(--black);
+
+    border-top:
+        4px solid var(--red);
+
+}
+
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.logo {
+
+    width: 45px;
+    height: 45px;
+
+    object-fit: contain;
+
+    background: var(--white);
+
+    border-radius: 5px;
+
+}
+
+
+.brand-name {
+
+    color: var(--yellow);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+}
+
+
+.brand-subtitle {
+
+    margin-top: 2px;
+
+    color: #dddddd;
+
+    font-size: 8px;
+
+}
+
+
+.logout-top {
+
+    border:
+        1px solid #444444;
+
+    border-radius: 4px;
+
+    padding:
+        8px 11px;
+
+    background: transparent;
+
+    color: #eeeeee;
+
+    font-size: 7px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+}
+
+
+.logout-top:hover {
+
+    background: var(--yellow);
+
+    color: var(--black);
+
+}
+
+
+/* =================================
+   PAGE
+================================= */
+
+.page {
+
+    width: 100%;
+
+    max-width: 900px;
+
+    margin: auto;
+
+    padding:
+        42px 20px 70px;
+
+}
+
+
+/* =================================
+   WELCOME
+================================= */
+
+.welcome {
+
+    margin-bottom: 25px;
+
+}
+
+
+.eyebrow {
+
+    display: block;
+
+    color: var(--grey-400);
+
+    font-size: 7px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.8px;
+
+}
+
+
+.welcome h1 {
+
+    margin-top: 7px;
+
+    font-family:
+        "Playfair Display",
+        Georgia,
+        serif;
+
+    font-size: 38px;
+
+}
+
+
+.welcome p {
+
+    margin-top: 8px;
+
+    color: var(--grey-600);
+
+    font-size: 10px;
+
+}
+
+
+/* =================================
+   BUS BANNER
+================================= */
+
+.bus-banner {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 20px;
+
+    background: var(--black);
+
+    border-radius: 7px;
+
+    color: var(--white);
+
+}
+
+
+.banner-label {
+
+    display: block;
+
+    color: #aaaaaa;
+
+    font-size: 6px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+}
+
+
+#busNumber {
+
+    display: block;
+
+    margin-top: 6px;
+
+    color: var(--yellow);
+
+    font-size: 20px;
+
+}
+
+
+.registration {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #cccccc;
+
+    font-size: 8px;
+
+}
+
+
+.meter-box {
+
+    text-align: right;
+
+}
+
+
+.meter-box span {
+
+    display: block;
+
+    color: #aaaaaa;
+
+    font-size: 6px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+}
+
+
+.meter-box strong {
+
+    display: block;
+
+    margin-top: 5px;
+
+    font-size: 18px;
+
+}
+
+
+/* =================================
+   DATE
+================================= */
+
+.date-section {
+
+    margin-top: 20px;
+
+}
+
+
+.date-section label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--grey-600);
+
+    font-size: 7px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+}
+
+
+.date-section input {
+
+    width: 100%;
+
+    max-width: 280px;
+
+    height: 44px;
+
+    padding: 0 12px;
+
+    border:
+        1px solid var(--grey-200);
+
+    border-radius: 6px;
+
+    background: var(--white);
+
+    color: var(--black);
+
+    font-family:
+        "DM Sans",
+        Arial,
+        sans-serif;
+
+    font-size: 11px;
+
+    outline: none;
+
+}
+
+
+/* =================================
+   SECTIONS
+================================= */
+
+.trip-section,
+.history-section {
+
+    margin-top: 38px;
+
+}
+
+
+.section-heading {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-end;
+
+    padding-bottom: 11px;
+
+    border-bottom:
+        1px solid var(--grey-200);
+
+}
+
+
+.section-heading h2 {
+
+    margin-top: 5px;
+
+    font-family:
+        "Playfair Display",
+        Georgia,
+        serif;
+
+    font-size: 23px;
+
+}
+
+
+/* =================================
+   STATUS
+================================= */
+
+.status {
+
+    padding:
+        6px 8px;
+
+    border-radius: 4px;
+
+    font-size: 6px;
+
+    font-weight: 800;
+
+    letter-spacing: .6px;
+
+}
+
+
+.status.pending {
+
+    background: var(--grey-100);
+
+    color: var(--grey-600);
+
+}
+
+
+.status.active {
+
+    background: var(--yellow-soft);
+
+    color: var(--black);
+
+}
+
+
+.status.complete {
+
+    background: var(--black);
+
+    color: var(--white);
+
+}
+
+
+/* =================================
+   TRIP CARD
+================================= */
+
+.trip-card {
+
+    margin-top: 12px;
+
+    padding: 18px;
+
+    background: var(--white);
+
+    border:
+        1px solid var(--grey-200);
+
+    border-left:
+        3px solid var(--yellow);
+
+    border-radius: 7px;
+
+}
+
+
+.automatic-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding-bottom: 14px;
+
+    border-bottom:
+        1px solid var(--grey-200);
+
+}
+
+
+.automatic-row span {
+
+    display: block;
+
+    color: var(--grey-400);
+
+    font-size: 6px;
+
+    font-weight: 700;
+
+    letter-spacing: .8px;
+
+}
+
+
+.automatic-row strong {
+
+    display: block;
+
+    margin-top: 5px;
+
+    font-size: 20px;
+
+}
+
+
+.automatic-row small {
+
+    padding:
+        5px 7px;
+
+    background: var(--yellow-soft);
+
+    border-radius: 3px;
+
+    color: var(--black);
+
+    font-size: 6px;
+
+    font-weight: 800;
+
+}
+
+
+/* =================================
+   BUTTONS
+================================= */
+
+.primary-button,
+.secondary-button {
+
+    width: 100%;
+
+    height: 45px;
+
+    margin-top: 14px;
+
+    border-radius: 5px;
+
+    font-size: 7px;
+
+    font-weight: 700;
+
+    letter-spacing: .8px;
+
+    cursor: pointer;
+
+}
+
+
+.primary-button {
+
+    border:
+        1px solid var(--black);
+
+    background: var(--black);
+
+    color: var(--white);
+
+}
+
+
+.primary-button:hover {
+
+    background: var(--yellow);
+
+    color: var(--black);
+
+}
+
+
+.secondary-button {
+
+    border:
+        1px solid var(--black);
+
+    background: var(--white);
+
+    color: var(--black);
+
+}
+
+
+.secondary-button:hover {
+
+    background: var(--yellow);
+
+}
+
+
+.primary-button:disabled {
+
+    opacity: .4;
+
+    cursor: not-allowed;
+
+}
+
+
+/* =================================
+   END AREA
+================================= */
+
+.end-area {
+
+    margin-top: 15px;
+
+    padding-top: 15px;
+
+    border-top:
+        1px solid var(--grey-200);
+
+}
+
+
+.end-area label,
+.field label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--grey-600);
+
+    font-size: 7px;
+
+    font-weight: 700;
+
+    letter-spacing: .8px;
+
+}
+
+
+.end-area input,
+.field input {
+
+    width: 100%;
+
+    height: 43px;
+
+    padding:
+        0 11px;
+
+    border:
+        1px solid var(--grey-200);
+
+    border-radius: 5px;
+
+    background: var(--white);
+
+    color: var(--black);
+
+    outline: none;
+
+    font-family:
+        "DM Sans",
+        Arial,
+        sans-serif;
+
+    font-size: 11px;
+
+}
+
+
+.end-area input:focus,
+.field input:focus {
+
+    border-color:
+        var(--black);
+
+}
+
+
+/* =================================
+   DIESEL
+================================= */
+
+.two-column {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+
+}
+
+
+.field {
+
+    margin-top: 3px;
+
+}
+
+
+.field + .field {
+
+    margin-top: 0;
+
+}
+
+
+/* =================================
+   HISTORY
+================================= */
+
+.history-list {
+
+    margin-top: 12px;
+
+}
+
+
+.history-card {
+
+    margin-bottom: 9px;
+
+    padding: 15px;
+
+    background: var(--white);
+
+    border:
+        1px solid var(--grey-200);
+
+    border-radius: 7px;
+
+}
+
+
+.history-date {
+
+    color: var(--grey-400);
+
+    font-size: 7px;
+
+    font-weight: 700;
+
+    letter-spacing: .8px;
+
+}
+
+
+.history-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 10px;
+
+}
+
+
+.history-item span {
+
+    display: block;
+
+    color: var(--grey-400);
+
+    font-size: 6px;
+
+    font-weight: 700;
+
+    letter-spacing: .5px;
+
+}
+
+
+.history-item strong {
+
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 11px;
+
+}
+
+
+.empty {
+
+    padding: 30px 15px;
+
+    background: var(--white);
+
+    border:
+        1px solid var(--grey-200);
+
+    border-radius: 7px;
+
+    color: var(--grey-400);
+
+    text-align: center;
+
+    font-size: 8px;
+
+}
+
+
+/* =================================
+   MESSAGE
+================================= */
+
+.message {
+
+    position: fixed;
+
+    left: 50%;
+
+    bottom: 20px;
+
+    transform:
+        translateX(-50%);
+
+    width: calc(100% - 30px);
+
+    max-width: 450px;
+
+    padding:
+        13px 15px;
+
+    background: var(--black);
+
+    border-radius: 6px;
+
+    color: var(--white);
+
+    text-align: center;
+
+    font-size: 8px;
+
+    z-index: 100;
+
+}
+
+
+.message.error {
+
+    background: var(--red);
+
+}
+
+
+.message.success {
+
+    background: var(--black);
+
+    border:
+        2px solid var(--yellow);
+
+}
+
+
+.hidden {
+
+    display: none;
+
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 600px) {
+
+    .brand-subtitle {
+
+        display: none;
+
+    }
+
+
+    .page {
+
+        padding:
+            30px 12px 50px;
+
+    }
+
+
+    .bus-banner {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .meter-box {
+
+        text-align: left;
+
+    }
+
+
+    .two-column {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
