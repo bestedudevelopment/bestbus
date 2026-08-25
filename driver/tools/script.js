@@ -11,7 +11,7 @@ import {
     getDocs,
     query,
     where,
-    orderBy,
+    updateDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
@@ -21,333 +21,193 @@ import {
 } from "../../core/firebase.js";
 
 
-
-/* ============================================
-   ELEMENTS
-============================================ */
-
-const driverName =
-    document.getElementById(
-        "driverName"
-    );
-
-const busName =
-    document.getElementById(
-        "busName"
-    );
-
-const busRegistration =
-    document.getElementById(
-        "busRegistration"
-    );
-
-const problem =
-    document.getElementById(
-        "problem"
-    );
-
-const characterCount =
-    document.getElementById(
-        "characterCount"
-    );
-
-const submitButton =
-    document.getElementById(
-        "submitButton"
-    );
-
-const reportsList =
-    document.getElementById(
-        "reportsList"
-    );
-
-const logoutButton =
-    document.getElementById(
-        "logoutButton"
-    );
-
-const backButton =
-    document.getElementById(
-        "backButton"
-    );
-
-const message =
-    document.getElementById(
-        "message"
-    );
-
-
-
-/* ============================================
-   STATE
-============================================ */
-
 let currentUser = null;
-
 let currentDriver = null;
-
 let currentBus = null;
 
-let selectedType =
-    "service";
+let selectedType = "service";
+let selectedPriority = "normal";
+let selectedRepairType = "service";
 
-let selectedPriority =
-    "normal";
-
-
-
-/* ============================================
-   AUTH
-============================================ */
-
-onAuthStateChanged(
-    auth,
-    async (user) => {
-
-        if (!user) {
-
-            window.location.href =
-                "../../login/";
-
-            return;
-
-        }
+let selectedRepairTicket = null;
 
 
-        currentUser =
-            user;
+const driverName =
+    document.getElementById("driverName");
+
+const busName =
+    document.getElementById("busName");
+
+const busNumber =
+    document.getElementById("busNumber");
+
+const problem =
+    document.getElementById("problem");
+
+const reportsList =
+    document.getElementById("reportsList");
+
+const repairSection =
+    document.getElementById("repairSection");
+
+const repairTicketInfo =
+    document.getElementById("repairTicketInfo");
+
+const repairDescription =
+    document.getElementById("repairDescription");
+
+const partFields =
+    document.getElementById("partFields");
+
+const partName =
+    document.getElementById("partName");
+
+const partCost =
+    document.getElementById("partCost");
+
+const labourCost =
+    document.getElementById("labourCost");
+
+const totalCost =
+    document.getElementById("totalCost");
 
 
-        try {
+/* =========================
+   LOGIN
+========================= */
 
-            await loadDriver();
+onAuthStateChanged(auth, async user => {
 
-            await loadAssignedBus();
+    if (!user) {
 
-            await loadReports();
+        window.location.href =
+            "../../login/";
 
-        } catch (error) {
+        return;
+    }
 
-            console.error(
-                "TOOLS ERROR:",
-                error
-            );
+    currentUser = user;
 
+    try {
 
-            showMessage(
-                error.message ||
-                "Unable to load tools.",
-                "error"
-            );
+        await loadDriver();
+        await loadBus();
+        await loadReports();
 
-        }
+    } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            error.message ||
+            "Unable to load Tools.",
+            true
+        );
 
     }
-);
+
+});
 
 
-
-/* ============================================
-   LOAD DRIVER
-============================================ */
+/* =========================
+   DRIVER
+========================= */
 
 async function loadDriver() {
 
-    /*
-     * EXACT STRUCTURE FROM YOUR FIRESTORE:
-     *
-     * users/{uid}
-     *
-     * name
-     * phone
-     * role
-     * status
-     * assignedBusId
-     */
-
-
-    const userRef =
+    const ref =
         doc(
             db,
             "users",
             currentUser.uid
         );
 
+    const snap =
+        await getDoc(ref);
 
-    const userSnap =
-        await getDoc(
-            userRef
-        );
-
-
-    if (
-        !userSnap.exists()
-    ) {
+    if (!snap.exists()) {
 
         throw new Error(
-            "Driver account was not found."
+            "Driver account not found."
         );
 
     }
 
+    const data = snap.data();
 
-    const data =
-        userSnap.data();
+    if (data.role !== "driver") {
 
-
-    /*
-     * ROLE CHECK
-     */
-
-    if (
-        data.role !==
-        "driver"
-    ) {
-
-        await signOut(
-            auth
-        );
-
-
-        window.location.href =
-            "../../login/";
-
+        await signOut(auth);
 
         throw new Error(
-            "Only driver accounts can access Tools."
+            "Driver access required."
         );
 
     }
-
-
-    /*
-     * APPROVAL CHECK
-     */
 
     if (
         data.status &&
-        data.status !==
-        "approved"
+        data.status !== "approved"
     ) {
 
-        await signOut(
-            auth
-        );
-
-
-        window.location.href =
-            "../../login/";
-
+        await signOut(auth);
 
         throw new Error(
-            "Your driver account is not approved."
+            "Driver account is not approved."
         );
 
     }
 
-
-    /*
-     * DRIVER DATA
-     */
-
     currentDriver = {
-
-        id:
-            userSnap.id,
-
-        uid:
-            currentUser.uid,
-
+        id: snap.id,
         ...data
-
     };
 
-
     driverName.textContent =
-        currentDriver.name ||
-        "Driver";
+        data.name || "Driver";
 
 }
 
 
+/* =========================
+   BUS
+========================= */
 
-/* ============================================
-   LOAD ASSIGNED BUS
-============================================ */
+async function loadBus() {
 
-async function loadAssignedBus() {
-
-    /*
-     * THIS IS THE IMPORTANT PART.
-     *
-     * Firestore screenshot shows:
-     *
-     * users/{uid}
-     * assignedBusId: "5VK..."
-     *
-     * So we directly open:
-     *
-     * buses/{assignedBusId}
-     */
-
-
-    const assignedBusId =
+    const busId =
         currentDriver.assignedBusId;
 
-
-    if (
-        !assignedBusId
-    ) {
+    if (!busId) {
 
         throw new Error(
-            "No bus is assigned to your account."
+            "No bus is assigned to you."
         );
 
     }
 
-
-    const busRef =
+    const ref =
         doc(
             db,
             "buses",
-            assignedBusId
+            busId
         );
 
+    const snap =
+        await getDoc(ref);
 
-    const busSnap =
-        await getDoc(
-            busRef
-        );
-
-
-    if (
-        !busSnap.exists()
-    ) {
+    if (!snap.exists()) {
 
         throw new Error(
-            "Your assigned bus could not be found."
+            "Assigned bus was not found."
         );
 
     }
 
-
     currentBus = {
-
-        id:
-            busSnap.id,
-
-        ...busSnap.data()
-
+        id: snap.id,
+        ...snap.data()
     };
-
-
-    /*
-     * We display only this bus.
-     *
-     * No dropdown.
-     * No bus selection.
-     */
-
 
     busName.textContent =
         currentBus.name ||
@@ -355,305 +215,262 @@ async function loadAssignedBus() {
         currentBus.number ||
         "Assigned Bus";
 
-
-    busRegistration.textContent =
+    busNumber.textContent =
         currentBus.registrationNumber ||
         currentBus.registrationNo ||
         currentBus.registration ||
-        "--";
+        "";
 
 }
 
 
-
-/* ============================================
+/* =========================
    PROBLEM TYPE
-============================================ */
+========================= */
 
 document
-    .querySelectorAll(
-        ".type-option"
-    )
-    .forEach(
-        button => {
+    .querySelectorAll(".choice")
+    .forEach(button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-                    document
-                        .querySelectorAll(
-                            ".type-option"
-                        )
-                        .forEach(
-                            item =>
-                                item.classList.remove(
-                                    "active"
-                                )
-                        );
-
-
-                    button.classList.add(
-                        "active"
+                document
+                    .querySelectorAll(".choice")
+                    .forEach(x =>
+                        x.classList.remove("active")
                     );
 
+                button.classList.add("active");
 
-                    selectedType =
-                        button.dataset.type;
+                selectedType =
+                    button.dataset.type;
 
-                }
-            );
+            }
+        );
 
-        }
-    );
-
+    });
 
 
-/* ============================================
+/* =========================
    PRIORITY
-============================================ */
+========================= */
 
 document
-    .querySelectorAll(
-        ".priority-option"
-    )
-    .forEach(
-        button => {
+    .querySelectorAll(".priority button")
+    .forEach(button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-                    document
-                        .querySelectorAll(
-                            ".priority-option"
-                        )
-                        .forEach(
-                            item =>
-                                item.classList.remove(
-                                    "active"
-                                )
-                        );
-
-
-                    button.classList.add(
-                        "active"
+                document
+                    .querySelectorAll(
+                        ".priority button"
+                    )
+                    .forEach(x =>
+                        x.classList.remove("active")
                     );
 
+                button.classList.add("active");
 
-                    selectedPriority =
-                        button.dataset.priority;
+                selectedPriority =
+                    button.dataset.priority;
 
-                }
-            );
+            }
+        );
 
-        }
+    });
+
+
+/* =========================
+   SUBMIT PROBLEM
+========================= */
+
+document
+    .getElementById("submitProblem")
+    .addEventListener(
+        "click",
+        submitProblem
     );
 
 
+async function submitProblem() {
 
-/* ============================================
-   CHARACTER COUNT
-============================================ */
+    const text =
+        problem.value.trim();
 
-problem.addEventListener(
-    "input",
-    () => {
+    if (!text) {
 
-        characterCount.textContent =
-            problem.value.length;
+        showMessage(
+            "Enter the problem first.",
+            true
+        );
 
+        return;
     }
-);
 
+    try {
 
-
-/* ============================================
-   SUBMIT
-============================================ */
-
-submitButton.addEventListener(
-    "click",
-    async () => {
-
-        const description =
-            problem.value.trim();
-
-
-        if (
-            !description
-        ) {
-
-            showMessage(
-                "Please describe the problem.",
-                "error"
+        const button =
+            document.getElementById(
+                "submitProblem"
             );
 
-            problem.focus();
+        button.disabled = true;
 
-            return;
-
-        }
-
-
-        if (
-            !currentDriver ||
-            !currentBus
-        ) {
-
-            showMessage(
-                "Driver or bus information is not ready.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        submitButton.disabled =
-            true;
-
-        submitButton.textContent =
+        button.textContent =
             "SUBMITTING...";
 
 
-        try {
+        await addDoc(
 
-            /*
-             * NEW COLLECTION:
-             *
-             * maintenanceTickets
-             */
+            collection(
+                db,
+                "maintenanceTickets"
+            ),
 
+            {
 
-            await addDoc(
+                driverUid:
+                    currentUser.uid,
 
-                collection(
-                    db,
-                    "maintenanceTickets"
-                ),
+                driverId:
+                    currentDriver.id,
 
-                {
-
-                    /* DRIVER */
-
-                    driverUid:
-                        currentUser.uid,
-
-                    driverId:
-                        currentDriver.id,
-
-                    driverName:
-                        currentDriver.name ||
-                        "",
+                driverName:
+                    currentDriver.name || "",
 
 
-                    /* BUS */
+                busId:
+                    currentBus.id,
 
-                    busId:
-                        currentBus.id,
+                busNumber:
+                    currentBus.busNumber ||
+                    currentBus.name ||
+                    currentBus.number ||
+                    "",
 
-                    busNumber:
-                        currentBus.busNumber ||
-                        currentBus.name ||
-                        currentBus.number ||
-                        "",
-
-                    busRegistration:
-                        currentBus.registrationNumber ||
-                        currentBus.registrationNo ||
-                        currentBus.registration ||
-                        "",
+                busRegistration:
+                    currentBus.registrationNumber ||
+                    currentBus.registrationNo ||
+                    currentBus.registration ||
+                    "",
 
 
-                    /* PROBLEM */
+                problem:
+                    text,
 
-                    problem:
-                        description,
+                problemType:
+                    selectedType,
 
-                    problemType:
-                        selectedType,
-
-                    priority:
-                        selectedPriority,
+                priority:
+                    selectedPriority,
 
 
-                    /* STATUS */
+                status:
+                    "reported",
 
-                    status:
-                        "reported",
-
-
-                    /* TIME */
-
-                    reportedAt:
-                        serverTimestamp(),
-
-                    createdAt:
-                        serverTimestamp()
-
-                }
-
-            );
+                repairSubmitted:
+                    false,
 
 
-            /*
-             * CLEAR FORM
-             */
+                reportedAt:
+                    serverTimestamp(),
 
-            problem.value =
-                "";
+                createdAt:
+                    serverTimestamp()
 
-            characterCount.textContent =
-                "0";
+            }
 
-
-            showMessage(
-                "Problem reported successfully.",
-                "success"
-            );
+        );
 
 
-            await loadReports();
+        problem.value = "";
+
+        showMessage(
+            "Problem reported successfully."
+        );
+
+        await loadReports();
 
 
-        } catch (error) {
+    } catch (error) {
 
-            console.error(
-                "SUBMIT ERROR:",
-                error
-            );
+        console.error(error);
 
-
-            showMessage(
-                "Unable to submit the problem.",
-                "error"
-            );
-
-        }
-
-
-        submitButton.disabled =
-            false;
-
-        submitButton.textContent =
-            "SUBMIT PROBLEM";
+        showMessage(
+            "Unable to submit problem.",
+            true
+        );
 
     }
-);
 
 
+    document.getElementById(
+        "submitProblem"
+    ).disabled = false;
 
-/* ============================================
-   LOAD DRIVER REPORTS
-============================================ */
+    document.getElementById(
+        "submitProblem"
+    ).textContent =
+        "SUBMIT PROBLEM";
+
+}
+
+
+/* =========================
+   LOAD REPORTS
+========================= */
 
 async function loadReports() {
 
-    if (
-        !currentUser
-    ) {
+    reportsList.innerHTML =
+        "Loading...";
+
+
+    const q =
+        query(
+
+            collection(
+                db,
+                "maintenanceTickets"
+            ),
+
+            where(
+                "driverUid",
+                "==",
+                currentUser.uid
+            )
+
+        );
+
+
+    const snap =
+        await getDocs(q);
+
+
+    const reports =
+        snap.docs
+            .map(x => ({
+                id: x.id,
+                ...x.data()
+            }))
+            .sort(
+                (a, b) =>
+                    getSeconds(b.createdAt) -
+                    getSeconds(a.createdAt)
+            );
+
+
+    if (!reports.length) {
+
+        reportsList.innerHTML = `
+            <div class="ticket">
+                No problems reported yet.
+            </div>
+        `;
 
         return;
 
@@ -661,169 +478,85 @@ async function loadReports() {
 
 
     reportsList.innerHTML =
-        "Loading...";
+        reports
+            .map(renderTicket)
+            .join("");
 
 
-    try {
+    /*
+     * Find first solved ticket
+     * that still needs repair details.
+     */
 
-        const reportsQuery =
-            query(
-
-                collection(
-                    db,
-                    "maintenanceTickets"
-                ),
-
-                where(
-                    "driverUid",
-                    "==",
-                    currentUser.uid
-                )
-
-            );
-
-
-        const snapshot =
-            await getDocs(
-                reportsQuery
-            );
-
-
-        const reports =
-            snapshot.docs
-                .map(
-                    item => ({
-
-                        id:
-                            item.id,
-
-                        ...item.data()
-
-                    })
-                )
-                .sort(
-                    (a, b) => {
-
-                        const aTime =
-                            a.createdAt?.seconds ||
-                            0;
-
-                        const bTime =
-                            b.createdAt?.seconds ||
-                            0;
-
-                        return bTime - aTime;
-
-                    }
-                );
-
-
-        if (
-            reports.length === 0
-        ) {
-
-            reportsList.innerHTML = `
-                <div class="empty">
-                    You have not reported
-                    any problems yet.
-                </div>
-            `;
-
-            return;
-
-        }
-
-
-        reportsList.innerHTML =
-            reports
-                .slice(
-                    0,
-                    10
-                )
-                .map(
-                    createReportCard
-                )
-                .join("");
-
-
-    } catch (error) {
-
-        console.error(
-            "REPORT LOAD ERROR:",
-            error
+    const pendingRepair =
+        reports.find(
+            x =>
+                x.status === "solved" &&
+                x.repairSubmitted !== true
         );
 
 
-        reportsList.innerHTML = `
-            <div class="empty">
-                Unable to load reports.
-            </div>
-        `;
+    if (pendingRepair) {
+
+        openRepairForm(
+            pendingRepair
+        );
+
+    } else {
+
+        repairSection.classList.add(
+            "hidden"
+        );
 
     }
 
 }
 
 
+/* =========================
+   TICKET
+========================= */
 
-/* ============================================
-   REPORT CARD
-============================================ */
-
-function createReportCard(
-    report
-) {
-
-    const type =
-        report.problemType ===
-        "part"
-            ?
-        "PART REPLACEMENT"
-            :
-        "SERVICE / REPAIR";
-
+function renderTicket(ticket) {
 
     const status =
-        String(
-            report.status ||
-            "reported"
-        )
-        .replace(
-            /_/g,
-            " "
-        )
-        .toUpperCase();
+        ticket.status || "reported";
+
+    const label =
+        status === "solved"
+            ? "PROBLEM SOLVED"
+            : "WAITING FOR ADMIN";
 
 
     return `
 
-        <div class="report">
+        <div class="ticket">
 
-            <div class="report-top">
+            <div class="ticket-head">
 
-                <span class="report-type">
-                    ${type}
+                <span class="ticket-title">
+                    ${escapeHTML(
+                        ticket.busNumber ||
+                        "Assigned Bus"
+                    )}
                 </span>
 
-                <span class="report-date">
-                    ${formatTimestamp(
-                        report.createdAt
+                <span class="ticket-date">
+                    ${formatDate(
+                        ticket.createdAt
                     )}
                 </span>
 
             </div>
 
-
-            <div class="report-problem">
+            <div class="ticket-problem">
                 ${escapeHTML(
-                    report.problem ||
-                    ""
+                    ticket.problem || ""
                 )}
             </div>
 
-
-            <span class="report-status">
-                ${status}
+            <span class="status ${status}">
+                ${label}
             </span>
 
         </div>
@@ -833,151 +566,435 @@ function createReportCard(
 }
 
 
+/* =========================
+   OPEN REPAIR FORM
+========================= */
 
-/* ============================================
-   BACK
-============================================ */
+function openRepairForm(ticket) {
 
-backButton.addEventListener(
-    "click",
-    () => {
+    selectedRepairTicket =
+        ticket;
 
-        window.location.href =
-            "../";
 
-    }
+    repairSection.classList.remove(
+        "hidden"
+    );
+
+
+    repairTicketInfo.innerHTML = `
+
+        <div class="repair-info">
+
+            <strong>
+                ${escapeHTML(
+                    ticket.busNumber ||
+                    "Bus"
+                )}
+            </strong>
+
+            <br><br>
+
+            Problem:
+
+            <br>
+
+            ${escapeHTML(
+                ticket.problem || ""
+            )}
+
+            <br><br>
+
+            Admin has marked this
+            problem as solved.
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================
+   REPAIR TYPE
+========================= */
+
+document
+    .querySelectorAll(
+        ".repair-choice"
+    )
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .querySelectorAll(
+                        ".repair-choice"
+                    )
+                    .forEach(x =>
+                        x.classList.remove(
+                            "active"
+                        )
+                    );
+
+                button.classList.add(
+                    "active"
+                );
+
+                selectedRepairType =
+                    button.dataset.repair;
+
+
+                if (
+                    selectedRepairType ===
+                    "part"
+                ) {
+
+                    partFields.classList.remove(
+                        "hidden"
+                    );
+
+                } else {
+
+                    partFields.classList.add(
+                        "hidden"
+                    );
+
+                    partName.value = "";
+                    partCost.value = "0";
+
+                }
+
+                calculateTotal();
+
+            }
+        );
+
+    });
+
+
+/* =========================
+   COST CALCULATION
+========================= */
+
+partCost.addEventListener(
+    "input",
+    calculateTotal
+);
+
+labourCost.addEventListener(
+    "input",
+    calculateTotal
 );
 
 
+function calculateTotal() {
 
-/* ============================================
-   LOGOUT
-============================================ */
+    const part =
+        selectedRepairType === "part"
+            ? Number(partCost.value || 0)
+            : 0;
 
-logoutButton.addEventListener(
-    "click",
-    async () => {
+    const labour =
+        Number(
+            labourCost.value || 0
+        );
 
-        try {
 
-            await signOut(
-                auth
+    const total =
+        part + labour;
+
+
+    totalCost.textContent =
+        "₹" +
+        total.toLocaleString("en-IN");
+
+}
+
+
+/* =========================
+   SUBMIT REPAIR
+========================= */
+
+document
+    .getElementById("submitRepair")
+    .addEventListener(
+        "click",
+        submitRepair
+    );
+
+
+async function submitRepair() {
+
+    if (!selectedRepairTicket) {
+
+        return;
+
+    }
+
+
+    const description =
+        repairDescription.value.trim();
+
+
+    if (!description) {
+
+        showMessage(
+            "Enter the repair details.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    if (
+        selectedRepairType === "part" &&
+        !partName.value.trim()
+    ) {
+
+        showMessage(
+            "Enter the part replaced.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    const part =
+        selectedRepairType === "part"
+            ? Number(partCost.value || 0)
+            : 0;
+
+
+    const labour =
+        Number(
+            labourCost.value || 0
+        );
+
+
+    const total =
+        part + labour;
+
+
+    try {
+
+        const button =
+            document.getElementById(
+                "submitRepair"
             );
 
+        button.disabled = true;
+
+        button.textContent =
+            "SAVING...";
+
+
+        const ticketRef =
+            doc(
+                db,
+                "maintenanceTickets",
+                selectedRepairTicket.id
+            );
+
+
+        await updateDoc(
+            ticketRef,
+            {
+
+                repairType:
+                    selectedRepairType,
+
+                repairDescription:
+                    description,
+
+
+                partReplaced:
+                    selectedRepairType ===
+                    "part",
+
+                partName:
+                    selectedRepairType ===
+                    "part"
+                        ? partName.value.trim()
+                        : "",
+
+                partCost:
+                    part,
+
+                labourCost:
+                    labour,
+
+                totalCost:
+                    total,
+
+
+                repairSubmitted:
+                    true,
+
+                repairSubmittedBy:
+                    currentUser.uid,
+
+                repairSubmittedAt:
+                    serverTimestamp()
+
+            }
+        );
+
+
+        showMessage(
+            "Repair details saved."
+        );
+
+
+        repairSection.classList.add(
+            "hidden"
+        );
+
+
+        selectedRepairTicket =
+            null;
+
+
+        await loadReports();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            "Unable to save repair details.",
+            true
+        );
+
+    }
+
+
+    document.getElementById(
+        "submitRepair"
+    ).disabled = false;
+
+    document.getElementById(
+        "submitRepair"
+    ).textContent =
+        "SUBMIT REPAIR DETAILS";
+
+}
+
+
+/* =========================
+   BACK
+========================= */
+
+document
+    .getElementById("backButton")
+    .addEventListener(
+        "click",
+        () => {
+
+            window.location.href =
+                "../";
+
+        }
+    );
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+document
+    .getElementById("logoutButton")
+    .addEventListener(
+        "click",
+        async () => {
+
+            await signOut(auth);
 
             window.location.href =
                 "../../login/";
 
-        } catch (error) {
-
-            showMessage(
-                "Unable to log out.",
-                "error"
-            );
-
         }
-
-    }
-);
+    );
 
 
-
-/* ============================================
+/* =========================
    HELPERS
-============================================ */
+========================= */
 
-function formatTimestamp(
-    timestamp
-) {
+function getSeconds(timestamp) {
 
-    if (
-        !timestamp ||
-        !timestamp.toDate
-    ) {
+    return timestamp?.seconds || 0;
+
+}
+
+
+function formatDate(timestamp) {
+
+    if (!timestamp?.toDate) {
 
         return "JUST NOW";
 
     }
 
-
-    const date =
-        timestamp.toDate();
-
-
-    return date.toLocaleDateString(
-        "en-IN",
-        {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
-        }
-    );
-
-}
-
-
-
-function escapeHTML(
-    value
-) {
-
-    return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
+    return timestamp
+        .toDate()
+        .toLocaleDateString(
+            "en-IN",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }
         );
 
 }
 
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
 
 
 function showMessage(
     text,
-    type = ""
+    error = false
 ) {
 
-    message.textContent =
-        text;
+    const box =
+        document.getElementById(
+            "message"
+        );
 
-    message.className =
-        `message ${type}`;
+    box.textContent = text;
 
-    message.classList.remove(
+    box.className =
+        "message" +
+        (error ? " error" : "");
+
+    box.classList.remove(
         "hidden"
     );
 
-
-    clearTimeout(
-        window.messageTimer
+    setTimeout(
+        () => {
+            box.classList.add(
+                "hidden"
+            );
+        },
+        3500
     );
-
-
-    window.messageTimer =
-        setTimeout(
-            () => {
-
-                message.classList.add(
-                    "hidden"
-                );
-
-            },
-            3500
-        );
 
 }
