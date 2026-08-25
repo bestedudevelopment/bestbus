@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Tools | Admin</title>
+
+    <link rel="stylesheet" href="./style.css">
+
+</head>
+
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="logo">
+            BEST
+        </div>
+
+        <div>
+            <strong>BEST</strong>
+            <small>ADMIN TOOLS</small>
+        </div>
+
+    </div>
+
+
+    <button id="logoutButton">
+        LOG OUT
+    </button>
+
+</header>
+
+
+<main class="page">
+
+    <button
+        id="backButton"
+        class="back"
+    >
+        ← BACK
+    </button>
+
+
+    <section class="intro">
+
+        <span>MAINTENANCE</span>
+
+        <h1>
+            Tools
+        </h1>
+
+        <p>
+            Manage driver maintenance reports.
+        </p>
+
+    </section>
+
+
+    <!-- COUNTS -->
+
+    <div class="counts">
+
+        <div>
+            <small>OPEN</small>
+            <strong id="openCount">0</strong>
+        </div>
+
+        <div>
+            <small>SOLVED</small>
+            <strong id="solvedCount">0</strong>
+        </div>
+
+    </div>
+
+
+    <!-- OPEN -->
+
+    <section class="section">
+
+        <span class="label">
+            REQUIRES ATTENTION
+        </span>
+
+        <h2>
+            Open Problems
+        </h2>
+
+        <div id="openList">
+            Loading...
+        </div>
+
+    </section>
+
+
+    <!-- SOLVED -->
+
+    <section class="section">
+
+        <span class="label">
+            COMPLETED
+        </span>
+
+        <h2>
+            Solved Problems
+        </h2>
+
+        <div id="solvedList">
+            Loading...
+        </div>
+
+    </section>
+
+</main>
+
+
+<div
+    id="message"
+    class="message hidden"
+></div>
+
+
+<script
+    type="module"
+    src="./script.js"
+></script>
+
+</body>
+</html>
