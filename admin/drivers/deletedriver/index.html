@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Delete Driver | BEST Bus</title>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="logo">
+            BEST
+        </div>
+
+        <div>
+            <strong>BEST</strong>
+            <small>DELETE DRIVER</small>
+        </div>
+
+    </div>
+
+    <button id="logoutButton">
+        LOG OUT
+    </button>
+
+</header>
+
+
+<main class="page">
+
+    <button
+        id="backButton"
+        class="back"
+    >
+        ← BACK TO DRIVERS
+    </button>
+
+
+    <section class="intro">
+
+        <span>DRIVER MANAGEMENT</span>
+
+        <h1>
+            Delete Driver
+        </h1>
+
+        <p>
+            Remove a driver profile from the BEST Bus system.
+        </p>
+
+    </section>
+
+
+    <div class="warning">
+
+        <strong>⚠ IMPORTANT</strong>
+
+        <p>
+            A driver assigned to a bus cannot be deleted.
+            Deassign the driver first.
+        </p>
+
+    </div>
+
+
+    <section class="card">
+
+        <div class="section-head">
+
+            <div>
+
+                <span>DRIVERS</span>
+
+                <h2>
+                    Select Driver
+                </h2>
+
+            </div>
+
+            <span id="driverCount">
+                0 drivers
+            </span>
+
+        </div>
+
+
+        <input
+            id="searchInput"
+            type="search"
+            placeholder="Search driver name or phone..."
+        >
+
+
+        <div id="driversList">
+            Loading drivers...
+        </div>
+
+    </section>
+
+</main>
+
+
+<div
+    id="message"
+    class="message hidden"
+></div>
+
+
+<script
+    type="module"
+    src="./script.js"
+></script>
+
+</body>
+
+</html>
