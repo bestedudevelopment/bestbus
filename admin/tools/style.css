@@ -1,0 +1,327 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #f5f5f2;
+    color: #111;
+    font-family: Arial, sans-serif;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.topbar {
+    min-height: 68px;
+    background: #111;
+    border-top: 4px solid #c62828;
+    color: white;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 10px 5vw;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    width: 42px;
+    height: 42px;
+    background: white;
+    color: #111;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 5px;
+    font-weight: 900;
+    font-size: 10px;
+}
+
+.brand strong {
+    display: block;
+    color: #e8bb00;
+    letter-spacing: 3px;
+}
+
+.brand small {
+    display: block;
+    color: #aaa;
+    font-size: 7px;
+    margin-top: 3px;
+}
+
+#logoutButton {
+    background: transparent;
+    border: 1px solid #555;
+    color: white;
+    padding: 9px 12px;
+    border-radius: 5px;
+    font-size: 8px;
+    font-weight: 700;
+}
+
+.page {
+    width: min(900px, 100%);
+    margin: auto;
+    padding: 25px 16px 70px;
+}
+
+.back {
+    background: transparent;
+    border: 0;
+    color: #777;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.intro {
+    margin: 25px 0;
+}
+
+.intro span,
+.label {
+    color: #999;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.intro h1 {
+    font-family: Georgia, serif;
+    font-size: 40px;
+    margin-top: 5px;
+}
+
+.intro p {
+    color: #777;
+    margin-top: 7px;
+    font-size: 10px;
+}
+
+.counts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.counts div {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    padding: 16px;
+}
+
+.counts small {
+    display: block;
+    color: #999;
+    font-size: 7px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.counts strong {
+    display: block;
+    font-family: Georgia, serif;
+    font-size: 28px;
+    margin-top: 5px;
+}
+
+.section {
+    margin-top: 38px;
+}
+
+.section h2 {
+    font-family: Georgia, serif;
+    font-size: 25px;
+    margin: 6px 0 15px;
+}
+
+.ticket {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    padding: 17px;
+    margin-bottom: 10px;
+}
+
+.ticket-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.bus {
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.driver {
+    margin-top: 4px;
+    color: #777;
+    font-size: 8px;
+}
+
+.date {
+    color: #999;
+    font-size: 7px;
+}
+
+.problem {
+    margin-top: 13px;
+    padding: 12px;
+    background: #f5f5f2;
+    border-radius: 5px;
+
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+.priority {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 7px;
+    background: #fff4c7;
+    border-radius: 4px;
+
+    font-size: 6px;
+    font-weight: 800;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.solve,
+.keep-open {
+    flex: 1;
+    height: 40px;
+    border-radius: 5px;
+    font-size: 7px;
+    font-weight: 800;
+}
+
+.solve {
+    background: #111;
+    color: white;
+    border: 0;
+}
+
+.solve:hover {
+    background: #e8bb00;
+    color: #111;
+}
+
+.keep-open {
+    background: white;
+    border: 1px solid #ddd;
+}
+
+.solved-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 8px;
+
+    background: #e5f4e7;
+    border-radius: 4px;
+
+    color: #27652e;
+    font-size: 7px;
+    font-weight: 800;
+}
+
+.repair {
+    margin-top: 13px;
+    border-top: 1px solid #ddd;
+    padding-top: 13px;
+}
+
+.repair-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    font-size: 8px;
+}
+
+.repair-row span:first-child {
+    color: #777;
+}
+
+.total {
+    margin-top: 8px;
+    padding: 11px;
+
+    display: flex;
+    justify-content: space-between;
+
+    background: #111;
+    color: white;
+    border-radius: 5px;
+}
+
+.total strong {
+    color: #e8bb00;
+}
+
+.empty {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 25px;
+    text-align: center;
+    color: #999;
+    font-size: 9px;
+    border-radius: 7px;
+}
+
+.message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    background: #111;
+    color: white;
+
+    padding: 13px 18px;
+    border-radius: 5px;
+
+    font-size: 8px;
+    z-index: 100;
+}
+
+.message.error {
+    background: #c62828;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media (max-width: 550px) {
+
+    .ticket-top {
+        flex-direction: column;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .counts {
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
