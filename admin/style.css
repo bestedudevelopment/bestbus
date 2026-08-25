@@ -17,7 +17,103 @@
     --app-grey: #777772;
     --app-border: #e2e2de;
 }
+/* DATA EDITOR CARD */
 
+.data-editor-card {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    width: 100%;
+
+    padding: 16px 18px;
+
+    background: #ffffff;
+
+    border: 1px solid #deded9;
+    border-radius: 8px;
+
+    text-decoration: none;
+    color: #111;
+
+    transition:
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.data-editor-card:hover {
+    border-color: #e8bb00;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+
+/* ICON */
+
+.data-editor-icon {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f1f1ed;
+
+    border-radius: 6px;
+
+    font-size: 18px;
+}
+
+
+/* CONTENT */
+
+.data-editor-content {
+    flex: 1;
+}
+
+.data-editor-content h3 {
+    margin: 0;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.data-editor-content p {
+    margin: 5px 0 0;
+
+    color: #777;
+
+    font-size: 8px;
+    line-height: 1.4;
+}
+
+
+/* ARROW */
+
+.data-editor-arrow {
+    color: #999;
+
+    font-size: 18px;
+
+    transition:
+        transform 0.2s ease,
+        color 0.2s ease;
+}
+
+.data-editor-card:hover .data-editor-arrow {
+    color: #111;
+
+    transform: translateX(3px);
+}
 
 /* =========================================================
    HEADER
