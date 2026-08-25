@@ -4,101 +4,6 @@
     padding: 0;
 }
 
-.delete-driver-btn {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    width: 100%;
-    padding: 14px 16px;
-
-    margin-top: 15px;
-
-    background: #ffffff;
-
-    border: 1px solid #deded9;
-    border-radius: 7px;
-
-    color: #111;
-    text-decoration: none;
-
-    transition:
-        border-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.delete-driver-btn:hover {
-    border-color: #c62828;
-
-    transform: translateY(-1px);
-
-    box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.06);
-}
-
-
-/* ICON */
-
-.delete-driver-icon {
-    width: 40px;
-    height: 40px;
-
-    flex-shrink: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #fff0f0;
-
-    border-radius: 5px;
-
-    color: #c62828;
-
-    font-size: 16px;
-}
-
-
-/* TEXT */
-
-.delete-driver-text {
-    flex: 1;
-
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.delete-driver-text strong {
-    font-size: 10px;
-    font-weight: 800;
-}
-
-.delete-driver-text small {
-    color: #777;
-
-    font-size: 8px;
-}
-
-
-/* ARROW */
-
-.delete-driver-arrow {
-    color: #999;
-
-    font-size: 17px;
-
-    transition:
-        transform 0.2s ease,
-        color 0.2s ease;
-}
-
-.delete-driver-btn:hover .delete-driver-arrow {
-    color: #c62828;
-
-    transform: translateX(3px);
-}
 :root {
 
     --black: #111111;
@@ -765,4 +670,100 @@ body {
 
     }
 
+}
+
+.delete-driver-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+    padding: 14px 16px;
+
+    margin-top: 15px;
+
+    background: #ffffff;
+
+    border: 1px solid #deded9;
+    border-radius: 7px;
+
+    color: #111;
+    text-decoration: none;
+
+    transition:
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.delete-driver-btn:hover {
+    border-color: #c62828;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+
+/* ICON */
+
+.delete-driver-icon {
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #fff0f0;
+
+    border-radius: 5px;
+
+    color: #c62828;
+
+    font-size: 16px;
+}
+
+
+/* TEXT */
+
+.delete-driver-text {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.delete-driver-text strong {
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.delete-driver-text small {
+    color: #777;
+
+    font-size: 8px;
+}
+
+
+/* ARROW */
+
+.delete-driver-arrow {
+    color: #999;
+
+    font-size: 17px;
+
+    transition:
+        transform 0.2s ease,
+        color 0.2s ease;
+}
+
+.delete-driver-btn:hover .delete-driver-arrow {
+    color: #c62828;
+
+    transform: translateX(3px);
 }
