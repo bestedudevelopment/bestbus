@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Data Editor | BEST Bus</title>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand">
+        <div class="logo">BEST</div>
+
+        <div>
+            <strong>BEST</strong>
+            <small>DATA EDITOR</small>
+        </div>
+    </div>
+
+    <button id="logoutButton">
+        LOG OUT
+    </button>
+
+</header>
+
+
+<main class="page">
+
+    <button id="backButton" class="back">
+        ← BACK
+    </button>
+
+
+    <section class="intro">
+
+        <span>ADMINISTRATION</span>
+
+        <h1>Data Editor</h1>
+
+        <p>
+            View and edit application data stored in Firestore.
+        </p>
+
+    </section>
+
+
+    <!-- COLLECTION -->
+
+    <section class="card">
+
+        <label>COLLECTION</label>
+
+        <select id="collectionSelect">
+
+            <option value="">
+                Select collection
+            </option>
+
+            <option value="users">
+                Drivers / Users
+            </option>
+
+            <option value="buses">
+                Buses
+            </option>
+
+            <option value="driverRecords">
+                Driver Records
+            </option>
+
+            <option value="dieselRecords">
+                Diesel Records
+            </option>
+
+            <option value="maintenanceTickets">
+                Maintenance
+            </option>
+
+        </select>
+
+
+        <button
+            id="loadDocuments"
+            class="primary"
+        >
+            LOAD DATA
+        </button>
+
+    </section>
+
+
+    <!-- DOCUMENTS -->
+
+    <section
+        id="documentsSection"
+        class="card hidden"
+    >
+
+        <div class="section-head">
+
+            <div>
+                <span>DOCUMENTS</span>
+
+                <h2>Select Record</h2>
+            </div>
+
+            <span id="documentCount">
+                0 records
+            </span>
+
+        </div>
+
+
+        <input
+            id="searchInput"
+            type="search"
+            placeholder="Search records..."
+        >
+
+
+        <div id="documentsList">
+        </div>
+
+    </section>
+
+
+    <!-- EDITOR -->
+
+    <section
+        id="editorSection"
+        class="card hidden"
+    >
+
+        <div class="section-head">
+
+            <div>
+                <span>EDIT RECORD</span>
+
+                <h2 id="editorTitle">
+                    Record
+                </h2>
+            </div>
+
+        </div>
+
+
+        <div class="document-id">
+
+            <span>DOCUMENT ID</span>
+
+            <strong id="documentId">
+                -
+            </strong>
+
+        </div>
+
+
+        <div id="fieldsContainer">
+        </div>
+
+
+        <button
+            id="saveButton"
+            class="primary"
+        >
+            SAVE CHANGES
+        </button>
+
+
+        <button
+            id="cancelButton"
+            class="secondary"
+        >
+            CANCEL
+        </button>
+
+    </section>
+
+</main>
+
+
+<div
+    id="message"
+    class="message hidden"
+></div>
+
+
+<script
+    type="module"
+    src="./script.js"
+></script>
+
+</body>
+</html>
