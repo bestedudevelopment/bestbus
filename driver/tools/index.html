@@ -2,368 +2,274 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <title>Driver Tools | BEST Bus</title>
 
-    <meta
-        name="theme-color"
-        content="#111111"
-    >
-
-    <title>Tools | BEST Bus</title>
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        rel="stylesheet"
-        href="./style.css"
-    >
-
+    <link rel="stylesheet" href="./style.css">
 </head>
 
-
 <body>
-
 
 <header class="topbar">
 
     <div class="brand">
-
-        <div class="brand-logo">
-            BEST
-        </div>
+        <div class="logo">BEST</div>
 
         <div>
-
-            <div class="brand-name">
-                BEST
-            </div>
-
-            <div class="brand-subtitle">
-                DRIVER TOOLS
-            </div>
-
+            <div class="brand-name">BEST</div>
+            <div class="brand-sub">DRIVER TOOLS</div>
         </div>
-
     </div>
 
-
-    <button
-        id="logoutButton"
-        class="logout"
-    >
+    <button id="logoutButton" class="logout">
         LOG OUT
     </button>
 
 </header>
 
 
-
 <main class="page">
 
-
-    <!-- BACK -->
-
-    <button
-        id="backButton"
-        class="back-button"
-    >
+    <button id="backButton" class="back">
         ← BACK
     </button>
 
 
-
-    <!-- TITLE -->
-
     <section class="intro">
-
-        <span class="eyebrow">
-            DRIVER TOOLS
-        </span>
-
-        <h1>
-            Report a Problem
-        </h1>
-
+        <span>DRIVER TOOLS</span>
+        <h1>Maintenance</h1>
         <p>
-            Tell us about any problem found
-            in your assigned bus.
+            Report bus problems and complete repair details.
         </p>
-
     </section>
-
 
 
     <!-- DRIVER -->
 
-    <section class="driver-card">
+    <div class="info-card">
 
-        <div class="driver-icon">
-            👤
-        </div>
+        <div class="icon">👤</div>
 
         <div>
-
-            <span class="small-label">
-                DRIVER
-            </span>
-
-            <strong id="driverName">
-                Loading...
-            </strong>
-
+            <small>DRIVER</small>
+            <strong id="driverName">Loading...</strong>
         </div>
 
-    </section>
-
+    </div>
 
 
     <!-- BUS -->
 
-    <section class="bus-card">
+    <div class="bus-card">
 
-        <div class="bus-icon">
-            🚌
+        <div class="bus-icon">🚌</div>
+
+        <div>
+            <small>ASSIGNED BUS</small>
+            <strong id="busName">Loading...</strong>
+            <p id="busNumber">--</p>
         </div>
 
-        <div class="bus-info">
+        <b>ASSIGNED</b>
 
-            <span class="small-label">
-                YOUR ASSIGNED BUS
-            </span>
+    </div>
 
-            <strong id="busName">
-                Loading...
-            </strong>
 
-            <span id="busRegistration">
-                --
-            </span>
+    <!-- REPORT PROBLEM -->
 
+    <section class="card">
+
+        <div class="section-label">
+            NEW REPORT
         </div>
 
-        <span class="assigned">
-            ASSIGNED
-        </span>
-
-    </section>
+        <h2>Report a Problem</h2>
 
 
+        <label>PROBLEM TYPE</label>
 
-    <!-- FORM -->
+        <div class="choices">
 
-    <section class="form-card">
+            <button
+                class="choice active"
+                data-type="service"
+            >
+                🔧 Service / Repair
+            </button>
 
-
-        <div class="form-title">
-
-            <span class="eyebrow">
-                MAINTENANCE
-            </span>
-
-            <h2>
-                What's the problem?
-            </h2>
-
-        </div>
-
-
-
-        <!-- TYPE -->
-
-        <div class="field">
-
-            <label>
-                PROBLEM TYPE
-            </label>
-
-
-            <div class="type-grid">
-
-                <button
-                    type="button"
-                    class="type-option active"
-                    data-type="service"
-                >
-
-                    <span class="type-icon">
-                        🔧
-                    </span>
-
-                    <span>
-                        Service / Repair
-                    </span>
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="type-option"
-                    data-type="part"
-                >
-
-                    <span class="type-icon">
-                        ⚙️
-                    </span>
-
-                    <span>
-                        Part Replacement
-                    </span>
-
-                </button>
-
-            </div>
+            <button
+                class="choice"
+                data-type="part"
+            >
+                ⚙️ Part Replacement
+            </button>
 
         </div>
 
 
+        <label>PRIORITY</label>
 
-        <!-- PROBLEM -->
+        <div class="priority">
 
-        <div class="field">
+            <button data-priority="low">
+                LOW
+            </button>
 
-            <label for="problem">
-                PROBLEM DESCRIPTION
-            </label>
+            <button
+                class="active"
+                data-priority="normal"
+            >
+                NORMAL
+            </button>
 
-            <textarea
-                id="problem"
-                rows="6"
-                maxlength="1000"
-                placeholder="Example: Front brake making noise while driving..."
-            ></textarea>
-
-            <div class="counter">
-
-                <span>
-                    Describe the problem clearly.
-                </span>
-
-                <span>
-                    <b id="characterCount">0</b>/1000
-                </span>
-
-            </div>
+            <button data-priority="urgent">
+                URGENT
+            </button>
 
         </div>
 
 
+        <label>PROBLEM DESCRIPTION</label>
 
-        <!-- URGENCY -->
+        <textarea
+            id="problem"
+            placeholder="Describe the problem found in the bus..."
+        ></textarea>
 
-        <div class="field">
-
-            <label>
-                PRIORITY
-            </label>
-
-
-            <div class="priority-grid">
-
-                <button
-                    type="button"
-                    class="priority-option"
-                    data-priority="low"
-                >
-                    LOW
-                </button>
-
-
-                <button
-                    type="button"
-                    class="priority-option active"
-                    data-priority="normal"
-                >
-                    NORMAL
-                </button>
-
-
-                <button
-                    type="button"
-                    class="priority-option"
-                    data-priority="urgent"
-                >
-                    URGENT
-                </button>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- SUBMIT -->
 
         <button
-            id="submitButton"
-            class="submit-button"
+            id="submitProblem"
+            class="primary"
         >
             SUBMIT PROBLEM
         </button>
 
-
-        <p class="note">
-            This report will be sent to the
-            school transport administration.
-        </p>
-
     </section>
 
 
+    <!-- WAITING / ACTIVE REPORTS -->
 
-    <!-- PREVIOUS REPORTS -->
+    <section class="section">
 
-    <section class="reports-section">
-
-        <div class="section-heading">
-
-            <div>
-
-                <span class="eyebrow">
-                    HISTORY
-                </span>
-
-                <h2>
-                    My Reports
-                </h2>
-
-            </div>
-
+        <div class="section-label">
+            MY REPORTS
         </div>
 
+        <h2>Reported Problems</h2>
 
-        <div
-            id="reportsList"
-            class="reports-list"
-        >
+        <div id="reportsList">
             Loading...
         </div>
 
     </section>
 
 
-</main>
+    <!-- REPAIR DETAILS -->
 
+    <section
+        id="repairSection"
+        class="card hidden"
+    >
+
+        <div class="section-label">
+            REPAIR DETAILS
+        </div>
+
+        <h2>Complete Repair Details</h2>
+
+        <div id="repairTicketInfo"></div>
+
+
+        <label>WHAT WAS DONE?</label>
+
+        <div class="choices">
+
+            <button
+                class="repair-choice active"
+                data-repair="service"
+            >
+                🔧 Service / Repair
+            </button>
+
+            <button
+                class="repair-choice"
+                data-repair="part"
+            >
+                ⚙️ Part Replacement
+            </button>
+
+        </div>
+
+
+        <label>REPAIR / SERVICE DETAILS</label>
+
+        <textarea
+            id="repairDescription"
+            placeholder="Explain what was repaired or serviced..."
+        ></textarea>
+
+
+        <!-- PART DETAILS -->
+
+        <div id="partFields" class="hidden">
+
+            <label>PART REPLACED</label>
+
+            <input
+                id="partName"
+                type="text"
+                placeholder="Example: Brake Pad"
+            >
+
+
+            <label>PART COST</label>
+
+            <input
+                id="partCost"
+                type="number"
+                min="0"
+                placeholder="₹ 0"
+            >
+
+        </div>
+
+
+        <!-- LABOUR -->
+
+        <label>LABOUR CHARGES</label>
+
+        <input
+            id="labourCost"
+            type="number"
+            min="0"
+            placeholder="₹ 0"
+        >
+
+
+        <div class="total-box">
+
+            <span>TOTAL COST</span>
+
+            <strong id="totalCost">
+                ₹0
+            </strong>
+
+        </div>
+
+
+        <button
+            id="submitRepair"
+            class="primary"
+        >
+            SUBMIT REPAIR DETAILS
+        </button>
+
+    </section>
+
+
+</main>
 
 
 <div
@@ -372,13 +278,10 @@
 ></div>
 
 
-
 <script
     type="module"
     src="./script.js"
 ></script>
 
-
 </body>
-
 </html>
