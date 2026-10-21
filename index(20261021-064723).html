@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#142844">
+<title>Add Driver | BEST Bus</title>
+<style>
+:root{--navy:#142844;--ink:#172438;--muted:#6d7b8e;--line:#e3eaf2;--bg:#f4f7fb;--blue:#2f6fed;--green:#16845b;--red:#b42318;--white:#fff;--shadow:0 14px 36px rgba(20,40,68,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}input,button{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}
+.topbar{height:74px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,48px);gap:14px}.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;object-fit:contain;border-radius:10px}.brand-name{font-size:17px;font-weight:850;letter-spacing:.05em;color:var(--navy)}.brand-sub{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}.admin-badge{background:#edf3ff;color:#245ac6;padding:7px 11px;border-radius:999px;font-size:11px;font-weight:800}
+.layout{display:grid;grid-template-columns:236px minmax(0,1fr);min-height:calc(100vh - 74px)}.sidebar{background:var(--navy);padding:24px 14px;color:#d8e4f3}.side-label{font-size:10px;letter-spacing:.16em;color:#8ea4c2;font-weight:800;padding:10px 12px}.nav-link{display:flex;align-items:center;gap:12px;padding:12px;border-radius:11px;color:#d8e4f3;text-decoration:none;margin:3px 0;font-size:13px;font-weight:650}.nav-link:hover,.nav-link.active{background:#254568;color:#fff}.ico{width:22px;text-align:center;font-size:17px}.main{width:100%;max-width:1180px;margin:0 auto;padding:clamp(20px,4vw,44px)}.eyebrow{color:var(--blue);font-size:11px;font-weight:850;letter-spacing:.15em;text-transform:uppercase}.heading{margin-bottom:24px}.heading h1{font-size:clamp(28px,3vw,36px);line-height:1.12;letter-spacing:-.04em;color:var(--navy);margin:8px 0}.heading p{margin:0;color:var(--muted);max-width:660px}.grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(270px,.8fr);gap:20px;align-items:start}.panel{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.panel-head{padding:20px 22px;border-bottom:1px solid var(--line)}.panel-head h2{margin:0;color:var(--navy);font-size:17px}.panel-head p{margin:5px 0 0;color:var(--muted);font-size:12px}.panel-body{padding:22px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{margin-bottom:16px}.field.full{grid-column:1/-1}.field label{display:block;font-size:11px;font-weight:850;letter-spacing:.08em;color:#596a80;margin-bottom:7px}.field input{width:100%;min-height:47px;border:1px solid #d8e1ec;border-radius:11px;padding:12px 13px;background:#fff;outline:none;color:var(--ink)}.field input:focus{border-color:#76a0f8;box-shadow:0 0 0 3px #eaf1ff}.hint{font-size:12px;color:var(--muted);margin-top:6px}.info{display:flex;gap:12px;background:#f3f7ff;border:1px solid #dce7ff;border-radius:12px;padding:14px;margin:4px 0 18px}.info-icon{font-size:20px}.info strong{display:block;color:var(--navy);font-size:13px}.info p{margin:4px 0 0;color:#5d6f87;font-size:12px}.btn{border:1px solid var(--line);border-radius:11px;padding:11px 15px;background:#fff;color:var(--ink);font-size:13px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn-primary{background:var(--blue);border-color:var(--blue);color:#fff}.btn-full{width:100%;min-height:48px}.message{padding:12px 14px;border-radius:11px;margin-bottom:15px;font-size:13px;font-weight:650}.message.error{color:var(--red);background:#fff0f0;border:1px solid #f4d0d0}.message.success{color:#116b49;background:#eaf8f1;border:1px solid #c6ead8}.hidden{display:none!important}.side-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px}.side-icon{width:42px;height:42px;display:grid;place-items:center;background:#edf3ff;color:var(--blue);border-radius:12px;font-size:20px;margin-bottom:13px}.side-card h3{margin:0 0 8px;font-size:15px;color:var(--navy)}.side-card p,.side-card li{font-size:12px;color:var(--muted)}.side-card ul{padding-left:18px;margin:10px 0 0}.side-card li{margin:7px 0}.steps{display:flex;flex-direction:column;gap:12px}.step{display:flex;gap:10px;align-items:flex-start}.num{width:25px;height:25px;flex:0 0 25px;border-radius:50%;display:grid;place-items:center;background:#edf3ff;color:#245ac6;font-size:11px;font-weight:850}.step span:last-child{font-size:12px;color:#5d6f87}.foot{text-align:center;font-size:11px;color:var(--muted);padding:18px}
+.menu-btn{display:none;border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff;color:var(--navy)}
+@media(max-width:900px){.layout{grid-template-columns:205px 1fr}.grid{grid-template-columns:1fr}.main{padding:25px 20px}}
+@media(max-width:680px){.topbar{height:66px;padding:0 14px}.logo{width:38px;height:38px}.brand-name{font-size:15px}.brand-sub{font-size:9px}.admin-badge{display:none}.menu-btn{display:block}.layout{display:block;min-height:calc(100vh - 66px)}.sidebar{display:none;position:fixed;z-index:20;top:66px;bottom:0;left:0;width:min(285px,84vw);overflow:auto;box-shadow:12px 0 32px #0c1d3340}.sidebar.open{display:block}.main{padding:22px 14px}.panel-head,.panel-body{padding:17px}.fields{grid-template-columns:1fr;gap:0}.field.full{grid-column:auto}.heading h1{font-size:29px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><img src="../logo.png" class="logo" alt="BEST Bus logo" onerror="this.style.display='none'"><div><div class="brand-name">BEST BUS</div><div class="brand-sub">Fleet Management System</div></div></div>
+  <div style="display:flex;gap:10px;align-items:center"><span class="admin-badge">ADMIN · DRIVER SETUP</span><button id="menuBtn" class="menu-btn" type="button">☰ Menu</button></div>
+</header>
+<div class="layout">
+  <aside id="sidebar" class="sidebar">
+    <div class="side-label">MAIN MENU</div>
+    <a class="nav-link" href="../admin/"><span class="ico">▦</span>Dashboard</a>
+    <a class="nav-link" href="./"><span class="ico">＋</span>Add Driver</a>
+    <a class="nav-link" href="../admin/drivers/"><span class="ico">♙</span>Drivers &amp; Approvals</a>
+    <a class="nav-link" href="../admin/assignment/"><span class="ico">⇄</span>Bus Assignments</a>
+    <a class="nav-link" href="../add-bus/"><span class="ico">🚌</span>Add Bus</a>
+  </aside>
+  <main class="main">
+    <section class="heading"><div class="eyebrow">FLEET MANAGEMENT</div><h1>Add Driver</h1><p>Create a driver profile for review. Bus assignment is managed separately, so you can approve a driver first and assign a bus when you're ready.</p></section>
+    <div class="grid">
+      <section class="panel">
+        <div class="panel-head"><h2>Driver information</h2><p>Enter accurate details to create a pending driver profile.</p></div>
+        <div class="panel-body">
+          <div id="message" class="message hidden" role="status" aria-live="polite"></div>
+          <form id="driverForm">
+            <div class="fields">
+              <div class="field"><label for="driverName">DRIVER FULL NAME *</label><input id="driverName" name="driverName" type="text" placeholder="Enter driver's full name" autocomplete="name" maxlength="100" required></div>
+              <div class="field"><label for="driverPhone">PHONE NUMBER *</label><input id="driverPhone" name="driverPhone" type="tel" inputmode="tel" placeholder="+91 98765 43210" autocomplete="tel" maxlength="20" required><div class="hint">Use the number the driver will use for contact.</div></div>
+              <div class="field full"><label for="driverEmail">EMAIL ADDRESS</label><input id="driverEmail" name="driverEmail" type="email" placeholder="driver@example.com" autocomplete="email"><div class="hint">Optional if your existing driver login workflow does not use email. Do not enter a password here.</div></div>
+            </div>
+            <div class="info"><div class="info-icon">ℹ️</div><div><strong>Approval and assignment are separate</strong><p>This creates a pending driver profile only. It does not assign a bus or create a Firebase Authentication account. Approve the profile from Drivers &amp; Approvals, then assign a bus from Bus Assignments.</p></div></div>
+            <button id="saveButton" type="submit" class="btn btn-primary btn-full">＋ Create Driver Profile</button>
+          </form>
+        </div>
+      </section>
+      <aside>
+        <div class="side-card"><div class="side-icon">✓</div><h3>Recommended workflow</h3><div class="steps"><div class="step"><span class="num">1</span><span>Create the driver's pending profile.</span></div><div class="step"><span class="num">2</span><span>Review details and approve the driver.</span></div><div class="step"><span class="num">3</span><span>Assign an available bus from the assignment page.</span></div><div class="step"><span class="num">4</span><span>The driver signs in through the existing login process.</span></div></div></div>
+        <div class="side-card"><h3>Before you begin</h3><ul><li>Check the driver's phone number for accuracy.</li><li>Do not share admin credentials with drivers.</li><li>Bus assignments and history are managed separately.</li></ul></div>
+      </aside>
+    </div>
+    <div class="foot">BEST Bus · Admin-only driver profile creation</div>
+  </main>
+</div>
+<script type="module">
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { collection, addDoc, getDoc, doc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { auth, db } from "../core/firebase.js";
+
+const $ = id => document.getElementById(id);
+let adminUser = null;
+let submitting = false;
+const showMessage = (text, type) => { const el=$("message"); el.textContent=text; el.className="message "+type; el.classList.remove("hidden"); };
+$("menuBtn").addEventListener("click", () => $("sidebar").classList.toggle("open"));
+
+onAuthStateChanged(auth, async user => {
+  if (!user) { location.replace("../index.html"); return; }
+  try {
+    const snap = await getDoc(doc(db, "users", user.uid));
+    if (!snap.exists() || snap.data().role !== "admin") {
+      await signOut(auth);
+      location.replace("../index.html");
+      return;
+    }
+    adminUser = user;
+  } catch (error) {
+    console.error(error);
+    showMessage("Could not verify admin access. Check Firebase permissions and try again.", "error");
+    $("saveButton").disabled = true;
+  }
+});
+
+$("driverForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (submitting || !adminUser) return;
+  const name=$("driverName").value.trim();
+  const phone=$("driverPhone").value.trim();
+  const email=$("driverEmail").value.trim().toLowerCase();
+  if (!name || !phone) { showMessage("Enter the driver's name and phone number.", "error"); return; }
+  const normalizedPhone=phone.replace(/[^\d+]/g,"");
+  if (normalizedPhone.replace(/\D/g,"").length < 10) { showMessage("Enter a valid phone number with at least 10 digits.", "error"); return; }
+
+  submitting=true;
+  $("saveButton").disabled=true;
+  $("saveButton").textContent="Creating profile…";
+  $("message").classList.add("hidden");
+  try {
+    // Keep the existing app's `drivers` collection and its pending-profile model.
+    const phoneQuery=query(collection(db,"drivers"),where("phone","==",phone));
+    const phoneSnap=await getDocs(phoneQuery);
+    if (!phoneSnap.empty) throw new Error("A driver profile with this phone number already exists.");
+
+    if (email) {
+      const emailQuery=query(collection(db,"drivers"),where("email","==",email));
+      const emailSnap=await getDocs(emailQuery);
+      if (!emailSnap.empty) throw new Error("A driver profile with this email already exists.");
+    }
+
+    const payload={
+      name,
+      phone,
+      email: email || "",
+      authUid: null,
+      assignedBusId: null,
+      status: "pending",
+      role: "driver",
+      createdAt: serverTimestamp(),
+      createdBy: adminUser.uid
+    };
+    await addDoc(collection(db,"drivers"),payload);
+    $("driverForm").reset();
+    showMessage("Driver profile created and marked pending approval. Assign a bus separately after approval.", "success");
+  } catch(error) {
+    console.error("Create driver profile failed:",error);
+    showMessage(error.message || "Could not create driver profile. Check Firestore rules.", "error");
+  } finally {
+    submitting=false;
+    $("saveButton").disabled=false;
+    $("saveButton").textContent="＋ Create Driver Profile";
+  }
+});
+</script>
+</body>
+</html>
