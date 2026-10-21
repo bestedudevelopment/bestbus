@@ -47,16 +47,16 @@ h1{font-size:clamp(38px,5vw,62px);line-height:1.02;letter-spacing:-2px;margin:58
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getAuth, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-// Replace these placeholder values with the web app config from Firebase Console.
 const firebaseConfig = {
-  apiKey: "YOUR_FIREBASE_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_FIREBASE_APP_ID"
+  apiKey: "AIzaSyCvpd7HxpLq4IJ22cMTldV3sanz35tt3H8",
+  authDomain: "best----bus-application.firebaseapp.com",
+  projectId: "best----bus-application",
+  storageBucket: "best----bus-application.firebasestorage.app",
+  messagingSenderId: "428353631166",
+  appId: "1:428353631166:web:e58e03cb28a52a790e3fef",
+  measurementId: "G-5XP2LE6FH1"
 };
+
 const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(app), db = getFirestore(app);
 const statusEl = document.getElementById("status"), loginBtn = document.getElementById("loginBtn");
