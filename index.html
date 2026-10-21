@@ -89,7 +89,7 @@ async function signIn(action){
 }
 document.getElementById("loginForm").addEventListener("submit",e=>{e.preventDefault();const email=document.getElementById("email").value.trim();const password=document.getElementById("password").value;signIn(()=>signInWithEmailAndPassword(auth,email,password));});
 document.getElementById("googleBtn").addEventListener("click",()=>signIn(()=>signInWithPopup(auth,new GoogleAuthProvider())));
-onAuthStateChanged(auth, user=>{ if(user && !location.pathname.includes("/admin/") && !location.pathname.includes("/driver/")) destinationFor(user).catch(e=>{console.error(e);status("Signed in, but your profile could not be checked. Check Firestore rules.","error");}); });
+onAuthStateChanged(auth, user=>{ if(user && !location.pathname.includes("../admin/") && !location.pathname.includes("../driver/")) destinationFor(user).catch(e=>{console.error(e);status("Signed in, but your profile could not be checked. Check Firestore rules.","error");}); });
 </script>
 </body>
 </html>
