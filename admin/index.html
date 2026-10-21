@@ -18,8 +18,18 @@ import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.1.
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, collection, addDoc, updateDoc, onSnapshot, serverTimestamp, runTransaction } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 // Replace with your existing Firebase web app config; use identical values in project/index.html.
-const firebaseConfig={apiKey:"YOUR_FIREBASE_API_KEY",authDomain:"YOUR_PROJECT_ID.firebaseapp.com",projectId:"YOUR_PROJECT_ID",storageBucket:"YOUR_PROJECT_ID.firebasestorage.app",messagingSenderId:"YOUR_MESSAGING_SENDER_ID",appId:"YOUR_FIREBASE_APP_ID"};
-const app=getApps().length?getApps()[0]:initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),$=id=>document.getElementById(id);
+const firebaseConfig = {
+  apiKey: "AIzaSyCvpd7HxpLq4IJ22cMTldV3sanz35tt3H8",
+  authDomain: "best----bus-application.firebaseapp.com",
+  projectId: "best----bus-application",
+  storageBucket: "best----bus-application.firebasestorage.app",
+  messagingSenderId: "428353631166",
+  appId: "1:428353631166:web:e58e03cb28a52a790e3fef",
+  measurementId: "G-5XP2LE6FH1"
+};
+
+
+  const app=getApps().length?getApps()[0]:initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),$=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let currentUser=null,buses=[],drivers=[],activity=[],unsubs=[],modalResolve=null,listenersStarted=false;
 const names={overview:"Overview",buses:"Bus Management",drivers:"Driver Management",assignments:"Bus Assignments",deleted:"Deleted Buses"};
