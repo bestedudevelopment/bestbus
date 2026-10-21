@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BEST Bus | Admin</title>
+<style>
+:root{--bg:#07111f;--panel:#0d1b2e;--panel2:#11233a;--line:#263d57;--text:#f3f7fb;--muted:#9fb1c7;--gold:#ffc857;--cyan:#57d9f5;--green:#85e0ac;--red:#ff858e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}.layout{display:grid;grid-template-columns:245px 1fr;min-height:100vh}.side{padding:24px 17px;background:#091726;border-right:1px solid var(--line);position:sticky;top:0;height:100vh}.brand{display:flex;align-items:center;gap:11px;padding:0 8px 24px;border-bottom:1px solid var(--line)}.brand img{width:44px;height:44px;object-fit:contain;background:white;border-radius:10px;padding:3px}.brand strong{display:block;letter-spacing:1.3px}.brand small{color:var(--muted);font-size:11px}.navtitle{font-size:10px;letter-spacing:1.8px;color:#7086a0;font-weight:800;margin:25px 10px 10px}.navitem{width:100%;text-align:left;padding:12px 13px;margin:3px 0;border:1px solid transparent;background:transparent;color:#bdcad9;border-radius:10px;cursor:pointer;font:inherit;font-size:13px}.navitem.active,.navitem:hover{background:#132841;border-color:#294762;color:white}.navitem b{display:inline-block;width:26px;color:var(--gold)}.sidebottom{position:absolute;bottom:18px;left:17px;right:17px}.main{min-width:0}.top{height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;border-bottom:1px solid var(--line);background:#0a1726}.top h1{font-size:18px;margin:0}.top p{font-size:12px;color:var(--muted);margin:5px 0 0}.topright{display:flex;align-items:center;gap:12px}.pill{font-size:11px;padding:7px 10px;border-radius:999px;background:#163c35;color:var(--green);border:1px solid #24564b}.btn{border:0;border-radius:10px;padding:11px 14px;background:var(--gold);color:#1d2b3b;font-weight:800;cursor:pointer;font-size:12px}.btn.secondary{background:#172b42;color:#dce8f5;border:1px solid #2c4662}.btn.danger{background:#49232d;color:#ffb2b7;border:1px solid #733743}.btn:disabled{opacity:.5;cursor:not-allowed}.content{padding:26px 30px 50px;max-width:1500px;margin:auto}.welcome{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:24px 25px;border-radius:17px;background:linear-gradient(115deg,#173b59,#10243a 65%,#172b40);border:1px solid #2b4b68;margin-bottom:22px}.welcome h2{margin:0 0 7px;font-size:25px}.welcome p{margin:0;color:#bdcede;font-size:13px}.welcome .badge{font-size:11px;color:var(--gold);border:1px solid #8a6b30;border-radius:8px;padding:9px 11px;white-space:nowrap}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:22px}.stat{padding:17px 18px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}.stat span{color:var(--muted);font-size:12px}.stat strong{display:block;font-size:29px;margin-top:9px}.stat small{display:block;color:#7188a2;font-size:11px;margin-top:5px}.section{display:none}.section.active{display:block}.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:4px 0 17px}.sectionhead h2{font-size:20px;margin:0}.sectionhead p{color:var(--muted);font-size:12px;margin:6px 0 0}.columns{display:grid;grid-template-columns:minmax(280px,.8fr) minmax(0,1.2fr);gap:16px}.card{border:1px solid var(--line);border-radius:15px;background:var(--panel);padding:19px;min-width:0}.card h3{margin:0 0 17px;font-size:15px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:12px}.field.full{grid-column:1/-1}.field label{display:block;font-size:11px;color:#b9c8d9;font-weight:700;margin-bottom:7px}.field input,.field select{width:100%;background:#081523;border:1px solid #2b415b;border-radius:9px;padding:11px 12px;color:white;font:inherit;font-size:12px;outline:none}.field input:focus,.field select:focus{border-color:var(--cyan)}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px}table{width:100%;border-collapse:collapse;min-width:650px;font-size:12px}th,td{text-align:left;padding:12px 13px;border-bottom:1px solid #1d3148;vertical-align:middle}th{color:#94aac2;background:#102238;font-size:10px;text-transform:uppercase;letter-spacing:1px}td{color:#dce6f1}tr:last-child td{border-bottom:0}.muted{color:var(--muted)}.statusbadge{display:inline-block;border-radius:999px;padding:5px 8px;font-size:10px;background:#26364a;color:#cbd8e6}.statusbadge.pending{background:#493c21;color:#ffdf91}.statusbadge.approved,.statusbadge.active{background:#173e34;color:#9df0c1}.statusbadge.deleted{background:#47252e;color:#ffb0b6}.actions{display:flex;gap:6px;flex-wrap:wrap}.actions .btn{padding:7px 9px;font-size:10px}.empty{text-align:center;padding:25px;color:#7f95ad}.notice{padding:12px 14px;border-radius:10px;background:#142b40;border:1px solid #294760;color:#b9d5ec;font-size:12px;line-height:1.5;margin-bottom:16px}.notice.error{background:#3b2029;color:#ffbdc2;border-color:#6b333f}.notice.ok{background:#15332c;color:#a7f0c7;border-color:#285846}.toast{position:fixed;right:22px;bottom:22px;z-index:20;max-width:380px;background:#16342d;border:1px solid #2e6654;color:#c6ffe0;padding:13px 17px;border-radius:12px;box-shadow:0 12px 40px #0007;display:none;font-size:13px}.toast.show{display:block}.mobilemenu{display:none}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.side{position:relative;height:auto;padding:13px;border-right:0;border-bottom:1px solid var(--line)}.brand{padding:0 5px 12px;border:0}.navtitle,.sidebottom{display:none}.navlist{display:flex;overflow:auto;gap:5px;padding-top:8px}.navitem{white-space:nowrap;width:auto;margin:0;padding:10px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.content{padding:20px}.columns{grid-template-columns:1fr}.top{padding:0 20px}}
+@media(max-width:600px){.top{height:auto;padding:15px;align-items:flex-start;gap:10px}.top h1{font-size:16px}.topright{flex-direction:column;align-items:flex-end}.content{padding:14px}.welcome{padding:18px;align-items:flex-start;flex-direction:column}.welcome h2{font-size:21px}.stats{gap:9px}.stat{padding:14px}.stat strong{font-size:25px}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.sectionhead{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="side">
+  <div class="brand"><img src="../logo.png" alt="BEST Bus" onerror="this.style.display='none'"><div><strong>BEST BUS</strong><small>ADMIN CONTROL</small></div></div>
+  <div class="navtitle">MANAGEMENT</div>
+  <nav class="navlist">
+    <button class="navitem active" data-section="overview"><b>◫</b> Overview</button>
+    <button class="navitem" data-section="buses"><b>▣</b> Add / Manage Buses</button>
+    <button class="navitem" data-section="drivers"><b>♙</b> Add / Approve Drivers</button>
+    <button class="navitem" data-section="assignments"><b>⇄</b> Assign / Deassign</button>
+    <button class="navitem" data-section="deleted"><b>⌫</b> Deleted Buses</button>
+  </nav>
+  <div class="sidebottom"><button class="btn secondary" id="logoutBtn" style="width:100%">Sign out</button></div>
+</aside>
+<main class="main">
+<header class="top"><div><h1 id="pageTitle">Overview</h1><p>Manage your transport operations from one place.</p></div><div class="topright"><span class="pill">● Admin workspace</span><button class="btn secondary" id="logoutTop">Sign out</button></div></header>
+<div class="content">
+  <div id="globalNotice" class="notice">Connecting to BEST Bus services…</div>
+  <section class="welcome"><div><h2>Good to see you, Administrator.</h2><p>One control centre for buses, drivers and assignments.</p></div><div class="badge">BEST BUS · OPERATIONS</div></section>
+  <section id="overview" class="section active">
+    <div class="stats">
+      <div class="stat"><span>Total buses</span><strong id="busCount">—</strong><small>Active fleet</small></div>
+      <div class="stat"><span>Active drivers</span><strong id="driverCount">—</strong><small>Driver records</small></div>
+      <div class="stat"><span>Awaiting approval</span><strong id="pendingCount">—</strong><small>Needs review</small></div>
+      <div class="stat"><span>Unassigned buses</span><strong id="unassignedCount">—</strong><small>Ready for assignment</small></div>
+    </div>
+    <div class="card"><h3>Quick actions</h3><div class="actions"><button class="btn" data-go="buses">＋ Add a bus</button><button class="btn secondary" data-go="drivers">＋ Add a driver</button><button class="btn secondary" data-go="assignments">⇄ Assign a bus</button><button class="btn secondary" data-go="deleted">View deleted buses</button></div></div>
+  </section>
+  <section id="buses" class="section">
+    <div class="sectionhead"><div><h2>Add / Manage Buses</h2><p>Register a bus, edit its details, or move it to deleted buses.</p></div></div>
+    <div class="columns">
+      <div class="card"><h3 id="busFormTitle">Register a bus</h3>
+        <form id="busForm"><input type="hidden" id="busEditId">
+          <div class="formgrid">
+            <div class="field"><label for="busNumber">Bus number / registration *</label><input id="busNumber" required placeholder="KA-00-XX-0000"></div>
+            <div class="field"><label for="busCode">Bus code</label><input id="busCode" placeholder="01"></div>
+            <div class="field"><label for="expectedMileage">Expected mileage (km/L)</label><input id="expectedMileage" type="number" min="0" step="0.1" placeholder="6.5"></div>
+            <div class="field"><label for="initialOdometer">Initial odometer (km)</label><input id="initialOdometer" type="number" min="0" step="0.1" placeholder="0"></div>
+            <div class="field"><label for="routeFrom">Route from</label><input id="routeFrom" placeholder="Starting point"></div>
+            <div class="field"><label for="routeTo">Route to</label><input id="routeTo" placeholder="School / destination"></div>
+            <div class="field full"><label for="busStage">Initial odometer stage</label><select id="busStage"><option value="after_evening_drop">After evening drop (day closed)</option><option value="after_morning_pickup">After morning pickup (midday setup)</option></select></div>
+          </div>
+          <div class="actions"><button class="btn" id="saveBusBtn" type="submit">Save bus</button><button class="btn secondary" id="cancelBusEdit" type="button" hidden>Cancel edit</button></div>
+        </form>
+      </div>
+      <div class="card"><h3>Registered buses</h3><div class="tablewrap"><table><thead><tr><th>Bus</th><th>Route</th><th>Driver</th><th>Status</th><th>Actions</th></tr></thead><tbody id="busRows"><tr><td colspan="5" class="empty">Loading buses…</td></tr></tbody></table></div></div>
+    </div>
+  </section>
+  <section id="drivers" class="section">
+    <div class="sectionhead"><div><h2>Add / Approve Drivers</h2><p>New drivers start as pending. Approve them before assigning a bus.</p></div></div>
+    <div class="columns">
+      <div class="card"><h3>Add driver record</h3>
+        <form id="driverForm">
+          <div class="field"><label for="driverName">Full name *</label><input id="driverName" required placeholder="Driver full name"></div>
+          <div class="field"><label for="driverPhone">Phone number *</label><input id="driverPhone" required type="tel" placeholder="+91 9XXXXXXXXX"></div>
+          <div class="field"><label for="driverEmail">Email address</label><input id="driverEmail" type="email" placeholder="driver@example.com"></div>
+          <div class="field"><label for="driverCode">Driver code (optional)</label><input id="driverCode" placeholder="DRV-001"></div>
+          <button class="btn" type="submit" id="saveDriverBtn">Add pending driver</button>
+        </form>
+        <p class="tiny">This creates a driver record only; it does not create a Firebase Authentication login account.</p>
+      </div>
+      <div class="card"><h3>Driver register</h3><div class="tablewrap"><table><thead><tr><th>Driver</th><th>Contact</th><th>Status</th><th>Assigned bus</th><th>Actions</th></tr></thead><tbody id="driverRows"><tr><td colspan="5" class="empty">Loading drivers…</td></tr></tbody></table></div></div>
+    </div>
+  </section>
+  <section id="assignments" class="section">
+    <div class="sectionhead"><div><h2>Assign / Deassign Bus</h2><p>Only approved drivers and active buses can be assigned.</p></div></div>
+    <div class="columns">
+      <div class="card"><h3>Assign a bus</h3><form id="assignForm">
+        <div class="field"><label for="assignDriver">Approved driver *</label><select id="assignDriver" required><option value="">Select a driver</option></select></div>
+        <div class="field"><label for="assignBus">Available bus *</label><select id="assignBus" required><option value="">Select a bus</option></select></div>
+        <button class="btn" type="submit">Assign bus</button>
+      </form></div>
+      <div class="card"><h3>Current assignments</h3><div class="tablewrap"><table><thead><tr><th>Driver</th><th>Bus</th><th>Assigned on</th><th>Action</th></tr></thead><tbody id="assignmentRows"><tr><td colspan="4" class="empty">Loading assignments…</td></tr></tbody></table></div></div>
+    </div>
+  </section>
+  <section id="deleted" class="section">
+    <div class="sectionhead"><div><h2>Deleted Buses</h2><p>Soft-deleted buses are retained here so you can restore them without losing history.</p></div></div>
+    <div class="card"><div class="tablewrap"><table><thead><tr><th>Bus</th><th>Route</th><th>Deleted on</th><th>Action</th></tr></thead><tbody id="deletedRows"><tr><td colspan="4" class="empty">Loading deleted buses…</td></tr></tbody></table></div></div>
+  </section>
+</div>
+</main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection, addDoc, updateDoc, onSnapshot, query, where, serverTimestamp, runTransaction } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+// Keep this configuration identical to project/index.html.
+const firebaseConfig = {
+  apiKey: "YOUR_FIREBASE_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_FIREBASE_APP_ID"
+};
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app), db = getFirestore(app);
+const $ = id => document.getElementById(id);
+let currentUser=null, buses=[], drivers=[], unsubscribeFns=[];
+const esc = value => String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),3500)}
+function notice(msg,type=""){const n=$("globalNotice");n.textContent=msg;n.className="notice"+(type?" "+type:"")}
+function showSection(id){document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===id));document.querySelectorAll(".navitem").forEach(b=>b.classList.toggle("active",b.dataset.section===id));$("pageTitle").textContent=({overview:"Overview",buses:"Add / Manage Buses",drivers:"Add / Approve Drivers",assignments:"Assign / Deassign Bus",deleted:"Deleted Buses"})[id]||"Admin";window.scrollTo({top:0,behavior:"smooth"})}
+document.querySelectorAll("[data-section]").forEach(b=>b.addEventListener("click",()=>showSection(b.dataset.section)));
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>showSection(b.dataset.go)));
+async function requireAdmin(user){
+  const snap=await getDoc(doc(db,"users",user.uid));
+  const role=String(snap.exists()?snap.data().role||"":"").toLowerCase();
+  if(role!=="admin"&&role!=="superadmin"){location.href="../driver/";return false}
+  currentUser=user;return true;
+}
+function busName(id){const b=buses.find(x=>x.id===id);return b?(b.busNumber||b.registrationNumber||b.code||b.id):"Unassigned"}
+function driverName(id){const d=drivers.find(x=>x.id===id);return d?(d.name||d.fullName||d.email||d.phone||d.id):"Unassigned"}
+function render(){
+  const activeBuses=buses.filter(b=>b.status!=="deleted"), deletedBuses=buses.filter(b=>b.status==="deleted");
+  $("busCount").textContent=activeBuses.length;
+  $("driverCount").textContent=drivers.filter(d=>d.status==="approved").length;
+  $("pendingCount").textContent=drivers.filter(d=>d.status==="pending").length;
+  $("unassignedCount").textContent=activeBuses.filter(b=>!b.assignedDriverId&&!b.driverId).length;
+  $("busRows").innerHTML=activeBuses.length?activeBuses.map(b=>`<tr><td><strong>${esc(b.busNumber||b.registrationNumber||"Bus")}</strong><br><span class="muted">Code: ${esc(b.busCode||"—")}</span></td><td>${esc(b.routeFrom||"—")} → ${esc(b.routeTo||"—")}</td><td>${esc(driverName(b.assignedDriverId||b.driverId))}</td><td><span class="statusbadge active">Active</span></td><td><div class="actions"><button class="btn secondary" data-editbus="${esc(b.id)}">Edit</button><button class="btn danger" data-deletebus="${esc(b.id)}">Delete</button></div></td></tr>`).join(""):`<tr><td colspan="5" class="empty">No buses yet. Register your first bus.</td></tr>`;
+  $("driverRows").innerHTML=drivers.length?drivers.map(d=>`<tr><td><strong>${esc(d.name||d.fullName||"Unnamed")}</strong><br><span class="muted">${esc(d.driverCode||"")}</span></td><td>${esc(d.phone||"—")}<br><span class="muted">${esc(d.email||"")}</span></td><td><span class="statusbadge ${esc(d.status||"pending")}">${esc(d.status||"pending")}</span></td><td>${esc(busName(d.assignedBusId))}</td><td><div class="actions">${d.status!=="approved"?`<button class="btn" data-approvedriver="${esc(d.id)}">Approve</button>`:""}${d.assignedBusId?`<button class="btn secondary" data-deassign="${esc(d.id)}">Deassign</button>`:""}<button class="btn danger" data-deletedriver="${esc(d.id)}">Delete</button></div></td></tr>`).join(""):`<tr><td colspan="5" class="empty">No driver records yet. Add a driver to begin.</td></tr>`;
+  $("assignDriver").innerHTML='<option value="">Select a driver</option>'+drivers.filter(d=>d.status==="approved"&&!d.assignedBusId).map(d=>`<option value="${esc(d.id)}">${esc(d.name||d.fullName||d.phone||d.id)}</option>`).join("");
+  $("assignBus").innerHTML='<option value="">Select a bus</option>'+activeBuses.filter(b=>!b.assignedDriverId&&!b.driverId).map(b=>`<option value="${esc(b.id)}">${esc(b.busNumber||b.registrationNumber||b.id)} · ${esc(b.routeFrom||"")} → ${esc(b.routeTo||"")}</option>`).join("");
+  const assigned=drivers.filter(d=>d.assignedBusId);
+  $("assignmentRows").innerHTML=assigned.length?assigned.map(d=>`<tr><td>${esc(d.name||d.fullName||d.phone||d.id)}</td><td>${esc(busName(d.assignedBusId))}</td><td>${d.assignedAt?.toDate?esc(d.assignedAt.toDate().toLocaleDateString()):"—"}</td><td><button class="btn secondary" data-deassign="${esc(d.id)}">Deassign</button></td></tr>`).join(""):`<tr><td colspan="4" class="empty">No active assignments.</td></tr>`;
+  $("deletedRows").innerHTML=deletedBuses.length?deletedBuses.map(b=>`<tr><td><strong>${esc(b.busNumber||b.registrationNumber||"Bus")}</strong></td><td>${esc(b.routeFrom||"—")} → ${esc(b.routeTo||"—")}</td><td>${b.deletedAt?.toDate?esc(b.deletedAt.toDate().toLocaleDateString()):"—"}</td><td><button class="btn secondary" data-restorebus="${esc(b.id)}">Restore</button></td></tr>`).join(""):`<tr><td colspan="4" class="empty">No deleted buses.</td></tr>`;
+  bindRowActions();
+}
+function bindRowActions(){
+  document.querySelectorAll("[data-editbus]").forEach(btn=>btn.onclick=()=>editBus(btn.dataset.editbus));
+  document.querySelectorAll("[data-deletebus]").forEach(btn=>btn.onclick=()=>deleteBus(btn.dataset.deletebus));
+  document.querySelectorAll("[data-restorebus]").forEach(btn=>btn.onclick=()=>restoreBus(btn.dataset.restorebus));
+  document.querySelectorAll("[data-approvedriver]").forEach(btn=>btn.onclick=()=>approveDriver(btn.dataset.approvedriver));
+  document.querySelectorAll("[data-deassign]").forEach(btn=>btn.onclick=()=>deassignDriver(btn.dataset.deassign));
+  document.querySelectorAll("[data-deletedriver]").forEach(btn=>btn.onclick=()=>deleteDriver(btn.dataset.deletedriver));
+}
+function startListeners(){
+  unsubscribeFns.forEach(fn=>fn());unsubscribeFns=[];
+  unsubscribeFns.push(onSnapshot(collection(db,"buses"),s=>{buses=s.docs.map(d=>({id:d.id,...d.data()}));render()},e=>notice("Cannot read buses: "+e.message,"error")));
+  unsubscribeFns.push(onSnapshot(collection(db,"drivers"),s=>{drivers=s.docs.map(d=>({id:d.id,...d.data()}));render()},e=>notice("Cannot read drivers: "+e.message,"error")));
+  notice("Connected. Changes update in real time.","ok");
+}
+$("busForm").addEventListener("submit",async e=>{
+  e.preventDefault();const id=$("busEditId").value;
+  const payload={busNumber:$("busNumber").value.trim(),busCode:$("busCode").value.trim(),expectedMileage:Number($("expectedMileage").value||0),initialOdometer:Number($("initialOdometer").value||0),routeFrom:$("routeFrom").value.trim(),routeTo:$("routeTo").value.trim(),initialOdometerStage:$("busStage").value,updatedAt:serverTimestamp(),updatedBy:currentUser.uid};
+  if(!payload.busNumber){toast("Enter a bus number.");return}
+  try{if(id){await updateDoc(doc(db,"buses",id),payload);toast("Bus updated.")}else{await addDoc(collection(db,"buses"),{...payload,status:"active",assignedDriverId:null,createdAt:serverTimestamp(),createdBy:currentUser.uid});toast("Bus registered.")}resetBusForm()}catch(err){console.error(err);toast("Could not save bus: "+err.message)}
+});
+function resetBusForm(){$("busForm").reset();$("busEditId").value="";$("busFormTitle").textContent="Register a bus";$("saveBusBtn").textContent="Save bus";$("cancelBusEdit").hidden=true}
+$("cancelBusEdit").onclick=resetBusForm;
+function editBus(id){const b=buses.find(x=>x.id===id);if(!b)return;showSection("buses");$("busEditId").value=id;$("busNumber").value=b.busNumber||b.registrationNumber||"";$("busCode").value=b.busCode||"";$("expectedMileage").value=b.expectedMileage??"";$("initialOdometer").value=b.initialOdometer??"";$("routeFrom").value=b.routeFrom||"";$("routeTo").value=b.routeTo||"";$("busStage").value=b.initialOdometerStage||"after_evening_drop";$("busFormTitle").textContent="Edit bus";$("saveBusBtn").textContent="Update bus";$("cancelBusEdit").hidden=false}
+async function deleteBus(id){const b=buses.find(x=>x.id===id);if(!b)return;if(b.assignedDriverId||b.driverId){toast("Deassign the driver before deleting this bus.");return}if(!confirm(`Move bus ${b.busNumber||id} to Deleted Buses?`))return;try{await updateDoc(doc(db,"buses",id),{status:"deleted",deletedAt:serverTimestamp(),deletedBy:currentUser.uid,updatedAt:serverTimestamp()});toast("Bus moved to Deleted Buses. History preserved.")}catch(e){toast("Could not delete bus: "+e.message)}}
+async function restoreBus(id){try{await updateDoc(doc(db,"buses",id),{status:"active",deletedAt:null,restoredAt:serverTimestamp(),restoredBy:currentUser.uid});toast("Bus restored.")}catch(e){toast("Could not restore bus: "+e.message)}}
+$("driverForm").addEventListener("submit",async e=>{e.preventDefault();const name=$("driverName").value.trim(),phone=$("driverPhone").value.trim(),email=$("driverEmail").value.trim().toLowerCase();if(!name||!phone){toast("Name and phone are required.");return}
+if(drivers.some(d=>String(d.phone||"").replace(/\s/g,"")===phone.replace(/\s/g,""))){toast("A driver with this phone number already exists.");return}
+try{await addDoc(collection(db,"drivers"),{name,phone,email,driverCode:$("driverCode").value.trim(),status:"pending",assignedBusId:null,authUid:null,createdAt:serverTimestamp(),createdBy:currentUser.uid,updatedAt:serverTimestamp()});$("driverForm").reset();toast("Driver added as pending approval.")}catch(err){toast("Could not add driver: "+err.message)}});
+async function approveDriver(id){try{await updateDoc(doc(db,"drivers",id),{status:"approved",approvedAt:serverTimestamp(),approvedBy:currentUser.uid,updatedAt:serverTimestamp()});toast("Driver approved. They can now be assigned.")}catch(e){toast("Could not approve driver: "+e.message)}}
+async function deleteDriver(id){const d=drivers.find(x=>x.id===id);if(!d)return;if(d.assignedBusId){toast("Deassign this driver before deleting the record.");return}if(!confirm(`Move driver ${d.name||d.phone} to deleted status?`))return;try{await updateDoc(doc(db,"drivers",id),{status:"deleted",deletedAt:serverTimestamp(),deletedBy:currentUser.uid,updatedAt:serverTimestamp()});toast("Driver record marked deleted; history retained.")}catch(e){toast("Could not delete driver: "+e.message)}}
+$("assignForm").addEventListener("submit",async e=>{e.preventDefault();const driverId=$("assignDriver").value,busId=$("assignBus").value;if(!driverId||!busId)return;const d=drivers.find(x=>x.id===driverId),b=buses.find(x=>x.id===busId);if(!d||!b||d.status!=="approved"||d.assignedBusId||b.assignedDriverId||b.driverId||b.status==="deleted"){toast("Selection changed. Refresh and try again.");return}
+try{await runTransaction(db,async tx=>{const dr=doc(db,"drivers",driverId),br=doc(db,"buses",busId);const [ds,bs]=await Promise.all([tx.get(dr),tx.get(br)]);if(!ds.exists()||!bs.exists())throw new Error("Driver or bus no longer exists.");const dd=ds.data(),bd=bs.data();if(dd.status!=="approved"||dd.assignedBusId||bd.assignedDriverId||bd.driverId||bd.status==="deleted")throw new Error("Driver or bus is no longer available.");tx.update(dr,{assignedBusId:busId,assignedAt:serverTimestamp(),assignedBy:currentUser.uid,updatedAt:serverTimestamp()});tx.update(br,{assignedDriverId:driverId,updatedAt:serverTimestamp()});tx.set(doc(collection(db,"assignmentHistory")),{driverId,busId,action:"assigned",actorUid:currentUser.uid,createdAt:serverTimestamp()})});toast("Bus assigned successfully.")}catch(err){toast("Assignment failed: "+err.message)}});
+async function deassignDriver(id){const d=drivers.find(x=>x.id===id);if(!d||!d.assignedBusId)return;const busId=d.assignedBusId;if(!confirm(`Deassign ${d.name||d.phone} from ${busName(busId)}?`))return;try{await runTransaction(db,async tx=>{const dr=doc(db,"drivers",id),br=doc(db,"buses",busId);const [ds,bs]=await Promise.all([tx.get(dr),tx.get(br)]);if(!ds.exists())throw new Error("Driver record missing.");tx.update(dr,{assignedBusId:null,deassignedAt:serverTimestamp(),deassignedBy:currentUser.uid,updatedAt:serverTimestamp()});if(bs.exists()&&bs.data().assignedDriverId===id)tx.update(br,{assignedDriverId:null,updatedAt:serverTimestamp()});tx.set(doc(collection(db,"assignmentHistory")),{driverId:id,busId,action:"deassigned",actorUid:currentUser.uid,createdAt:serverTimestamp()})});toast("Driver deassigned; assignment history retained.")}catch(e){toast("Could not deassign: "+e.message)}}
+async function logout(){try{unsubscribeFns.forEach(fn=>fn());await signOut(auth);location.href="../project/"}catch(e){toast("Sign-out failed: "+e.message)}}
+$("logoutBtn").onclick=logout;$("logoutTop").onclick=logout;
+onAuthStateChanged(auth,async user=>{if(!user){location.href="../project/";return}try{if(await requireAdmin(user))startListeners()}catch(e){console.error(e);notice("Cannot verify administrator access. Check Firebase config and Firestore rules. "+e.message,"error")}});
+</script>
+</body>
+</html>
