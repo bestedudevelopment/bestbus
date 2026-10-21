@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#edf6ff">
+<title>BEST Bus | Admin</title>
+<style>
+:root{--blue:#147be8;--blue2:#0864c8;--ink:#163653;--muted:#7b91a7;--line:#dce9f6;--bg:#f1f7fe;--white:#fff;--green:#159767;--amber:#d58b20;--red:#d84a4a;--shadow:0 12px 32px rgba(28,85,135,.08)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{min-height:100dvh;display:grid;grid-template-columns:232px minmax(0,1fr);max-width:1600px;margin:auto}
+.sidebar{position:sticky;top:0;height:100dvh;padding:22px 15px;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:22px;z-index:20}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px}
+.logo{width:40px;height:40px;border-radius:13px;background:linear-gradient(145deg,#178cf5,#075fc2);display:grid;place-items:center;color:white;font-size:22px;font-weight:900;box-shadow:0 7px 16px #1378df30}
+.brand-title{font-weight:900;letter-spacing:.07em;font-size:13px}.brand-sub{font-size:9px;color:var(--muted);letter-spacing:.12em;margin-top:3px}
+.admin-tag{margin-left:auto;background:#e9f4ff;color:var(--blue);font-size:9px;font-weight:800;padding:5px 7px;border-radius:7px}
+.nav-label{font-size:9px;letter-spacing:.14em;color:#9aabbb;font-weight:850;padding:0 12px;margin-bottom:4px}
+.nav{display:grid;gap:5px}
+.nav-btn{width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:11px 12px;border:0;border-radius:11px;background:transparent;color:#637e97;font-size:12px;font-weight:700;transition:.16s}
+.nav-btn svg{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8}
+.nav-btn:hover{background:#f2f8ff;color:var(--blue)}.nav-btn.active{background:#eaf4ff;color:var(--blue)}
+.nav-count{margin-left:auto;background:#fff0dc;color:#b36c0d;border-radius:99px;padding:3px 7px;font-size:10px}
+.sidebar-bottom{margin-top:auto;display:grid;gap:9px}
+.profile-mini{display:flex;align-items:center;gap:9px;padding:11px;background:#f5f9fd;border:1px solid #e9f1f8;border-radius:13px;min-width:0}
+.avatar{width:34px;height:34px;border-radius:11px;background:#dceeff;color:#176cc1;display:grid;place-items:center;font-weight:900;flex:none}
+.profile-name{font-size:11px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.profile-email{font-size:9px;color:var(--muted);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.main{min-width:0;padding:24px clamp(16px,3vw,38px) 35px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:25px}
+.top-left{display:flex;align-items:center;gap:12px;min-width:0}
+.menu-mobile{display:none;width:39px;height:39px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+.kicker{font-size:9px;color:var(--blue);letter-spacing:.15em;font-weight:900;text-transform:uppercase}
+.page-title{font-size:clamp(22px,2.4vw,30px);letter-spacing:-.045em;font-weight:900;margin:4px 0 0}
+.top-actions{display:flex;align-items:center;gap:9px}
+.icon-btn{width:39px;height:39px;display:grid;place-items:center;border:1px solid var(--line);border-radius:12px;background:#fff;color:#52718e;position:relative}
+.icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}
+.live-dot{position:absolute;width:7px;height:7px;right:8px;top:7px;background:#23b77a;border-radius:50%;box-shadow:0 0 0 3px #e1fff0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:11px;padding:11px 15px;background:linear-gradient(100deg,#1689f3,#0867d0);color:#fff;font-size:11px;font-weight:850;box-shadow:0 7px 16px #1478df20;transition:.16s}
+.btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.55;cursor:wait;transform:none}
+.btn.secondary{background:#fff;color:#52718e;border:1px solid var(--line);box-shadow:none}.btn.danger{background:#fff1f0;color:var(--red);border:1px solid #ffd9d5;box-shadow:none}.btn.small{padding:8px 10px;font-size:10px}
+.welcome{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:23px 25px;margin-bottom:20px;border:1px solid #d4e9fc;border-radius:20px;background:linear-gradient(110deg,#e5f3ff 0%,#f8fcff 68%,#d9eeff 100%)}
+.welcome:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;right:70px;top:-135px;border:25px solid #ffffff75}
+.welcome-copy{position:relative;z-index:2}.welcome h2{font-size:clamp(19px,2.4vw,28px);letter-spacing:-.04em;margin:6px 0 7px}.welcome p{font-size:11px;color:#68839d;margin:0;line-height:1.6}
+.bus-art{position:relative;z-index:2;width:160px;height:80px;flex:none;animation:busFloat 2.5s ease-in-out infinite;filter:drop-shadow(0 10px 7px #18588b20)}
+.bus-body{position:absolute;left:4px;top:7px;width:145px;height:55px;border-radius:12px 17px 5px 5px;border:2px solid #d0e2f0;background:linear-gradient(180deg,#fff 0 14%,#197bdc 14% 29%,#fff 29% 73%,#197bdc 73%)}
+.bus-glass{position:absolute;top:20px;width:22px;height:18px;background:linear-gradient(140deg,#c7efff,#5c9bc8);border:2px solid #274a68;border-radius:3px}.bus-glass.g1{left:13px}.bus-glass.g2{left:39px}.bus-glass.g3{left:65px}.bus-glass.g4{left:91px}
+.bus-front{position:absolute;right:2px;top:20px;width:22px;height:42px;border-radius:5px 10px 4px 3px;border:3px solid #197bdc;background:linear-gradient(135deg,#d5f3ff,#74b8e7)}
+.bus-front:after{content:"";position:absolute;bottom:5px;left:3px;width:9px;height:4px;background:#fff3b0;border-radius:5px}
+.bus-wheel{position:absolute;bottom:6px;width:20px;height:20px;border-radius:50%;background:#203b53;border:4px solid #fff;box-shadow:inset 0 0 0 3px #8ca8bd;animation:wheelSpin .8s linear infinite}
+.bus-wheel:after{content:"";position:absolute;inset:4px;border-radius:50%;background:#d8e8f5}.bus-wheel.w1{left:28px}.bus-wheel.w2{right:28px}
+@keyframes wheelSpin{to{transform:rotate(360deg)}}@keyframes busFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:22px}
+.stat{background:#fff;border:1px solid #e6eff8;border-radius:16px;padding:16px;box-shadow:var(--shadow);min-width:0}
+.stat-top{display:flex;align-items:center;justify-content:space-between;gap:7px}
+.stat-icon{width:35px;height:35px;border-radius:11px;background:#eaf4ff;color:var(--blue);display:grid;place-items:center}
+.stat-icon svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8}
+.stat-icon.green{background:#e7fff2;color:var(--green)}.stat-icon.amber{background:#fff4df;color:var(--amber)}.stat-icon.red{background:#fff0ef;color:var(--red)}
+.stat-value{font-size:27px;font-weight:900;letter-spacing:-.05em;margin-top:12px}.stat-label{font-size:10px;color:var(--muted);margin-top:3px}.stat-foot{font-size:9px;color:#6d8ba4;margin-top:10px}
+.content-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(250px,.75fr);gap:16px}
+.panel{background:#fff;border:1px solid #e5eef7;border-radius:17px;padding:18px;box-shadow:var(--shadow);min-width:0}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}
+.panel-title{font-size:13px;font-weight:900}.panel-sub{font-size:10px;color:var(--muted);margin-top:4px}
+.text-btn{border:0;background:transparent;color:var(--blue);font-size:10px;font-weight:850;padding:5px}
+.quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.quick{display:flex;align-items:center;gap:11px;padding:13px;border:1px solid #e4eef8;border-radius:13px;background:#fbfdff;text-align:left;color:var(--ink);transition:.15s}
+.quick:hover{border-color:#b9dcfc;background:#f4faff;transform:translateY(-1px)}
+.quick-ico{width:36px;height:36px;border-radius:11px;background:#e8f3ff;color:var(--blue);display:grid;place-items:center;flex:none}
+.quick-ico svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}
+.quick strong{display:block;font-size:10px}.quick small{display:block;font-size:9px;color:var(--muted);margin-top:4px}
+.activity-list{display:grid;gap:12px}.activity{display:flex;align-items:flex-start;gap:10px}
+.activity-ico{width:30px;height:30px;border-radius:10px;background:#eef6ff;color:var(--blue);display:grid;place-items:center;flex:none}
+.activity-ico svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8}
+.activity strong{font-size:10px;display:block}.activity span{display:block;font-size:9px;color:var(--muted);margin-top:4px;line-height:1.45}
+.page-view{display:none}.page-view.active{display:block}
+.toolbar{display:flex;align-items:center;gap:9px;margin-bottom:15px;flex-wrap:wrap}
+.search{position:relative;flex:1;min-width:160px}.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:#8ba2b7;fill:none;stroke-width:1.8}
+.search input{width:100%;height:39px;border:1px solid var(--line);border-radius:11px;background:#fff;padding:0 12px 0 36px;font-size:11px;outline:none}.search input:focus{border-color:#84bdf5;box-shadow:0 0 0 3px #147be812}
+.filter-select{height:39px;border:1px solid var(--line);border-radius:11px;padding:0 10px;background:#fff;color:#58758f;font-size:10px;outline:none}
+.data-list{display:grid;gap:10px}
+.data-card{display:flex;align-items:center;gap:12px;padding:13px;border:1px solid #e6eff8;border-radius:14px;background:#fff;min-width:0}
+.item-icon{width:47px;height:47px;border-radius:13px;background:#edf6ff;color:var(--blue);display:grid;place-items:center;flex:none}
+.item-icon svg{width:25px;height:25px;stroke:currentColor;fill:none;stroke-width:1.6}
+.item-main{min-width:0;flex:1}.item-title{font-size:11px;font-weight:900;overflow-wrap:anywhere}.item-sub{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.5;overflow-wrap:anywhere}
+.item-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:5px 8px;font-size:9px;font-weight:850;background:#e8f4ff;color:#176fc7;white-space:nowrap}
+.pill.green{background:#e6fff0;color:#16804f}.pill.amber{background:#fff4df;color:#ad6c10}.pill.red{background:#fff0ef;color:#c23a35}.pill.gray{background:#edf1f5;color:#687d90}
+.empty{padding:38px 15px;text-align:center;border:1px dashed #d6e5f2;border-radius:14px;color:var(--muted);font-size:11px;background:#fbfdff}
+.empty-icon{font-size:25px;margin-bottom:9px}
+.notice{padding:11px 13px;border-radius:11px;font-size:11px;line-height:1.5;margin-bottom:14px;display:none;overflow-wrap:anywhere}
+.notice.show{display:block}.notice.error{background:#fff0ef;color:#a72b25;border:1px solid #ffd7d3}.notice.success{background:#eafff3;color:#167449;border:1px solid #c7f0d9}
+.overlay{position:fixed;inset:0;background:rgba(16,43,68,.34);backdrop-filter:blur(4px);z-index:80;display:none;align-items:flex-end;justify-content:center;padding:14px}
+.overlay.open{display:flex}
+.modal{width:min(100%,520px);max-height:min(88dvh,780px);overflow:auto;background:#fff;border:1px solid #e2edf7;border-radius:22px;padding:22px;box-shadow:0 28px 80px #123a5b35;animation:modalIn .18s ease-out}
+@keyframes modalIn{from{transform:translateY(12px);opacity:.5}to{transform:translateY(0);opacity:1}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}.modal-title{font-size:18px;font-weight:900;letter-spacing:-.03em}.close-btn{width:32px;height:32px;border:1px solid var(--line);border-radius:10px;background:#f8fbff;color:#607d96;font-size:18px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.form-field{min-width:0}.form-field.full{grid-column:1/-1}.form-field label{display:block;font-size:10px;font-weight:850;color:#58738c;margin-bottom:7px}
+.form-field input,.form-field select{width:100%;height:42px;border:1px solid var(--line);border-radius:10px;background:#fbfdff;padding:0 11px;color:var(--ink);font-size:11px;outline:none}.form-field input:focus,.form-field select:focus{border-color:#84bdf5;box-shadow:0 0 0 3px #147be812}
+.modal-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:20px}
+.loading{color:var(--muted);font-size:11px;padding:20px;text-align:center}
+.mobile-nav{display:none}
+@media(max-width:1000px){.app{grid-template-columns:205px minmax(0,1fr)}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.content-grid{grid-template-columns:1fr}.main{padding:20px}.welcome{padding:20px}.bus-art{transform:scale(.85);transform-origin:right center}}
+@media(max-width:700px){
+ html,body{min-height:100%;background:#edf6ff}
+ .app{display:block;min-height:100dvh;padding-bottom:calc(68px + env(safe-area-inset-bottom))}
+ .sidebar{display:none}
+ .main{padding:16px 14px 25px}
+ .topbar{margin-bottom:15px}.menu-mobile{display:grid;place-items:center;flex:none}.menu-mobile svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8}
+ .kicker{font-size:8px}.page-title{font-size:23px}.top-actions .btn{display:none}
+ .welcome{padding:18px 17px;border-radius:17px;margin-bottom:14px;min-height:116px}
+ .welcome h2{font-size:22px}.welcome p{font-size:10px;max-width:210px}.bus-art{position:absolute;right:8px;bottom:3px;transform:scale(.7);transform-origin:bottom right;opacity:.9}
+ .stats{gap:9px;margin-bottom:14px}.stat{padding:12px;border-radius:14px}.stat-icon{width:31px;height:31px}.stat-value{font-size:24px;margin-top:9px}.stat-label{font-size:9px}.stat-foot{font-size:8px;margin-top:7px}
+ .content-grid{gap:12px}.panel{padding:14px;border-radius:15px}.panel-title{font-size:12px}.quick-grid{gap:8px}.quick{padding:10px;gap:8px}.quick-ico{width:32px;height:32px}.quick strong{font-size:9px}.quick small{font-size:8px}
+ .toolbar{gap:7px}.search{flex-basis:100%}.filter-select{flex:1;min-width:0}.toolbar .btn{flex:1}
+ .data-card{padding:10px;gap:9px;align-items:flex-start}.item-icon{width:39px;height:39px;border-radius:11px}.item-icon svg{width:21px;height:21px}.item-title{font-size:10px}.item-sub{font-size:9px}.item-actions{gap:5px}.item-actions .btn{padding:7px 8px;font-size:9px}
+ .mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;left:0;right:0;bottom:0;z-index:40;padding:8px 7px calc(8px + env(safe-area-inset-bottom));background:#ffffffed;backdrop-filter:blur(18px);border-top:1px solid #dce9f6;box-shadow:0 -8px 28px #1b4d7410}
+ .mobile-nav button{border:0;background:transparent;border-radius:11px;color:#8095a8;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;padding:5px 0;font-size:8px;font-weight:800;min-width:0}
+ .mobile-nav svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8}
+ .mobile-nav button.active{background:#eaf4ff;color:var(--blue)}
+ .overlay{padding:0;align-items:flex-end}.modal{width:100%;border-radius:22px 22px 0 0;padding:21px 18px calc(20px + env(safe-area-inset-bottom));max-height:90dvh}
+ .form-grid{grid-template-columns:1fr;gap:11px}.form-field.full{grid-column:auto}.form-field input,.form-field select{height:44px}.modal-actions .btn{flex:1}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">B</div>
+      <div><div class="brand-title">BEST BUS</div><div class="brand-sub">TRANSPORT MANAGEMENT</div></div>
+      <span class="admin-tag">ADMIN</span>
+    </div>
+    <div>
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="nav" id="sideNav">
+        <button class="nav-btn active" data-page="home"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>Dashboard</button>
+        <button class="nav-btn" data-page="buses"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="3"/><path d="M6 18v3m12-3v3M3 10h18M7 14h.01M17 14h.01"/></svg>Buses</button>
+        <button class="nav-btn" data-page="drivers"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21v-2a7 7 0 0 1 14 0v2M19 8v6m-3-3h6"/></svg>Drivers <span class="nav-count" id="pendingNav">0</span></button>
+        <button class="nav-btn" data-page="assignments"><svg viewBox="0 0 24 24"><path d="M7 7h14l-4-4m4 4-4 4M17 17H3l4 4m-4-4 4-4"/></svg>Assignments</button>
+        <button class="nav-btn" data-page="deleted"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2m-10 0 1 15h10l1-15M10 10v7m4-7v7"/></svg>Deleted buses</button>
+      </nav>
+    </div>
+    <div class="sidebar-bottom">
+      <button class="nav-btn" data-page="profile"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Account profile</button>
+      <div class="profile-mini"><div class="avatar" id="avatarInitial">A</div><div style="min-width:0;flex:1"><div class="profile-name" id="adminName">Administrator</div><div class="profile-email" id="adminEmail">Checking account…</div></div></div>
+      <button class="nav-btn" id="logoutBtn"><svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5m5 5H3m9-9h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7"/></svg>Log out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="top-left">
+        <button class="menu-mobile" id="mobileMenu" aria-label="Open menu"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+        <div><div class="kicker">BEST BUS / ADMIN</div><div class="page-title" id="pageTitle">Dashboard</div></div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="refreshBtn" title="Refresh data"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.5 9A7 7 0 0 1 18 6l2 6M4 12l2 6a7 7 0 0 0 12.5-3"/></svg></button>
+        <button class="icon-btn" title="Live data"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="live-dot"></span></button>
+        <button class="btn" id="topAddBtn">＋ Add bus</button>
+      </div>
+    </header>
+
+    <div id="globalNotice" class="notice" role="status" aria-live="polite"></div>
+
+    <section class="page-view active" id="page-home">
+      <div class="welcome">
+        <div class="welcome-copy"><div class="kicker">YOUR FLEET AT A GLANCE</div><h2>Good day, <span id="welcomeName">Admin</span> 👋</h2><p>Manage buses, drivers and daily transport operations from one place.</p></div>
+        <div class="bus-art" aria-hidden="true"><div class="bus-body"><div class="bus-glass g1"></div><div class="bus-glass g2"></div><div class="bus-glass g3"></div><div class="bus-glass g4"></div></div><div class="bus-front"></div><div class="bus-wheel w1"></div><div class="bus-wheel w2"></div></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-top"><div class="stat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="3"/><path d="M6 18v3m12-3v3M3 10h18M7 14h.01M17 14h.01"/></svg></div><span class="pill" id="busStatusPill">Fleet</span></div><div class="stat-value" id="totalBuses">—</div><div class="stat-label">Total active buses</div><div class="stat-foot">Excludes archived buses</div></div>
+        <div class="stat"><div class="stat-top"><div class="stat-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21v-2a7 7 0 0 1 14 0v2M19 8v6m-3-3h6"/></svg></div><span class="pill green">Team</span></div><div class="stat-value" id="totalDrivers">—</div><div class="stat-label">Approved drivers</div><div class="stat-foot">Ready for assignments</div></div>
+        <div class="stat"><div class="stat-top"><div class="stat-icon green"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></div><span class="pill green">Live</span></div><div class="stat-value" id="totalAssigned">—</div><div class="stat-label">Active assignments</div><div class="stat-foot">Currently allocated buses</div></div>
+        <div class="stat"><div class="stat-top"><div class="stat-icon amber"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><span class="pill amber">Review</span></div><div class="stat-value" id="totalPending">—</div><div class="stat-label">Pending drivers</div><div class="stat-foot">Waiting for approval</div></div>
+      </div>
+      <div class="content-grid">
+        <section class="panel">
+          <div class="panel-head"><div><div class="panel-title">Quick actions</div><div class="panel-sub">Common tasks, right at your fingertips</div></div></div>
+          <div class="quick-grid">
+            <button class="quick" data-action="add-bus"><span class="quick-ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="3"/><path d="M6 18v3m12-3v3M3 10h18M12 2v5m-3-2.5h6"/></svg></span><span><strong>Add a bus</strong><small>Register a vehicle</small></span></button>
+            <button class="quick" data-action="add-driver"><span class="quick-ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21v-2a7 7 0 0 1 14 0v2M19 8v6m-3-3h6"/></svg></span><span><strong>Add a driver</strong><small>Create driver profile</small></span></button>
+            <button class="quick" data-action="assign"><span class="quick-ico"><svg viewBox="0 0 24 24"><path d="M7 7h14l-4-4m4 4-4 4M17 17H3l4 4m-4-4 4-4"/></svg></span><span><strong>Assign a bus</strong><small>Connect driver and bus</small></span></button>
+            <button class="quick" data-action="approve"><span class="quick-ico"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span><span><strong>Review drivers</strong><small>Approve pending requests</small></span></button>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><div><div class="panel-title">Fleet overview</div><div class="panel-sub">Availability at a glance</div></div><button class="text-btn" data-go="buses">View buses →</button></div>
+          <div class="activity-list" id="overviewList"><div class="loading">Loading fleet data…</div></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="page-view" id="page-buses">
+      <div class="toolbar">
+        <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/></svg><input id="busSearch" placeholder="Search bus number or model…" aria-label="Search buses"></div>
+        <select class="filter-select" id="busFilter" aria-label="Filter buses"><option value="all">All statuses</option><option value="available">Available</option><option value="assigned">Assigned</option><option value="maintenance">Maintenance</option></select>
+        <button class="btn" data-action="add-bus">＋ Add bus</button>
+      </div>
+      <div class="panel"><div class="panel-head"><div><div class="panel-title">Bus fleet</div><div class="panel-sub" id="busCountText">Your registered vehicles</div></div></div><div class="data-list" id="busList"><div class="loading">Loading buses…</div></div></div>
+    </section>
+
+    <section class="page-view" id="page-drivers">
+      <div class="toolbar">
+        <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/></svg><input id="driverSearch" placeholder="Search name or phone…" aria-label="Search drivers"></div>
+        <select class="filter-select" id="driverFilter" aria-label="Filter drivers"><option value="all">All drivers</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="inactive">Inactive</option></select>
+        <button class="btn" data-action="add-driver">＋ Add driver</button>
+      </div>
+      <div class="panel"><div class="panel-head"><div><div class="panel-title">Driver management</div><div class="panel-sub" id="driverCountText">Profiles and approval status</div></div></div><div class="data-list" id="driverList"><div class="loading">Loading drivers…</div></div></div>
+    </section>
+
+    <section class="page-view" id="page-assignments">
+      <div class="toolbar"><div><div class="panel-title">Bus assignments</div><div class="panel-sub">Manage active driver-to-bus allocations</div></div><span style="flex:1"></span><button class="btn" data-action="assign">＋ New assignment</button></div>
+      <div class="panel"><div class="panel-head"><div><div class="panel-title">Current assignments</div><div class="panel-sub">Each bus and driver can have only one active assignment</div></div></div><div class="data-list" id="assignmentList"><div class="loading">Loading assignments…</div></div></div>
+    </section>
+
+    <section class="page-view" id="page-deleted">
+      <div class="panel"><div class="panel-head"><div><div class="panel-title">Archived buses</div><div class="panel-sub">Restore an archived bus to return it to your active fleet.</div></div></div><div class="data-list" id="deletedList"><div class="loading">Loading archived buses…</div></div></div>
+    </section>
+
+    <section class="page-view" id="page-profile">
+      <div class="panel"><div class="panel-head"><div><div class="panel-title">Administrator account</div><div class="panel-sub">Signed-in account details</div></div></div><div class="data-card"><div class="avatar" id="profileAvatar">A</div><div class="item-main"><div class="item-title" id="profileName">Administrator</div><div class="item-sub" id="profileEmail">—</div><span class="pill green" style="margin-top:8px">Administrator access</span></div></div><div style="margin-top:16px"><button class="btn danger" id="profileLogout">Log out</button></div></div>
+    </section>
+  </main>
+</div>
+
+<nav class="mobile-nav" id="mobileNav" aria-label="Main navigation">
+  <button class="active" data-page="home"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>Home</button>
+  <button data-page="buses"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="3"/><path d="M6 18v3m12-3v3M3 10h18M7 14h.01M17 14h.01"/></svg>Buses</button>
+  <button data-page="drivers"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21v-2a7 7 0 0 1 14 0v2M19 8v6m-3-3h6"/></svg>Drivers</button>
+  <button data-page="assignments"><svg viewBox="0 0 24 24"><path d="M7 7h14l-4-4m4 4-4 4M17 17H3l4 4m-4-4 4-4"/></svg>Assign</button>
+  <button data-page="profile"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profile</button>
+</nav>
+
+<div class="overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title" id="modalTitle">Add bus</div><button class="close-btn" id="closeModal" aria-label="Close">×</button></div>
+    <form id="modalForm">
+      <div id="modalFields" class="form-grid"></div>
+      <div class="modal-actions"><button type="button" class="btn secondary" id="cancelModal">Cancel</button><button type="submit" class="btn" id="saveModal">Save</button></div>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+import { watchAuth, getUserProfile, logoutUser } from "../auth.js";
+import { auth, db } from "../firebase.js";
+import {
+  collection, doc, addDoc, updateDoc, getDocs, getDoc, onSnapshot,
+  query, where, serverTimestamp, runTransaction
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const $ = id => document.getElementById(id);
+const state = { user:null, profile:null, buses:[], drivers:[], assignments:[], unsub:[], page:"home", modalMode:null, editingId:null, busy:false };
+const icons = {
+  bus:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="3"/><path d="M6 18v3m12-3v3M3 10h18M7 14h.01M17 14h.01"/></svg>',
+  user:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21v-2a7 7 0 0 1 14 0v2"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>',
+  clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'
+};
+function esc(value=""){return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function notice(text,type="success"){const el=$("globalNotice");el.textContent=text;el.className=`notice show ${type}`;window.clearTimeout(notice.timer);notice.timer=window.setTimeout(()=>el.classList.remove("show"),5500);}
+function setBusy(value){state.busy=value;$("saveModal").disabled=value;$("saveModal").textContent=value?"Saving…":"Save";}
+function roleName(profile){return String(profile?.role||"").trim().toLowerCase();}
+function busNumber(bus){return bus.busNumber||bus.registrationNumber||bus.numberPlate||bus.number||"Bus without number";}
+function busModel(bus){return bus.model||bus.busModel||bus.name||"Bus model not added";}
+function capacity(bus){return bus.capacity??bus.seatingCapacity??bus.seats??"—";}
+function isArchived(bus){return bus.archived===true||bus.deleted===true||bus.status==="deleted";}
+function driverName(driver){return driver.name||driver.fullName||driver.displayName||"Unnamed driver";}
+function driverPhone(driver){return driver.phone||driver.phoneNumber||driver.mobile||"No phone number";}
+function isApproved(driver){return driver.approved===true||driver.isApproved===true||String(driver.status||"").toLowerCase()==="approved"||String(driver.approvalStatus||"").toLowerCase()==="approved";}
+function isDriverInactive(driver){return driver.active===false||driver.disabled===true||String(driver.status||"").toLowerCase()==="inactive";}
+function activeBuses(){return state.buses.filter(b=>!isArchived(b));}
+function activeDrivers(){return state.drivers.filter(d=>!d.archived&&!isDriverInactive(d));}
+function activeAssignments(){return state.assignments.filter(a=>a.active!==false&&a.status!=="ended"&&a.status!=="deassigned");}
+function findBus(id){return state.buses.find(b=>b.id===id);}
+function findDriver(id){return state.drivers.find(d=>d.id===id);}
+function statusPill(text,kind=""){return `<span class="pill ${kind}">${esc(text)}</span>`;}
+function empty(text,sub=""){return `<div class="empty"><div class="empty-icon">🚌</div><strong>${esc(text)}</strong>${sub?`<div style="margin-top:6px">${esc(sub)}</div>`:""}</div>`;}
+function go(page){
+  state.page=page;
+  document.querySelectorAll(".page-view").forEach(el=>el.classList.toggle("active",el.id===`page-${page}`));
+  document.querySelectorAll("[data-page]").forEach(el=>el.classList.toggle("active",el.dataset.page===page));
+  const titles={home:"Dashboard",buses:"Buses",drivers:"Drivers",assignments:"Assignments",deleted:"Deleted buses",profile:"Account"};
+  $("pageTitle").textContent=titles[page]||"Dashboard";
+  $("topAddBtn").style.display=page==="buses"?"inline-flex":"none";
+  if(page==="home")renderDashboard();if(page==="buses")renderBuses();if(page==="drivers")renderDrivers();if(page==="assignments")renderAssignments();if(page==="deleted")renderDeleted();
+}
+function clearListeners(){state.unsub.forEach(fn=>fn());state.unsub=[];}
+function startListeners(){
+  clearListeners();
+  const bind=(name,callback)=>state.unsub.push(onSnapshot(collection(db,name),snap=>{callback(snap.docs.map(d=>({id:d.id,...d.data()})));renderAll();},error=>{console.error(`Listener ${name}:`,error);notice(`Could not load ${name}. Check Firestore Security Rules.`, "error");}));
+  bind("buses",rows=>state.buses=rows);
+  bind("drivers",rows=>state.drivers=rows);
+  bind("assignments",rows=>state.assignments=rows);
+}
+function renderAll(){renderDashboard();renderBuses();renderDrivers();renderAssignments();renderDeleted();$("pendingNav").textContent=state.drivers.filter(d=>!isApproved(d)&&!d.archived&&!isDriverInactive(d)).length;}
+function renderDashboard(){
+  const buses=activeBuses(),drivers=activeDrivers(),assigned=new Set(activeAssignments().map(a=>a.busId).filter(Boolean));
+  const pending=drivers.filter(d=>!isApproved(d));
+  $("totalBuses").textContent=buses.length;$("totalDrivers").textContent=drivers.filter(isApproved).length;$("totalAssigned").textContent=activeAssignments().length;$("totalPending").textContent=pending.length;
+  $("busStatusPill").textContent=`${buses.filter(b=>String(b.status||"available").toLowerCase()==="available"&&!assigned.has(b.id)).length} available`;
+  $("overviewList").innerHTML=`
+    <div class="activity"><div class="activity-ico">${icons.bus}</div><div><strong>${buses.filter(b=>!assigned.has(b.id)&&String(b.status||"available").toLowerCase()!=="maintenance").length} buses available</strong><span>Vehicles ready for assignment</span></div></div>
+    <div class="activity"><div class="activity-ico">${icons.check}</div><div><strong>${activeAssignments().length} active assignments</strong><span>Current driver-to-bus allocations</span></div></div>
+    <div class="activity"><div class="activity-ico">${icons.clock}</div><div><strong>${pending.length} drivers need review</strong><span>Approve eligible drivers in the Drivers section</span></div></div>`;
+}
+function renderBuses(){
+  const term=($("busSearch")?.value||"").toLowerCase(),filter=$("busFilter")?.value||"all";
+  const rows=activeBuses().filter(b=>(`${busNumber(b)} ${busModel(b)}`).toLowerCase().includes(term)).filter(b=>filter==="all"||(filter==="assigned"?activeAssignments().some(a=>a.busId===b.id):filter==="available"?!activeAssignments().some(a=>a.busId===b.id)&&String(b.status||"available").toLowerCase()!=="maintenance":String(b.status||"").toLowerCase()===filter));
+  $("busCountText").textContent=`${rows.length} vehicle${rows.length===1?"":"s"} shown`;
+  $("busList").innerHTML=rows.length?rows.map(b=>{
+    const assignment=activeAssignments().find(a=>a.busId===b.id),driver=findDriver(assignment?.driverId),status=assignment?"Assigned":String(b.status||"Available");
+    const kind=assignment?"green":status.toLowerCase()==="maintenance"?"amber":"";
+    return `<article class="data-card"><div class="item-icon">${icons.bus}</div><div class="item-main"><div class="item-title">${esc(busNumber(b))}</div><div class="item-sub">${esc(busModel(b))} · ${esc(capacity(b))} seats${driver?`<br>Driver: ${esc(driverName(driver))}`:""}</div><div style="margin-top:7px">${statusPill(status,kind)}</div></div><div class="item-actions"><button class="btn secondary small" data-edit-bus="${esc(b.id)}">Edit</button><button class="btn secondary small" data-archive-bus="${esc(b.id)}">Archive</button></div></article>`;
+  }).join(""):empty("No buses found","Add a bus or change your search filters.");
+}
+function renderDrivers(){
+  const term=($("driverSearch")?.value||"").toLowerCase(),filter=$("driverFilter")?.value||"all";
+  const rows=state.drivers.filter(d=>!d.archived).filter(d=>(`${driverName(d)} ${driverPhone(d)}`).toLowerCase().includes(term)).filter(d=>filter==="all"||(filter==="pending"?!isApproved(d):filter==="approved"?isApproved(d)&&!isDriverInactive(d):isDriverInactive(d)));
+  $("driverCountText").textContent=`${rows.length} driver${rows.length===1?"":"s"} shown`;
+  $("driverList").innerHTML=rows.length?rows.map(d=>{
+    const approved=isApproved(d),inactive=isDriverInactive(d),assignment=activeAssignments().find(a=>a.driverId===d.id),bus=findBus(assignment?.busId);
+    const status=inactive?"Inactive":approved?"Approved":"Pending approval",kind=inactive?"gray":approved?"green":"amber";
+    return `<article class="data-card"><div class="avatar">${esc(driverName(d).trim().charAt(0).toUpperCase()||"D")}</div><div class="item-main"><div class="item-title">${esc(driverName(d))}</div><div class="item-sub">${esc(driverPhone(d))}${bus?`<br>Bus: ${esc(busNumber(bus))}`:""}</div><div style="margin-top:7px">${statusPill(status,kind)}</div></div><div class="item-actions">${!approved&&!inactive?`<button class="btn small" data-approve-driver="${esc(d.id)}">Approve</button>`:""}<button class="btn secondary small" data-edit-driver="${esc(d.id)}">Edit</button><button class="btn ${inactive?"small":"danger small"}" data-toggle-driver="${esc(d.id)}">${inactive?"Activate":"Disable"}</button></div></article>`;
+  }).join(""):empty("No drivers found","Drivers will appear here when added to Firestore.");
+}
+function renderAssignments(){
+  const rows=activeAssignments();
+  $("assignmentList").innerHTML=rows.length?rows.map(a=>{
+    const b=findBus(a.busId),d=findDriver(a.driverId);
+    return `<article class="data-card"><div class="item-icon">${icons.bus}</div><div class="item-main"><div class="item-title">${esc(b?busNumber(b):a.busNumber||"Unknown bus")}</div><div class="item-sub">Driver: ${esc(d?driverName(d):a.driverName||"Unknown driver")}<br>${esc(d?driverPhone(d):"Driver profile unavailable")}</div><div style="margin-top:7px">${statusPill("Active","green")}</div></div><div class="item-actions"><button class="btn danger small" data-deassign="${esc(a.id)}">Deassign</button></div></article>`;
+  }).join(""):empty("No active assignments","Assign an approved driver to an available bus.");
+}
+function renderDeleted(){
+  const rows=state.buses.filter(isArchived);
+  $("deletedList").innerHTML=rows.length?rows.map(b=>`<article class="data-card"><div class="item-icon">${icons.bus}</div><div class="item-main"><div class="item-title">${esc(busNumber(b))}</div><div class="item-sub">${esc(busModel(b))} · ${esc(capacity(b))} seats</div><div style="margin-top:7px">${statusPill("Archived","gray")}</div></div><div class="item-actions"><button class="btn small" data-restore-bus="${esc(b.id)}">Restore</button></div></article>`).join(""):empty("No deleted buses","Archived buses will appear here.");
+}
+function field(name,label,type="text",opts={}){
+  const id=opts.id||name,required=opts.required===false?"":"required",value=opts.value??"",placeholder=opts.placeholder||"";
+  if(type==="select")return `<div class="form-field ${opts.full?"full":""}"><label for="${esc(id)}">${esc(label)}</label><select id="${esc(id)}" name="${esc(name)}" ${required}>${(opts.options||[]).map(o=>`<option value="${esc(o.value)}" ${String(o.value)===String(value)?"selected":""}>${esc(o.label)}</option>`).join("")}</select></div>`;
+  return `<div class="form-field ${opts.full?"full":""}"><label for="${esc(id)}">${esc(label)}</label><input id="${esc(id)}" name="${esc(name)}" type="${esc(type)}" value="${esc(value)}" placeholder="${esc(placeholder)}" ${required} ${opts.min!==undefined?`min="${opts.min}"`:""} ${opts.max!==undefined?`max="${opts.max}"`:""}></div>`;
+}
+function openModal(mode,id=null){
+  state.modalMode=mode;state.editingId=id;
+  const form=$("modalFields");let title="",content="";
+  if(mode==="add-bus"||mode==="edit-bus"){
+    const b=id?findBus(id)||{}:{};
+    title=mode==="add-bus"?"Add bus":"Edit bus";
+    content=field("busNumber","Registration number","text",{value:busNumber(b)==="Bus without number"?"":busNumber(b),placeholder:"e.g. KA 01 AB 1234"})+
+      field("model","Bus model","text",{value:b.model||b.busModel||"",placeholder:"e.g. Tata Starbus"})+
+      field("capacity","Seating capacity","number",{value:capacity(b)==="—"?"":capacity(b),min:1,placeholder:"e.g. 52"})+
+      field("status","Vehicle status","select",{value:b.status||"available",options:[{value:"available",label:"Available"},{value:"maintenance",label:"Maintenance"},{value:"inactive",label:"Inactive"}]});
+  }else if(mode==="add-driver"||mode==="edit-driver"){
+    const d=id?findDriver(id)||{}:{};
+    title=mode==="add-driver"?"Add driver":"Edit driver";
+    content=field("name","Driver full name","text",{value:d.name||d.fullName||"",placeholder:"Enter full name"})+
+      field("phone","Phone number","tel",{value:d.phone||d.phoneNumber||d.mobile||"",placeholder:"+91 98765 43210"})+
+      field("email","Email address","email",{value:d.email||"",required:false,placeholder:"driver@example.com"})+
+      field("status","Approval status","select",{value:isApproved(d)?"approved":"pending",options:[{value:"pending",label:"Pending approval"},{value:"approved",label:"Approved"}]});
+  }else if(mode==="assign"){
+    const assignedBusIds=new Set(activeAssignments().map(a=>a.busId)),assignedDriverIds=new Set(activeAssignments().map(a=>a.driverId));
+    const buses=activeBuses().filter(b=>!assignedBusIds.has(b.id)&&String(b.status||"available").toLowerCase()==="available");
+    const drivers=activeDrivers().filter(d=>isApproved(d)&&!assignedDriverIds.has(d.id));
+    title="Assign a bus";
+    content=field("driverId","Select approved driver","select",{options:[{value:"",label:"Choose a driver"},...drivers.map(d=>({value:d.id,label:`${driverName(d)} · ${driverPhone(d)}`}))],full:true})+
+      field("busId","Select available bus","select",{options:[{value:"",label:"Choose a bus"},...buses.map(b=>({value:b.id,label:`${busNumber(b)} · ${busModel(b)}`}))],full:true})+
+      field("startDate","Assignment start date","date",{value:new Date().toISOString().slice(0,10),full:true});
+    if(!drivers.length||!buses.length)content+=`<div class="form-field full"><div class="notice show error">${!drivers.length?"No approved unassigned drivers are available. ":""}${!buses.length?"No available buses are ready to assign.":""}</div></div>`;
+  }
+  $("modalTitle").textContent=title;$("saveModal").textContent=mode==="assign"?"Assign bus":"Save";form.innerHTML=content;$("modalOverlay").classList.add("open");
+}
+function closeModal(){$("modalOverlay").classList.remove("open");$("modalForm").reset();state.modalMode=null;state.editingId=null;}
+async function saveModal(event){
+  event.preventDefault();if(state.busy)return;
+  const formData=new FormData(event.currentTarget),v=Object.fromEntries(formData.entries());setBusy(true);
+  try{
+    if(state.modalMode==="add-bus"||state.modalMode==="edit-bus"){
+      const payload={busNumber:v.busNumber.trim(),model:v.model.trim(),capacity:Number(v.capacity),status:v.status,archived:false,updatedAt:serverTimestamp()};
+      if(!payload.busNumber||!payload.model||!payload.capacity||payload.capacity<1)throw new Error("Enter a registration number, model and valid seating capacity.");
+      if(state.modalMode==="add-bus"){payload.createdAt=serverTimestamp();await addDoc(collection(db,"buses"),payload);notice("Bus added successfully.");}
+      else{await updateDoc(doc(db,"buses",state.editingId),payload);notice("Bus details updated.");}
+    }else if(state.modalMode==="add-driver"||state.modalMode==="edit-driver"){
+      const payload={name:v.name.trim(),phone:v.phone.trim(),email:v.email.trim(),approved:v.status==="approved",status:v.status==="approved"?"approved":"pending",active:true,archived:false,updatedAt:serverTimestamp()};
+      if(!payload.name||!payload.phone)throw new Error("Enter the driver's name and phone number.");
+      if(state.modalMode==="add-driver"){payload.createdAt=serverTimestamp();await addDoc(collection(db,"drivers"),payload);notice("Driver profile added. This does not create a Firebase Authentication account.");}
+      else{await updateDoc(doc(db,"drivers",state.editingId),payload);notice("Driver profile updated.");}
+    }else if(state.modalMode==="assign"){
+      const driverId=v.driverId,busId=v.busId;
+      if(!driverId||!busId)throw new Error("Choose both an approved driver and an available bus.");
+      const driver=findDriver(driverId),bus=findBus(busId);
+      if(!driver||!bus||!isApproved(driver)||isArchived(bus))throw new Error("The selected driver or bus is no longer available.");
+      await runTransaction(db,async tx=>{
+        const busRef=doc(db,"buses",busId),driverRef=doc(db,"drivers",driverId);
+        const busSnap=await tx.get(busRef),driverSnap=await tx.get(driverRef);
+        const activeQuery=query(collection(db,"assignments"),where("active","==",true));
+        const assignmentsSnap=await tx.get(activeQuery);
+        if(!busSnap.exists()||!driverSnap.exists())throw new Error("Bus or driver no longer exists.");
+        if(busSnap.data().archived===true||busSnap.data().deleted===true)throw new Error("This bus is archived.");
+        if(driverSnap.data().active===false||driverSnap.data().approved!==true)throw new Error("This driver is not active and approved.");
+        const active=assignmentsSnap.docs.map(d=>({id:d.id,...d.data()}));
+        if(active.some(a=>a.busId===busId))throw new Error("This bus already has an active assignment.");
+        if(active.some(a=>a.driverId===driverId))throw new Error("This driver already has an active assignment.");
+        const assignmentRef=doc(collection(db,"assignments"));
+        tx.set(assignmentRef,{busId,driverId,busNumber:busNumber(bus),driverName:driverName(driver),startDate:v.startDate||new Date().toISOString().slice(0,10),status:"active",active:true,createdAt:serverTimestamp(),createdBy:state.user.uid});
+        tx.update(busRef,{assignedDriverId:driverId,status:"assigned",updatedAt:serverTimestamp()});
+        tx.update(driverRef,{assignedBusId:busId,updatedAt:serverTimestamp()});
+      });
+      notice("Bus assignment created.");
+    }
+    closeModal();renderAll();
+  }catch(error){console.error(error);notice(error.message||"Could not save changes. Check Firestore rules and try again.","error");}
+  finally{setBusy(false);}
+}
+async function archiveBus(id){
+  const bus=findBus(id);if(!bus)return;
+  if(activeAssignments().some(a=>a.busId===id)){notice("Deassign this bus before archiving it.","error");return;}
+  if(!confirm(`Archive ${busNumber(bus)}? You can restore it later.`))return;
+  try{await updateDoc(doc(db,"buses",id),{archived:true,deleted:true,status:"deleted",archivedAt:serverTimestamp(),updatedAt:serverTimestamp()});notice("Bus archived. You can restore it from Deleted buses.");}
+  catch(e){console.error(e);notice("Could not archive bus. Check Firestore rules.","error");}
+}
+async function restoreBus(id){
+  try{await updateDoc(doc(db,"buses",id),{archived:false,deleted:false,status:"available",restoredAt:serverTimestamp(),updatedAt:serverTimestamp()});notice("Bus restored.");}
+  catch(e){console.error(e);notice("Could not restore bus. Check Firestore rules.","error");}
+}
+async function approveDriver(id){
+  try{await updateDoc(doc(db,"drivers",id),{approved:true,isApproved:true,status:"approved",approvalStatus:"approved",active:true,approvedAt:serverTimestamp(),updatedAt:serverTimestamp()});notice("Driver approved.");}
+  catch(e){console.error(e);notice("Could not approve driver. Check Firestore rules.","error");}
+}
+async function toggleDriver(id){
+  const d=findDriver(id);if(!d)return;const inactive=!isDriverInactive(d);
+  if(inactive&&activeAssignments().some(a=>a.driverId===id)){notice("Deassign this driver's bus before disabling the driver.","error");return;}
+  try{await updateDoc(doc(db,"drivers",id),{active:inactive?false:true,disabled:inactive,status:inactive?"inactive":(isApproved(d)?"approved":"pending"),updatedAt:serverTimestamp()});notice(inactive?"Driver disabled.":"Driver reactivated.");}
+  catch(e){console.error(e);notice("Could not update driver. Check Firestore rules.","error");}
+}
+async function deassign(id){
+  const a=state.assignments.find(x=>x.id===id);if(!a)return;
+  if(!confirm("Deassign this bus from the driver?"))return;
+  try{
+    await runTransaction(db,async tx=>{
+      const assignmentRef=doc(db,"assignments",id),busRef=a.busId?doc(db,"buses",a.busId):null,driverRef=a.driverId?doc(db,"drivers",a.driverId):null;
+      tx.update(assignmentRef,{active:false,status:"deassigned",endedAt:serverTimestamp(),updatedAt:serverTimestamp()});
+      if(busRef)tx.update(busRef,{assignedDriverId:null,status:"available",updatedAt:serverTimestamp()});
+      if(driverRef)tx.update(driverRef,{assignedBusId:null,updatedAt:serverTimestamp()});
+    });notice("Bus deassigned.");
+  }catch(e){console.error(e);notice("Could not deassign bus. Check Firestore rules.","error");}
+}
+function openProfile(){go("profile");}
+function refresh(){notice("Refreshing fleet data…");renderAll();}
+function signOutNow(){logoutUser().then(()=>window.location.assign("../")).catch(e=>{console.error(e);notice("Could not log out. Try again.","error");});}
+document.addEventListener("click",async e=>{
+  const page=e.target.closest("[data-page]");if(page){go(page.dataset.page);return;}
+  const action=e.target.closest("[data-action]");if(action){const a=action.dataset.action;if(a==="assign")openModal("assign");else if(a==="approve"){go("drivers");$("driverFilter").value="pending";renderDrivers();}else openModal(a);return;}
+  const goBtn=e.target.closest("[data-go]");if(goBtn){go(goBtn.dataset.go);return;}
+  const editBus=e.target.closest("[data-edit-bus]");if(editBus){openModal("edit-bus",editBus.dataset.editBus);return;}
+  const archive=e.target.closest("[data-archive-bus]");if(archive){archiveBus(archive.dataset.archiveBus);return;}
+  const restore=e.target.closest("[data-restore-bus]");if(restore){restoreBus(restore.dataset.restoreBus);return;}
+  const editDriver=e.target.closest("[data-edit-driver]");if(editDriver){openModal("edit-driver",editDriver.dataset.editDriver);return;}
+  const approve=e.target.closest("[data-approve-driver]");if(approve){approveDriver(approve.dataset.approveDriver);return;}
+  const toggle=e.target.closest("[data-toggle-driver]");if(toggle){toggleDriver(toggle.dataset.toggleDriver);return;}
+  const deassignBtn=e.target.closest("[data-deassign]");if(deassignBtn){deassign(deassignBtn.dataset.deassign);return;}
+});
+$("modalForm").addEventListener("submit",saveModal);
+$("closeModal").addEventListener("click",closeModal);$("cancelModal").addEventListener("click",closeModal);
+$("modalOverlay").addEventListener("click",e=>{if(e.target===$("modalOverlay"))closeModal();});
+$("topAddBtn").addEventListener("click",()=>openModal("add-bus"));
+$("refreshBtn").addEventListener("click",refresh);
+$("mobileMenu").addEventListener("click",()=>{go("profile");});
+$("logoutBtn").addEventListener("click",signOutNow);$("profileLogout").addEventListener("click",signOutNow);
+$("busSearch").addEventListener("input",renderBuses);$("busFilter").addEventListener("change",renderBuses);
+$("driverSearch").addEventListener("input",renderDrivers);$("driverFilter").addEventListener("change",renderDrivers);
+
+watchAuth(async user=>{
+  if(!user){window.location.replace("../");return;}
+  state.user=user;
+  try{
+    const profile=await getUserProfile(user.uid);
+    if(!profile){notice(`No user profile found in Firestore at users/${user.uid}. Ask the project owner to configure your role.`,"error");return;}
+    const role=roleName(profile);
+    if(role!=="admin"&&role!=="superadmin"){notice("This account does not have administrator access.","error");setTimeout(()=>window.location.replace("../"),1800);return;}
+    state.profile=profile;
+    const displayName=profile.name||profile.fullName||user.displayName||"Administrator";
+    $("adminName").textContent=displayName;$("welcomeName").textContent=displayName.split(" ")[0];$("adminEmail").textContent=user.email||"Admin account";
+    $("avatarInitial").textContent=displayName.trim().charAt(0).toUpperCase();$("profileAvatar").textContent=displayName.trim().charAt(0).toUpperCase();$("profileName").textContent=displayName;$("profileEmail").textContent=user.email||"—";
+    startListeners();
+  }catch(error){console.error("Admin role check failed:",error);notice("Could not verify admin role. Check Firestore rules for users/{uid}.","error");}
+});
+</script>
+</body>
+</html>
