@@ -154,7 +154,7 @@ $("mobileSignOut").addEventListener("click", signOutNow);
 
 let signOutNow = async () => {
   try {
-    const { logoutUser } = await import("../auth.js");
+    const { logoutUser } = await import("../../auth.js");
     await logoutUser();
     const base = new URL("../index.html", window.location.href);
     window.location.href = base.href;
@@ -209,7 +209,7 @@ function updateFleet(buses, assignments) {
 async function startDashboard() {
   try {
     const [{ auth, db }, { onAuthStateChanged }, { collection, getDocs, onSnapshot }] = await Promise.all([
-      import("../firebase.js"),
+      import("../../firebase.js"),
       import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js"),
       import("https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js")
     ]);
