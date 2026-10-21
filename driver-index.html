@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#eaf4ff">
+<title>Driver Portal | BEST Bus</title>
+<style>
+:root{--blue:#2582d8;--navy:#193650;--muted:#7d91a3;--bg:#eaf4ff;--line:#e2edf6;--white:#fff;--green:#17885e;--amber:#b87816;--red:#c34d55;--shadow:0 12px 34px rgba(36,91,139,.07)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--navy);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button,a{cursor:pointer}a{color:inherit;text-decoration:none}.app{max-width:950px;margin:0 auto;padding:18px 16px 105px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.brand{display:flex;align-items:center;gap:11px;min-width:0}.logo{width:47px;height:47px;border-radius:15px;object-fit:contain;background:#fff;border:1px solid var(--line);padding:5px;box-shadow:var(--shadow)}.brand-title{font-size:18px;font-weight:850;letter-spacing:-.5px}.brand-sub{font-size:10px;color:var(--muted);margin-top:3px}.top-actions{display:flex;align-items:center;gap:8px}.icon-btn{border:1px solid var(--line);background:#fff;color:#56748c;width:41px;height:41px;border-radius:14px;display:grid;place-items:center}.icon-btn svg{width:20px;height:20px}.status{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);border-radius:99px;padding:9px 11px;color:#668096;font-size:11px;font-weight:800}.dot{width:7px;height:7px;border-radius:50%;background:#22b47b}.hero{border:1px solid #d8eafa;background:linear-gradient(120deg,#f9fcff,#e4f3ff);border-radius:25px;padding:23px;margin-bottom:16px;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:200px;height:200px;right:-85px;top:-115px;border-radius:50%;background:#ffffff66}.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:var(--blue);font-weight:850}.hero h1{font-size:clamp(24px,5vw,34px);letter-spacing:-1.2px;line-height:1.1;margin:8px 0}.hero p{font-size:13px;color:#718ba0;line-height:1.6;margin:0;max-width:580px}.hero-row{display:flex;align-items:center;justify-content:space-between;gap:14px;position:relative;z-index:1}.driver-avatar{width:58px;height:58px;flex-shrink:0;border-radius:20px;background:#fff;color:var(--blue);display:grid;place-items:center;box-shadow:0 8px 22px #277fc51a}.driver-avatar svg{width:30px;height:30px}.notice{display:none;padding:12px 14px;border-radius:13px;font-size:12px;line-height:1.55;margin-bottom:14px}.notice.show{display:block}.notice.error{background:#fff0f0;color:#a43c45}.notice.success{background:#e7f8ef;color:#176e4e}.notice.info{background:#fff6e4;color:#946314}.card{background:#fff;border:1px solid #e8f0f7;border-radius:23px;padding:20px;box-shadow:var(--shadow);margin-bottom:15px}.card-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px}.card-title h2{font-size:16px;margin:0;letter-spacing:-.3px}.card-title p{font-size:11px;color:var(--muted);margin:5px 0 0}.date-control{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.date-control label{font-size:11px;font-weight:800;color:#688095}.date-control input{border:1px solid #dce8f2;background:#fbfdff;border-radius:12px;padding:10px;color:var(--navy);max-width:160px;min-width:0}.bus-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.info-box{border:1px solid #e5eef6;background:#fbfdff;border-radius:16px;padding:14px;min-width:0}.info-label{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:#8b9eae;font-weight:800}.info-value{font-size:15px;font-weight:850;margin-top:7px;overflow-wrap:anywhere}.info-value.small{font-size:13px;line-height:1.45}.route-box{grid-column:1/-1;background:#f3f9ff}.route-line{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:14px;font-weight:800;flex-wrap:wrap}.route-arrow{color:var(--blue)}.odometer-card{padding:0;overflow:hidden}.odometer-head{padding:19px 20px;background:#f6fbff;border-bottom:1px solid var(--line)}.odometer-head h2{font-size:16px;margin:0}.odometer-head p{font-size:11px;color:var(--muted);margin:5px 0 0;line-height:1.5}.odo-body{padding:20px}.odo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.odo-step{border:1px solid #e3edf6;border-radius:17px;padding:15px;min-width:0}.step-head{display:flex;align-items:center;gap:9px;margin-bottom:12px}.step-icon{width:38px;height:38px;border-radius:13px;background:#eaf4ff;color:var(--blue);display:grid;place-items:center;flex-shrink:0}.step-icon svg{width:20px;height:20px}.step-head strong{font-size:13px;display:block}.step-head small{display:block;color:var(--muted);font-size:10px;margin-top:3px}.field{display:grid;gap:7px}.field label{font-size:11px;font-weight:800;color:#58758c}.field input{width:100%;border:1px solid #dce8f2;background:#fbfdff;border-radius:12px;padding:13px 12px;outline:none;color:var(--navy);min-width:0}.field input:focus{border-color:#70b6f0;box-shadow:0 0 0 3px #eaf4ff}.field input:disabled{background:#f1f5f8;color:#899ba9}.hint{font-size:10px;line-height:1.5;color:#90a2b0;margin-top:7px}.save-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px}.btn{border:0;border-radius:13px;padding:13px 17px;font-size:12px;font-weight:850;display:inline-flex;align-items:center;justify-content:center;gap:8px}.primary{background:var(--blue);color:white;box-shadow:0 7px 16px #2582d826}.primary:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#edf6ff;color:var(--blue)}.saved-pill{font-size:10px;font-weight:800;color:var(--green);background:#e7f8ef;padding:7px 10px;border-radius:99px}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.stat{border:1px solid #e4edf5;border-radius:16px;padding:13px;min-width:0}.stat strong{display:block;font-size:19px;letter-spacing:-.5px}.stat span{display:block;font-size:10px;color:var(--muted);margin-top:5px;line-height:1.4}.empty{background:#f8fbff;border:1px dashed #ccdfef;border-radius:17px;padding:22px;text-align:center;color:#7d93a6;font-size:12px;line-height:1.6}.bottom{position:fixed;z-index:20;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:#ffffffed;backdrop-filter:blur(16px);border-top:1px solid var(--line);padding:8px 8px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -8px 24px #214c6d0b}.bottom a{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;color:#8194a4;padding:8px 2px;border-radius:14px;font-size:10px;font-weight:800}.bottom a svg{width:21px;height:21px}.bottom a.active{background:#eaf4ff;color:var(--blue)}.footer{text-align:center;color:#9aabba;font-size:10px;padding:7px}.hidden{display:none!important}
+@media(min-width:700px){.app{padding-top:28px}.hero{padding:28px}.bottom{left:50%;right:auto;transform:translateX(-50%);width:min(600px,calc(100% - 32px));border:1px solid var(--line);border-bottom:0;border-radius:19px 19px 0 0}.card{padding:23px}.odometer-card{padding:0}.odo-body{padding:23px}}
+@media(max-width:480px){.app{padding:13px 12px 100px}.top{margin-bottom:14px}.logo{width:42px;height:42px}.brand-title{font-size:16px}.status{font-size:10px;padding:8px}.hero{padding:19px;border-radius:22px}.hero h1{font-size:25px}.hero p{font-size:12px}.card{padding:16px;border-radius:20px}.odometer-card{padding:0}.odometer-head{padding:16px}.odo-body{padding:14px}.odo-grid{grid-template-columns:1fr}.bus-grid{gap:8px}.info-box{padding:12px}.info-value{font-size:13px}.info-value.small{font-size:12px}.card-title{align-items:flex-start;flex-direction:column}.date-control{width:100%;justify-content:space-between}.date-control input{flex:1;max-width:none}.stats{gap:7px}.stat{padding:11px}.stat strong{font-size:17px}.stat span{font-size:9px}}
+</style>
+</head>
+<body>
+<main class="app">
+<header class="top">
+  <a class="brand" href="./index.html"><img class="logo" src="../logo.png" alt="BEST logo" onerror="this.style.display='none'"><span><div class="brand-title">BEST Driver Portal</div><div class="brand-sub">Your bus · Your daily records</div></span></a>
+  <div class="top-actions"><span class="status"><span class="dot"></span><span id="authStatus">Checking session</span></span><button class="icon-btn" id="signOut" aria-label="Sign out" title="Sign out"><svg viewBox="0 0 24 24" fill="none"><path d="M10 17l5-5-5-5m5 5H3m9-9h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+</header>
+<div id="notice" class="notice" role="status"></div>
+<section class="hero"><div class="hero-row"><div><div class="eyebrow">Bus information · Home</div><h1 id="welcome">Welcome, Driver</h1><p id="welcomeText">Your assigned vehicle and daily odometer entries will appear here.</p></div><div class="driver-avatar"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 21a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div></div></section>
+
+<section id="noAssignment" class="card hidden"><div class="empty"><strong style="display:block;color:#193650;font-size:15px;margin-bottom:7px">Waiting for bus assignment</strong>Your driver account is signed in, but no bus is currently assigned to your profile. Please wait for the BEST administrator to assign a bus.</div></section>
+
+<section id="busInfoCard" class="card hidden"><div class="card-title"><div><h2>Your assigned bus</h2><p>Vehicle and route details from BEST fleet records</p></div><span id="busStatus" class="saved-pill">Assigned</span></div><div class="bus-grid">
+<div class="info-box"><div class="info-label">Driver name</div><div class="info-value" id="driverName">—</div></div>
+<div class="info-box"><div class="info-label">Registration number</div><div class="info-value" id="busReg">—</div></div>
+<div class="info-box"><div class="info-label">Bus code</div><div class="info-value" id="busCode">—</div></div>
+<div class="info-box"><div class="info-label">Mileage average</div><div class="info-value" id="busMileage">—</div></div>
+<div class="info-box route-box"><div class="info-label">Assigned route</div><div class="route-line"><span id="routeFrom">—</span><span class="route-arrow">→</span><span id="routeTo">—</span></div></div>
+</div></section>
+
+<section id="odoSection" class="card odometer-card hidden">
+<div class="odometer-head"><div class="card-title" style="margin:0"><div><h2>Daily odometer entry</h2><p>Enter the odometer reading at pickup and drop. One entry per date; saved entries cannot be overwritten from this page.</p></div><span id="entryStatus" class="saved-pill">Select date</span></div></div>
+<div class="odo-body">
+<div class="date-control" style="margin-bottom:15px"><label for="entryDate">Entry date</label><input id="entryDate" type="date"><button type="button" class="btn secondary" id="todayBtn">Today</button></div>
+<div id="daySummary" class="stats" style="margin-bottom:15px"><div class="stat"><strong id="startOdo">—</strong><span>Starting odometer (km)</span></div><div class="stat"><strong id="endOdo">—</strong><span>Latest end reading (km)</span></div><div class="stat"><strong id="distance">—</strong><span>Distance recorded (km)</span></div></div>
+<div class="odo-grid">
+<div class="odo-step"><div class="step-head"><span class="step-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span><strong>Morning / Pickup</strong><small>Odometer at pickup</small></span></div><div class="field"><label for="pickupOdo">Pickup odometer (km)</label><input id="pickupOdo" type="number" min="0" step="0.1" placeholder="Enter pickup reading"></div><div class="hint" id="pickupHint">Enter the reading at pickup.</div><div class="actions"><button class="btn primary" id="savePickup" type="button">Save pickup end odometer</button></div><div id="pickupSaved" class="hint"></div></div>
+<div class="odo-step"><div class="step-head"><span class="step-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 17h16M6 17V7h12v10M9 7V4h6v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="18" r="2" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="18" r="2" stroke="currentColor" stroke-width="2"/></svg></span><span><strong>Evening / Drop</strong><small>Odometer at drop</small></span></div><div class="field"><label for="dropOdo">Drop odometer (km)</label><input id="dropOdo" type="number" min="0" step="0.1" placeholder="Enter drop reading"></div><div class="hint" id="dropHint">Enter the reading at drop.</div><div class="actions"><button class="btn primary" id="saveDrop" type="button">Save drop end odometer</button></div><div id="dropSaved" class="hint"></div></div>
+</div><p class="hint" style="margin-top:14px">Reading flow: if the bus was registered with an “after pickup” odometer, the first entry is the drop reading. If registered “after drop”, the first entry is the pickup reading. After that, the previous date’s drop reading starts the next date. Each date can be saved only once per pickup/drop checkpoint.</p>
+</div></section>
+
+<section id="recentCard" class="card hidden"><div class="card-title"><div><h2>Selected date record</h2><p>Read-only summary for the date selected above</p></div></div><div id="recordSummary" class="empty">No record for this date yet.</div></section>
+<div class="footer">BEST Bus Management System · Driver Portal</div>
+</main>
+
+<nav class="bottom" aria-label="Driver navigation">
+<a class="active" href="./index.html"><svg viewBox="0 0 24 24" fill="none"><path d="m3 10 9-7 9 7v10H4V10" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>Bus Info</span></a>
+<a href="./diesel/index.html"><svg viewBox="0 0 24 24" fill="none"><path d="M4 21V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v17M2 21h17M8 6h5v5H8zM17 8h2l3 4v6a2 2 0 0 1-4 0v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Diesel</span></a>
+<a href="./bus-info/index.html"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="15" rx="3" stroke="currentColor" stroke-width="2"/><path d="M4 12h16M7 19v2m10-2v2" stroke="currentColor" stroke-width="2"/></svg><span>Bus Info</span></a>
+<a href="./service/index.html"><svg viewBox="0 0 24 24" fill="none"><path d="m14 6 4-4 4 4-4 4m-2-2L4 20l-2-2L14 6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Service</span></a>
+</nav>
+<script type="module">
+const $=id=>document.getElementById(id);
+let db,auth,doc,collection,query,where,getDocs,runTransaction,serverTimestamp;
+let signedInUser=null,driverProfile=null,assignedBus=null,assignment=null,dayRecord=null,driverDocId=null,startingReading=null,entryBusy=false;
+const dayFormat=d=>{const date=new Date(d);return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`};
+const today=dayFormat(new Date());
+$("entryDate").value=today;$("entryDate").max=today;
+function notice(msg,type="info"){const n=$("notice");n.textContent=msg;n.className="notice show "+type;window.scrollTo({top:0,behavior:"smooth"});}
+function hideNotice(){$("notice").className="notice";}
+function fmt(n){return Number.isFinite(Number(n))?Number(n).toLocaleString("en-IN",{maximumFractionDigits:1}):"—";}
+function isArchived(b){return b.archived===true||b.isArchived===true||b.deleted===true||String(b.status||"").toLowerCase()==="archived";}
+function setText(id,v){$(id).textContent=v??"—";}
+function showAssignmentState(){const hasBus=Boolean(assignedBus);$("noAssignment").classList.toggle("hidden",hasBus);$("busInfoCard").classList.toggle("hidden",!hasBus);$("odoSection").classList.toggle("hidden",!hasBus);$("recentCard").classList.toggle("hidden",!hasBus);if(!hasBus){$("welcomeText").textContent="You are signed in. Waiting for the administrator to assign a bus.";}}
+function assignmentBusId(a){return a?.busId||a?.busID||a?.bus_id||a?.assignedBusId||null;}
+function activeAssignment(a){const s=String(a.status||a.assignmentStatus||"").toLowerCase();return a.active===true||a.isActive===true||["active","assigned","current"].includes(s)||(!s&&a.endedAt==null&&a.endDate==null&&a.isActive!==false);}
+async function loadDriverContext(){
+  const uid=signedInUser.uid,email=String(signedInUser.email||"").toLowerCase();
+  const [driverSnap,driverEmailSnap,assignmentUidSnap,assignmentEmailSnap]=await Promise.all([
+    getDocs(query(collection(db,"drivers"),where("uid","==",uid))),
+    email?getDocs(query(collection(db,"drivers"),where("email","==",email))):Promise.resolve({docs:[]}),
+    getDocs(query(collection(db,"assignments"),where("driverId","==",uid))),
+    email?getDocs(query(collection(db,"assignments"),where("driverEmail","==",email))):Promise.resolve({docs:[]})
+  ]);
+  let d=driverSnap.docs[0]||driverEmailSnap.docs[0]||null;
+  driverProfile=d?{id:d.id,...d.data()}:null;
+  driverDocId=driverProfile?.id||null;
+  const profileBusId=driverProfile?.assignedBusId||driverProfile?.busId||null;
+  const candidates=[...assignmentUidSnap.docs,...assignmentEmailSnap.docs].map(x=>({id:x.id,...x.data()})).filter(activeAssignment);
+  assignment=candidates[0]||null;
+  const busId=assignmentBusId(assignment)||profileBusId;
+  if(!busId){assignedBus=null;showAssignmentState();return;}
+  const busSnap=await getDocs(query(collection(db,"buses"),where("__name__","==",busId))).catch(async()=>null);
+  let b=busSnap?.docs?.[0]||null;
+  if(!b){b=await doc(db,"buses",busId);const {getDoc}=await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js");const snap=await getDoc(b);b=snap.exists()?snap:null;}
+  if(b&&typeof b.data==="function"){const data=b.data();assignedBus={id:b.id,...data};}
+  else assignedBus=null;
+  if(assignedBus&&isArchived(assignedBus))assignedBus=null;
+  showAssignmentState();
+  if(!assignedBus){notice("Your assigned bus record was not found or is archived. Please contact the BEST administrator.","error");return;}
+  setText("driverName",driverProfile?.name||driverProfile?.fullName||signedInUser.displayName||email.split("@")[0]||"Driver");
+  setText("busReg",assignedBus.registrationNumber||assignedBus.registrationNo||assignedBus.regNumber);
+  setText("busCode",assignedBus.busCode||assignedBus.code);
+  setText("busMileage",assignedBus.mileageAverage?`${assignedBus.mileageAverage} km/l`:"—");
+  setText("routeFrom",assignedBus.routeFrom||assignedBus.from||"—");setText("routeTo",assignedBus.routeTo||assignedBus.to||"—");
+  $("welcome").textContent=`Welcome, ${driverProfile?.name||driverProfile?.fullName||signedInUser.displayName||"Driver"}`;
+  $("welcomeText").textContent="Your assigned vehicle and daily odometer entries are shown below.";
+  await loadDayRecord();
+}
+function startMode(){
+  const point=assignedBus?.readingPoint||"";
+  if(point==="after_pickup")return "drop";
+  if(point==="after_drop")return "pickup";
+  return "pickup";
+}
+function dateRecordId(){return `${assignedBus.id}_${signedInUser.uid}_${$("entryDate").value}`.replace(/[\/.#$[\]]/g,"_");}
+function renderRecord(){
+  const r=dayRecord||{};
+  const pickup=Number.isFinite(Number(r.pickupOdometer))&&r.pickupOdometer!==undefined?Number(r.pickupOdometer):null;
+  const drop=Number.isFinite(Number(r.dropOdometer))&&r.dropOdometer!==undefined?Number(r.dropOdometer):null;
+  $("pickupOdo").value=pickup??"";$("dropOdo").value=drop??"";
+  $("pickupOdo").disabled=pickup!==null;$("dropOdo").disabled=drop!==null;
+  $("savePickup").disabled=pickup!==null||entryBusy;$("saveDrop").disabled=drop!==null||entryBusy;
+  $("pickupSaved").textContent=pickup!==null?`Saved: ${fmt(pickup)} km`:"Not entered yet";
+  $("dropSaved").textContent=drop!==null?`Saved: ${fmt(drop)} km`:"Not entered yet";
+  const base=startingReading;
+  const start=pickup!==null?pickup:(drop!==null&&startMode()==="drop"?base:null);
+  const end=drop!==null?drop:(pickup!==null&&startMode()==="pickup"?pickup:null);
+  setText("startOdo",base!==null&&base!==undefined?fmt(base):"—");
+  setText("endOdo",end!==null&&end!==undefined?fmt(end):"—");
+  const distance=pickup!==null&&drop!==null?drop-pickup:null;
+  setText("distance",distance!==null&&distance>=0?`${fmt(distance)} km`:"—");
+  $("entryStatus").textContent=pickup!==null&&drop!==null?"Day completed":pickup!==null||drop!==null?"Partially saved":"No entry yet";
+  $("entryStatus").style.background=pickup!==null&&drop!==null?"#e7f8ef":"#fff4df";
+  $("entryStatus").style.color=pickup!==null&&drop!==null?"#17885e":"#a86b11";
+  $("recordSummary").textContent=pickup!==null||drop!==null?`Date ${$("entryDate").value}: pickup ${pickup!==null?fmt(pickup)+" km":"not entered"}; drop ${drop!==null?fmt(drop)+" km":"not entered"}; distance ${distance!==null&&distance>=0?fmt(distance)+" km":"pending"}.`:"No odometer entry has been saved for this date.";
+  const initialMode=startMode();
+  if(!r.pickupOdometer&&!r.dropOdometer){
+    $("pickupHint").textContent=initialMode==="pickup"?"First entry for this bus: enter the morning pickup reading.":"This bus was registered after pickup; enter the evening drop reading first.";
+    $("dropHint").textContent=initialMode==="drop"?"First entry for this bus: enter the evening drop reading.":"Enter the evening drop reading after the pickup reading is saved.";
+  }else{
+    $("pickupHint").textContent=pickup!==null?"This checkpoint is saved for this date.":"Enter pickup reading; it must not be less than the previous recorded odometer.";
+    $("dropHint").textContent=drop!==null?"This checkpoint is saved for this date.":"Enter drop reading; it must not be less than the pickup reading.";
+  }
+}
+async function loadDayRecord(){
+  if(!assignedBus||!signedInUser)return;
+  hideNotice();dayRecord=null;startingReading=null;renderRecord();
+  const date=$("entryDate").value;if(!date)return;
+  try{
+    const {getDoc}=await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js");
+    const rRef=doc(db,"odometerEntries",dateRecordId());const snap=await getDoc(rRef);dayRecord=snap.exists()?snap.data():null;
+    // The day's starting reference is the previous date's drop reading, or the bus's original odometer on its initial day.
+    const previousDate=new Date(date+"T12:00:00");previousDate.setDate(previousDate.getDate()-1);
+    const prevKey=dayFormat(previousDate);const prevId=`${assignedBus.id}_${signedInUser.uid}_${prevKey}`.replace(/[\/.#$[\]]/g,"_");
+    const prevSnap=await getDoc(doc(db,"odometerEntries",prevId));
+    if(prevSnap.exists()&&prevSnap.data().dropOdometer!==undefined)startingReading=Number(prevSnap.data().dropOdometer);
+    else if(date===dayFormat(new Date())||!prevSnap.exists())startingReading=Number(assignedBus.currentOdometer??assignedBus.odometerReading??NaN);
+    renderRecord();
+  }catch(err){console.error(err);notice("Could not load odometer entries. Check Firestore read permissions and the odometerEntries collection.","error");}
+}
+async function saveCheckpoint(kind){
+  if(entryBusy||!assignedBus||!signedInUser)return;
+  const date=$("entryDate").value;if(!date){notice("Select a date first.","error");return;}
+  if(date>today){notice("You cannot enter odometer readings for a future date.","error");return;}
+  const input=$(kind==="pickup"?"pickupOdo":"dropOdo");const value=Number(input.value);
+  if(input.value.trim()===""||!Number.isFinite(value)||value<0){notice("Enter a valid odometer reading.","error");return;}
+  const field=kind==="pickup"?"pickupOdometer":"dropOdometer";
+  const other=kind==="pickup"?"dropOdometer":"pickupOdometer";
+  const btn=$(kind==="pickup"?"savePickup":"saveDrop");entryBusy=true;btn.disabled=true;btn.textContent="Saving…";
+  try{
+    const ref=doc(db,"odometerEntries",dateRecordId());
+    await runTransaction(db,async tx=>{
+      const snap=await tx.get(ref);const old=snap.exists()?snap.data():{};
+      if(old[field]!==undefined&&old[field]!==null)throw new Error("ALREADY_SAVED");
+      const existingOther=old[other];
+      if(kind==="drop"){
+        const pickup=old.pickupOdometer;
+        const minimum=pickup!==undefined&&pickup!==null?Number(pickup):Number(startingReading);
+        if(Number.isFinite(minimum)&&value<minimum)throw new Error("ODOMETER_DECREASE");
+      }else{
+        const previous=Number(startingReading);
+        if(Number.isFinite(previous)&&value<previous)throw new Error("ODOMETER_DECREASE");
+        if(existingOther!==undefined&&existingOther!==null&&value>Number(existingOther))throw new Error("PICKUP_AFTER_DROP");
+      }
+      tx.set(ref,{busId:assignedBus.id,driverId:signedInUser.uid,driverEmail:signedInUser.email||null,entryDate:date,[field]:value,[`${kind}EnteredAt`]:new Date().toISOString(),updatedAt:new Date().toISOString(),createdAt:old.createdAt||new Date().toISOString()},{merge:true});
+    });
+    notice(`${kind==="pickup"?"Pickup":"Drop"} odometer saved for ${date}.`,"success");await loadDayRecord();
+  }catch(err){console.error(err);if(err.message==="ALREADY_SAVED")notice("This odometer checkpoint is already saved for this date and cannot be entered twice.","error");else if(err.message==="ODOMETER_DECREASE")notice("The odometer reading cannot be lower than the previous recorded reading.","error");else if(err.message==="PICKUP_AFTER_DROP")notice("Pickup reading cannot be higher than the drop reading already entered.","error");else notice("Could not save this reading. Check Firestore rules and try again.","error");}
+  finally{entryBusy=false;btn.textContent=kind==="pickup"?"Save pickup end odometer":"Save drop end odometer";renderRecord();}
+}
+$("savePickup").addEventListener("click",()=>saveCheckpoint("pickup"));
+$("saveDrop").addEventListener("click",()=>saveCheckpoint("drop"));
+$("entryDate").addEventListener("change",()=>{if($("entryDate").value>today){$("entryDate").value=today;notice("Future dates are not allowed.","error");}loadDayRecord();});
+$("todayBtn").addEventListener("click",()=>{$("entryDate").value=today;loadDayRecord();});
+$("signOut").addEventListener("click",async()=>{try{const {logoutUser}=await import("../auth.js");await logoutUser();window.location.href="../index.html";}catch(e){console.error(e);notice("Sign out failed. Please try again.","error");}});
+async function init(){
+ try{
+  const [{auth:a,db:database},{onAuthStateChanged},{doc:d,collection:c,query:q,where:w,getDocs:g,runTransaction:rt,serverTimestamp:st}]=await Promise.all([import("../firebase.js"),import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js"),import("https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js")]);
+  auth=a;db=database;doc=d;collection=c;query=q;where=w;getDocs=g;runTransaction=rt;serverTimestamp=st;
+  onAuthStateChanged(auth,async user=>{
+   if(!user){$("authStatus").textContent="Not signed in";notice("Please sign in using your existing BEST login page. Driver login accounts must be created separately by the administrator.","error");showAssignmentState();return;}
+   signedInUser=user;$("authStatus").textContent="Signed in";
+   try{await loadDriverContext();}catch(err){console.error(err);showAssignmentState();notice("Could not load your driver or assignment profile. Confirm the Firestore fields and rules.","error");}
+  },err=>{console.error(err);$("authStatus").textContent="Auth error";notice("Firebase Authentication could not initialize. Check your connection and firebase.js.","error");});
+ }catch(err){console.error(err);$("authStatus").textContent="Connection error";notice("Could not initialize Firebase. Verify that driver/index.html is in the driver folder and firebase.js is at the repository root.","error");}
+}
+init();
+</script>
+</body>
+</html>
