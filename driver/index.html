@@ -3,22 +3,25 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111b2a">
 <title>BEST | Driver Portal</title>
-<style>
 
+<style>
 :root {
-  --bg: #f5f5f7;
+  --navy: #111b2a;
+  --navy-light: #1b2b40;
+  --yellow: #f5bd3d;
+  --bg: #f4f6f9;
   --white: #ffffff;
-  --ink: #1d1d1f;
-  --muted: #86868b;
-  --line: #e5e5ea;
-  --blue: #0071e3;
-  --blue-hover: #0077ed;
-  --green: #248a3d;
-  --red: #d70015;
-  --radius: 18px;
-  --shadow: 0 4px 18px rgba(0, 0, 0, 0.035);
+  --ink: #172334;
+  --muted: #778396;
+  --line: #e5e9ef;
+  --blue: #2563eb;
+  --green: #16834a;
+  --red: #d92d43;
+  --radius: 17px;
+  --shadow: 0 5px 22px rgba(25, 40, 60, .045);
 }
 
 * {
@@ -26,79 +29,245 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
-    "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
-button,
-input,
-select,
-textarea {
+button, input, select, textarea {
   font: inherit;
 }
 
 button {
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease,
-    transform 0.15s ease, opacity 0.2s ease;
-}
-
-button:active {
-  transform: scale(0.98);
+  transition: .18s ease;
 }
 
 button:disabled {
+  opacity: .6;
   cursor: not-allowed;
-  opacity: 0.55;
 }
 
-/* Top header */
+/* Desktop application shell */
+
+.app {
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  width: 245px;
+  padding: 25px 17px 18px;
+  background: var(--navy);
+  color: white;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 9px 27px;
+  border-bottom: 1px solid #2b3646;
+}
+
+.brand-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 43px;
+  width: 43px;
+  height: 43px;
+  border-radius: 13px;
+  background: var(--yellow);
+  color: var(--navy);
+  font-size: 23px;
+  font-weight: 900;
+}
+
+.brand-name {
+  font-size: 21px;
+  font-weight: 850;
+  letter-spacing: 1px;
+  line-height: 1.1;
+}
+
+.brand-caption {
+  margin-top: 5px;
+  color: #a9b7c9;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.35px;
+}
+
+.side-label {
+  padding: 26px 11px 10px;
+  color: #8493a7;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.nav {
+  display: grid;
+  gap: 6px;
+}
+
+.nav button {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  min-height: 47px;
+  padding: 12px 13px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: transparent;
+  color: #c1ccda;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.nav button:hover {
+  background: #1b2a3d;
+  color: white;
+}
+
+.nav button.active {
+  border-color: #35445a;
+  background: #26364c;
+  color: white;
+}
+
+.nav button.active .nav-icon {
+  color: var(--yellow);
+}
+
+.nav-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 23px;
+  font-size: 18px;
+}
+
+.side-bottom {
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid #2b3646;
+}
+
+.account-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 7px 15px;
+  min-width: 0;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 37px;
+  width: 37px;
+  height: 37px;
+  border-radius: 50%;
+  background: #34465d;
+  color: white;
+  font-weight: 800;
+}
+
+.account-text {
+  min-width: 0;
+  flex: 1;
+}
+
+.account-text strong,
+.account-text span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-text strong {
+  font-size: 12px;
+}
+
+.account-text span {
+  margin-top: 3px;
+  color: #a9b7c9;
+  font-size: 11px;
+}
+
+.side-signout {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #344255;
+  border-radius: 10px;
+  background: transparent;
+  color: #d5deea;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.side-signout:hover {
+  background: #273548;
+}
+
+.main-area {
+  min-height: 100vh;
+  margin-left: 245px;
+}
+
+/* Top bar */
 
 .top {
   position: sticky;
   top: 0;
   z-index: 20;
-  min-height: 70px;
-  padding: 15px 30px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  background: rgba(255, 255, 255, 0.88);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 72px;
+  padding: 15px 34px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, .94);
+  backdrop-filter: blur(16px);
 }
 
-.brand {
-  font-size: 19px;
+.top-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.top-title {
+  font-size: 15px;
   font-weight: 750;
-  letter-spacing: -0.7px;
+  letter-spacing: -.2px;
 }
 
-.brand span {
-  color: var(--blue);
-  font-weight: 600;
-  letter-spacing: -0.3px;
+.top-subtitle {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 11px;
 }
 
 .topright {
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: 9px;
 }
 
 .small {
@@ -106,195 +275,168 @@ button:disabled {
   font-size: 12px;
 }
 
-/* Buttons */
-
 .btn {
-  min-height: 40px;
-  padding: 10px 16px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: #fff;
-  color: var(--ink);
-  font-weight: 600;
-  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 41px;
+  padding: 10px 15px;
+  border: 1px solid #dfe4eb;
+  border-radius: 10px;
+  background: white;
+  color: #253348;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .btn:hover {
-  background: #f5f5f7;
-  border-color: #d2d2d7;
+  background: #f6f8fb;
+  border-color: #cbd3df;
 }
 
 .btn.primary {
-  background: var(--blue);
-  border-color: var(--blue);
-  color: #fff;
+  border-color: var(--navy);
+  background: var(--navy);
+  color: white;
 }
 
 .btn.primary:hover {
-  background: var(--blue-hover);
+  background: #26374d;
 }
 
 .btn.danger {
-  background: #fff2f2;
-  border-color: #ffd6d6;
+  border-color: #f7d4d9;
+  background: #fff4f5;
   color: var(--red);
 }
 
-/* Main page */
+/* Main content */
 
 .shell {
   width: 100%;
-  max-width: 1180px;
+  max-width: 1260px;
   margin: 0 auto;
-  padding: 32px 28px 50px;
+  padding: 32px 34px 50px;
 }
 
 .heading {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  justify-content: space-between;
+  gap: 15px;
   flex-wrap: wrap;
-  margin-bottom: 26px;
+  margin-bottom: 24px;
 }
 
 h1 {
   margin: 0 0 6px;
   font-size: clamp(25px, 3vw, 32px);
-  font-weight: 750;
-  letter-spacing: -1.1px;
+  font-weight: 800;
+  letter-spacing: -1px;
   line-height: 1.2;
 }
 
 h2 {
-  margin: 0 0 13px;
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: -0.45px;
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 750;
+  letter-spacing: -.4px;
 }
 
 h3 {
   margin: 0 0 8px;
-  font-size: 15px;
-  font-weight: 650;
-  letter-spacing: -0.2px;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .muted {
   color: var(--muted);
-  font-size: 13px;
-  line-height: 1.65;
+  font-size: 12px;
+  line-height: 1.7;
 }
 
 .status {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 12px;
-  border: 1px solid #ccebd4;
-  border-radius: 999px;
-  background: #effaf1;
+  padding: 7px 11px;
+  border: 1px solid #ccebd8;
+  border-radius: 30px;
+  background: #effaf3;
   color: var(--green);
-  font-size: 12px;
-  font-weight: 650;
+  font-size: 11px;
+  font-weight: 750;
 }
-
-/* Existing navigation */
-
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 6px;
-  margin-bottom: 24px;
-  overflow-x: auto;
-  background: #eaeaf0;
-  border: 1px solid #e5e5ea;
-  border-radius: 14px;
-  scrollbar-width: none;
-}
-
-.nav::-webkit-scrollbar {
-  display: none;
-}
-
-.nav button {
-  flex: 0 0 auto;
-  min-height: 40px;
-  padding: 10px 16px;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: #626267;
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.nav button:hover {
-  color: var(--ink);
-  background: rgba(255, 255, 255, 0.55);
-}
-
-.nav button.active {
-  background: #fff;
-  color: var(--ink);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-}
-
-/* Layout cards */
 
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  gap: 17px;
 }
 
 .card {
   min-width: 0;
-  padding: 24px;
-  background: var(--white);
-  border: 1px solid rgba(0, 0, 0, 0.055);
+  padding: 23px;
+  border: 1px solid var(--line);
   border-radius: var(--radius);
+  background: var(--white);
   box-shadow: var(--shadow);
 }
 
-/* Assigned bus panel */
+/* Assigned vehicle */
 
 .bushero {
   position: relative;
   overflow: hidden;
   margin-bottom: 18px;
-  padding: 30px;
-  color: #fff;
-  background: linear-gradient(135deg, #172033 0%, #253b60 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 22px;
-  box-shadow: 0 12px 30px rgba(25, 40, 65, 0.12);
+  padding: 29px;
+  border: 1px solid #26384d;
+  border-radius: 20px;
+  background: linear-gradient(125deg, #111b2a, #233750);
+  color: white;
+  box-shadow: 0 12px 30px rgba(17, 27, 42, .11);
 }
 
-.bushero > .muted {
-  color: #c7d1e1;
+.bushero::after {
+  content: "BUS";
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  color: rgba(255, 255, 255, .055);
+  font-size: 72px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  pointer-events: none;
+}
+
+.bushero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.bushero .muted {
+  color: #c0ccdb;
 }
 
 .reg {
   margin: 8px 0;
-  font-size: clamp(24px, 4vw, 34px);
-  font-weight: 750;
-  letter-spacing: -0.8px;
+  font-size: clamp(25px, 3vw, 35px);
+  font-weight: 850;
+  letter-spacing: -.8px;
   overflow-wrap: anywhere;
 }
 
 .reading {
   margin: 8px 0;
-  font-size: clamp(29px, 4vw, 38px);
-  font-weight: 750;
-  letter-spacing: -1px;
+  font-size: clamp(30px, 4vw, 40px);
+  font-weight: 850;
+  letter-spacing: -1.2px;
   font-variant-numeric: tabular-nums;
 }
 
 .unit {
-  color: #c7d1e1;
+  color: #c0ccdb;
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0;
@@ -303,36 +445,39 @@ h3 {
 .details {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 18px;
+  gap: 11px;
+  margin-top: 17px;
 }
 
 .detail {
   min-width: 0;
-  padding: 15px;
-  background: rgba(255, 255, 255, 0.09);
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 13px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .075);
 }
 
 .detail label {
   display: block;
-  margin-bottom: 7px;
-  color: #c7d1e1;
-  font-size: 12px;
+  margin-bottom: 6px;
+  color: #bdc9d8;
+  font-size: 11px;
 }
 
 .detail strong {
-  font-size: 14px;
-  font-weight: 650;
+  font-size: 13px;
+  font-weight: 750;
   overflow-wrap: anywhere;
 }
 
 .bushero > .detail {
-  margin-top: 22px !important;
+  margin-top: 21px !important;
   padding: 18px;
-  background: rgba(255, 255, 255, 0.11);
-  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, .09);
+}
+
+.bushero > .detail .reading {
+  font-size: clamp(32px, 4vw, 42px);
 }
 
 /* Forms */
@@ -340,20 +485,20 @@ h3 {
 .formgrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  gap: 17px;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
   min-width: 0;
 }
 
 .field label {
-  color: #424245;
-  font-size: 13px;
-  font-weight: 600;
+  color: #354155;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .field input,
@@ -361,32 +506,27 @@ h3 {
 .field textarea {
   width: 100%;
   min-width: 0;
-  min-height: 46px;
-  padding: 12px 14px;
-  border: 1px solid #d2d2d7;
-  border-radius: 12px;
+  min-height: 45px;
+  padding: 11px 13px;
+  border: 1px solid #dce2e9;
+  border-radius: 10px;
   outline: none;
   background: #fff;
   color: var(--ink);
-  font-size: 14px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.field input::placeholder,
-.field textarea::placeholder {
-  color: #a1a1a6;
+  font-size: 13px;
+  transition: border-color .2s, box-shadow .2s;
 }
 
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
   border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.13);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .11);
 }
 
 .field input[readonly] {
-  background: #f5f5f7;
-  color: #626267;
+  background: #f5f7fa;
+  color: #647084;
 }
 
 .full {
@@ -395,19 +535,19 @@ h3 {
 
 .formactions {
   display: flex;
-  gap: 10px;
   flex-wrap: wrap;
-  margin-top: 22px;
+  gap: 10px;
+  margin-top: 21px;
 }
 
-/* Status messages */
+/* Messages */
 
 .message {
   display: none;
-  margin-bottom: 18px;
-  padding: 14px 16px;
+  margin-bottom: 17px;
+  padding: 13px 15px;
   border: 1px solid transparent;
-  border-radius: 13px;
+  border-radius: 12px;
   font-size: 13px;
   line-height: 1.6;
   overflow-wrap: anywhere;
@@ -418,76 +558,70 @@ h3 {
 }
 
 .message.ok {
-  color: #176b32;
-  background: #effaf1;
-  border-color: #d2efd8;
+  border-color: #d0ecd9;
+  background: #effaf3;
+  color: #176b39;
 }
 
 .message.error {
-  color: #b42332;
-  background: #fff2f2;
-  border-color: #ffd6d6;
+  border-color: #f5d0d5;
+  background: #fff3f4;
+  color: #ae2638;
 }
 
 .message.info {
-  color: #1558a6;
+  border-color: #d3e5ff;
   background: #eff6ff;
-  border-color: #d6e8ff;
+  color: #2055a4;
 }
 
 /* Reading history */
 
 .history {
   display: grid;
-  gap: 11px;
+  gap: 10px;
 }
 
 .entry {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   gap: 14px;
   flex-wrap: wrap;
-  padding: 17px 18px;
+  padding: 16px;
   border: 1px solid var(--line);
-  border-radius: 14px;
-  background: #fff;
-  transition: border-color 0.2s ease, background 0.2s ease;
-}
-
-.entry:hover {
-  border-color: #c9c9d0;
-  background: #fdfdfe;
+  border-radius: 13px;
+  background: white;
 }
 
 .entry strong {
-  font-size: 14px;
-  font-weight: 650;
+  font-size: 13px;
+  font-weight: 750;
   font-variant-numeric: tabular-nums;
 }
 
 .entry .muted {
-  margin-top: 5px;
+  margin-top: 4px;
   overflow-wrap: anywhere;
 }
 
 .pill {
   display: inline-block;
   padding: 5px 9px;
-  border: 1px solid #e5e5ea;
-  border-radius: 999px;
-  background: #f5f5f7;
-  color: #626267;
+  border: 1px solid #e1e6ed;
+  border-radius: 30px;
+  background: #f2f5f9;
+  color: #536174;
   font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.35px;
+  font-weight: 800;
+  letter-spacing: .4px;
 }
 
 .empty {
-  padding: 34px 18px;
-  border: 1px dashed #d2d2d7;
-  border-radius: 15px;
-  background: #fafafd;
+  padding: 29px 15px;
+  border: 1px dashed #d8dee7;
+  border-radius: 13px;
+  background: #fafbfd;
   color: var(--muted);
   font-size: 13px;
   line-height: 1.8;
@@ -498,95 +632,96 @@ h3 {
   display: none !important;
 }
 
+.mobile-bottom {
+  display: none;
+}
+
 /* Tablet */
 
-@media (max-width: 900px) {
-  .top {
-    padding: 14px 20px;
+@media (max-width: 1000px) {
+  .sidebar {
+    width: 215px;
+    padding-right: 13px;
+    padding-left: 13px;
+  }
+
+  .main-area {
+    margin-left: 215px;
   }
 
   .shell {
-    padding: 25px 20px 40px;
+    padding: 26px 22px 40px;
   }
 
-  .bushero {
-    padding: 24px;
+  .top {
+    padding-right: 22px;
+    padding-left: 22px;
   }
 
   .card {
-    padding: 20px;
+    padding: 19px;
   }
 }
 
-/* Mobile */
+/* Mobile navigation and layout */
 
-@media (max-width: 700px) {
+@media (max-width: 720px) {
   body {
-    font-size: 14px;
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .main-area {
+    margin-left: 0;
   }
 
   .top {
     position: relative;
-    min-height: auto;
-    padding: 15px 16px;
-    gap: 12px;
+    min-height: 66px;
+    padding: 13px 16px;
   }
 
-  .brand {
-    font-size: 17px;
+  .top-title {
+    font-size: 14px;
+  }
+
+  .top-subtitle {
+    font-size: 10px;
   }
 
   .topright {
-    width: 100%;
-    justify-content: space-between;
-    gap: 8px;
+    gap: 6px;
   }
 
   .topright .small {
-    flex: 1 1 100%;
-    font-size: 12px;
+    display: none;
   }
 
   .topright .btn {
-    min-height: 38px;
-    padding: 9px 12px;
+    min-height: 37px;
+    padding: 8px 10px;
+    font-size: 11px;
   }
 
   .shell {
-    padding: 23px 14px 35px;
+    padding: 22px 14px 28px;
   }
 
   .heading {
     align-items: flex-start;
-    margin-bottom: 20px;
+    margin-bottom: 19px;
   }
 
   h1 {
     font-size: 27px;
-    letter-spacing: -0.8px;
+    letter-spacing: -.8px;
   }
 
   h2 {
-    font-size: 18px;
-  }
-
-  .nav {
-    position: sticky;
-    top: 0;
-    z-index: 15;
-    margin: 0 -14px 20px;
-    padding: 8px 14px;
-    border: 0;
-    border-radius: 0;
-    background: rgba(245, 245, 247, 0.94);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-  }
-
-  .nav button {
-    min-height: 39px;
-    padding: 9px 13px;
-    font-size: 12px;
+    font-size: 17px;
   }
 
   .grid {
@@ -596,16 +731,22 @@ h3 {
 
   .card {
     padding: 19px;
-    border-radius: 17px;
+    border-radius: 16px;
   }
 
   .bushero {
     padding: 22px 18px;
-    margin-bottom: 14px;
-    border-radius: 19px;
+    border-radius: 18px;
+  }
+
+  .bushero::after {
+    top: 23px;
+    right: 12px;
+    font-size: 43px;
   }
 
   .reg {
+    max-width: 100%;
     font-size: 27px;
   }
 
@@ -621,13 +762,9 @@ h3 {
     padding: 12px;
   }
 
-  .detail strong {
-    font-size: 13px;
-  }
-
   .formgrid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 15px;
   }
 
   .full {
@@ -637,14 +774,14 @@ h3 {
   .field input,
   .field select,
   .field textarea {
-    min-height: 48px;
+    min-height: 47px;
     font-size: 16px;
   }
 
   .formactions {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 9px;
   }
 
   .formactions .btn {
@@ -654,7 +791,7 @@ h3 {
 
   .entry {
     align-items: flex-start;
-    padding: 15px;
+    padding: 14px;
     gap: 10px;
   }
 
@@ -663,7 +800,51 @@ h3 {
   }
 
   .empty {
-    padding: 27px 14px;
+    padding: 25px 13px;
+  }
+
+  /* Fixed bottom navigation */
+
+  .mobile-bottom {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 50;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
+    padding: 7px 5px calc(7px + env(safe-area-inset-bottom));
+    border-top: 1px solid #e3e7ed;
+    background: rgba(255, 255, 255, .96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .mobile-bottom button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+    min-height: 51px;
+    padding: 4px 1px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: #778396;
+    font-size: 9px;
+    font-weight: 700;
+  }
+
+  .mobile-bottom button.active {
+    color: #175bc2;
+    background: #edf4ff;
+  }
+
+  .mobile-bottom .nav-icon {
+    width: auto;
+    font-size: 19px;
+    line-height: 1.2;
   }
 }
 
@@ -673,135 +854,264 @@ h3 {
   }
 
   .topright .btn {
-    font-size: 12px;
+    padding: 8px;
+    font-size: 10px;
   }
 
-  .reg {
-    font-size: 23px;
+  .mobile-bottom button {
+    font-size: 8px;
   }
 }
 </style>
 </head>
+
 <body>
-<header class="top">
-  <div class="brand">BEST <span>DRIVER PORTAL</span></div>
-  <div class="topright">
-    <span id="driverLabel" class="small">Checking account…</span>
-    <button class="btn" id="refreshBtn">↻ Refresh</button>
-    <button class="btn" id="logoutBtn">Sign out</button>
-  </div>
-</header>
+<div class="app">
 
-<main class="shell">
-  <div class="heading">
-    <div>
-      <h1 id="welcome">My dashboard</h1>
-      <div class="muted">Your bus, odometer readings and diesel records.</div>
-    </div>
-    <span class="status" id="approvalBadge">Verifying</span>
-  </div>
-
-  <div id="message" class="message" role="status"></div>
-
-  <nav class="nav" id="navigation">
-    <button class="active" data-view="bus">My Bus</button>
-    <button data-view="reading">Odometer Reading</button>
-    <button data-view="history">Reading History</button>
-    <button id="dieselNav">⛽ Diesel Data ↗</button>
-    <button data-view="profile">My Profile</button>
-  </nav>
-
-  <section id="busView">
-    <div class="bushero">
-      <div class="muted">ASSIGNED BUS</div>
-      <div class="reg" id="busRegistration">Loading bus…</div>
-      <div class="muted" id="busRoute">Loading route…</div>
-      <div class="detail" style="margin-top:20px">
-        <label>Current odometer reading</label>
-        <div class="reading"><span id="currentReading">—</span> <span class="unit">km</span></div>
-        <div class="muted" id="currentReadingMeta">Latest saved reading</div>
-      </div>
-      <div class="details">
-        <div class="detail"><label>Bus code</label><strong id="busCode">—</strong></div>
-        <div class="detail"><label>Expected mileage</label><strong id="busMileage">—</strong></div>
-        <div class="detail"><label>Last pickup reading</label><strong id="lastPickup">—</strong></div>
-        <div class="detail"><label>Last drop reading</label><strong id="lastDrop">—</strong></div>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">B</div>
+      <div>
+        <div class="brand-name">BEST</div>
+        <div class="brand-caption">TRANSPORT OPERATIONS</div>
       </div>
     </div>
 
-    <div class="grid">
-      <div class="card">
-        <h2>Quick actions</h2>
-        <p class="muted">Record your pickup or drop odometer reading. Enter the actual time shown on the vehicle log.</p>
-        <button class="btn primary" data-goto="reading">+ Enter odometer reading</button>
-      </div>
-      <div class="card">
-        <h2>Diesel / fuel</h2>
-        <p class="muted">Enter fuel quantity, cost, odometer reading and station details on the separate diesel page.</p>
-        <button class="btn" id="dieselCardBtn">Open Diesel Data ↗</button>
-      </div>
-    </div>
-  </section>
+    <div class="side-label">DRIVER WORKSPACE</div>
 
-  <section id="readingView" class="hidden">
-    <div class="card">
-      <h2>Enter odometer reading</h2>
-      <p class="muted">Saved readings remain in Firestore and appear in Reading History after refresh.</p>
-      <div class="formgrid">
-        <div class="field">
-          <label for="readingDate">Date</label>
-          <input type="date" id="readingDate" required>
-        </div>
-        <div class="field">
-          <label for="readingTime">Time</label>
-          <input type="time" id="readingTime" required>
-        </div>
-        <div class="field">
-          <label for="readingType">Reading type</label>
-          <select id="readingType">
-            <option value="pickup">Pickup / Start of duty</option>
-            <option value="drop">Drop / End of duty</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="readingValue">Odometer reading (km)</label>
-          <input type="number" id="readingValue" min="0" step="0.1" placeholder="e.g. 42850.5" required>
-        </div>
-      </div>
-      <div class="formactions">
-        <button class="btn primary" id="saveReadingBtn">Save reading</button>
-        <button class="btn" id="viewHistoryBtn">View history</button>
-      </div>
-    </div>
-  </section>
+    <nav class="nav" id="navigation">
+      <button class="active" data-view="bus">
+        <span class="nav-icon">▦</span> My Bus
+      </button>
+      <button data-view="reading">
+        <span class="nav-icon">◷</span> Odometer Reading
+      </button>
+      <button data-view="history">
+        <span class="nav-icon">↻</span> Reading History
+      </button>
+      <button id="dieselNav">
+        <span class="nav-icon">⛽</span> Diesel Data
+      </button>
+      <button data-view="profile">
+        <span class="nav-icon">◎</span> My Profile
+      </button>
+    </nav>
 
-  <section id="historyView" class="hidden">
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+    <div class="side-bottom">
+      <div class="account-box">
+        <div class="avatar" id="sideAvatar">D</div>
+        <div class="account-text">
+          <strong id="sideDriverName">Driver account</strong>
+          <span id="sideDriverStatus">Verifying account…</span>
+        </div>
+      </div>
+      <button class="side-signout" id="sideLogoutBtn">↪ &nbsp; Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main-area">
+    <header class="top">
+      <div class="top-left">
         <div>
-          <h2 style="margin-bottom:5px">Reading History</h2>
-          <div class="muted">Previously saved pickup and drop readings, including their entered date and time.</div>
+          <div class="top-title">BEST Driver Portal</div>
+          <div class="top-subtitle">Your vehicle. Your daily operations.</div>
         </div>
-        <button class="btn" id="historyRefreshBtn">↻ Reload history</button>
       </div>
-      <div id="historySummary" class="muted" style="margin-bottom:12px"></div>
-      <div id="historyList" class="history"><div class="empty">Loading history…</div></div>
-    </div>
-  </section>
 
-  <section id="profileView" class="hidden">
-    <div class="card">
-      <h2>My Profile</h2>
-      <div class="formgrid">
-        <div class="field"><label>Name</label><input id="profileName" readonly></div>
-        <div class="field"><label>Phone</label><input id="profilePhone" readonly></div>
-        <div class="field"><label>Email</label><input id="profileEmail" readonly></div>
-        <div class="field"><label>Date of birth</label><input id="profileDob" readonly></div>
-        <div class="field"><label>Driver ID</label><input id="profileId" readonly></div>
+      <div class="topright">
+        <span id="driverLabel" class="small">Checking account…</span>
+        <button class="btn" id="refreshBtn">↻ Refresh</button>
+        <button class="btn" id="logoutBtn">Sign out</button>
       </div>
-    </div>
-  </section>
-</main>
+    </header>
+
+    <main class="shell">
+      <div class="heading">
+        <div>
+          <h1 id="welcome">My dashboard</h1>
+          <div class="muted">Manage your assigned bus and daily readings.</div>
+        </div>
+        <span class="status" id="approvalBadge">Verifying</span>
+      </div>
+
+      <div id="message" class="message" role="status"></div>
+
+      <section id="busView">
+        <div class="bushero">
+          <div class="muted">YOUR ASSIGNED VEHICLE</div>
+          <div class="reg" id="busRegistration">Loading bus…</div>
+          <div class="muted" id="busRoute">Loading route…</div>
+
+          <div class="detail" style="margin-top:20px">
+            <label>Current odometer reading</label>
+            <div class="reading">
+              <span id="currentReading">—</span>
+              <span class="unit">km</span>
+            </div>
+            <div class="muted" id="currentReadingMeta">Latest saved reading</div>
+          </div>
+
+          <div class="details">
+            <div class="detail">
+              <label>Bus code</label>
+              <strong id="busCode">—</strong>
+            </div>
+            <div class="detail">
+              <label>Expected mileage</label>
+              <strong id="busMileage">—</strong>
+            </div>
+            <div class="detail">
+              <label>Last pickup reading</label>
+              <strong id="lastPickup">—</strong>
+            </div>
+            <div class="detail">
+              <label>Last drop reading</label>
+              <strong id="lastDrop">—</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <h2>Odometer reading</h2>
+            <p class="muted">
+              Record your pickup or drop reading at the correct time.
+            </p>
+            <button class="btn primary" data-goto="reading">
+              + Enter reading
+            </button>
+          </div>
+
+          <div class="card">
+            <h2>Diesel and fuel</h2>
+            <p class="muted">
+              Record refuelling, litres, expenses and station details.
+            </p>
+            <button class="btn" id="dieselCardBtn">
+              Open Diesel Data →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="readingView" class="hidden">
+        <div class="card">
+          <h2>Record odometer reading</h2>
+          <p class="muted">
+            Enter the vehicle's actual reading. Saved readings appear in your history.
+          </p>
+
+          <div class="formgrid">
+            <div class="field">
+              <label for="readingDate">Date</label>
+              <input type="date" id="readingDate" required>
+            </div>
+
+            <div class="field">
+              <label for="readingTime">Time</label>
+              <input type="time" id="readingTime" required>
+            </div>
+
+            <div class="field">
+              <label for="readingType">Reading type</label>
+              <select id="readingType">
+                <option value="pickup">Pickup / Start of duty</option>
+                <option value="drop">Drop / End of duty</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="readingValue">Odometer reading (km)</label>
+              <input
+                type="number"
+                id="readingValue"
+                min="0"
+                step="0.1"
+                placeholder="Enter kilometres"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="formactions">
+            <button class="btn primary" id="saveReadingBtn">Save reading</button>
+            <button class="btn" id="viewHistoryBtn">View history</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="historyView" class="hidden">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+            <div>
+              <h2 style="margin-bottom:5px">Reading history</h2>
+              <div class="muted">Your saved pickup and drop records.</div>
+            </div>
+            <button class="btn" id="historyRefreshBtn">↻ Reload history</button>
+          </div>
+
+          <div id="historySummary" class="muted" style="margin-bottom:12px"></div>
+          <div id="historyList" class="history">
+            <div class="empty">Loading history…</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="profileView" class="hidden">
+        <div class="card">
+          <h2>My profile</h2>
+          <p class="muted">Your registered driver account information.</p>
+
+          <div class="formgrid">
+            <div class="field">
+              <label>Name</label>
+              <input id="profileName" readonly>
+            </div>
+            <div class="field">
+              <label>Phone</label>
+              <input id="profilePhone" readonly>
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input id="profileEmail" readonly>
+            </div>
+            <div class="field">
+              <label>Date of birth</label>
+              <input id="profileDob" readonly>
+            </div>
+            <div class="field full">
+              <label>Driver ID</label>
+              <input id="profileId" readonly>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<nav class="mobile-bottom" aria-label="Driver navigation">
+  <button class="active" data-view="bus">
+    <span class="nav-icon">▦</span>
+    <span>My Bus</span>
+  </button>
+  <button data-view="reading">
+    <span class="nav-icon">◷</span>
+    <span>Reading</span>
+  </button>
+  <button data-view="history">
+    <span class="nav-icon">↻</span>
+    <span>History</span>
+  </button>
+  <button data-diesel-link>
+    <span class="nav-icon">⛽</span>
+    <span>Diesel</span>
+  </button>
+  <button data-view="profile">
+    <span class="nav-icon">◎</span>
+    <span>Profile</span>
+  </button>
+</nav>
 
 <script type="module">
 import { auth, db } from "../firebase.js";
@@ -820,261 +1130,370 @@ const localDate = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 };
+
 const localTime = () => {
   const d = new Date();
   return `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
 };
-function esc(v="") {
-  return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function esc(v = "") {
+  return String(v).replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[c]));
 }
-function showMessage(text,type="info") {
-  $("message").textContent=text;
-  $("message").className="message show "+type;
+
+function showMessage(text, type = "info") {
+  $("message").textContent = text;
+  $("message").className = "message show " + type;
 }
-function clearMessage() { $("message").className="message"; $("message").textContent=""; }
+
+function clearMessage() {
+  $("message").className = "message";
+  $("message").textContent = "";
+}
+
 function localDateTime(entry) {
-  const date=entry.date||"";
-  const time=entry.time||"";
-  if(date||time) return `${date} ${time}`.trim();
-  const timestamp=entry.createdAt?.toDate?.();
+  const date = entry.date || "";
+  const time = entry.time || "";
+  if (date || time) return `${date} ${time}`.trim();
+  const timestamp = entry.createdAt?.toDate?.();
   return timestamp ? timestamp.toLocaleString() : "Time not recorded";
 }
+
 function sortReadings(list) {
-  return [...list].sort((a,b)=>{
-    const aa=`${a.date||""}T${a.time||"00:00"}`;
-    const bb=`${b.date||""}T${b.time||"00:00"}`;
+  return [...list].sort((a, b) => {
+    const aa = `${a.date || ""}T${a.time || "00:00"}`;
+    const bb = `${b.date || ""}T${b.time || "00:00"}`;
     return bb.localeCompare(aa);
   });
 }
+
 function showView(name) {
-  ["bus","reading","history","profile"].forEach(v=>{
-    $(v+"View").classList.toggle("hidden",v!==name);
+  ["bus", "reading", "history", "profile"].forEach(v => {
+    $(v + "View").classList.toggle("hidden", v !== name);
   });
-  document.querySelectorAll("[data-view]").forEach(btn=>{
-    btn.classList.toggle("active",btn.dataset.view===name);
+
+  document.querySelectorAll("[data-view]").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.view === name);
   });
-  if(name==="history") renderHistory();
+
+  if (name === "history") renderHistory();
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
-document.querySelectorAll("[data-view]").forEach(btn=>{
-  btn.addEventListener("click",()=>showView(btn.dataset.view));
-});
-document.querySelectorAll("[data-goto]").forEach(btn=>{
-  btn.addEventListener("click",()=>showView(btn.dataset.goto));
-});
-$("dieselNav").addEventListener("click",()=>location.href="./diesel/");
-$("dieselCardBtn").addEventListener("click",()=>location.href="./diesel/");
-$("viewHistoryBtn").addEventListener("click",()=>showView("history"));
-$("historyRefreshBtn").addEventListener("click",loadReadings);
-$("refreshBtn").addEventListener("click",loadAll);
-$("logoutBtn").addEventListener("click",async()=>{await signOut(auth);location.replace("../");});
 
-$("readingDate").value=localDate();
-$("readingTime").value=localTime();
+document.querySelectorAll("[data-view]").forEach(btn => {
+  btn.addEventListener("click", () => showView(btn.dataset.view));
+});
 
-onAuthStateChanged(auth,async signedInUser=>{
-  if(!signedInUser){location.replace("../");return;}
-  user=signedInUser;
+document.querySelectorAll("[data-goto]").forEach(btn => {
+  btn.addEventListener("click", () => showView(btn.dataset.goto));
+});
+
+function openDiesel() {
+  location.href = "./diesel/";
+}
+
+$("dieselNav").addEventListener("click", openDiesel);
+$("dieselCardBtn").addEventListener("click", openDiesel);
+
+document.querySelectorAll("[data-diesel-link]").forEach(btn => {
+  btn.addEventListener("click", openDiesel);
+});
+
+$("viewHistoryBtn").addEventListener("click", () => showView("history"));
+$("historyRefreshBtn").addEventListener("click", loadReadings);
+$("refreshBtn").addEventListener("click", loadAll);
+
+async function logout() {
+  await signOut(auth);
+  location.replace("../");
+}
+
+$("logoutBtn").addEventListener("click", logout);
+$("sideLogoutBtn").addEventListener("click", logout);
+
+$("readingDate").value = localDate();
+$("readingTime").value = localTime();
+
+onAuthStateChanged(auth, async signedInUser => {
+  if (!signedInUser) {
+    location.replace("../");
+    return;
+  }
+
+  user = signedInUser;
   await loadAll();
 });
 
 async function loadAll() {
-  if(!user||busy) return;
+  if (!user || busy) return;
   clearMessage();
-  try {
-    const profileSnap=await getDoc(doc(db,"users",user.uid));
-    if(!profileSnap.exists()){showMessage("Driver profile not found. Please sign in again or contact the administrator.","error");return;}
-    profile=profileSnap.data();
 
-    if(profile.role==="admin"){location.replace("../admin/");return;}
-    if(profile.role!=="driver"){showMessage("This portal is for driver accounts only.","error");return;}
-    if(profile.approvalStatus!=="approved"){
-      $("approvalBadge").textContent="Not approved";
-      showMessage("Your driver account is not approved yet. Please contact the administrator.","info");
+  try {
+    const profileSnap = await getDoc(doc(db, "users", user.uid));
+
+    if (!profileSnap.exists()) {
+      showMessage("Driver profile not found. Please sign in again or contact the administrator.", "error");
       return;
     }
 
-    $("driverLabel").textContent=profile.name||user.email||"Driver";
-    $("welcome").textContent="Hello, "+(profile.name||"Driver");
-    $("approvalBadge").textContent="Approved";
-    $("profileName").value=profile.name||"";
-    $("profilePhone").value=profile.phone||"";
-    $("profileEmail").value=profile.email||user.email||"";
-    $("profileDob").value=profile.dob||"";
-    $("profileId").value=user.uid;
+    profile = profileSnap.data();
 
-    bus=null;
-    if(profile.assignedBusId){
-      const snap=await getDoc(doc(db,"buses",profile.assignedBusId));
-      if(snap.exists()) bus={id:snap.id,...snap.data()};
+    if (profile.role === "admin") {
+      location.replace("../admin/");
+      return;
     }
-    if(!bus){
-      const linked=await getDocs(query(collection(db,"buses"),where("assignedDriverId","==",user.uid)));
-      if(!linked.empty) bus={id:linked.docs[0].id,...linked.docs[0].data()};
+
+    if (profile.role !== "driver") {
+      showMessage("This portal is for driver accounts only.", "error");
+      return;
     }
-    if(!bus){
-      $("busRegistration").textContent="No bus assigned";
-      $("busRoute").textContent="Please contact your administrator.";
-      $("currentReading").textContent="—";
-      $("busCode").textContent="—";
-      $("busMileage").textContent="—";
-      $("lastPickup").textContent="—";
-      $("lastDrop").textContent="—";
-      showMessage("Your account is approved, but no bus is assigned yet.","info");
+
+    if (profile.approvalStatus !== "approved") {
+      $("approvalBadge").textContent = "Not approved";
+      $("sideDriverStatus").textContent = "Awaiting approval";
+      showMessage("Your driver account is not approved yet. Please contact the administrator.", "info");
+      return;
+    }
+
+    $("driverLabel").textContent = profile.name || user.email || "Driver";
+    $("welcome").textContent = "Welcome, " + (profile.name || "Driver");
+    $("approvalBadge").textContent = "Approved";
+    $("sideDriverName").textContent = profile.name || "Driver";
+    $("sideDriverStatus").textContent = "Approved driver";
+    $("sideAvatar").textContent = (profile.name || "D").trim().charAt(0).toUpperCase();
+
+    $("profileName").value = profile.name || "";
+    $("profilePhone").value = profile.phone || "";
+    $("profileEmail").value = profile.email || user.email || "";
+    $("profileDob").value = profile.dob || "";
+    $("profileId").value = user.uid;
+
+    bus = null;
+
+    if (profile.assignedBusId) {
+      const snap = await getDoc(doc(db, "buses", profile.assignedBusId));
+      if (snap.exists()) bus = { id: snap.id, ...snap.data() };
+    }
+
+    if (!bus) {
+      const linked = await getDocs(query(
+        collection(db, "buses"),
+        where("assignedDriverId", "==", user.uid)
+      ));
+
+      if (!linked.empty) bus = { id: linked.docs[0].id, ...linked.docs[0].data() };
+    }
+
+    if (!bus) {
+      $("busRegistration").textContent = "No bus assigned";
+      $("busRoute").textContent = "Please contact your administrator.";
+      $("currentReading").textContent = "—";
+      $("currentReadingMeta").textContent = "No assigned vehicle";
+      $("busCode").textContent = "—";
+      $("busMileage").textContent = "—";
+      $("lastPickup").textContent = "—";
+      $("lastDrop").textContent = "—";
+      showMessage("Your account is approved, but no bus is assigned yet.", "info");
       return;
     }
 
     await loadReadings();
     renderBus();
-  } catch(error) {
+
+  } catch (error) {
     console.error(error);
-    showMessage("Unable to load driver portal: "+error.message,"error");
+    showMessage("Unable to load driver portal: " + error.message, "error");
   }
 }
 
 async function loadReadings() {
-  if(!user) return;
-  $("historyList").innerHTML='<div class="empty">Loading saved readings from Firestore…</div>';
+  if (!user) return;
+
+  $("historyList").innerHTML = '<div class="empty">Loading saved readings from Firestore…</div>';
+
   try {
-    // Read the driver's saved records from Firestore, not browser memory.
-    const snap=await getDocs(query(
-      collection(db,"odometerEntries"),
-      where("driverUid","==",user.uid)
+    const snap = await getDocs(query(
+      collection(db, "odometerEntries"),
+      where("driverUid", "==", user.uid)
     ));
-    readings=snap.docs.map(s=>({id:s.id,...s.data()}));
 
-    // Include only the currently assigned bus if the driver has one.
-    if(bus) readings=readings.filter(r=>r.busId===bus.id);
+    readings = snap.docs.map(s => ({ id: s.id, ...s.data() }));
 
-    readings=sortReadings(readings);
+    if (bus) readings = readings.filter(r => r.busId === bus.id);
+
+    readings = sortReadings(readings);
     renderHistory();
     renderBus();
-  } catch(error) {
-    console.error("Reading history load failed:",error);
-    $("historyList").innerHTML='<div class="empty">Could not load reading history.</div>';
-    showMessage("Reading history could not be loaded: "+error.message+
-      ". Check Firestore read rules for odometerEntries.","error");
+
+  } catch (error) {
+    console.error("Reading history load failed:", error);
+    $("historyList").innerHTML = '<div class="empty">Could not load reading history.</div>';
+    showMessage(
+      "Reading history could not be loaded: " + error.message +
+      ". Check Firestore read rules for odometerEntries.",
+      "error"
+    );
   }
 }
 
 function renderBus() {
-  if(!bus) return;
-  $("busRegistration").textContent=bus.registrationNo||"Bus";
-  $("busRoute").textContent=(bus.routeFrom||"—")+" → "+(bus.routeTo||"—");
-  $("busCode").textContent=bus.busCode||"—";
-  $("busMileage").textContent=bus.expectedMileage!=null?bus.expectedMileage+" km/l":"—";
+  if (!bus) return;
 
-  const chronological=[...readings].sort((a,b)=>{
-    const aa=`${a.date||""}T${a.time||"00:00"}`;
-    const bb=`${b.date||""}T${b.time||"00:00"}`;
+  $("busRegistration").textContent = bus.registrationNo || "Bus";
+  $("busRoute").textContent = (bus.routeFrom || "—") + " → " + (bus.routeTo || "—");
+  $("busCode").textContent = bus.busCode || "—";
+  $("busMileage").textContent = bus.expectedMileage != null ? bus.expectedMileage + " km/l" : "—";
+
+  const chronological = [...readings].sort((a, b) => {
+    const aa = `${a.date || ""}T${a.time || "00:00"}`;
+    const bb = `${b.date || ""}T${b.time || "00:00"}`;
     return aa.localeCompare(bb);
   });
-  const latest=chronological[chronological.length-1];
-  $("currentReading").textContent=latest?.reading!=null?Number(latest.reading).toLocaleString():(bus.odometerReading??"—");
-  $("currentReadingMeta").textContent=latest
-    ? `Last saved ${localDateTime(latest)} · ${String(latest.type||"").toUpperCase()}`
+
+  const latest = chronological[chronological.length - 1];
+
+  $("currentReading").textContent = latest?.reading != null
+    ? Number(latest.reading).toLocaleString()
+    : (bus.odometerReading ?? "—");
+
+  $("currentReadingMeta").textContent = latest
+    ? `Last saved ${localDateTime(latest)} · ${String(latest.type || "").toUpperCase()}`
     : "No driver readings saved yet · Initial bus reading shown if available";
 
-  const pickup=[...chronological].reverse().find(r=>r.type==="pickup");
-  const drop=[...chronological].reverse().find(r=>r.type==="drop");
-  $("lastPickup").textContent=pickup?`${pickup.reading} km · ${pickup.date||""}`:"—";
-  $("lastDrop").textContent=drop?`${drop.reading} km · ${drop.date||""}`:"—";
+  const pickup = [...chronological].reverse().find(r => r.type === "pickup");
+  const drop = [...chronological].reverse().find(r => r.type === "drop");
+
+  $("lastPickup").textContent = pickup ? `${pickup.reading} km · ${pickup.date || ""}` : "—";
+  $("lastDrop").textContent = drop ? `${drop.reading} km · ${drop.date || ""}` : "—";
 }
 
 function renderHistory() {
-  const list=sortReadings(readings);
-  $("historySummary").textContent=`${list.length} saved reading${list.length===1?"":"s"}`;
-  if(!list.length) {
-    $("historyList").innerHTML='<div class="empty">No saved readings found for this bus yet.<br>After you save a pickup or drop reading, it will appear here and remain after refresh.</div>';
+  const list = sortReadings(readings);
+
+  $("historySummary").textContent =
+    `${list.length} saved reading${list.length === 1 ? "" : "s"}`;
+
+  if (!list.length) {
+    $("historyList").innerHTML =
+      '<div class="empty">No saved readings found for this bus yet.<br>After you save a pickup or drop reading, it will appear here and remain after refresh.</div>';
     return;
   }
 
-  $("historyList").innerHTML=list.map((r,index)=>{
-    const type=(r.type||"unknown").toLowerCase();
-    const label=type==="pickup"?"Pickup / Start":type==="drop"?"Drop / End":type;
-    const earlier=list.slice(index+1).find(x=>x.type===r.type);
+  $("historyList").innerHTML = list.map(r => {
+    const type = (r.type || "unknown").toLowerCase();
+    const label = type === "pickup"
+      ? "Pickup / Start"
+      : type === "drop"
+        ? "Drop / End"
+        : type;
+
     return `<article class="entry">
       <div>
         <strong>${esc(label)}</strong>
         <div class="muted">${esc(localDateTime(r))}</div>
-        <div class="muted">Bus: ${esc(bus?.registrationNo||r.busId||"—")}</div>
+        <div class="muted">Bus: ${esc(bus?.registrationNo || r.busId || "—")}</div>
       </div>
       <div style="text-align:right">
-        <strong>${esc(r.reading??"—")} km</strong>
+        <strong>${esc(r.reading ?? "—")} km</strong>
         <div style="margin-top:7px"><span class="pill">${esc(type.toUpperCase())}</span></div>
       </div>
     </article>`;
   }).join("");
 }
 
-$("saveReadingBtn").addEventListener("click",saveReading);
+$("saveReadingBtn").addEventListener("click", saveReading);
 
 async function saveReading() {
-  if(!user||!profile||!bus||busy) {
-    showMessage("Your assigned bus is not loaded. Refresh and try again.","error");
-    return;
-  }
-  const date=$("readingDate").value;
-  const time=$("readingTime").value;
-  const type=$("readingType").value;
-  const reading=Number($("readingValue").value);
-
-  if(!date||!time||$("readingValue").value.trim()===""||!Number.isFinite(reading)||reading<0) {
-    showMessage("Enter a valid date, time and non-negative odometer reading.","error");
+  if (!user || !profile || !bus || busy) {
+    showMessage("Your assigned bus is not loaded. Refresh and try again.", "error");
     return;
   }
 
-  const id=`${bus.id}_${date}_${type}`;
-  const entryRef=doc(db,"odometerEntries",id);
-  const driverRef=doc(db,"users",user.uid);
-  const busRef=doc(db,"buses",bus.id);
+  const date = $("readingDate").value;
+  const time = $("readingTime").value;
+  const type = $("readingType").value;
+  const reading = Number($("readingValue").value);
 
-  busy=true;
-  $("saveReadingBtn").disabled=true;
-  $("saveReadingBtn").textContent="Saving…";
+  if (!date || !time || $("readingValue").value.trim() === "" ||
+      !Number.isFinite(reading) || reading < 0) {
+    showMessage("Enter a valid date, time and non-negative odometer reading.", "error");
+    return;
+  }
+
+  const id = `${bus.id}_${date}_${type}`;
+  const entryRef = doc(db, "odometerEntries", id);
+  const driverRef = doc(db, "users", user.uid);
+  const busRef = doc(db, "buses", bus.id);
+
+  busy = true;
+  $("saveReadingBtn").disabled = true;
+  $("saveReadingBtn").textContent = "Saving…";
   clearMessage();
 
   try {
-    await runTransaction(db,async transaction=>{
-      const [entrySnap,driverSnap,busSnap]=await Promise.all([
-        transaction.get(entryRef),transaction.get(driverRef),transaction.get(busRef)
+    await runTransaction(db, async transaction => {
+      const [entrySnap, driverSnap, busSnap] = await Promise.all([
+        transaction.get(entryRef),
+        transaction.get(driverRef),
+        transaction.get(busRef)
       ]);
 
-      if(entrySnap.exists()) {
-        throw new Error("A "+type+" reading is already saved for this bus on "+date+". Choose the other reading type or contact your administrator.");
+      if (entrySnap.exists()) {
+        throw new Error(
+          "A " + type + " reading is already saved for this bus on " +
+          date + ". Choose the other reading type or contact your administrator."
+        );
       }
-      if(!driverSnap.exists()) throw new Error("Driver profile not found.");
-      const freshDriver=driverSnap.data();
-      if(freshDriver.role!=="driver"||freshDriver.approvalStatus!=="approved") {
+
+      if (!driverSnap.exists()) throw new Error("Driver profile not found.");
+
+      const freshDriver = driverSnap.data();
+
+      if (freshDriver.role !== "driver" ||
+          freshDriver.approvalStatus !== "approved") {
         throw new Error("Your driver account is not approved.");
       }
-      if(freshDriver.assignedBusId!==bus.id) {
+
+      if (freshDriver.assignedBusId !== bus.id) {
         throw new Error("This bus is no longer assigned to your account. Refresh and contact the administrator.");
       }
-      if(!busSnap.exists()) throw new Error("Assigned bus no longer exists.");
 
-      transaction.set(entryRef,{
-        busId:bus.id,
-        driverUid:user.uid,
+      if (!busSnap.exists()) throw new Error("Assigned bus no longer exists.");
+
+      transaction.set(entryRef, {
+        busId: bus.id,
+        driverUid: user.uid,
         date,
         time,
         type,
         reading,
-        createdAt:serverTimestamp(),
-        updatedAt:serverTimestamp()
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
       });
     });
 
-    $("readingValue").value="";
-    showMessage("Reading saved successfully. Updating current odometer and history…","ok");
-    await loadAll();
+    $("readingValue").value = "";
+    showMessage("Reading saved successfully. Updating current odometer and history…", "ok");
+
+    // Correct refresh: do not call loadAll() while busy is true.
+    await loadReadings();
+    renderBus();
     showView("history");
-  } catch(error) {
-    console.error("Save reading failed:",error);
-    showMessage("Could not save reading: "+error.message,"error");
+
+    // Prepare the form for the next entry.
+    $("readingDate").value = localDate();
+    $("readingTime").value = localTime();
+
+  } catch (error) {
+    console.error("Save reading failed:", error);
+    showMessage("Could not save reading: " + error.message, "error");
+
   } finally {
-    busy=false;
-    $("saveReadingBtn").disabled=false;
-    $("saveReadingBtn").textContent="Save reading";
+    busy = false;
+    $("saveReadingBtn").disabled = false;
+    $("saveReadingBtn").textContent = "Save reading";
   }
 }
 </script>
