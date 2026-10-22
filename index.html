@@ -3,247 +3,698 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
-<title>BEST Bus Management</title>
+<title>BEST Bus Management | Login</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{min-height:100vh;display:flex;justify-content:center;align-items:center;background:#fff;color:#111827;padding:16px}
-.login-box{width:100%;max-width:360px;padding:28px;border:1px solid #e5e7eb;border-radius:12px}
-.bus-scene{height:62px;display:flex;justify-content:center;align-items:center;margin-bottom:12px;overflow:hidden}
-.bus{position:relative;width:88px;height:35px;background:#2563eb;border-radius:7px 11px 5px 5px;animation:drive 3s ease-in-out infinite}
-.bus:before{content:"";position:absolute;top:6px;left:7px;width:55px;height:13px;background:#fff;border-radius:3px}
-.bus:after{content:"";position:absolute;right:5px;top:8px;width:13px;height:12px;background:#bfdbfe;border-radius:3px}
-.wheel{position:absolute;bottom:-6px;width:13px;height:13px;border:3px solid #374151;background:#fff;border-radius:50%;animation:roll .8s linear infinite}
-.wheel.one{left:13px}.wheel.two{right:13px}
-@keyframes drive{0%,100%{transform:translateX(-7px)}50%{transform:translateX(7px)}}
-@keyframes roll{to{transform:rotate(360deg)}}
-h2{text-align:center;font-size:24px;font-weight:600;margin-bottom:5px}
-.subtitle{text-align:center;color:#6b7280;font-size:14px;margin-bottom:25px}
-input[type=radio]{display:none}
-.tabs{display:flex;background:#f3f4f6;padding:4px;border-radius:8px;margin-bottom:24px}
-.tabs label{width:50%;padding:11px;text-align:center;cursor:pointer;border-radius:6px;font-size:14px;color:#6b7280}
-#admin:checked~.login-box .tabs label[for=admin],#driver:checked~.login-box .tabs label[for=driver]{background:#fff;color:#111827;box-shadow:0 1px 4px #00000012}
-.form{display:none}
-#admin:checked~.login-box .admin-form,#driver:checked~.login-box .driver-form{display:block}
-.google-btn,.login-btn{width:100%;padding:12px;border:none;border-radius:7px;background:#2563eb;color:#fff;font-size:14px;font-weight:600;cursor:pointer}
-.google-btn:hover,.login-btn:hover{background:#1d4ed8}
-button:disabled{opacity:.6;cursor:wait}
-.field{display:block;width:100%;padding:12px;margin-bottom:12px;border:1px solid #d1d5db;border-radius:7px;font-size:14px;outline:none}
-.field:focus{border-color:#2563eb}
-.message{display:none;margin-top:15px;padding:11px;border-radius:7px;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
-.message.show{display:block}
-.error{background:#fef2f2;color:#b91c1c}
-@media(max-width:420px){.login-box{padding:24px}}
-@media(prefers-reduced-motion:reduce){.bus,.wheel{animation:none}}
+:root {
+  --blue: #2457e6;
+  --dark: #172033;
+  --muted: #778198;
+  --line: #e6eaf0;
+  --bg: #f6f8fc;
+}
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+}
+
+.container {
+  width: 100%;
+  max-width: 410px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  margin-bottom: 30px;
+}
+
+.brand-icon {
+  width: 43px;
+  height: 43px;
+  border-radius: 13px;
+  background: var(--blue);
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.brand-name {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -.6px;
+}
+
+.brand-name span { color: var(--blue); }
+
+.panel {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 12px 40px rgba(20, 35, 70, .05);
+}
+
+h1 {
+  font-size: 25px;
+  letter-spacing: -.8px;
+  margin: 0 0 9px;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 25px;
+}
+
+.google-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px;
+  background: white;
+  border: 1px solid #dce1e9;
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dark);
+  cursor: pointer;
+  transition: background .2s, border .2s;
+}
+
+.google-button:hover {
+  background: #f9fafc;
+  border-color: #b9c3d3;
+}
+
+.google-button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+.google-logo {
+  width: 20px;
+  height: 20px;
+}
+
+.divider {
+  height: 1px;
+  background: var(--line);
+  margin: 23px 0;
+}
+
+.info {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.info-icon {
+  flex-shrink: 0;
+  font-size: 17px;
+}
+
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin: 17px 0 8px;
+}
+
+input {
+  display: block;
+  width: 100%;
+  border: 1px solid #dce1e9;
+  border-radius: 10px;
+  padding: 13px;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+  color: var(--dark);
+}
+
+input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(36, 87, 230, .08);
+}
+
+input[readonly] {
+  background: #f6f8fb;
+  color: var(--muted);
+}
+
+.primary-button {
+  width: 100%;
+  margin-top: 22px;
+  padding: 14px;
+  background: var(--blue);
+  color: white;
+  border: 0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primary-button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+.message {
+  display: none;
+  padding: 13px;
+  margin-top: 17px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.message.error {
+  display: block;
+  color: #b42318;
+  background: #fff0ee;
+}
+
+.message.success {
+  display: block;
+  color: #087f5b;
+  background: #e9f8f0;
+}
+
+.message.info-message {
+  display: block;
+  color: #2548a5;
+  background: #edf2ff;
+}
+
+.status-icon {
+  width: 58px;
+  height: 58px;
+  margin: 0 0 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: #edf2ff;
+  color: var(--blue);
+  font-size: 27px;
+}
+
+.status-email {
+  color: var(--muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  margin-top: 12px;
+}
+
+.secondary-button {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--dark);
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.footer {
+  text-align: center;
+  font-size: 11px;
+  color: #929bad;
+  margin-top: 22px;
+}
+
+[hidden] { display: none !important; }
+
+@media(max-width: 450px) {
+  .panel { padding: 24px 20px; }
+  h1 { font-size: 23px; }
+}
 </style>
 </head>
 
 <body>
-<input type="radio" name="role" id="admin" checked>
-<input type="radio" name="role" id="driver">
+<div class="container">
 
-<div class="login-box">
-  <div class="bus-scene">
-    <div class="bus">
-      <span class="wheel one"></span>
-      <span class="wheel two"></span>
-    </div>
+  <div class="brand">
+    <div class="brand-icon">B</div>
+    <div class="brand-name">BEST <span>BUS</span> MANAGEMENT</div>
   </div>
 
-  <h2>BEST</h2>
-  <p class="subtitle">Bus Management System</p>
+  <!-- LOGIN -->
+  <section class="panel" id="loginPanel">
+    <h1>Welcome back</h1>
+    <p class="subtitle">
+      Sign in with Google to access your BEST Bus Management account.
+    </p>
 
-  <div class="tabs">
-    <label for="admin">Admin</label>
-    <label for="driver">Driver</label>
-  </div>
-
-  <div class="form admin-form">
-    <button class="google-btn" id="googleBtn" type="button">
-      Continue with Google
+    <button class="google-button" id="googleLogin">
+      <svg class="google-logo" viewBox="0 0 48 48" aria-hidden="true">
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" transform="translate(0 4)"/>
+        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.74 7.18l7.73 6C44.43 37.88 46.98 31.76 46.98 24.55z"/>
+        <path fill="#FBBC05" d="M10.53 28.59a14.4 14.4 0 0 1 0-9.18l-7.98-6.19a23.93 23.93 0 0 0 0 21.56l7.98-6.19z"/>
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.91-5.8l-7.73-6c-2.15 1.45-4.9 2.3-8.18 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+      </svg>
+      <span id="loginButtonText">Continue with Google</span>
     </button>
-  </div>
 
-  <form class="form driver-form" id="driverForm">
-    <input class="field" id="username" type="text"
-      placeholder="Username" autocomplete="username" required>
-    <input class="field" id="password" type="password"
-      placeholder="Password" autocomplete="current-password" required>
-    <button class="login-btn" id="driverBtn" type="submit">Login</button>
-  </form>
+    <div id="loginMessage" class="message"></div>
 
-  <div class="message error" id="message" role="alert"></div>
+    <div class="divider"></div>
+
+    <div class="info">
+      <span class="info-icon">ⓘ</span>
+      <span>
+        Admins access the administration dashboard. Drivers complete
+        their profile and wait for admin approval before accessing the
+        driver portal.
+      </span>
+    </div>
+  </section>
+
+  <!-- FIRST-TIME DRIVER PROFILE -->
+  <section class="panel" id="profilePanel" hidden>
+    <h1>Complete your profile</h1>
+    <p class="subtitle">
+      Enter your details to register as a BEST bus driver. Your profile
+      must be approved by the admin.
+    </p>
+
+    <form id="profileForm">
+      <label for="driverName">FULL NAME</label>
+      <input id="driverName" type="text" maxlength="100"
+        autocomplete="name" required placeholder="Enter your full name">
+
+      <label for="driverDob">DATE OF BIRTH</label>
+      <input id="driverDob" type="date" required>
+
+      <label for="driverPhone">PHONE NUMBER</label>
+      <input id="driverPhone" type="tel" inputmode="numeric"
+        maxlength="10" minlength="10" pattern="[6-9][0-9]{9}"
+        autocomplete="tel-national" required placeholder="10-digit mobile number">
+
+      <label for="driverEmail">GOOGLE ACCOUNT</label>
+      <input id="driverEmail" type="email" readonly>
+
+      <button class="primary-button" id="saveProfile" type="submit">
+        Submit for approval
+      </button>
+    </form>
+
+    <div id="profileMessage" class="message"></div>
+
+    <button class="secondary-button" id="profileSignOut" type="button">
+      Sign out
+    </button>
+  </section>
+
+  <!-- WAITING / BLOCKED STATUS -->
+  <section class="panel" id="statusPanel" hidden>
+    <div class="status-icon" id="statusIcon">◷</div>
+    <h1 id="statusTitle">Application submitted</h1>
+    <p class="subtitle" id="statusDescription"></p>
+    <div class="status-email" id="statusEmail"></div>
+    <div id="statusMessage" class="message"></div>
+    <button class="primary-button" id="checkStatus" type="button">
+      Check status again
+    </button>
+    <button class="secondary-button" id="statusSignOut" type="button">
+      Sign out
+    </button>
+  </section>
+
+  <div class="footer">BEST Bus Management System</div>
 </div>
 
 <script type="module">
-
-
 import { auth, db } from "./firebase.js";
 
 import {
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
+  onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 import {
   doc,
-  getDoc
+  getDoc,
+  setDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-import { loginUser } from "./auth.js";
 
 const ADMIN_EMAIL = "admin.svtbest@gmail.com";
 
 const $ = id => document.getElementById(id);
 
-function showMessage(text) {
-  const el = $("message");
-  el.textContent = text;
-  el.className = "message show error";
+const loginPanel = $("loginPanel");
+const profilePanel = $("profilePanel");
+const statusPanel = $("statusPanel");
+
+let currentUser = null;
+let processing = false;
+let profileNeedsCompletion = false;
+
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
+  prompt: "select_account"
+});
+
+function showMessage(id, message, type = "info-message") {
+  const el = $(id);
+  el.textContent = message;
+  el.className = "message " + type;
 }
 
-function clearMessage() {
-  $("message").textContent = "";
-  $("message").className = "message";
+function clearMessage(id) {
+  $(id).textContent = "";
+  $(id).className = "message";
 }
 
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({ prompt: "select_account" });
+function showPanel(panel) {
+  loginPanel.hidden = panel !== loginPanel;
+  profilePanel.hidden = panel !== profilePanel;
+  statusPanel.hidden = panel !== statusPanel;
+}
 
-let googleBusy = false;
+function localDateString() {
+  const d = new Date();
+  const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+  return local.toISOString().slice(0, 10);
+}
 
-// Verify that the Google account is the authorized admin.
-async function verifyAdmin(user) {
-  if ((user.email || "").toLowerCase() !== ADMIN_EMAIL) {
-    await signOut(auth);
-    showMessage(
-      "This email is not registered with the admin portal."
+function setBusy(busy) {
+  processing = busy;
+  $("googleLogin").disabled = busy;
+  $("saveProfile").disabled = busy;
+  $("loginButtonText").textContent = busy
+    ? "Please wait..."
+    : "Continue with Google";
+}
+
+function showStatus(title, description, icon = "◷") {
+  showPanel(statusPanel);
+  $("statusTitle").textContent = title;
+  $("statusDescription").textContent = description;
+  $("statusIcon").textContent = icon;
+  $("statusEmail").textContent = currentUser?.email || "";
+  clearMessage("statusMessage");
+}
+
+async function checkAccount(user) {
+  if (!user) {
+    currentUser = null;
+    profileNeedsCompletion = false;
+    showPanel(loginPanel);
+    return;
+  }
+
+  currentUser = user;
+  const email = (user.email || "").toLowerCase();
+
+  // Admin must have a matching Firestore admin profile.
+  if (email === ADMIN_EMAIL) {
+    const adminSnap = await getDoc(doc(db, "users", user.uid));
+
+    if (adminSnap.exists() && adminSnap.data().role === "admin") {
+      location.replace("./admin/");
+      return;
+    }
+
+    showStatus(
+      "Admin access not configured",
+      "Your Google account is recognized as the admin email, but its Firestore users profile is missing or does not have role = admin. Ask the project administrator to verify users/" + user.uid + ".",
+      "!"
     );
+    $("checkStatus").hidden = true;
     return;
   }
 
-  try {
-    const snap = await getDoc(doc(db, "users", user.uid));
+  const userRef = doc(db, "users", user.uid);
+  const profileSnap = await getDoc(userRef);
 
-    if (!snap.exists() ||
-        String(snap.data().role || "").toLowerCase() !== "admin") {
-      await signOut(auth);
-      showMessage("Admin profile not found. Contact the administrator.");
-      return;
-    }
+  if (!profileSnap.exists()) {
+    profileNeedsCompletion = true;
+    $("driverName").value = user.displayName || "";
+    $("driverDob").value = "";
+    $("driverPhone").value = "";
+    $("driverEmail").value = user.email || "";
+    $("driverDob").max = localDateString();
 
-    location.href = "admin/";
-  } catch (error) {
-    console.error("Admin verification:", error);
-    await signOut(auth);
-    showMessage("Could not verify admin access. Check Firestore permissions.");
+    showPanel(profilePanel);
+    clearMessage("profileMessage");
+    return;
   }
+
+  const profile = profileSnap.data();
+
+  // Never treat an admin or another role as a driver.
+  if (profile.role !== "driver") {
+    showStatus(
+      "Account not configured for drivers",
+      "This Google account already has a different role. Contact your administrator.",
+      "!"
+    );
+    $("checkStatus").hidden = true;
+    return;
+  }
+
+  profileNeedsCompletion = false;
+
+  if (profile.approvalStatus === "rejected") {
+    showStatus(
+      "Application not approved",
+      "Your driver registration was not approved. Please contact the administrator.",
+      "!"
+    );
+    $("checkStatus").hidden = true;
+    return;
+  }
+
+  if (profile.approvalStatus !== "approved") {
+    showStatus(
+      "Waiting for admin approval",
+      "Your driver profile has been submitted. You can access the driver portal after the admin approves your application and assigns a bus.",
+      "◷"
+    );
+    $("checkStatus").hidden = false;
+    return;
+  }
+
+  if (!profile.assignedBusId) {
+    showStatus(
+      "Waiting for bus assignment",
+      "Your driver account has been approved. Please wait for the admin to assign a bus.",
+      "🚌"
+    );
+    $("checkStatus").hidden = false;
+    return;
+  }
+
+  // Approved drivers with an assigned bus can enter the portal.
+  location.replace("./driver/");
 }
 
-// Complete Google redirect sign-in if the browser returns from Google.
-try {
-  const result = await getRedirectResult(auth);
-  if (result?.user) await verifyAdmin(result.user);
-} catch (error) {
-  console.error("Google redirect:", error);
-  showMessage("Google sign-in failed. Please try again.");
-}
+$("googleLogin").addEventListener("click", async () => {
+  if (processing) return;
 
-// Google button
-$("googleBtn").addEventListener("click", async () => {
-  if (googleBusy) return;
-
-  googleBusy = true;
-  clearMessage();
-
-  const btn = $("googleBtn");
-  btn.disabled = true;
-  btn.textContent = "Connecting to Google...";
+  setBusy(true);
+  clearMessage("loginMessage");
 
   try {
-    const result = await signInWithPopup(auth, provider);
-    await verifyAdmin(result.user);
+    await signInWithPopup(auth, googleProvider);
+    // onAuthStateChanged continues the account checks.
   } catch (error) {
-    console.error("Google login error:", error);
+    console.error("Google sign-in error:", error);
 
-    if (error.code === "auth/popup-blocked") {
-      await signInWithRedirect(auth, provider);
-      return;
-    }
+    let message = "Could not sign in. Please try again.";
 
-    if (error.code === "auth/unauthorized-domain") {
-      showMessage("Add this website domain in Firebase Authentication settings.");
+    if (error.code === "auth/popup-closed-by-user") {
+      message = "The Google sign-in window was closed. Please try again.";
+    } else if (error.code === "auth/unauthorized-domain") {
+      message = "This website domain is not authorized in Firebase Authentication.";
+    } else if (error.code === "auth/popup-blocked") {
+      message = "Your browser blocked the Google sign-in popup. Allow popups and try again.";
     } else if (error.code === "auth/operation-not-allowed") {
-      showMessage("Enable Google sign-in in Firebase Console.");
-    } else if (error.code === "auth/popup-closed-by-user") {
-      showMessage("Google sign-in cancelled. Please try again.");
-    } else {
-      showMessage("Google login failed: " + (error.code || error.message));
+      message = "Google sign-in is not enabled in Firebase Authentication.";
+    } else if (error.code === "auth/network-request-failed") {
+      message = "Network error. Check your internet connection.";
     }
+
+    showMessage("loginMessage", message, "error");
   } finally {
-    googleBusy = false;
-    btn.disabled = false;
-    btn.textContent = "Continue with Google";
+    setBusy(false);
   }
 });
 
-// Driver login
-$("driverForm").addEventListener("submit", async event => {
+$("profileForm").addEventListener("submit", async event => {
   event.preventDefault();
-  clearMessage();
 
-  const username = $("username").value.trim();
-  const password = $("password").value;
-  const btn = $("driverBtn");
+  if (processing || !currentUser || !profileNeedsCompletion) return;
 
-  if (!username || !password) {
-    showMessage("Enter username and password.");
+  const name = $("driverName").value.trim();
+  const dob = $("driverDob").value;
+  const phone = $("driverPhone").value.trim();
+
+  if (!name || !dob || !phone) {
+    showMessage("profileMessage", "Please complete all fields.", "error");
     return;
   }
 
-  btn.disabled = true;
-  btn.textContent = "Signing in...";
+  if (dob > localDateString()) {
+    showMessage("profileMessage", "Date of birth cannot be in the future.", "error");
+    return;
+  }
+
+  if (!/^[6-9][0-9]{9}$/.test(phone)) {
+    showMessage("profileMessage", "Enter a valid 10-digit Indian mobile number.", "error");
+    return;
+  }
+
+  setBusy(true);
+  clearMessage("profileMessage");
 
   try {
-    // auth.js must export loginUser(username, password).
-    const result = await loginUser(username, password);
+    const userRef = doc(db, "users", currentUser.uid);
 
-    // Support either a Firebase User or { user: FirebaseUser }.
-    const user = result?.user || result;
+    // Recheck the document before creating the profile.
+    // Never overwrite an existing role or approval status here.
+    const existing = await getDoc(userRef);
 
-    if (!user?.uid) {
-      showMessage("User not found. Contact admin.");
+    if (existing.exists()) {
+      profileNeedsCompletion = false;
+      await checkAccount(currentUser);
       return;
     }
 
-    const snap = await getDoc(doc(db, "users", user.uid));
-    const profile = snap.exists() ? snap.data() : {};
+    await setDoc(userRef, {
+      uid: currentUser.uid,
+      name,
+      dob,
+      phone,
+      email: currentUser.email || "",
+      role: "driver",
+      approvalStatus: "pending",
+      assignedBusId: null,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
 
-    if (String(profile.role || "").toLowerCase() !== "driver" ||
-        profile.disabled === true ||
-        String(profile.status || "").toLowerCase() === "disabled") {
-      await signOut(auth);
-      showMessage("User not found. Contact admin.");
-      return;
-    }
+    profileNeedsCompletion = false;
 
-    location.href = profile.portalPath || "driver/";
+    showStatus(
+      "Registration submitted",
+      "Your driver profile has been saved. The admin must approve your application and assign a bus before you can use the driver portal.",
+      "✓"
+    );
+    $("checkStatus").hidden = false;
 
   } catch (error) {
-    console.error("Driver login error:", error);
-    showMessage("User not found. Contact admin.");
+    console.error("Profile save error:", error);
+
+    let message = "Could not save your profile.";
+
+    if (error.code === "permission-denied") {
+      message = "Firestore denied this profile write. Your Firestore security rules must allow a signed-in user to create their own pending driver profile.";
+    } else if (error.code === "unavailable") {
+      message = "Firebase is temporarily unavailable. Please try again.";
+    }
+
+    showMessage("profileMessage", message, "error");
   } finally {
-    btn.disabled = false;
-    btn.textContent = "Login";
+    setBusy(false);
   }
 });
 
+$("checkStatus").addEventListener("click", async () => {
+  if (!currentUser || processing) return;
 
+  setBusy(true);
+  try {
+    await checkAccount(currentUser);
+  } catch (error) {
+    console.error("Status check error:", error);
+    showMessage(
+      "statusMessage",
+      error.code === "permission-denied"
+        ? "Permission denied when reading your profile. Check Firestore security rules."
+        : "Could not check your status. Please try again.",
+      "error"
+    );
+  } finally {
+    setBusy(false);
+  }
+});
+
+async function doSignOut() {
+  try {
+    await signOut(auth);
+    showPanel(loginPanel);
+  } catch (error) {
+    console.error("Sign-out error:", error);
+  }
+}
+
+$("profileSignOut").addEventListener("click", doSignOut);
+$("statusSignOut").addEventListener("click", doSignOut);
+
+onAuthStateChanged(auth, async user => {
+  if (processing && !user) return;
+
+  setBusy(true);
+
+  try {
+    await checkAccount(user);
+  } catch (error) {
+    console.error("Account verification error:", error);
+
+    showPanel(user ? statusPanel : loginPanel);
+
+    if (user) {
+      showStatus(
+        "Could not verify your account",
+        "Your sign-in succeeded, but the application could not check your Firestore profile. Check the browser console and Firestore security rules.",
+        "!"
+      );
+      showMessage(
+        "statusMessage",
+        error.code === "permission-denied"
+          ? "Firestore permission denied."
+          : (error.message || "An unexpected error occurred."),
+        "error"
+      );
+    } else {
+      showMessage("loginMessage", error.message || "Could not initialize login.", "error");
+    }
+  } finally {
+    setBusy(false);
+  }
+});
 </script>
 </body>
 </html>
