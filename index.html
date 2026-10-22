@@ -79,7 +79,8 @@ button:disabled{opacity:.6;cursor:wait}
 
 <script type="module">
 
-import { auth, db } from "./core/firebase.js";
+
+import { auth, db } from "./firebase.js";
 
 import {
   GoogleAuthProvider,
@@ -94,15 +95,19 @@ import {
   getDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
+import { loginUser } from "./auth.js";
+
 const ADMIN_EMAIL = "admin.svtbest@gmail.com";
+
 const $ = id => document.getElementById(id);
 
-function showError(text) {
-  $("message").textContent = text;
-  $("message").className = "message error show";
+function showMessage(text) {
+  const el = $("message");
+  el.textContent = text;
+  el.className = "message show error";
 }
 
-function clearError() {
+function clearMessage() {
   $("message").textContent = "";
   $("message").className = "message";
 }
@@ -112,87 +117,132 @@ provider.setCustomParameters({ prompt: "select_account" });
 
 let googleBusy = false;
 
-async function checkAdmin(user) {
-  const email = (user.email || "").trim().toLowerCase();
-
-  if (email !== ADMIN_EMAIL) {
+// Verify that the Google account is the authorized admin.
+async function verifyAdmin(user) {
+  if ((user.email || "").toLowerCase() !== ADMIN_EMAIL) {
     await signOut(auth);
-    showError("This email is not registered with the admin portal.");
+    showMessage(
+      "This email is not registered with the admin portal."
+    );
     return;
   }
 
   try {
-    const profile = await getDoc(doc(db, "users", user.uid));
+    const snap = await getDoc(doc(db, "users", user.uid));
 
-    if (!profile.exists() ||
-        String(profile.data().role || "").toLowerCase() !== "admin") {
+    if (!snap.exists() ||
+        String(snap.data().role || "").toLowerCase() !== "admin") {
       await signOut(auth);
-      showError("Admin profile not configured. Contact the administrator.");
+      showMessage("Admin profile not found. Contact the administrator.");
       return;
     }
 
-    location.assign("admin/");
+    location.href = "admin/";
   } catch (error) {
-    console.error("Admin profile check failed:", error);
+    console.error("Admin verification:", error);
     await signOut(auth);
-    showError("Could not verify admin access. Check Firestore permissions.");
+    showMessage("Could not verify admin access. Check Firestore permissions.");
   }
 }
 
-// Handles Google sign-in when the browser returns from redirect.
+// Complete Google redirect sign-in if the browser returns from Google.
 try {
   const result = await getRedirectResult(auth);
-  if (result?.user) {
-    await checkAdmin(result.user);
-  }
+  if (result?.user) await verifyAdmin(result.user);
 } catch (error) {
-  console.error("Google redirect error:", error);
-  showError("Google sign-in failed. Check Firebase settings and try again.");
+  console.error("Google redirect:", error);
+  showMessage("Google sign-in failed. Please try again.");
 }
 
-// Google login button
+// Google button
 $("googleBtn").addEventListener("click", async () => {
   if (googleBusy) return;
 
   googleBusy = true;
-  clearError();
+  clearMessage();
 
-  const button = $("googleBtn");
-  button.disabled = true;
-  button.textContent = "Connecting to Google...";
+  const btn = $("googleBtn");
+  btn.disabled = true;
+  btn.textContent = "Connecting to Google...";
 
   try {
     const result = await signInWithPopup(auth, provider);
-    await checkAdmin(result.user);
+    await verifyAdmin(result.user);
   } catch (error) {
-    console.error("Google sign-in error:", error);
+    console.error("Google login error:", error);
 
     if (error.code === "auth/popup-blocked") {
-      try {
-        await signInWithRedirect(auth, provider);
-        return;
-      } catch (redirectError) {
-        console.error("Redirect sign-in error:", redirectError);
-      }
+      await signInWithRedirect(auth, provider);
+      return;
     }
 
     if (error.code === "auth/unauthorized-domain") {
-      showError("Authorize this website in Firebase Authentication settings.");
+      showMessage("Add this website domain in Firebase Authentication settings.");
     } else if (error.code === "auth/operation-not-allowed") {
-      showError("Enable Google in Firebase Authentication → Sign-in method.");
+      showMessage("Enable Google sign-in in Firebase Console.");
     } else if (error.code === "auth/popup-closed-by-user") {
-      showError("Sign-in cancelled. Please try again.");
+      showMessage("Google sign-in cancelled. Please try again.");
     } else {
-      showError("Google sign-in failed (" +
-        (error.code || "unknown error") +
-        "). Check the browser console.");
+      showMessage("Google login failed: " + (error.code || error.message));
     }
   } finally {
     googleBusy = false;
-    button.disabled = false;
-    button.textContent = "Continue with Google";
+    btn.disabled = false;
+    btn.textContent = "Continue with Google";
   }
 });
+
+// Driver login
+$("driverForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  clearMessage();
+
+  const username = $("username").value.trim();
+  const password = $("password").value;
+  const btn = $("driverBtn");
+
+  if (!username || !password) {
+    showMessage("Enter username and password.");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Signing in...";
+
+  try {
+    // auth.js must export loginUser(username, password).
+    const result = await loginUser(username, password);
+
+    // Support either a Firebase User or { user: FirebaseUser }.
+    const user = result?.user || result;
+
+    if (!user?.uid) {
+      showMessage("User not found. Contact admin.");
+      return;
+    }
+
+    const snap = await getDoc(doc(db, "users", user.uid));
+    const profile = snap.exists() ? snap.data() : {};
+
+    if (String(profile.role || "").toLowerCase() !== "driver" ||
+        profile.disabled === true ||
+        String(profile.status || "").toLowerCase() === "disabled") {
+      await signOut(auth);
+      showMessage("User not found. Contact admin.");
+      return;
+    }
+
+    location.href = profile.portalPath || "driver/";
+
+  } catch (error) {
+    console.error("Driver login error:", error);
+    showMessage("User not found. Contact admin.");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Login";
+  }
+});
+
 
 </script>
 </body>
