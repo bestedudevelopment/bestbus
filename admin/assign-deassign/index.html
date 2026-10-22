@@ -4,770 +4,609 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Assign / Deassign | BEST Bus Management</title>
-
+<title>BEST | Assign & Deassign</title>
 <style>
-:root {
-  --primary:#1769e0;
-  --primary-light:#edf4ff;
-  --bg:#f5f7fb;
-  --card:#ffffff;
-  --text:#17243b;
-  --muted:#718096;
-  --border:#e5eaf2;
-  --green:#13875a;
-  --red:#d94848;
-  --orange:#b96b08;
-}
+:root{--blue:#1769e0;--navy:#12233f;--bg:#f4f7fc;--line:#e5eaf2;--muted:#68758b;--green:#13834b;--red:#c92e3b;--orange:#a86100}
 *{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:Inter,Arial,sans-serif;
-}
-button,select{font:inherit}
-button{cursor:pointer}
-.layout{max-width:1450px;margin:auto;padding:24px}
-.topbar{
-  display:flex;justify-content:space-between;align-items:center;
-  gap:16px;margin-bottom:24px;flex-wrap:wrap;
-}
-.brand{display:flex;align-items:center;gap:12px}
-.logo{
-  width:46px;height:46px;border-radius:14px;background:var(--primary);
-  color:white;display:grid;place-items:center;font-weight:800;font-size:19px;
-}
-h1{font-size:25px;margin:0 0 5px}
-.subtitle{font-size:13px;color:var(--muted)}
-.btn{
-  border:0;border-radius:10px;padding:11px 15px;
-  font-weight:700;font-size:13px;
-}
-.btn-primary{background:var(--primary);color:white}
-.btn-light{background:white;border:1px solid var(--border);color:var(--text)}
-.btn-danger{background:#fff0f0;color:var(--red);border:1px solid #ffdada}
-.btn:disabled{opacity:.55;cursor:not-allowed}
-.stats{
-  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:15px;margin-bottom:24px;
-}
-.stat,.panel{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:17px;
-}
-.stat{padding:20px}
-.stat-label{font-size:13px;color:var(--muted)}
-.stat-number{font-size:29px;font-weight:800;margin-top:9px}
-.stat-note{font-size:12px;color:var(--muted);margin-top:5px}
-.panel{padding:22px;margin-bottom:22px;min-width:0}
-.panel-head{
-  display:flex;justify-content:space-between;align-items:center;
-  gap:12px;flex-wrap:wrap;margin-bottom:18px;
-}
-.panel h2{font-size:18px;margin:0 0 5px}
-.panel-desc{font-size:12px;color:var(--muted)}
-.count{
-  display:inline-flex;background:var(--primary-light);color:var(--primary);
-  border-radius:20px;padding:6px 10px;font-size:12px;font-weight:800;
-}
-.table-wrap{width:100%;overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:760px}
-th{
-  text-align:left;background:#f8faff;color:var(--muted);
-  font-size:11px;text-transform:uppercase;letter-spacing:.5px;
-  padding:13px 12px;white-space:nowrap;
-}
-td{
-  padding:14px 12px;border-bottom:1px solid var(--border);
-  font-size:13px;vertical-align:middle;
-}
-tbody tr:last-child td{border-bottom:0}
-.primary-text{font-weight:750}
-.secondary-text{font-size:12px;color:var(--muted);margin-top:4px}
-.pill{
-  display:inline-block;padding:5px 9px;border-radius:20px;
-  font-size:11px;font-weight:800;white-space:nowrap;
-}
-.pill-green{background:#e8f8f0;color:var(--green)}
-.pill-blue{background:#edf4ff;color:var(--primary)}
-.pill-orange{background:#fff4e3;color:var(--orange)}
-.pill-red{background:#fff0f0;color:var(--red)}
-.assign-controls{display:flex;gap:8px;min-width:270px}
-.assign-controls select{
-  flex:1;min-width:145px;max-width:240px;
-  padding:10px;border:1px solid var(--border);
-  border-radius:9px;background:white;color:var(--text);
-}
-.empty{
-  padding:32px 15px;text-align:center;color:var(--muted);
-  font-size:13px;
-}
-.notice{
-  padding:13px 15px;border-radius:11px;margin-bottom:20px;
-  font-size:13px;display:none;line-height:1.5;
-}
-.notice.success{display:block;background:#e8f8f0;color:#116b49}
-.notice.error{display:block;background:#fff0f0;color:#a72e2e}
-.notice.info{display:block;background:#edf4ff;color:#174e9d}
-.loading{padding:25px;text-align:center;color:var(--muted);font-size:13px}
-.footer{font-size:12px;color:var(--muted);text-align:center;padding:10px}
-@media(max-width:850px){
-  .layout{padding:16px}
-  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .panel{padding:16px}
-}
-@media(max-width:480px){
-  .layout{padding:12px}
-  h1{font-size:21px}
-  .stats{gap:9px}
-  .stat{padding:14px}
-  .stat-number{font-size:25px}
-  .topbar .btn{width:100%}
-}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--navy)}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0;border-radius:9px;padding:10px 13px;font-weight:700}
+button:disabled{opacity:.5;cursor:not-allowed}
+.layout{min-height:100vh;display:flex}
+.sidebar{width:230px;background:#fff;border-right:1px solid var(--line);padding:24px 16px;flex-shrink:0}
+.logo{font-size:23px;font-weight:900;color:var(--blue);margin:0 0 5px}
+.sublogo{font-size:12px;color:var(--muted);margin-bottom:28px}
+.nav a{display:block;text-decoration:none;color:#52617a;padding:13px 12px;border-radius:10px;margin:5px 0;font-weight:700;font-size:14px}
+.nav a.active,.nav a:hover{background:#eaf2ff;color:var(--blue)}
+.main{flex:1;min-width:0;padding:27px;max-width:1600px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:23px}
+h1{font-size:27px;margin:0 0 7px}
+.subtitle{font-size:14px;color:var(--muted)}
+.primary{background:var(--blue);color:white}
+.secondary{background:#edf2f8;color:#33445e}
+.danger{background:#fff0f0;color:var(--red)}
+.success{background:#e5f7ed;color:var(--green)}
+.warning{background:#fff4df;color:var(--orange)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:22px}
+.stat,.panel{background:white;border:1px solid var(--line);border-radius:15px;padding:18px}
+.stat span{display:block;color:var(--muted);font-size:13px;margin-bottom:9px}
+.stat strong{font-size:27px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+.tab{background:white;color:#52617a;border:1px solid var(--line)}
+.tab.active{background:var(--blue);color:white;border-color:var(--blue)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}
+.toolbar input,.toolbar select,.field input,.field select{width:100%;border:1px solid #dbe2ec;border-radius:9px;padding:11px;background:white;color:var(--navy);min-width:0}
+.search{flex:1;min-width:190px}
+.list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:17px;min-width:0}
+.cardhead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}
+.card h3{font-size:16px;margin:0 0 5px;overflow-wrap:anywhere}
+.small{font-size:12px;color:var(--muted)}
+.badge{display:inline-block;padding:5px 8px;border-radius:20px;background:#edf2f8;color:#53627a;font-size:11px;font-weight:800;white-space:nowrap}
+.badge.green{background:#e5f7ed;color:var(--green)}
+.badge.red{background:#fff0f0;color:var(--red)}
+.badge.orange{background:#fff4df;color:var(--orange)}
+.details{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:13px 0}
+.detail{padding:10px;border-radius:9px;background:#f7f9fc;min-width:0}
+.detail span{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
+.detail strong{font-size:13px;overflow-wrap:anywhere}
+.assignrow{display:flex;gap:8px;margin:12px 0}
+.assignrow select{flex:1;min-width:0;border:1px solid #dbe2ec;border-radius:9px;padding:10px;background:white}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.actions button{font-size:12px;padding:9px 11px}
+.empty,.loading{padding:35px 15px;text-align:center;color:var(--muted);background:white;border:1px dashed #d5deeb;border-radius:12px;grid-column:1/-1}
+.notice{padding:12px 14px;border-radius:10px;margin-bottom:15px;font-size:13px;background:#eaf2ff;color:#194d99}
+#message{position:fixed;right:18px;bottom:18px;max-width:calc(100% - 36px);padding:13px 17px;border-radius:10px;background:#15243b;color:#fff;display:none;z-index:20;box-shadow:0 5px 25px #0002}
+#message.error{background:#a82431}
+.modalback{position:fixed;inset:0;background:#0e1c3290;display:none;align-items:center;justify-content:center;padding:16px;z-index:10}
+.modal{width:100%;max-width:520px;background:white;border-radius:16px;padding:22px;max-height:90vh;overflow:auto}
+.modal h2{margin:0 0 18px;font-size:21px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.field label{display:block;font-size:12px;font-weight:700;color:#53627a;margin-bottom:6px}
+.field.full{grid-column:1/-1}
+.modalfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+@media(max-width:900px){.sidebar{width:190px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.list{grid-template-columns:1fr}}
+@media(max-width:600px){.layout{display:block}.sidebar{width:auto;padding:13px 14px;border-right:0;border-bottom:1px solid var(--line)}.logo{font-size:20px}.sublogo{margin-bottom:8px}.nav{display:flex;gap:5px;overflow-x:auto}.nav a{white-space:nowrap;margin:0;padding:10px;font-size:12px}.main{padding:17px 13px 30px}h1{font-size:23px}.stat{padding:14px}.stat strong{font-size:23px}.fields{grid-template-columns:1fr}.field.full{grid-column:auto}.details{gap:7px}.assignrow{flex-direction:column}.assignrow button{width:100%}}
 </style>
 </head>
-
 <body>
 <div class="layout">
+  <aside class="sidebar">
+    <div class="logo">BEST BUS</div>
+    <div class="sublogo">Bus Management System</div>
+    <nav class="nav">
+      <a href="../">Dashboard</a>
+      <a href="../addbus/">Add Bus</a>
+      <a href="./" class="active">Assign / Deassign</a>
+      <a href="../diesel/">Diesel</a>
+      <a href="../reports/">Reports</a>
+    </nav>
+  </aside>
 
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo">B</div>
+  <main class="main">
+    <div class="top">
       <div>
-        <h1>Assign / Deassign</h1>
-        <div class="subtitle">BEST Bus Management · Fleet and driver allocation</div>
+        <h1>Assign & Deassign</h1>
+        <div class="subtitle">Manage buses, drivers, approvals and assignments in one place.</div>
       </div>
+      <button class="primary" id="refreshBtn">↻ Refresh data</button>
     </div>
-    <button class="btn btn-light" onclick="location.href='../'">
-      ← Back to Dashboard
-    </button>
-  </header>
 
-  <div id="notice" class="notice"></div>
+    <div class="notice">Assignment changes update both the bus and driver profiles. Drivers must be approved and assigned a bus to access the driver portal.</div>
 
-  <section class="stats">
-    <div class="stat">
-      <div class="stat-label">Total Buses</div>
-      <div class="stat-number" id="totalBuses">—</div>
-      <div class="stat-note">Registered fleet</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Assigned Buses</div>
-      <div class="stat-number" id="assignedBuses">—</div>
-      <div class="stat-note">With a driver</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Available Buses</div>
-      <div class="stat-number" id="availableBuses">—</div>
-      <div class="stat-note">Ready for allocation</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Unassigned Drivers</div>
-      <div class="stat-number" id="unassignedDrivers">—</div>
-      <div class="stat-note">Approved and available</div>
-    </div>
-  </section>
+    <section class="stats">
+      <div class="stat"><span>Total buses</span><strong id="totalBuses">—</strong></div>
+      <div class="stat"><span>Assigned buses</span><strong id="assignedBuses">—</strong></div>
+      <div class="stat"><span>Available buses</span><strong id="availableBuses">—</strong></div>
+      <div class="stat"><span>Pending drivers</span><strong id="pendingDrivers">—</strong></div>
+    </section>
 
-  <!-- 1. Assigned buses and their drivers -->
-  <section class="panel">
-    <div class="panel-head">
-      <div>
-        <h2>01 · Assigned Buses</h2>
-        <div class="panel-desc">View the driver linked to each bus and deassign when needed.</div>
+    <div class="tabs">
+      <button class="tab active" data-tab="buses">All buses</button>
+      <button class="tab" data-tab="assigned">Assigned buses</button>
+      <button class="tab" data-tab="available">Unassigned buses</button>
+      <button class="tab" data-tab="drivers">All drivers</button>
+      <button class="tab" data-tab="pending">Pending approval</button>
+      <button class="tab" data-tab="unassignedDrivers">Unassigned drivers</button>
+    </div>
+
+    <div class="toolbar">
+      <input class="search" id="search" placeholder="Search bus, driver, registration, route...">
+      <select id="statusFilter" style="max-width:190px">
+        <option value="all">All statuses</option>
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </div>
+
+    <div id="content" class="list"><div class="loading">Loading buses and drivers…</div></div>
+  </main>
+</div>
+
+<div id="message"></div>
+
+<div class="modalback" id="editModal">
+  <div class="modal">
+    <h2>Edit bus information</h2>
+    <form id="editForm">
+      <div class="fields">
+        <div class="field"><label>Registration number *</label><input id="editReg" required></div>
+        <div class="field"><label>Bus code *</label><input id="editCode" required></div>
+        <div class="field"><label>Route from</label><input id="editFrom"></div>
+        <div class="field"><label>Route to</label><input id="editTo"></div>
+        <div class="field"><label>Expected mileage (km/l)</label><input id="editMileage" type="number" min="0" step="any"></div>
+        <div class="field"><label>Current odometer (km)</label><input id="editOdometer" type="number" min="0" step="any"></div>
       </div>
-      <span class="count" id="assignedCount">0 buses</span>
-    </div>
-    <div id="assignedContent" class="loading">Loading assigned buses...</div>
-  </section>
-
-  <!-- 2. Drivers with no bus -->
-  <section class="panel">
-    <div class="panel-head">
-      <div>
-        <h2>02 · Unassigned Drivers</h2>
-        <div class="panel-desc">Approved drivers who do not currently have a bus.</div>
+      <div class="modalfoot">
+        <button type="button" class="secondary" id="cancelEdit">Cancel</button>
+        <button type="submit" class="primary">Save changes</button>
       </div>
-      <span class="count" id="driversCount">0 drivers</span>
-    </div>
-    <div id="driversContent" class="loading">Loading drivers...</div>
-  </section>
-
-  <!-- 3. Available buses with assign controls -->
-  <section class="panel">
-    <div class="panel-head">
-      <div>
-        <h2>03 · Unassigned Buses</h2>
-        <div class="panel-desc">Choose an available driver and assign them to a bus.</div>
-      </div>
-      <span class="count" id="availableCount">0 buses</span>
-    </div>
-    <div id="availableContent" class="loading">Loading available buses...</div>
-  </section>
-
-  <div class="footer">BEST Bus Management System · Admin allocation panel</div>
+    </form>
+  </div>
 </div>
 
 <script type="module">
 import { auth, db } from "../../firebase.js";
-
 import {
-  onAuthStateChanged,
-  signOut
+  onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
 import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  runTransaction,
-  serverTimestamp
+  collection, doc, getDoc, getDocs, writeBatch, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-const ADMIN_EMAIL = "admin.svtbest@gmail.com";
-
-let buses = [];
-let users = [];
-let busy = false;
-let currentAdmin = null;
-
 const $ = id => document.getElementById(id);
+const content = $("content");
+let currentUser = null;
+let buses = [];
+let drivers = [];
+let activeTab = "buses";
+let editingBusId = null;
+let busy = false;
 
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  })[char]);
-}
-
-function showNotice(message, type = "info") {
-  const el = $("notice");
+function toast(message, error=false) {
+  const el = $("message");
   el.textContent = message;
-  el.className = "notice " + type;
-  el.scrollIntoView({ behavior:"smooth", block:"nearest" });
+  el.className = error ? "error" : "";
+  el.style.display = "block";
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => el.style.display = "none", 3800);
 }
-
-function clearNotice() {
-  $("notice").textContent = "";
-  $("notice").className = "notice";
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[ch]));
 }
-
-function driverName(driver) {
-  return driver.name || driver.fullName || driver.displayName || "Unnamed driver";
+function normal(value) { return String(value ?? "").trim().toLowerCase(); }
+function driverName(d) { return d.name || d.fullName || d.displayName || d.email || d.id; }
+function busReg(b) { return b.registrationNo || b.registrationNumber || b.regNo || "No registration"; }
+function busCode(b) { return b.busCode || b.code || "—"; }
+function route(b) {
+  return [b.routeFrom || b.from, b.routeTo || b.to].filter(Boolean).join(" → ") || "Route not set";
 }
-
-function driverPhone(driver) {
-  return driver.phone || driver.phoneNumber || driver.mobile || "Not provided";
+function approval(d) {
+  const value = normal(d.approvalStatus || d.status);
+  if (["approved","active","accepted"].includes(value)) return "approved";
+  if (["rejected","declined","denied"].includes(value)) return "rejected";
+  return "pending";
 }
-
-function busName(bus) {
-  return bus.registrationNo || bus.busCode || bus.id;
+function assignedBusId(d) { return d.assignedBusId || ""; }
+function assignedDriverId(b) {
+  return b.assignedDriverId || b.driverUid || b.driverId || "";
 }
-
-function assignedDriverId(bus) {
-  return bus.assignedDriverId || bus.driverUid || bus.driverId || null;
+function busAssigned(b) {
+  return Boolean(assignedDriverId(b)) || normal(b.status) === "assigned";
 }
-
-function isBusAssigned(bus) {
-  // Treat a bus as occupied if any existing assignment field is set.
-  // A status-only legacy assignment is also considered occupied.
-  return Boolean(
-    assignedDriverId(bus) ||
-    bus.assignedDriverName ||
-    String(bus.status || "").toLowerCase() === "assigned"
-  );
+function driverAssigned(d) {
+  return Boolean(assignedBusId(d));
 }
-
-function hasBus(driver) {
-  return Boolean(driver.assignedBusId);
+function driverForBus(b) {
+  const id = assignedDriverId(b);
+  return drivers.find(d => d.id === id || d.uid === id) || null;
 }
-
-function approved(driver) {
-  return String(driver.approvalStatus || "").toLowerCase() === "approved";
-}
-
-function isDriver(driver) {
-  return String(driver.role || "").toLowerCase() === "driver";
-}
-
-function getDriver(uid) {
-  return users.find(user => user.id === uid) || null;
-}
-
-function getBus(id) {
-  return buses.find(bus => bus.id === id) || null;
-}
-
-function statusPill(bus) {
-  return isBusAssigned(bus)
-    ? '<span class="pill pill-green">Assigned</span>'
-    : '<span class="pill pill-blue">Available</span>';
-}
-
-function renderStats() {
-  const assigned = buses.filter(isBusAssigned).length;
-  const available = buses.filter(bus => !isBusAssigned(bus)).length;
-  const freeDrivers = users.filter(
-    driver => isDriver(driver) && approved(driver) && !hasBus(driver)
-  ).length;
-
-  $("totalBuses").textContent = buses.length;
-  $("assignedBuses").textContent = assigned;
-  $("availableBuses").textContent = available;
-  $("unassignedDrivers").textContent = freeDrivers;
-
-  $("assignedCount").textContent = assigned + " buses";
-  $("driversCount").textContent = freeDrivers + " drivers";
-  $("availableCount").textContent = available + " buses";
-}
-
-function renderAssignedBuses() {
-  const assigned = buses.filter(isBusAssigned);
-
-  if (!assigned.length) {
-    $("assignedContent").innerHTML =
-      '<div class="empty">No buses are currently assigned.</div>';
-    return;
-  }
-
-  $("assignedContent").innerHTML = `
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Bus</th>
-            <th>Route</th>
-            <th>Assigned Driver</th>
-            <th>Phone / Email</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${assigned.map(bus => {
-            const uid = assignedDriverId(bus);
-            const driver = uid ? getDriver(uid) : null;
-            const name = driver
-              ? driverName(driver)
-              : (bus.assignedDriverName || "Driver record not found");
-
-            return `
-              <tr>
-                <td>
-                  <div class="primary-text">${escapeHTML(busName(bus))}</div>
-                  <div class="secondary-text">Code: ${escapeHTML(bus.busCode || "—")}</div>
-                </td>
-                <td>
-                  ${escapeHTML(bus.routeFrom || "—")} → ${escapeHTML(bus.routeTo || "—")}
-                </td>
-                <td>
-                  <div class="primary-text">${escapeHTML(name)}</div>
-                  <div class="secondary-text">${escapeHTML(uid || "No driver UID stored")}</div>
-                </td>
-                <td>
-                  <div>${escapeHTML(driver ? driverPhone(driver) : "—")}</div>
-                  <div class="secondary-text">${escapeHTML(driver?.email || "—")}</div>
-                </td>
-                <td>${statusPill(bus)}</td>
-                <td>
-                  <button class="btn btn-danger" data-deassign="${escapeHTML(bus.id)}"
-                    ${busy ? "disabled" : ""}>Deassign</button>
-                </td>
-              </tr>
-            `;
-          }).join("")}
-        </tbody>
-      </table>
-    </div>
-  `;
-
-  $("assignedContent").querySelectorAll("[data-deassign]").forEach(button => {
-    button.addEventListener("click", () => deassignBus(button.dataset.deassign));
-  });
-}
-
-function renderDrivers() {
-  const freeDrivers = users.filter(
-    driver => isDriver(driver) && approved(driver) && !hasBus(driver)
-  );
-
-  if (!freeDrivers.length) {
-    $("driversContent").innerHTML =
-      '<div class="empty">No approved, unassigned drivers available right now.</div>';
-    return;
-  }
-
-  $("driversContent").innerHTML = `
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Driver</th>
-            <th>Phone</th>
-            <th>Email</th>
-            <th>Approval</th>
-            <th>Allocation</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${freeDrivers.map(driver => `
-            <tr>
-              <td>
-                <div class="primary-text">${escapeHTML(driverName(driver))}</div>
-                <div class="secondary-text">UID: ${escapeHTML(driver.id)}</div>
-              </td>
-              <td>${escapeHTML(driverPhone(driver))}</td>
-              <td>${escapeHTML(driver.email || "—")}</td>
-              <td><span class="pill pill-green">Approved</span></td>
-              <td><span class="pill pill-blue">No bus assigned</span></td>
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
-function renderAvailableBuses() {
-  const available = buses.filter(bus => !isBusAssigned(bus));
-  const freeDrivers = users.filter(
-    driver => isDriver(driver) && approved(driver) && !hasBus(driver)
-  );
-
-  if (!available.length) {
-    $("availableContent").innerHTML =
-      '<div class="empty">All buses currently have an assignment.</div>';
-    return;
-  }
-
-  $("availableContent").innerHTML = `
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Bus</th>
-            <th>Route</th>
-            <th>Expected Mileage</th>
-            <th>Select Driver</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${available.map(bus => `
-            <tr>
-              <td>
-                <div class="primary-text">${escapeHTML(busName(bus))}</div>
-                <div class="secondary-text">Code: ${escapeHTML(bus.busCode || "—")}</div>
-              </td>
-              <td>${escapeHTML(bus.routeFrom || "—")} → ${escapeHTML(bus.routeTo || "—")}</td>
-              <td>${escapeHTML(bus.expectedMileage ?? "—")}</td>
-              <td>
-                <div class="assign-controls">
-                  <select data-driver-select="${escapeHTML(bus.id)}"
-                    aria-label="Choose driver for ${escapeHTML(busName(bus))}"
-                    ${freeDrivers.length && !busy ? "" : "disabled"}>
-                    <option value="">Select approved driver</option>
-                    ${freeDrivers.map(driver => `
-                      <option value="${escapeHTML(driver.id)}">
-                        ${escapeHTML(driverName(driver))} · ${escapeHTML(driverPhone(driver))}
-                      </option>
-                    `).join("")}
-                  </select>
-                  <button class="btn btn-primary" data-assign="${escapeHTML(bus.id)}"
-                    ${freeDrivers.length && !busy ? "" : "disabled"}>Assign</button>
-                </div>
-              </td>
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
-    </div>
-    ${freeDrivers.length ? "" : `
-      <div class="empty">
-        No approved, unassigned drivers are available. Approve a driver or deassign one first.
-      </div>
-    `}
-  `;
-
-  $("availableContent").querySelectorAll("[data-assign]").forEach(button => {
-    button.addEventListener("click", () => {
-      const busId = button.dataset.assign;
-      const select = $("availableContent").querySelector(
-        `[data-driver-select="${CSS.escape(busId)}"]`
-      );
-      assignBus(busId, select?.value || "");
-    });
-  });
-}
-
-function renderAll() {
-  renderStats();
-  renderAssignedBuses();
-  renderDrivers();
-  renderAvailableBuses();
-}
-
-async function loadData() {
-  clearNotice();
-  $("assignedContent").innerHTML = '<div class="loading">Loading...</div>';
-  $("driversContent").innerHTML = '<div class="loading">Loading...</div>';
-  $("availableContent").innerHTML = '<div class="loading">Loading...</div>';
-
-  try {
-    const [busSnapshot, userSnapshot] = await Promise.all([
-      getDocs(collection(db, "buses")),
-      getDocs(collection(db, "users"))
-    ]);
-
-    buses = busSnapshot.docs.map(item => ({ id:item.id, ...item.data() }));
-    users = userSnapshot.docs.map(item => ({ id:item.id, ...item.data() }));
-
-    renderAll();
-  } catch (error) {
-    console.error(error);
-    showNotice(
-      "Could not load buses and drivers. Check Firestore permissions and your internet connection. " +
-      (error.code || error.message || ""),
-      "error"
-    );
-    $("assignedContent").innerHTML = '<div class="empty">Unable to load data.</div>';
-    $("driversContent").innerHTML = '<div class="empty">Unable to load data.</div>';
-    $("availableContent").innerHTML = '<div class="empty">Unable to load data.</div>';
-  }
-}
-
-async function assignBus(busId, driverUid) {
-  if (busy) return;
-
-  if (!driverUid) {
-    showNotice("Please select an approved driver before assigning.", "error");
-    return;
-  }
-
-  const bus = getBus(busId);
-  const driver = getDriver(driverUid);
-
-  if (!bus || !driver) {
-    showNotice("The selected bus or driver is no longer available. Refreshing the lists.", "error");
-    await loadData();
-    return;
-  }
-
-  if (isBusAssigned(bus)) {
-    showNotice("This bus already has an assignment. Refreshing the lists.", "error");
-    await loadData();
-    return;
-  }
-
-  if (!isDriver(driver) || !approved(driver)) {
-    showNotice("Only approved drivers can be assigned.", "error");
-    await loadData();
-    return;
-  }
-
-  if (hasBus(driver)) {
-    showNotice("This driver already has a bus assigned.", "error");
-    await loadData();
-    return;
-  }
-
-  busy = true;
-  renderAll();
-  showNotice("Assigning driver to bus...", "info");
-
-  try {
-    const busRef = doc(db, "buses", busId);
-    const driverRef = doc(db, "users", driverUid);
-
-    await runTransaction(db, async transaction => {
-      // Read both records before any writes.
-      const [busSnap, driverSnap] = await Promise.all([
-        transaction.get(busRef),
-        transaction.get(driverRef)
-      ]);
-
-      if (!busSnap.exists()) throw new Error("BUS_NOT_FOUND");
-      if (!driverSnap.exists()) throw new Error("DRIVER_NOT_FOUND");
-
-      const latestBus = busSnap.data();
-      const latestDriver = driverSnap.data();
-
-      const busOccupied = Boolean(
-        latestBus.assignedDriverId ||
-        latestBus.driverUid ||
-        latestBus.driverId ||
-        latestBus.assignedDriverName ||
-        String(latestBus.status || "").toLowerCase() === "assigned"
-      );
-
-      if (busOccupied) throw new Error("BUS_ALREADY_ASSIGNED");
-
-      if (String(latestDriver.role || "").toLowerCase() !== "driver") {
-        throw new Error("NOT_A_DRIVER");
-      }
-
-      if (String(latestDriver.approvalStatus || "").toLowerCase() !== "approved") {
-        throw new Error("DRIVER_NOT_APPROVED");
-      }
-
-      if (latestDriver.assignedBusId) throw new Error("DRIVER_ALREADY_ASSIGNED");
-
-      // Update both documents atomically.
-      transaction.update(busRef, {
-        assignedDriverId: driverUid,
-        assignedDriverName:
-          latestDriver.name || latestDriver.fullName || latestDriver.displayName || "Driver",
-        driverId: driverUid,
-        driverUid: driverUid,
-        status: "assigned",
-        updatedAt: serverTimestamp()
-      });
-
-      transaction.update(driverRef, {
-        assignedBusId: busId,
-        updatedAt: serverTimestamp()
-      });
-    });
-
-    showNotice(
-      `${driverName(driver)} has been assigned to bus ${busName(bus)}.`,
-      "success"
-    );
-  } catch (error) {
-    console.error(error);
-
-    const messages = {
-      BUS_NOT_FOUND:"The bus no longer exists.",
-      DRIVER_NOT_FOUND:"The driver no longer exists.",
-      BUS_ALREADY_ASSIGNED:"This bus has already been assigned to another driver.",
-      DRIVER_ALREADY_ASSIGNED:"This driver has already been assigned to another bus.",
-      DRIVER_NOT_APPROVED:"This driver is not approved for assignment.",
-      NOT_A_DRIVER:"The selected account is not a driver."
-    };
-
-    showNotice(
-      messages[error.message] ||
-      ("Assignment failed. Check Firestore permissions. " + (error.code || error.message || "")),
-      "error"
-    );
-  } finally {
-    busy = false;
-    await loadData();
-  }
-}
-
-async function deassignBus(busId) {
-  if (busy) return;
-
-  const bus = getBus(busId);
-  if (!bus) {
-    showNotice("Bus not found. Refreshing the lists.", "error");
-    await loadData();
-    return;
-  }
-
-  const uid = assignedDriverId(bus);
-
-  if (!confirm(
-    `Deassign the current driver from bus ${busName(bus)}?`
-  )) return;
-
-  busy = true;
-  renderAll();
-  showNotice("Deassigning bus...", "info");
-
-  try {
-    const busRef = doc(db, "buses", busId);
-
-    await runTransaction(db, async transaction => {
-      const busSnap = await transaction.get(busRef);
-
-      if (!busSnap.exists()) throw new Error("BUS_NOT_FOUND");
-
-      const latestBus = busSnap.data();
-      const latestUid = assignedDriverId(latestBus);
-
-      let driverRef = null;
-      let driverSnap = null;
-
-      if (latestUid) {
-        driverRef = doc(db, "users", latestUid);
-        driverSnap = await transaction.get(driverRef);
-      }
-
-      // Clear the bus assignment, including legacy assignment fields.
-      transaction.update(busRef, {
-        assignedDriverId: null,
-        assignedDriverName: null,
-        driverId: null,
-        driverUid: null,
-        status: "available",
-        updatedAt: serverTimestamp()
-      });
-
-      // Clear the driver's bus only if it still points to this bus.
-      if (
-        driverRef &&
-        driverSnap?.exists() &&
-        driverSnap.data().assignedBusId === busId
-      ) {
-        transaction.update(driverRef, {
-          assignedBusId: null,
-          updatedAt: serverTimestamp()
-        });
-      }
-    });
-
-    showNotice(
-      `Bus ${busName(bus)} has been deassigned and is available for allocation.`,
-      "success"
-    );
-  } catch (error) {
-    console.error(error);
-    showNotice(
-      error.message === "BUS_NOT_FOUND"
-        ? "The bus no longer exists."
-        : "Deassignment failed. Check Firestore permissions. " +
-          (error.code || error.message || ""),
-      "error"
-    );
-  } finally {
-    busy = false;
-    await loadData();
-  }
+function statusBadge(status) {
+  const cls = status === "approved" || status === "assigned" ? "green" :
+    status === "rejected" ? "red" : status === "pending" ? "orange" : "";
+  return `<span class="badge ${cls}">${esc(status)}</span>`;
 }
 
 onAuthStateChanged(auth, async user => {
   if (!user) {
-    location.href = "../../";
+    location.replace("../../");
     return;
   }
-
+  currentUser = user;
   try {
-    const profile = await getDoc(doc(db, "users", user.uid));
-
-    if (
-      user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase() ||
-      !profile.exists() ||
-      String(profile.data().role || "").toLowerCase() !== "admin"
-    ) {
-      showNotice("Admin access only. Please sign in with an authorized admin account.", "error");
+    const snap = await getDoc(doc(db, "users", user.uid));
+    if (!snap.exists() || normal(snap.data().role) !== "admin") {
       await signOut(auth);
-      setTimeout(() => location.href = "../../", 1200);
+      location.replace("../../");
       return;
     }
-
-    currentAdmin = user;
     await loadData();
-  } catch (error) {
-    console.error(error);
-    showNotice(
-      "Could not verify admin access. Check your users profile and Firestore rules.",
-      "error"
-    );
+  } catch (err) {
+    console.error(err);
+    content.innerHTML = `<div class="empty">Could not verify administrator access. Check Firestore permissions and users/${esc(user.uid)}.</div>`;
   }
 });
+
+async function loadData() {
+  if (busy) return;
+  $("refreshBtn").disabled = true;
+  content.innerHTML = `<div class="loading">Loading latest data…</div>`;
+  try {
+    const [busSnap, driverSnap] = await Promise.all([
+      getDocs(collection(db, "buses")),
+      getDocs(collection(db, "users"))
+    ]);
+    buses = busSnap.docs.map(s => ({id:s.id, ...s.data()}));
+    // Read all user documents first. Do not query only pending/approved drivers,
+    // because old driver profiles may not contain approvalStatus.
+    drivers = driverSnap.docs
+      .map(s => ({id:s.id, ...s.data()}))
+      .filter(d => normal(d.role) === "driver");
+
+    // Recognize assignments saved from either older or newer page versions.
+    updateStats();
+    render();
+  } catch (err) {
+    console.error(err);
+    content.innerHTML = `<div class="empty">Unable to load data. Check Firestore rules for read access to <b>buses</b> and <b>users</b>.<br><br>${esc(err.message)}</div>`;
+    toast("Could not load buses and drivers.", true);
+  } finally {
+    $("refreshBtn").disabled = false;
+  }
+}
+
+function updateStats() {
+  $("totalBuses").textContent = buses.length;
+  $("assignedBuses").textContent = buses.filter(busAssigned).length;
+  $("availableBuses").textContent = buses.filter(b => !busAssigned(b)).length;
+  $("pendingDrivers").textContent = drivers.filter(d => approval(d) === "pending").length;
+}
+
+function render() {
+  const q = normal($("search").value);
+  const status = $("statusFilter").value;
+  let html = "";
+
+  if (["buses","assigned","available"].includes(activeTab)) {
+    let list = [...buses];
+    if (activeTab === "assigned") list = list.filter(busAssigned);
+    if (activeTab === "available") list = list.filter(b => !busAssigned(b));
+    list = list.filter(b => {
+      const d = driverForBus(b);
+      const haystack = [
+        busReg(b), busCode(b), b.routeFrom, b.routeTo,
+        b.status, d && driverName(d), d && d.phone, d && d.email
+      ].join(" ").toLowerCase();
+      return haystack.includes(q);
+    });
+    html = list.map(busCard).join("");
+  } else {
+    let list = [...drivers];
+    if (activeTab === "pending") list = list.filter(d => approval(d) === "pending");
+    if (activeTab === "unassignedDrivers") list = list.filter(d => !driverAssigned(d));
+    if (status !== "all") list = list.filter(d => approval(d) === status);
+    list = list.filter(d => [
+      driverName(d), d.phone, d.email, d.id, d.approvalStatus, d.assignedBusId
+    ].join(" ").toLowerCase().includes(q));
+    html = list.map(driverCard).join("");
+  }
+
+  content.innerHTML = html || `<div class="empty">No records found in this section.</div>`;
+}
+
+function busCard(b) {
+  const driver = driverForBus(b);
+  const assigned = busAssigned(b);
+  const options = drivers.map(d => {
+    const selected = driver && (d.id === driver.id) ? "selected" : "";
+    const available = !driverAssigned(d) || (driver && d.id === driver.id);
+    const approvalText = approval(d);
+    const disabled = (!available || approvalText !== "approved") ? "disabled" : "";
+    return `<option value="${esc(d.id)}" ${selected} ${disabled}>${esc(driverName(d))} — ${esc(approvalText)}${available ? "" : " (already assigned)"}</option>`;
+  }).join("");
+
+  return `<article class="card">
+    <div class="cardhead">
+      <div><h3>${esc(busReg(b))}</h3><div class="small">Bus code: ${esc(busCode(b))}</div></div>
+      ${statusBadge(assigned ? "assigned" : "available")}
+    </div>
+    <div class="details">
+      <div class="detail"><span>Route</span><strong>${esc(route(b))}</strong></div>
+      <div class="detail"><span>Assigned driver</span><strong>${esc(driver ? driverName(driver) : "Not assigned")}</strong></div>
+      <div class="detail"><span>Expected mileage</span><strong>${esc(b.expectedMileage ?? "—")} km/l</strong></div>
+      <div class="detail"><span>Odometer reading</span><strong>${esc(b.odometerReading ?? "—")} km</strong></div>
+    </div>
+    <div class="assignrow">
+      <select id="select-${esc(b.id)}" aria-label="Choose driver for ${esc(busReg(b))}">
+        <option value="">Choose approved, unassigned driver</option>
+        ${options}
+      </select>
+      <button class="primary" onclick="window.bestAssign('${esc(b.id)}')">Assign / Change</button>
+    </div>
+    <div class="actions">
+      ${assigned ? `<button class="warning" onclick="window.bestDeassign('${esc(b.id)}')">Deassign driver</button>` : ""}
+      <button class="secondary" onclick="window.bestEdit('${esc(b.id)}')">Edit bus</button>
+      <button class="danger" onclick="window.bestDeleteBus('${esc(b.id)}')">Delete bus</button>
+    </div>
+  </article>`;
+}
+
+function driverCard(d) {
+  const status = approval(d);
+  const bus = buses.find(b => b.id === assignedBusId(d) || assignedDriverId(b) === d.id);
+  const assignment = bus ? `${busReg(bus)} (${busCode(bus)})` : "Not assigned";
+  return `<article class="card">
+    <div class="cardhead">
+      <div><h3>${esc(driverName(d))}</h3><div class="small">${esc(d.email || "No email")} · UID: ${esc(d.id)}</div></div>
+      ${statusBadge(status)}
+    </div>
+    <div class="details">
+      <div class="detail"><span>Phone</span><strong>${esc(d.phone || d.mobile || "—")}</strong></div>
+      <div class="detail"><span>Assigned bus</span><strong>${esc(assignment)}</strong></div>
+      <div class="detail"><span>Approval status</span><strong>${esc(status)}</strong></div>
+      <div class="detail"><span>Profile ID</span><strong>${esc(d.id)}</strong></div>
+    </div>
+    <div class="actions">
+      ${status !== "approved" ? `<button class="success" onclick="window.bestApprove('${esc(d.id)}')">Approve</button>` : ""}
+      ${status !== "rejected" ? `<button class="warning" onclick="window.bestReject('${esc(d.id)}')">Reject / Suspend</button>` : ""}
+      ${bus ? `<button class="secondary" onclick="window.bestDeassign('${esc(bus.id)}')">Deassign bus</button>` : ""}
+      <button class="danger" onclick="window.bestDeleteDriver('${esc(d.id)}')">Remove driver access</button>
+    </div>
+  </article>`;
+}
+
+function ensureNotBusy() {
+  if (busy) {
+    toast("Please wait for the current operation to finish.", true);
+    return false;
+  }
+  return true;
+}
+async function runAction(action) {
+  if (!ensureNotBusy()) return;
+  busy = true;
+  content.style.opacity = ".6";
+  try {
+    await action();
+    await loadData();
+  } catch (err) {
+    console.error(err);
+    toast(err.message || "Operation failed. Check Firestore permissions.", true);
+  } finally {
+    busy = false;
+    content.style.opacity = "1";
+  }
+}
+
+// Keep assignment references in both documents consistent.
+window.bestAssign = async busId => runAction(async () => {
+  const select = document.getElementById("select-" + busId);
+  const driverId = select?.value;
+  if (!driverId) throw new Error("Choose an approved driver first.");
+
+  const bus = buses.find(b => b.id === busId);
+  const driver = drivers.find(d => d.id === driverId);
+  if (!bus || !driver) throw new Error("Bus or driver no longer exists.");
+  if (approval(driver) !== "approved") throw new Error("Only approved drivers can be assigned.");
+
+  const previousDriver = driverForBus(bus);
+  const occupiedBy = buses.find(b => b.id !== busId && assignedDriverId(b) === driver.id);
+  if (occupiedBy) throw new Error("This driver is already assigned to another bus. Deassign them first.");
+
+  const batch = writeBatch(db);
+  const busRef = doc(db, "buses", busId);
+  const driverRef = doc(db, "users", driver.id);
+
+  // Clear the old driver's assignment when changing drivers.
+  if (previousDriver && previousDriver.id !== driver.id) {
+    batch.update(doc(db, "users", previousDriver.id), {
+      assignedBusId: null,
+      updatedAt: serverTimestamp()
+    });
+  }
+
+  batch.update(busRef, {
+    assignedDriverId: driver.id,
+    assignedDriverName: driverName(driver),
+    driverId: driver.id,
+    driverUid: driver.id,
+    status: "assigned",
+    updatedAt: serverTimestamp()
+  });
+  batch.update(driverRef, {
+    assignedBusId: busId,
+    updatedAt: serverTimestamp()
+  });
+  await batch.commit();
+  toast("Bus assigned successfully.");
+});
+
+window.bestDeassign = async busId => {
+  const bus = buses.find(b => b.id === busId);
+  if (!bus) return toast("Bus not found.", true);
+  if (!confirm(`Deassign the current driver from ${busReg(bus)}?`)) return;
+
+  await runAction(async () => {
+    const batch = writeBatch(db);
+    const driver = driverForBus(bus);
+    batch.update(doc(db, "buses", busId), {
+      assignedDriverId: null,
+      assignedDriverName: null,
+      driverId: null,
+      driverUid: null,
+      status: "available",
+      updatedAt: serverTimestamp()
+    });
+    if (driver) {
+      batch.update(doc(db, "users", driver.id), {
+        assignedBusId: null,
+        updatedAt: serverTimestamp()
+      });
+    } else {
+      // Legacy data may contain a driver UID without a matching profile.
+      const id = assignedDriverId(bus);
+      if (id) {
+        const ref = doc(db, "users", id);
+        const snap = await getDoc(ref);
+        if (snap.exists()) batch.update(ref, {assignedBusId:null, updatedAt:serverTimestamp()});
+      }
+    }
+    await batch.commit();
+    toast("Driver deassigned. Bus is now available.");
+  });
+};
+
+window.bestApprove = async driverId => {
+  if (!confirm("Approve this driver? They can access the driver portal only when a bus is also assigned.")) return;
+  await runAction(async () => {
+    await importUpdateDriver(driverId, {
+      approvalStatus: "approved",
+      approvedAt: serverTimestamp(),
+      approvedBy: currentUser.uid,
+      updatedAt: serverTimestamp()
+    });
+    toast("Driver approved.");
+  });
+};
+
+window.bestReject = async driverId => {
+  const driver = drivers.find(d => d.id === driverId);
+  if (!driver) return toast("Driver not found.", true);
+  if (!confirm("Reject or suspend this driver and remove their bus assignment?")) return;
+  await runAction(async () => {
+    const batch = writeBatch(db);
+    const bus = buses.find(b => assignedDriverId(b) === driverId || b.id === assignedBusId(driver));
+    if (bus) {
+      batch.update(doc(db, "buses", bus.id), {
+        assignedDriverId:null, assignedDriverName:null,
+        driverId:null, driverUid:null, status:"available",
+        updatedAt:serverTimestamp()
+      });
+    }
+    batch.update(doc(db, "users", driverId), {
+      approvalStatus:"rejected",
+      assignedBusId:null,
+      updatedAt:serverTimestamp()
+    });
+    await batch.commit();
+    toast("Driver rejected/suspended and assignment cleared.");
+  });
+};
+
+async function importUpdateDriver(driverId, data) {
+  const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js");
+  await updateDoc(doc(db, "users", driverId), data);
+}
+
+window.bestDeleteDriver = async driverId => {
+  const driver = drivers.find(d => d.id === driverId);
+  if (!driver) return toast("Driver not found.", true);
+  if (!confirm(`Remove ${driverName(driver)} from BEST driver access? Their profile will be deleted and their bus assignment cleared. This does not delete the Firebase Authentication account.`)) return;
+
+  await runAction(async () => {
+    const batch = writeBatch(db);
+    const bus = buses.find(b => assignedDriverId(b) === driverId || b.id === assignedBusId(driver));
+    if (bus) {
+      batch.update(doc(db, "buses", bus.id), {
+        assignedDriverId:null, assignedDriverName:null,
+        driverId:null, driverUid:null, status:"available",
+        updatedAt:serverTimestamp()
+      });
+    }
+    batch.delete(doc(db, "users", driverId));
+    await batch.commit();
+    toast("Driver profile removed and bus made available.");
+  });
+};
+
+window.bestDeleteBus = async busId => {
+  const bus = buses.find(b => b.id === busId);
+  if (!bus) return toast("Bus not found.", true);
+  if (!confirm(`Permanently delete bus ${busReg(bus)} (${busCode(bus)})? Its driver will become unassigned.`)) return;
+
+  await runAction(async () => {
+    const batch = writeBatch(db);
+    const driver = driverForBus(bus);
+    if (driver) {
+      batch.update(doc(db, "users", driver.id), {
+        assignedBusId:null,
+        updatedAt:serverTimestamp()
+      });
+    } else {
+      const oldId = assignedDriverId(bus);
+      if (oldId) {
+        const ref = doc(db, "users", oldId);
+        const snap = await getDoc(ref);
+        if (snap.exists()) batch.update(ref, {assignedBusId:null, updatedAt:serverTimestamp()});
+      }
+    }
+    batch.delete(doc(db, "buses", busId));
+    await batch.commit();
+    toast("Bus deleted and driver assignment cleared.");
+  });
+};
+
+window.bestEdit = busId => {
+  const b = buses.find(item => item.id === busId);
+  if (!b) return toast("Bus not found.", true);
+  editingBusId = busId;
+  $("editReg").value = b.registrationNo || b.registrationNumber || b.regNo || "";
+  $("editCode").value = b.busCode || b.code || "";
+  $("editFrom").value = b.routeFrom || b.from || "";
+  $("editTo").value = b.routeTo || b.to || "";
+  $("editMileage").value = b.expectedMileage ?? "";
+  $("editOdometer").value = b.odometerReading ?? "";
+  $("editModal").style.display = "flex";
+};
+
+$("cancelEdit").addEventListener("click", () => {
+  $("editModal").style.display = "none";
+  editingBusId = null;
+});
+$("editModal").addEventListener("click", e => {
+  if (e.target === $("editModal")) {
+    $("editModal").style.display = "none";
+    editingBusId = null;
+  }
+});
+$("editForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!editingBusId) return;
+  const busId = editingBusId;
+  const data = {
+    registrationNo:$("editReg").value.trim(),
+    busCode:$("editCode").value.trim(),
+    routeFrom:$("editFrom").value.trim(),
+    routeTo:$("editTo").value.trim(),
+    expectedMileage:$("editMileage").value === "" ? null : Number($("editMileage").value),
+    odometerReading:$("editOdometer").value === "" ? null : Number($("editOdometer").value),
+    updatedAt:serverTimestamp()
+  };
+  if (!data.registrationNo || !data.busCode) return toast("Registration number and bus code are required.", true);
+  await runAction(async () => {
+    const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js");
+    await updateDoc(doc(db, "buses", busId), data);
+    $("editModal").style.display = "none";
+    editingBusId = null;
+    toast("Bus details updated.");
+  });
+});
+
+document.querySelectorAll(".tab").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+    activeTab = button.dataset.tab;
+    $("statusFilter").style.display = ["drivers","pending","unassignedDrivers"].includes(activeTab) ? "" : "none";
+    render();
+  });
+});
+$("search").addEventListener("input", render);
+$("statusFilter").addEventListener("change", render);
+$("refreshBtn").addEventListener("click", loadData);
 </script>
 </body>
 </html>
