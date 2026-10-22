@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>BEST Bus Management</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{min-height:100vh;display:flex;justify-content:center;align-items:center;background:#fff;color:#111827;padding:16px}
+.login-box{width:100%;max-width:360px;padding:28px;border:1px solid #e5e7eb;border-radius:12px}
+.bus-scene{height:62px;display:flex;justify-content:center;align-items:center;margin-bottom:12px;overflow:hidden}
+.bus{position:relative;width:88px;height:35px;background:#2563eb;border-radius:7px 11px 5px 5px;animation:drive 3s ease-in-out infinite}
+.bus:before{content:"";position:absolute;top:6px;left:7px;width:55px;height:13px;background:#fff;border-radius:3px}
+.bus:after{content:"";position:absolute;right:5px;top:8px;width:13px;height:12px;background:#bfdbfe;border-radius:3px}
+.wheel{position:absolute;bottom:-6px;width:13px;height:13px;border:3px solid #374151;background:#fff;border-radius:50%;animation:roll .8s linear infinite}
+.wheel.one{left:13px}.wheel.two{right:13px}
+@keyframes drive{0%,100%{transform:translateX(-7px)}50%{transform:translateX(7px)}}
+@keyframes roll{to{transform:rotate(360deg)}}
+h2{text-align:center;font-size:24px;font-weight:600;margin-bottom:5px}
+.subtitle{text-align:center;color:#6b7280;font-size:14px;margin-bottom:25px}
+input[type=radio]{display:none}
+.tabs{display:flex;background:#f3f4f6;padding:4px;border-radius:8px;margin-bottom:24px}
+.tabs label{width:50%;padding:11px;text-align:center;cursor:pointer;border-radius:6px;font-size:14px;color:#6b7280}
+#admin:checked~.login-box .tabs label[for=admin],#driver:checked~.login-box .tabs label[for=driver]{background:#fff;color:#111827;box-shadow:0 1px 4px #00000012}
+.form{display:none}
+#admin:checked~.login-box .admin-form,#driver:checked~.login-box .driver-form{display:block}
+.google-btn,.login-btn{width:100%;padding:12px;border:none;border-radius:7px;background:#2563eb;color:#fff;font-size:14px;font-weight:600;cursor:pointer}
+.google-btn:hover,.login-btn:hover{background:#1d4ed8}
+button:disabled{opacity:.6;cursor:wait}
+.field{display:block;width:100%;padding:12px;margin-bottom:12px;border:1px solid #d1d5db;border-radius:7px;font-size:14px;outline:none}
+.field:focus{border-color:#2563eb}
+.message{display:none;margin-top:15px;padding:11px;border-radius:7px;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+.message.show{display:block}
+.error{background:#fef2f2;color:#b91c1c}
+@media(max-width:420px){.login-box{padding:24px}}
+@media(prefers-reduced-motion:reduce){.bus,.wheel{animation:none}}
+</style>
+</head>
+
+<body>
+<input type="radio" name="role" id="admin" checked>
+<input type="radio" name="role" id="driver">
+
+<div class="login-box">
+  <div class="bus-scene">
+    <div class="bus">
+      <span class="wheel one"></span>
+      <span class="wheel two"></span>
+    </div>
+  </div>
+
+  <h2>BEST</h2>
+  <p class="subtitle">Bus Management System</p>
+
+  <div class="tabs">
+    <label for="admin">Admin</label>
+    <label for="driver">Driver</label>
+  </div>
+
+  <div class="form admin-form">
+    <button class="google-btn" id="googleBtn" type="button">
+      Continue with Google
+    </button>
+  </div>
+
+  <form class="form driver-form" id="driverForm">
+    <input class="field" id="username" type="text"
+      placeholder="Username" autocomplete="username" required>
+    <input class="field" id="password" type="password"
+      placeholder="Password" autocomplete="current-password" required>
+    <button class="login-btn" id="driverBtn" type="submit">Login</button>
+  </form>
+
+  <div class="message error" id="message" role="alert"></div>
+</div>
+
+<script type="module">
+import { auth, db } from "./core/firebase.js";
+
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const ADMIN_EMAIL = "admin.svtbest@gmail.com";
+const $ = id => document.getElementById(id);
+
+function showError(text) {
+  $("message").textContent = text;
+  $("message").classList.add("show");
+}
+
+function clearError() {
+  $("message").textContent = "";
+  $("message").classList.remove("show");
+}
+
+function setBusy(button, busy, busyText, normalText) {
+  button.disabled = busy;
+  button.textContent = busy ? busyText : normalText;
+}
+
+// ADMIN GOOGLE LOGIN
+$("googleBtn").addEventListener("click", async () => {
+  clearError();
+  const button = $("googleBtn");
+  setBusy(button, true, "Signing in...", "Continue with Google");
+
+  let signedInUser = null;
+
+  try {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account" });
+
+    const result = await signInWithPopup(auth, provider);
+    signedInUser = result.user;
+
+    const email = (signedInUser.email || "").toLowerCase();
+
+    if (email !== ADMIN_EMAIL) {
+      await signOut(auth);
+      showError("This email is not registered with the admin portal.");
+      return;
+    }
+
+    const profile = await getDoc(doc(db, "users", signedInUser.uid));
+
+    if (!profile.exists() ||
+        String(profile.data().role || "").toLowerCase() !== "admin") {
+      await signOut(auth);
+      showError("Admin profile not configured. Contact the administrator.");
+      return;
+    }
+
+    location.href = "admin/";
+
+  } catch (error) {
+    console.error("Admin login:", error);
+
+    // If verification fails after login, don't leave an unverified
+    // account signed in.
+    if (signedInUser) {
+      try { await signOut(auth); } catch (_) {}
+    }
+
+    if (error.code === "auth/popup-closed-by-user") {
+      showError("Login cancelled. Please try again.");
+    } else {
+      showError("Login failed. Check Google sign-in settings and Firebase permissions.");
+    }
+  } finally {
+    setBusy(button, false, "", "Continue with Google");
+  }
+});
+
+// DRIVER USERNAME + PASSWORD LOGIN
+$("driverForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  clearError();
+
+  const button = $("driverBtn");
+  const username = $("username").value.trim().toLowerCase();
+  const password = $("password").value;
+
+  if (!username || !password) {
+    showError("Enter your username and password.");
+    return;
+  }
+
+  setBusy(button, true, "Checking...", "Login");
+
+  try {
+    /*
+      Account convention:
+      username "driver01" -> driver01@drivers.bestbus.in
+
+      Admin must create this Firebase Authentication account and
+      its matching users/{uid} Firestore profile.
+      Passwords are NOT stored in Firestore.
+    */
+    const loginEmail = username + "@drivers.bestbus.in";
+
+    const result = await signInWithEmailAndPassword(
+      auth, loginEmail, password
+    );
+
+    const profile = await getDoc(doc(db, "users", result.user.uid));
+
+    const data = profile.exists() ? profile.data() : {};
+    const role = String(data.role || "").toLowerCase();
+    const status = String(data.status || "").toLowerCase();
+
+    if (!profile.exists() || role !== "driver" ||
+        data.disabled === true || status === "disabled") {
+      await signOut(auth);
+      showError("User not found. Contact admin.");
+      return;
+    }
+
+    // Use a configured portal path or the default driver portal.
+    const portal = data.portalPath || "driver/";
+    location.href = portal;
+
+  } catch (error) {
+    console.error("Driver login:", error);
+
+    if (error.code === "auth/too-many-requests") {
+      showError("Too many attempts. Please wait and try again.");
+    } else if (error.code === "auth/network-request-failed") {
+      showError("Network error. Check your internet and try again.");
+    } else {
+      showError("User not found. Contact admin.");
+    }
+  } finally {
+    setBusy(button, false, "", "Login");
+  }
+});
+</script>
+</body>
+</html>
