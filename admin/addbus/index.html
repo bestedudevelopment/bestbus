@@ -3,296 +3,439 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f6f8fc">
-<title>Add Bus | BEST Bus Management</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f5f8fc">
+<title>BEST Bus | Add Bus</title>
+
 <style>
-:root{--blue:#2457e6;--dark:#172033;--muted:#778198;--line:#e6eaf0;--bg:#f6f8fc;--green:#087f5b}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--dark);font-family:Arial,Helvetica,sans-serif}
-header{height:66px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 24px}
-.brand{font-size:17px;font-weight:800}.brand span{color:var(--blue)}
-header a{font-size:13px;color:var(--muted);text-decoration:none}
-main{max-width:1050px;margin:30px auto;padding:0 18px 40px}
-.heading{margin-bottom:24px}
-.heading h1{font-size:27px;letter-spacing:-.7px;margin:0 0 7px}
-.heading p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
-.layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr);gap:20px;align-items:start}
-.card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:23px;box-shadow:0 4px 16px #17203305}
-.card h2{font-size:17px;margin:0 0 6px}
-.sub{font-size:13px;line-height:1.6;color:var(--muted);margin:0 0 20px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
-.field{min-width:0}
-label{display:block;font-size:12px;font-weight:700;color:#526078;margin:16px 0 8px}
-input,select{width:100%;padding:13px;border:1px solid #dce2ec;border-radius:10px;background:#fff;color:var(--dark);font-size:14px;outline:none}
-input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #2457e610}
-input::placeholder{color:#a0a8b7}
-.reading-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.reading-option{border:1px solid var(--line);border-radius:11px;padding:13px;display:flex;align-items:center;gap:9px;cursor:pointer;font-size:13px;font-weight:700}
-.reading-option input{width:auto;margin:0;accent-color:var(--blue)}
-.primary{width:100%;padding:14px;margin-top:23px;border:0;border-radius:10px;background:var(--blue);color:white;font-weight:700;font-size:14px;cursor:pointer}
-.primary:disabled{opacity:.6;cursor:wait}
-.message{display:none;padding:12px;border-radius:10px;font-size:13px;line-height:1.6;margin-top:15px;overflow-wrap:anywhere}
-.message.ok{display:block;background:#e8f7f0;color:var(--green)}
-.message.err{display:block;background:#fff0f0;color:#b42323}
-.message.info{display:block;background:#edf2ff;color:#2548a5}
-.note{padding:12px;background:#f3f6ff;border-radius:10px;color:#526078;font-size:12px;line-height:1.6;margin-top:14px}
-.list-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
-.count{font-size:11px;font-weight:700;color:var(--blue);background:#edf2ff;padding:7px 10px;border-radius:30px}
-.bus-list{display:grid;gap:11px}
-.bus{border:1px solid var(--line);border-radius:12px;padding:15px}
-.bus-top{display:flex;justify-content:space-between;gap:10px;align-items:start}
-.bus-reg{font-weight:800;font-size:15px;overflow-wrap:anywhere}
-.bus-code{font-size:12px;color:var(--muted);margin-top:5px}
-.status{font-size:10px;font-weight:800;border-radius:30px;padding:6px 8px;background:#e8f7f0;color:var(--green);white-space:nowrap}
-.status.assigned{background:#fff2d8;color:#986400}
-.bus-details{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
-.bus-details span{font-size:11px;color:var(--muted);display:block;margin-bottom:5px}
-.bus-details strong{font-size:12px;overflow-wrap:anywhere}
-.empty{padding:23px 12px;border:1px dashed #dce2ec;border-radius:12px;text-align:center;color:var(--muted);font-size:13px;line-height:1.6}
-#loading{text-align:center;padding:30px;color:var(--muted);font-size:13px}
-[hidden]{display:none!important}
-@media(max-width:760px){main{margin:22px auto;padding:0 12px 30px}.layout{grid-template-columns:1fr}.card{padding:18px}.heading h1{font-size:24px}}
-@media(max-width:400px){.grid{grid-template-columns:1fr}header{padding:0 14px}}
+:root {
+  --navy:#173451;
+  --blue:#2468e8;
+  --blue-light:#edf4ff;
+  --bg:#f5f8fc;
+  --white:#fff;
+  --text:#172b40;
+  --muted:#77879a;
+  --line:#e5ebf2;
+  --green:#16865b;
+  --red:#c43e46;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+button,input { font:inherit; }
+button { cursor:pointer; }
+.page { max-width:1000px;margin:auto;padding:25px 20px 50px; }
+.topbar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:26px;
+  flex-wrap:wrap;
+}
+.back {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:11px 15px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:11px;
+  color:var(--navy);
+  text-decoration:none;
+  font-size:13px;
+  font-weight:750;
+}
+.back:hover { background:var(--blue-light);border-color:#c8dafa; }
+.brand { display:flex;align-items:center;gap:10px; }
+.brand-icon {
+  display:grid;
+  place-items:center;
+  width:42px;
+  height:42px;
+  background:var(--navy);
+  color:#fff;
+  border-radius:13px;
+  font-size:22px;
+}
+.brand strong { display:block;font-size:15px;letter-spacing:.7px; }
+.brand small { display:block;color:var(--muted);font-size:10px;margin-top:4px; }
+.heading { margin-bottom:22px; }
+.eyebrow { color:var(--blue);font-size:10px;font-weight:850;letter-spacing:1.8px; }
+h1 { font-size:clamp(26px,4vw,34px);letter-spacing:-.8px;margin:8px 0; }
+.subtitle { color:var(--muted);font-size:13px;line-height:1.7;margin:0; }
+.card {
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:19px;
+  overflow:hidden;
+}
+.card-head { padding:21px 23px;border-bottom:1px solid var(--line); }
+.card-head h2 { font-size:16px;margin:0; }
+.card-head p { color:var(--muted);font-size:12px;line-height:1.6;margin:6px 0 0; }
+form { padding:24px; }
+.section-title {
+  font-size:11px;
+  color:#8797a9;
+  font-weight:850;
+  letter-spacing:1.2px;
+  margin:0 0 17px;
+}
+.form-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:20px;
+}
+.field { min-width:0; }
+.field.full { grid-column:1/-1; }
+label { display:block;font-size:12px;font-weight:750;margin-bottom:8px; }
+input {
+  display:block;
+  width:100%;
+  min-height:47px;
+  border:1px solid #dce4ed;
+  border-radius:11px;
+  background:#fff;
+  padding:12px 13px;
+  color:var(--text);
+  outline:none;
+  font-size:13px;
+}
+input:focus { border-color:var(--blue);box-shadow:0 0 0 3px #2468e817; }
+input::placeholder { color:#a3afbd; }
+.hint { color:var(--muted);font-size:10px;line-height:1.6;margin-top:7px; }
+.divider { height:1px;background:var(--line);margin:25px 0; }
+.form-actions {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:27px;
+}
+.btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:45px;
+  padding:12px 17px;
+  border-radius:11px;
+  border:1px solid var(--line);
+  background:white;
+  color:var(--navy);
+  font-size:12px;
+  font-weight:800;
+  text-decoration:none;
+}
+.btn.primary { background:var(--blue);color:white;border-color:var(--blue); }
+.btn:disabled { opacity:.6;cursor:not-allowed; }
+.message {
+  display:none;
+  padding:13px 15px;
+  border-radius:11px;
+  margin-bottom:18px;
+  font-size:12px;
+  line-height:1.6;
+  overflow-wrap:anywhere;
+}
+.message.show { display:block; }
+.message.success { color:#126c4a;background:#e9f8f0;border:1px solid #c8ecd9; }
+.message.error { color:#a72d35;background:#fff0f0;border:1px solid #f1cbce; }
+.message.info { color:#24599b;background:#edf4ff;border:1px solid #d5e5ff; }
+.footer { text-align:center;color:#93a0ae;font-size:10px;margin-top:25px; }
+@media(max-width:600px) {
+  .page { padding:17px 13px 35px; }
+  .topbar { align-items:flex-start; }
+  .form-grid { grid-template-columns:1fr;gap:17px; }
+  .field.full { grid-column:auto; }
+  .card-head { padding:18px; }
+  form { padding:19px; }
+  .form-actions { display:grid;grid-template-columns:1fr; }
+  .form-actions .btn { width:100%; }
+}
 </style>
 </head>
+
 <body>
-<header>
-  <div class="brand">BEST <span>BUS</span> MANAGEMENT</div>
-  <a href="../">← Admin dashboard</a>
-</header>
+<div class="page">
 
-<main>
-  <div class="heading">
-    <h1>Add a bus</h1>
-    <p>Register a bus in your fleet. The bus will appear in the assignment page once saved.</p>
-  </div>
-
-  <div id="loading">Verifying admin access…</div>
-
-  <div id="app" class="layout" hidden>
-    <section class="card">
-      <h2>Bus details</h2>
-      <p class="sub">Enter the vehicle information and its initial odometer reading.</p>
-
-      <form id="busForm">
-        <div class="grid">
-          <div class="field">
-            <label for="registrationNo">REGISTRATION NUMBER *</label>
-            <input id="registrationNo" maxlength="20" required placeholder="e.g. KA25AB1234">
-          </div>
-          <div class="field">
-            <label for="busCode">BUS CODE *</label>
-            <input id="busCode" maxlength="30" required placeholder="e.g. BUS-001">
-          </div>
-          <div class="field">
-            <label for="routeFrom">ROUTE FROM *</label>
-            <input id="routeFrom" maxlength="100" required placeholder="Starting location">
-          </div>
-          <div class="field">
-            <label for="routeTo">ROUTE TO *</label>
-            <input id="routeTo" maxlength="100" required placeholder="Destination">
-          </div>
-          <div class="field">
-            <label for="expectedMileage">EXPECTED MILEAGE (KM/L) *</label>
-            <input id="expectedMileage" type="number" min="0.1" max="100" step="0.1" required placeholder="e.g. 5.5">
-          </div>
-          <div class="field">
-            <label for="odometerReading">INITIAL ODOMETER (KM) *</label>
-            <input id="odometerReading" type="number" min="0" step="0.1" required placeholder="e.g. 125450">
-          </div>
-        </div>
-
-        <label>INITIAL READING TYPE *</label>
-        <div class="reading-options">
-          <label class="reading-option">
-            <input type="radio" name="readingType" value="pickup" required>
-            Pickup
-          </label>
-          <label class="reading-option">
-            <input type="radio" name="readingType" value="drop" required>
-            Drop
-          </label>
-        </div>
-
-        <div class="note">
-          The initial reading establishes the baseline. The driver's next required reading will be the opposite type. For example, initial Pickup means the next required reading is Drop.
-        </div>
-
-        <button class="primary" id="saveBtn" type="submit">Save bus</button>
-        <div id="message" class="message"></div>
-      </form>
-    </section>
-
-    <section class="card">
-      <div class="list-head">
-        <div>
-          <h2>Fleet buses</h2>
-          <p class="sub" style="margin:6px 0 0">Recently added buses</p>
-        </div>
-        <span class="count" id="busCount">0 buses</span>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">🚌</div>
+      <div>
+        <strong>BEST BUS</strong>
+        <small>BUS MANAGEMENT</small>
       </div>
-      <div id="busList" class="bus-list"></div>
-    </section>
+    </div>
+
+    <a class="back" href="../">← Back to Dashboard</a>
+  </header>
+
+  <section class="heading">
+    <div class="eyebrow">FLEET MANAGEMENT</div>
+    <h1>Add a new bus</h1>
+    <p class="subtitle">
+      Register a vehicle and save its route, mileage and odometer details.
+    </p>
+  </section>
+
+  <div class="message" id="message" role="status"></div>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>Bus information</h2>
+      <p>Complete the vehicle details below. The bus will initially be marked as available.</p>
+    </div>
+
+    <form id="busForm">
+      <h3 class="section-title">VEHICLE DETAILS</h3>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="registrationNo">Bus registration number *</label>
+          <input id="registrationNo" name="registrationNo"
+            placeholder="e.g. KA 01 AB 1234" required maxlength="30"
+            autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label for="busCode">Bus code *</label>
+          <input id="busCode" name="busCode"
+            placeholder="e.g. BEST-001" required maxlength="30"
+            autocomplete="off">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <h3 class="section-title">ROUTE DETAILS</h3>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="routeFrom">Route from *</label>
+          <input id="routeFrom" name="routeFrom"
+            placeholder="Starting location" required maxlength="100">
+        </div>
+
+        <div class="field">
+          <label for="routeTo">Route to *</label>
+          <input id="routeTo" name="routeTo"
+            placeholder="Destination" required maxlength="100">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <h3 class="section-title">MILEAGE & ODOMETER</h3>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="expectedMileage">Expected mileage (km/l) *</label>
+          <input id="expectedMileage" name="expectedMileage"
+            type="number" min="0.1" max="1000" step="0.1"
+            placeholder="e.g. 5.5" required>
+          <div class="hint">Expected distance travelled per litre of diesel.</div>
+        </div>
+
+        <div class="field">
+          <label for="odometerReading">Current odometer reading (km) *</label>
+          <input id="odometerReading" name="odometerReading"
+            type="number" min="0" max="99999999" step="0.1"
+            placeholder="e.g. 42850" required>
+          <div class="hint">Enter the current reading displayed on the bus.</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="form-actions">
+        <a class="btn" href="../">← Back to Dashboard</a>
+        <button class="btn primary" id="saveBtn" type="submit">
+          Save Bus →
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <div class="footer">
+    BEST Bus Management System · Secure administrator workspace
   </div>
-</main>
+</div>
 
 <script type="module">
 import { auth, db } from "../../firebase.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
 import {
-  collection, getDocs, getDoc, doc, query, where,
-  addDoc, serverTimestamp
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  addDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const $ = id => document.getElementById(id);
-let adminUser = null;
+const form = $("busForm");
+const saveBtn = $("saveBtn");
+const message = $("message");
+
+let currentAdmin = null;
+let ready = false;
 let saving = false;
 
-function esc(value) {
-  return String(value ?? "").replace(/[&<>"']/g,c=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  })[c]);
+function showMessage(text, type = "info") {
+  message.textContent = text;
+  message.className = "message show " + type;
+  message.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
-function notice(text,type="ok") {
-  $("message").textContent=text;
-  $("message").className="message "+type;
+function normalise(value) {
+  return String(value || "").trim().toUpperCase();
 }
 
-function assigned(bus) {
-  return Boolean(bus.assignedDriverId || bus.driverId || bus.driverUid);
-}
-
-function busCard(bus) {
-  return `<article class="bus">
-    <div class="bus-top">
-      <div>
-        <div class="bus-reg">${esc(bus.registrationNo || "No registration")}</div>
-        <div class="bus-code">${esc(bus.busCode || "No bus code")}</div>
-      </div>
-      <span class="status ${assigned(bus)?"assigned":""}">${assigned(bus)?"Assigned":"Available"}</span>
-    </div>
-    <div class="bus-details">
-      <div><span>ROUTE</span><strong>${esc(bus.routeFrom||"—")} → ${esc(bus.routeTo||"—")}</strong></div>
-      <div><span>ODOMETER</span><strong>${esc(bus.odometerReading ?? "—")} km</strong></div>
-      <div><span>EXPECTED MILEAGE</span><strong>${esc(bus.expectedMileage ?? "—")} km/L</strong></div>
-      <div><span>INITIAL TYPE</span><strong>${esc(bus.odometerReadingType || "—")}</strong></div>
-    </div>
-  </article>`;
-}
-
-async function loadBuses() {
-  const snap=await getDocs(collection(db,"buses"));
-  const buses=snap.docs.map(d=>({id:d.id,...d.data()}));
-  buses.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-  $("busCount").textContent=buses.length+" buses";
-  $("busList").innerHTML=buses.length
-    ?buses.map(busCard).join("")
-    :'<div class="empty">No buses added yet. Add your first bus using the form.</div>';
-}
-
-async function isAdmin(user) {
-  if(!user || (user.email||"").toLowerCase()!=="admin.svtbest@gmail.com") return false;
-  const profile=await getDoc(doc(db,"users",user.uid));
-  return profile.exists() && profile.data().role==="admin";
-}
-
-$("registrationNo").addEventListener("input",e=>{
-  e.target.value=e.target.value.toUpperCase().replace(/\s+/g,"");
-});
-$("busCode").addEventListener("input",e=>{
-  e.target.value=e.target.value.toUpperCase().trimStart();
-});
-
-$("busForm").addEventListener("submit",async event=>{
-  event.preventDefault();
-  if(saving || !adminUser) return;
-
-  const registrationNo=$("registrationNo").value.trim().toUpperCase();
-  const busCode=$("busCode").value.trim().toUpperCase();
-  const routeFrom=$("routeFrom").value.trim();
-  const routeTo=$("routeTo").value.trim();
-  const expectedMileage=Number($("expectedMileage").value);
-  const odometerReading=Number($("odometerReading").value);
-  const readingType=document.querySelector('input[name="readingType"]:checked')?.value;
-
-  if(!registrationNo || !busCode || !routeFrom || !routeTo || !readingType ||
-     !Number.isFinite(expectedMileage) || expectedMileage<=0 ||
-     !Number.isFinite(odometerReading) || odometerReading<0) {
-    notice("Please complete all fields with valid values.","err");
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    location.replace("../../");
     return;
   }
 
-  saving=true;
-  $("saveBtn").disabled=true;
-  $("saveBtn").textContent="Saving…";
+  ready = false;
+  saveBtn.disabled = true;
 
   try {
-    // Check duplicate registration and bus code.
-    const [regSnap,codeSnap]=await Promise.all([
-      getDocs(query(collection(db,"buses"),where("registrationNo","==",registrationNo))),
-      getDocs(query(collection(db,"buses"),where("busCode","==",busCode)))
-    ]);
+    const profileRef = doc(db, "users", user.uid);
+    const profileSnap = await getDoc(profileRef);
 
-    if(!regSnap.empty) throw new Error("This registration number is already registered.");
-    if(!codeSnap.empty) throw new Error("This bus code is already in use.");
-
-    // Recheck admin profile immediately before writing.
-    const adminSnap=await getDoc(doc(db,"users",adminUser.uid));
-    if(!adminSnap.exists() || adminSnap.data().role!=="admin") {
-      throw new Error("Admin access could not be verified.");
+    if (
+      !profileSnap.exists() ||
+      String(profileSnap.data().role || "").toLowerCase() !== "admin"
+    ) {
+      showMessage(
+        "Administrator access required. Please sign in with an authorised admin account.",
+        "error"
+      );
+      return;
     }
 
-    await addDoc(collection(db,"buses"),{
+    currentAdmin = user;
+    ready = true;
+    saveBtn.disabled = false;
+  } catch (error) {
+    console.error("Admin verification failed:", error);
+    showMessage(
+      "Could not verify administrator access. Check Firebase permissions and try again.",
+      "error"
+    );
+  }
+});
+
+form.addEventListener("submit", async event => {
+  event.preventDefault();
+
+  if (!ready || !currentAdmin || saving) {
+    showMessage("Administrator verification is not complete. Please wait.", "error");
+    return;
+  }
+
+  const registrationNo = normalise($("registrationNo").value);
+  const busCode = normalise($("busCode").value);
+  const routeFrom = $("routeFrom").value.trim();
+  const routeTo = $("routeTo").value.trim();
+  const expectedMileage = Number($("expectedMileage").value);
+  const odometerReading = Number($("odometerReading").value);
+
+  if (!registrationNo || !busCode || !routeFrom || !routeTo) {
+    showMessage("Please complete all required fields.", "error");
+    return;
+  }
+
+  if (
+    !Number.isFinite(expectedMileage) ||
+    expectedMileage <= 0 ||
+    !Number.isFinite(odometerReading) ||
+    odometerReading < 0
+  ) {
+    showMessage("Enter valid mileage and odometer readings.", "error");
+    return;
+  }
+
+  saving = true;
+  saveBtn.disabled = true;
+  saveBtn.textContent = "Saving bus…";
+  message.className = "message";
+
+  try {
+    // Check existing records to help prevent duplicate registration/code.
+    const [registrationQuery, codeQuery] = await Promise.all([
+      getDocs(query(
+        collection(db, "buses"),
+        where("registrationNo", "==", registrationNo)
+      )),
+      getDocs(query(
+        collection(db, "buses"),
+        where("busCode", "==", busCode)
+      ))
+    ]);
+
+    if (!registrationQuery.empty) {
+      throw new Error("A bus with this registration number already exists.");
+    }
+
+    if (!codeQuery.empty) {
+      throw new Error("This bus code is already in use. Enter a unique code.");
+    }
+
+    // Keep the existing buses collection and field names.
+    await addDoc(collection(db, "buses"), {
       registrationNo,
       busCode,
       routeFrom,
       routeTo,
       expectedMileage,
       odometerReading,
-      odometerReadingType:readingType,
-      assignedDriverId:null,
-      assignedDriverName:null,
-      status:"available",
-      createdAt:serverTimestamp(),
-      createdBy:adminUser.uid,
-      updatedAt:serverTimestamp()
+      odometerReadingType: "initial",
+      assignedDriverId: null,
+      assignedDriverName: null,
+      status: "available",
+      createdAt: serverTimestamp(),
+      createdBy: currentAdmin.uid,
+      updatedAt: serverTimestamp()
     });
 
-    $("busForm").reset();
-    notice("Bus added successfully.","ok");
-    await loadBuses();
-  } catch(error) {
-    console.error("Add bus error:",error);
-    notice(
-      error.code==="permission-denied"
-        ?"Firestore denied this operation. Check your buses collection security rules."
-        :(error.message||"Could not save this bus."),
-      "err"
+    form.reset();
+    showMessage(
+      "Bus registered successfully. You can add another bus or return to the dashboard.",
+      "success"
     );
-  } finally {
-    saving=false;
-    $("saveBtn").disabled=false;
-    $("saveBtn").textContent="Save bus";
-  }
-});
 
-onAuthStateChanged(auth,async user=>{
-  try {
-    if(!user || !(await isAdmin(user))) {
-      location.replace("../../");
-      return;
+    saveBtn.textContent = "Save Another Bus →";
+  } catch (error) {
+    console.error("Could not save bus:", error);
+
+    let errorText = error.message || "An unexpected error occurred.";
+
+    if (error.code === "permission-denied") {
+      errorText =
+        "Firestore denied permission to save or check the bus. " +
+        "Verify your existing admin security rules.";
     }
-    adminUser=user;
-    await loadBuses();
-    $("loading").hidden=true;
-    $("app").hidden=false;
-  } catch(error) {
-    console.error(error);
-    $("loading").textContent=error.code==="permission-denied"
-      ?"Access denied by Firestore rules. Check admin profile permissions."
-      :"Could not load fleet information. Check the browser console.";
+
+    showMessage("Bus was not saved: " + errorText, "error");
+    saveBtn.textContent = "Save Bus →";
+  } finally {
+    saving = false;
+    saveBtn.disabled = !ready;
   }
 });
 </script>
