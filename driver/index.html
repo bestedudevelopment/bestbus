@@ -4,608 +4,452 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f6f8fc">
-<title>Driver Portal | BEST Bus Management</title>
+<title>BEST | Driver Portal</title>
 <style>
-:root{--blue:#2457e6;--dark:#172033;--muted:#778198;--line:#e6eaf0;--bg:#f6f8fc;--green:#087f5b;--red:#c73535}
+:root{--bg:#f4f6fa;--white:#fff;--ink:#172033;--muted:#758096;--line:#e5e9f0;--blue:#2457e6;--green:#138a53;--red:#d92d43}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--dark)}
-header{height:66px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:5}
-.brand{font-weight:800;font-size:17px;letter-spacing:-.4px}.brand span{color:var(--blue)}
-.header-right{display:flex;align-items:center;gap:12px}
-.avatar{height:36px;width:36px;border-radius:50%;background:#e8eeff;color:var(--blue);display:grid;place-items:center;font-weight:800}
-.header-name{font-size:13px;font-weight:700}
-main{max-width:1060px;margin:28px auto;padding:0 18px 40px}
-.welcome{margin-bottom:23px}.welcome h1{font-size:27px;letter-spacing:-.7px;margin:0 0 7px}.welcome p{margin:0;color:var(--muted);font-size:14px}
-.tabs{display:flex;gap:8px;margin-bottom:20px;overflow:auto}
-.tab{padding:11px 16px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--muted);font-weight:700;font-size:13px;white-space:nowrap;cursor:pointer}
-.tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
-.card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:22px;margin-bottom:18px;box-shadow:0 4px 16px #17203305}
-.card-title{font-size:17px;font-weight:800;margin:0 0 5px}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.top{background:#fff;border-bottom:1px solid var(--line);padding:16px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-size:19px;font-weight:800}.brand span{color:var(--blue)}
+.topright{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.small{font-size:12px;color:var(--muted)}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9px;padding:10px 13px;font-weight:650}
+.primary{background:var(--blue);border-color:var(--blue);color:white}
+.danger{background:#fff0f1;border-color:#ffd6db;color:var(--red)}
+.shell{max-width:1120px;margin:auto;padding:22px}
+.heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+h1{font-size:25px;margin:0 0 7px}h2{font-size:17px;margin:0 0 15px}h3{font-size:15px;margin:0 0 8px}
 .muted{color:var(--muted);font-size:13px;line-height:1.6}
-.bus-hero{background:#172b59;color:white;border-radius:17px;padding:23px;margin-bottom:18px;position:relative;overflow:hidden}
-.bus-hero:after{content:"";position:absolute;width:170px;height:170px;border:35px solid #ffffff0c;border-radius:50%;right:-50px;top:-70px}
-.bus-tag{font-size:11px;letter-spacing:1.3px;color:#bdcbff;font-weight:700}
-.bus-registration{font-size:27px;font-weight:800;letter-spacing:.5px;margin:9px 0 5px;overflow-wrap:anywhere}
-.bus-code{font-size:13px;color:#d1dcff}
-.route{display:flex;align-items:center;gap:10px;margin-top:22px;position:relative;z-index:1}
-.route-point{min-width:0;flex:1}.route-point span{display:block;font-size:10px;color:#bdcbff;margin-bottom:6px}.route-point strong{font-size:14px;overflow-wrap:anywhere}
-.route-arrow{color:#bdcbff;font-size:20px}
-.bus-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px;position:relative;z-index:1}
-.bus-stat{background:#ffffff12;border:1px solid #ffffff12;border-radius:11px;padding:13px}
-.bus-stat span{font-size:11px;color:#bdcbff;display:block;margin-bottom:7px}
-.bus-stat strong{font-size:17px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-label{display:block;font-size:12px;font-weight:700;color:#526078;margin:17px 0 8px}
-input,select{width:100%;border:1px solid #dce2ec;border-radius:10px;padding:13px;font:inherit;font-size:14px;color:var(--dark);background:white;outline:none}
-input:focus,select:focus{border-color:var(--blue)}
-input[readonly]{background:#f5f7fb;color:var(--muted)}
-.segment{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
-.segment button{padding:13px;border:1px solid var(--line);background:white;border-radius:10px;color:var(--muted);font-weight:700;cursor:pointer}
-.segment button.active{background:#eaf0ff;border-color:var(--blue);color:var(--blue)}
-.primary,.secondary,.danger{padding:12px 16px;border:0;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer}
-.primary{background:var(--blue);color:white}
-.secondary{background:#eef2ff;color:var(--blue)}
-.danger{background:#fff0f0;color:var(--red)}
-button:disabled{opacity:.55;cursor:not-allowed}
-.full{width:100%;margin-top:19px}
-.message{display:none;padding:12px;border-radius:10px;font-size:13px;line-height:1.6;margin-top:14px;overflow-wrap:anywhere}
-.message.ok{display:block;background:#e8f7f0;color:var(--green)}
-.message.err{display:block;background:#fff0f0;color:#b42323}
-.message.info{display:block;background:#edf2ff;color:#2548a5}
-.notice{padding:13px 15px;background:#edf2ff;border-radius:11px;font-size:12px;color:#2548a5;line-height:1.6;margin-top:14px}
-.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
-.section-head h2{font-size:17px;margin:0}
-.pill{font-size:11px;padding:6px 9px;border-radius:30px;background:#e8f7f0;color:var(--green);font-weight:800}
-.pill.gray{background:#eef1f5;color:#667085}
+.status{padding:6px 10px;border-radius:20px;font-size:12px;font-weight:700;background:#e8f7ef;color:var(--green)}
+.nav{display:flex;gap:8px;overflow:auto;padding-bottom:15px}
+.nav button{white-space:nowrap;padding:11px 14px;border:1px solid var(--line);border-radius:9px;background:#fff;color:#4b5568}
+.nav button.active{background:#eaf0ff;border-color:#cbd8ff;color:var(--blue);font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:19px;min-width:0}
+.bushero{background:#172b57;color:#fff;border-radius:14px;padding:22px;margin-bottom:15px}
+.bushero .muted{color:#d4def5}
+.reg{font-size:25px;font-weight:800;margin:7px 0}
+.reading{font-size:32px;font-weight:800;margin:8px 0}
+.unit{font-size:13px;font-weight:500;color:#d4def5}
+.details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}
+.detail{background:#ffffff12;border:1px solid #ffffff20;padding:12px;border-radius:10px;min-width:0}
+.detail label{display:block;color:#d4def5;font-size:12px;margin-bottom:6px}
+.detail strong{overflow-wrap:anywhere;font-size:14px}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field{display:flex;flex-direction:column;gap:7px;min-width:0}
+.field label{font-size:13px;font-weight:700;color:#4a5568}
+.field input,.field select,.field textarea{width:100%;min-width:0;border:1px solid #dce2ec;border-radius:9px;padding:11px;background:#fff;outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue)}
+.full{grid-column:1/-1}
+.formactions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+.message{display:none;padding:12px 14px;border-radius:10px;margin-bottom:14px;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.message.show{display:block}.message.ok{background:#e8f7ef;color:#116b41}.message.error{background:#fff0f1;color:#a61c30}.message.info{background:#eaf0ff;color:#2149b9}
 .history{display:grid;gap:10px}
-.history-item{border:1px solid var(--line);border-radius:12px;padding:15px;display:flex;justify-content:space-between;gap:12px;align-items:center}
-.history-date{font-weight:800;font-size:13px;margin-bottom:6px}
-.history-meta{font-size:12px;color:var(--muted);line-height:1.6}
-.reading{text-align:right;flex-shrink:0}.reading strong{font-size:17px;display:block}.reading span{font-size:11px;color:var(--muted)}
-.empty{text-align:center;border:1px dashed #dce2ec;border-radius:12px;padding:25px;color:var(--muted);font-size:13px;line-height:1.7}
-.profile-row{padding:15px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:15px}
-.profile-row:last-child{border-bottom:0}.profile-row span{font-size:12px;color:var(--muted)}.profile-row strong{font-size:13px;text-align:right;overflow-wrap:anywhere}
-.status-card{text-align:center;padding:32px 20px}.status-icon{font-size:34px;margin-bottom:14px}
-.status-card h2{margin:0 0 8px;font-size:22px}
-.status-card p{max-width:440px;margin:0 auto;color:var(--muted);font-size:14px;line-height:1.7}
-footer{text-align:center;color:#929bad;font-size:11px;padding:0 0 22px}
-[hidden]{display:none!important}
-@media(max-width:700px){
- header{padding:0 14px}.header-name{display:none}
- main{margin:21px auto;padding:0 12px 30px}
- .welcome h1{font-size:24px}.card{padding:17px}
- .grid{grid-template-columns:1fr}
- .bus-hero{padding:19px}
- .bus-stats{grid-template-columns:1fr 1fr}
- .bus-stat:last-child{grid-column:1/-1}
- .history-item{align-items:flex-start}
-}
+.entry{border:1px solid var(--line);border-radius:11px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.entry strong{font-size:15px}.entry .muted{margin-top:5px}
+.pill{display:inline-block;background:#eef2f7;color:#526078;border-radius:20px;padding:5px 9px;font-size:11px;font-weight:700}
+.empty{text-align:center;padding:27px 14px;border:1px dashed #dce2ec;border-radius:11px;color:var(--muted);font-size:14px;line-height:1.7}
+.hidden{display:none!important}
+@media(max-width:700px){.shell{padding:14px}.top{padding:14px}.grid{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.bushero{padding:17px}.reading{font-size:28px}h1{font-size:22px}}
 </style>
 </head>
 <body>
-<header>
-  <div class="brand">BEST <span>BUS</span> MANAGEMENT</div>
-  <div class="header-right">
-    <div class="header-name" id="headerName">Driver Portal</div>
-    <div class="avatar" id="avatar">D</div>
+<header class="top">
+  <div class="brand">BEST <span>DRIVER PORTAL</span></div>
+  <div class="topright">
+    <span id="driverLabel" class="small">Checking account…</span>
+    <button class="btn" id="refreshBtn">↻ Refresh</button>
+    <button class="btn" id="logoutBtn">Sign out</button>
   </div>
 </header>
 
-<main>
-  <section id="loading" class="card status-card">
-    <div class="status-icon">◌</div>
-    <h2>Loading your portal</h2>
-    <p>Verifying your account and assigned bus…</p>
-  </section>
+<main class="shell">
+  <div class="heading">
+    <div>
+      <h1 id="welcome">My dashboard</h1>
+      <div class="muted">Your bus, odometer readings and diesel records.</div>
+    </div>
+    <span class="status" id="approvalBadge">Verifying</span>
+  </div>
 
-  <section id="blocked" class="card status-card" hidden>
-    <div class="status-icon" id="blockedIcon">◷</div>
-    <h2 id="blockedTitle">Waiting for approval</h2>
-    <p id="blockedText">Your account is being checked.</p>
-    <button class="primary" style="margin-top:20px" id="refreshStatus">Check status again</button>
-    <button class="secondary" style="margin:12px 0 0 8px" id="blockedSignOut">Sign out</button>
-    <div id="blockedMessage" class="message"></div>
-  </section>
+  <div id="message" class="message" role="status"></div>
 
-  <section id="portal" hidden>
-    <div class="welcome">
-      <h1 id="welcomeTitle">Hello, Driver</h1>
-      <p>Here is your bus and daily odometer information.</p>
+  <nav class="nav" id="navigation">
+    <button class="active" data-view="bus">My Bus</button>
+    <button data-view="reading">Odometer Reading</button>
+    <button data-view="history">Reading History</button>
+    <button id="dieselNav">⛽ Diesel Data ↗</button>
+    <button data-view="profile">My Profile</button>
+  </nav>
+
+  <section id="busView">
+    <div class="bushero">
+      <div class="muted">ASSIGNED BUS</div>
+      <div class="reg" id="busRegistration">Loading bus…</div>
+      <div class="muted" id="busRoute">Loading route…</div>
+      <div class="detail" style="margin-top:20px">
+        <label>Current odometer reading</label>
+        <div class="reading"><span id="currentReading">—</span> <span class="unit">km</span></div>
+        <div class="muted" id="currentReadingMeta">Latest saved reading</div>
+      </div>
+      <div class="details">
+        <div class="detail"><label>Bus code</label><strong id="busCode">—</strong></div>
+        <div class="detail"><label>Expected mileage</label><strong id="busMileage">—</strong></div>
+        <div class="detail"><label>Last pickup reading</label><strong id="lastPickup">—</strong></div>
+        <div class="detail"><label>Last drop reading</label><strong id="lastDrop">—</strong></div>
+      </div>
     </div>
 
-    <div class="tabs">
-      <button class="tab active" data-section="home">My Bus</button>
-      <button class="tab" data-section="history">Reading History</button>
-      <button class="tab" data-section="profile">My Profile</button>
+    <div class="grid">
+      <div class="card">
+        <h2>Quick actions</h2>
+        <p class="muted">Record your pickup or drop odometer reading. Enter the actual time shown on the vehicle log.</p>
+        <button class="btn primary" data-goto="reading">+ Enter odometer reading</button>
+      </div>
+      <div class="card">
+        <h2>Diesel / fuel</h2>
+        <p class="muted">Enter fuel quantity, cost, odometer reading and station details on the separate diesel page.</p>
+        <button class="btn" id="dieselCardBtn">Open Diesel Data ↗</button>
+      </div>
     </div>
+  </section>
 
-    <section id="homeSection">
-      <div class="bus-hero">
-        <div class="bus-tag">YOUR ASSIGNED BUS</div>
-        <div class="bus-registration" id="busRegistration">—</div>
-        <div class="bus-code" id="busCode">Bus details</div>
-        <div class="route">
-          <div class="route-point"><span>ROUTE FROM</span><strong id="routeFrom">—</strong></div>
-          <div class="route-arrow">→</div>
-          <div class="route-point"><span>ROUTE TO</span><strong id="routeTo">—</strong></div>
+  <section id="readingView" class="hidden">
+    <div class="card">
+      <h2>Enter odometer reading</h2>
+      <p class="muted">Saved readings remain in Firestore and appear in Reading History after refresh.</p>
+      <div class="formgrid">
+        <div class="field">
+          <label for="readingDate">Date</label>
+          <input type="date" id="readingDate" required>
         </div>
-        <div class="bus-stats">
-          <div class="bus-stat"><span>ODOMETER BASELINE</span><strong id="busOdometer">—</strong></div>
-          <div class="bus-stat"><span>EXPECTED MILEAGE</span><strong id="busMileage">—</strong></div>
-          <div class="bus-stat"><span>BUS STATUS</span><strong id="busStatus">Assigned</strong></div>
+        <div class="field">
+          <label for="readingTime">Time</label>
+          <input type="time" id="readingTime" required>
+        </div>
+        <div class="field">
+          <label for="readingType">Reading type</label>
+          <select id="readingType">
+            <option value="pickup">Pickup / Start of duty</option>
+            <option value="drop">Drop / End of duty</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="readingValue">Odometer reading (km)</label>
+          <input type="number" id="readingValue" min="0" step="0.1" placeholder="e.g. 42850.5" required>
         </div>
       </div>
-
-      <div class="grid">
-        <section class="card">
-          <h2 class="card-title">Daily odometer reading</h2>
-          <p class="muted">Select a date and enter the next required reading. Saved readings cannot be changed from this page.</p>
-
-          <label for="readingDate">READING DATE</label>
-          <input id="readingDate" type="date">
-
-          <div id="dateNote" class="notice">
-            Today's date is selected automatically. You may select a future date for testing.
-          </div>
-
-          <div id="dayReadings" class="notice" hidden></div>
-
-          <label>READING TYPE</label>
-          <div class="segment">
-            <button type="button" id="pickupBtn">Pickup</button>
-            <button type="button" id="dropBtn">Drop</button>
-          </div>
-
-          <label for="odometerInput">ODOMETER READING (KM)</label>
-          <input id="odometerInput" type="number" min="0" step="0.1" placeholder="Enter odometer reading">
-
-          <button id="saveReading" class="primary full">Save reading</button>
-          <div id="readingMessage" class="message"></div>
-        </section>
-
-        <section class="card">
-          <h2 class="card-title">Selected date summary</h2>
-          <p class="muted" id="selectedDateLabel">Readings for selected date.</p>
-          <div class="profile-row"><span>Pickup reading</span><strong id="summaryPickup">Not entered</strong></div>
-          <div class="profile-row"><span>Drop reading</span><strong id="summaryDrop">Not entered</strong></div>
-          <div class="profile-row"><span>Distance travelled</span><strong id="summaryDistance">—</strong></div>
-          <div class="notice">Enter the actual meter reading. Pickup and drop are recorded separately for each date.</div>
-        </section>
+      <div class="formactions">
+        <button class="btn primary" id="saveReadingBtn">Save reading</button>
+        <button class="btn" id="viewHistoryBtn">View history</button>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="historySection" hidden>
-      <div class="card">
-        <div class="section-head">
-          <h2>Reading history</h2>
-          <span class="pill" id="historyCount">0 entries</span>
+  <section id="historyView" class="hidden">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+        <div>
+          <h2 style="margin-bottom:5px">Reading History</h2>
+          <div class="muted">Previously saved pickup and drop readings, including their entered date and time.</div>
         </div>
-        <p class="muted">All saved odometer entries for your currently assigned bus.</p>
-        <div id="historyList" class="history"></div>
+        <button class="btn" id="historyRefreshBtn">↻ Reload history</button>
       </div>
-    </section>
+      <div id="historySummary" class="muted" style="margin-bottom:12px"></div>
+      <div id="historyList" class="history"><div class="empty">Loading history…</div></div>
+    </div>
+  </section>
 
-    <section id="profileSection" hidden>
-      <div class="card">
-        <div class="section-head"><h2>My profile</h2><span class="pill">Driver</span></div>
-        <div class="profile-row"><span>Full name</span><strong id="profileName">—</strong></div>
-        <div class="profile-row"><span>Date of birth</span><strong id="profileDob">—</strong></div>
-        <div class="profile-row"><span>Phone number</span><strong id="profilePhone">—</strong></div>
-        <div class="profile-row"><span>Google account</span><strong id="profileEmail">—</strong></div>
-        <div class="profile-row"><span>Approval status</span><strong id="profileApproval">Approved</strong></div>
-        <div class="profile-row"><span>Assigned bus</span><strong id="profileBus">—</strong></div>
-        <button class="secondary full" id="signOut">Sign out</button>
+  <section id="profileView" class="hidden">
+    <div class="card">
+      <h2>My Profile</h2>
+      <div class="formgrid">
+        <div class="field"><label>Name</label><input id="profileName" readonly></div>
+        <div class="field"><label>Phone</label><input id="profilePhone" readonly></div>
+        <div class="field"><label>Email</label><input id="profileEmail" readonly></div>
+        <div class="field"><label>Date of birth</label><input id="profileDob" readonly></div>
+        <div class="field"><label>Driver ID</label><input id="profileId" readonly></div>
       </div>
-    </section>
+    </div>
   </section>
 </main>
 
-<footer>BEST Bus Management System</footer>
-
 <script type="module">
 import { auth, db } from "../firebase.js";
-
 import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
 import {
   collection, doc, getDoc, getDocs, query, where,
   runTransaction, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const $ = id => document.getElementById(id);
-const ADMIN_EMAIL = "admin.svtbest@gmail.com";
+let user = null, profile = null, bus = null, readings = [], busy = false;
 
-let currentUser = null;
-let driver = null;
-let bus = null;
-let entries = [];
-let selectedType = "";
-let saving = false;
-
-function esc(value) {
-  return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  })[c]);
-}
-
-function localDate() {
+const localDate = () => {
   const d = new Date();
-  return new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+};
+const localTime = () => {
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+};
+function esc(v="") {
+  return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
-
-function showMessage(id, text, type="info") {
-  $(id).textContent = text;
-  $(id).className = "message " + type;
+function showMessage(text,type="info") {
+  $("message").textContent=text;
+  $("message").className="message show "+type;
 }
-
-function clearMessage(id) {
-  $(id).textContent = "";
-  $(id).className = "message";
+function clearMessage() { $("message").className="message"; $("message").textContent=""; }
+function localDateTime(entry) {
+  const date=entry.date||"";
+  const time=entry.time||"";
+  if(date||time) return `${date} ${time}`.trim();
+  const timestamp=entry.createdAt?.toDate?.();
+  return timestamp ? timestamp.toLocaleString() : "Time not recorded";
 }
-
-function showBlocked(title, text, icon="◷") {
-  $("loading").hidden = true;
-  $("portal").hidden = true;
-  $("blocked").hidden = false;
-  $("blockedTitle").textContent = title;
-  $("blockedText").textContent = text;
-  $("blockedIcon").textContent = icon;
-  $("blockedMessage").className = "message";
-}
-
-function localSection(section) {
-  ["home","history","profile"].forEach(s => {
-    $(s+"Section").hidden = s !== section;
-  });
-  document.querySelectorAll(".tab").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.section === section);
+function sortReadings(list) {
+  return [...list].sort((a,b)=>{
+    const aa=`${a.date||""}T${a.time||"00:00"}`;
+    const bb=`${b.date||""}T${b.time||"00:00"}`;
+    return bb.localeCompare(aa);
   });
 }
-
-function isBusAssignedToDriver(data) {
-  return (data.assignedDriverId || data.driverId || data.driverUid) === currentUser.uid;
+function showView(name) {
+  ["bus","reading","history","profile"].forEach(v=>{
+    $(v+"View").classList.toggle("hidden",v!==name);
+  });
+  document.querySelectorAll("[data-view]").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.view===name);
+  });
+  if(name==="history") renderHistory();
 }
+document.querySelectorAll("[data-view]").forEach(btn=>{
+  btn.addEventListener("click",()=>showView(btn.dataset.view));
+});
+document.querySelectorAll("[data-goto]").forEach(btn=>{
+  btn.addEventListener("click",()=>showView(btn.dataset.goto));
+});
+$("dieselNav").addEventListener("click",()=>location.href="./diesel/");
+$("dieselCardBtn").addEventListener("click",()=>location.href="./diesel/");
+$("viewHistoryBtn").addEventListener("click",()=>showView("history"));
+$("historyRefreshBtn").addEventListener("click",loadReadings);
+$("refreshBtn").addEventListener("click",loadAll);
+$("logoutBtn").addEventListener("click",async()=>{await signOut(auth);location.replace("../");});
 
-async function verifyAndLoad() {
-  if (!currentUser) return;
+$("readingDate").value=localDate();
+$("readingTime").value=localTime();
 
-  if ((currentUser.email || "").toLowerCase() === ADMIN_EMAIL) {
-    const adminSnap = await getDoc(doc(db,"users",currentUser.uid));
-    if (adminSnap.exists() && adminSnap.data().role === "admin") {
-      location.replace("../admin/");
+onAuthStateChanged(auth,async signedInUser=>{
+  if(!signedInUser){location.replace("../");return;}
+  user=signedInUser;
+  await loadAll();
+});
+
+async function loadAll() {
+  if(!user||busy) return;
+  clearMessage();
+  try {
+    const profileSnap=await getDoc(doc(db,"users",user.uid));
+    if(!profileSnap.exists()){showMessage("Driver profile not found. Please sign in again or contact the administrator.","error");return;}
+    profile=profileSnap.data();
+
+    if(profile.role==="admin"){location.replace("../admin/");return;}
+    if(profile.role!=="driver"){showMessage("This portal is for driver accounts only.","error");return;}
+    if(profile.approvalStatus!=="approved"){
+      $("approvalBadge").textContent="Not approved";
+      showMessage("Your driver account is not approved yet. Please contact the administrator.","info");
       return;
     }
-  }
 
-  const userRef = doc(db,"users",currentUser.uid);
-  const userSnap = await getDoc(userRef);
+    $("driverLabel").textContent=profile.name||user.email||"Driver";
+    $("welcome").textContent="Hello, "+(profile.name||"Driver");
+    $("approvalBadge").textContent="Approved";
+    $("profileName").value=profile.name||"";
+    $("profilePhone").value=profile.phone||"";
+    $("profileEmail").value=profile.email||user.email||"";
+    $("profileDob").value=profile.dob||"";
+    $("profileId").value=user.uid;
 
-  if (!userSnap.exists() || userSnap.data().role !== "driver") {
-    showBlocked("Driver profile not found","Please sign in from the main login page and complete your driver profile.","!");
-    return;
-  }
-
-  driver = {id:userSnap.id,...userSnap.data()};
-
-  if (driver.approvalStatus !== "approved") {
-    showBlocked(
-      driver.approvalStatus === "rejected" ? "Application not approved" : "Waiting for admin approval",
-      driver.approvalStatus === "rejected"
-        ? "Your driver application has not been approved. Please contact the admin."
-        : "Your profile is awaiting approval. The driver portal will open after the admin approves you and assigns a bus."
-    );
-    return;
-  }
-
-  bus = null;
-
-  if (driver.assignedBusId) {
-    const bSnap = await getDoc(doc(db,"buses",driver.assignedBusId));
-    if (bSnap.exists() && isBusAssignedToDriver(bSnap.data())) {
-      bus = {id:bSnap.id,...bSnap.data()};
+    bus=null;
+    if(profile.assignedBusId){
+      const snap=await getDoc(doc(db,"buses",profile.assignedBusId));
+      if(snap.exists()) bus={id:snap.id,...snap.data()};
     }
-  }
-
-  if (!bus) {
-    const q = query(collection(db,"buses"),where("assignedDriverId","==",currentUser.uid));
-    const snap = await getDocs(q);
-    if (!snap.empty) {
-      bus = {id:snap.docs[0].id,...snap.docs[0].data()};
+    if(!bus){
+      const linked=await getDocs(query(collection(db,"buses"),where("assignedDriverId","==",user.uid)));
+      if(!linked.empty) bus={id:linked.docs[0].id,...linked.docs[0].data()};
     }
+    if(!bus){
+      $("busRegistration").textContent="No bus assigned";
+      $("busRoute").textContent="Please contact your administrator.";
+      $("currentReading").textContent="—";
+      $("busCode").textContent="—";
+      $("busMileage").textContent="—";
+      $("lastPickup").textContent="—";
+      $("lastDrop").textContent="—";
+      showMessage("Your account is approved, but no bus is assigned yet.","info");
+      return;
+    }
+
+    await loadReadings();
+    renderBus();
+  } catch(error) {
+    console.error(error);
+    showMessage("Unable to load driver portal: "+error.message,"error");
   }
+}
 
-  if (!bus) {
-    showBlocked("Waiting for bus assignment","Your driver account is approved, but no bus is currently assigned to you. Contact the admin or check again later.","🚌");
-    return;
+async function loadReadings() {
+  if(!user) return;
+  $("historyList").innerHTML='<div class="empty">Loading saved readings from Firestore…</div>';
+  try {
+    // Read the driver's saved records from Firestore, not browser memory.
+    const snap=await getDocs(query(
+      collection(db,"odometerEntries"),
+      where("driverUid","==",user.uid)
+    ));
+    readings=snap.docs.map(s=>({id:s.id,...s.data()}));
+
+    // Include only the currently assigned bus if the driver has one.
+    if(bus) readings=readings.filter(r=>r.busId===bus.id);
+
+    readings=sortReadings(readings);
+    renderHistory();
+    renderBus();
+  } catch(error) {
+    console.error("Reading history load failed:",error);
+    $("historyList").innerHTML='<div class="empty">Could not load reading history.</div>';
+    showMessage("Reading history could not be loaded: "+error.message+
+      ". Check Firestore read rules for odometerEntries.","error");
   }
-
-  $("loading").hidden = true;
-  $("blocked").hidden = true;
-  $("portal").hidden = false;
-  renderProfile();
-  renderBus();
-
-  $("readingDate").value = localDate();
-  $("readingDate").max = "9999-12-31";
-
-  await renderSelectedDate();
-  await renderHistory();
 }
 
 function renderBus() {
-  const name = driver.name || currentUser.displayName || "Driver";
-  $("welcomeTitle").textContent = "Hello, " + name.split(" ")[0];
-  $("headerName").textContent = name;
-  $("avatar").textContent = name.trim().charAt(0).toUpperCase() || "D";
+  if(!bus) return;
+  $("busRegistration").textContent=bus.registrationNo||"Bus";
+  $("busRoute").textContent=(bus.routeFrom||"—")+" → "+(bus.routeTo||"—");
+  $("busCode").textContent=bus.busCode||"—";
+  $("busMileage").textContent=bus.expectedMileage!=null?bus.expectedMileage+" km/l":"—";
 
-  $("busRegistration").textContent = bus.registrationNo || "Registration not set";
-  $("busCode").textContent = bus.busCode || "Bus code not set";
-  $("routeFrom").textContent = bus.routeFrom || "—";
-  $("routeTo").textContent = bus.routeTo || "—";
-  $("busOdometer").textContent = bus.odometerReading == null ? "—" : Number(bus.odometerReading).toLocaleString("en-IN")+" km";
-  $("busMileage").textContent = bus.expectedMileage == null ? "—" : bus.expectedMileage+" km/L";
-  $("busStatus").textContent = bus.status || "Assigned";
+  const chronological=[...readings].sort((a,b)=>{
+    const aa=`${a.date||""}T${a.time||"00:00"}`;
+    const bb=`${b.date||""}T${b.time||"00:00"}`;
+    return aa.localeCompare(bb);
+  });
+  const latest=chronological[chronological.length-1];
+  $("currentReading").textContent=latest?.reading!=null?Number(latest.reading).toLocaleString():(bus.odometerReading??"—");
+  $("currentReadingMeta").textContent=latest
+    ? `Last saved ${localDateTime(latest)} · ${String(latest.type||"").toUpperCase()}`
+    : "No driver readings saved yet · Initial bus reading shown if available";
+
+  const pickup=[...chronological].reverse().find(r=>r.type==="pickup");
+  const drop=[...chronological].reverse().find(r=>r.type==="drop");
+  $("lastPickup").textContent=pickup?`${pickup.reading} km · ${pickup.date||""}`:"—";
+  $("lastDrop").textContent=drop?`${drop.reading} km · ${drop.date||""}`:"—";
 }
 
-function renderProfile() {
-  $("profileName").textContent = driver.name || "—";
-  $("profileDob").textContent = driver.dob || "—";
-  $("profilePhone").textContent = driver.phone || "—";
-  $("profileEmail").textContent = currentUser.email || "—";
-  $("profileApproval").textContent = driver.approvalStatus || "—";
-  $("profileBus").textContent = bus
-    ? (bus.registrationNo || bus.busCode || bus.id)
-    : "Not assigned";
-}
-
-function dateEntries(date) {
-  return entries.filter(e => e.date === date);
-}
-
-function readingOf(date,type) {
-  return dateEntries(date).find(e=>e.type===type);
-}
-
-function expectedTypeForDate(date) {
-  const sameDay = dateEntries(date);
-  const hasPickup = sameDay.some(e=>e.type==="pickup");
-  const hasDrop = sameDay.some(e=>e.type==="drop");
-
-  if (hasPickup && hasDrop) return "";
-  if (hasPickup) return "drop";
-  if (hasDrop) return "pickup";
-
-  // First reading on the new date follows the last reading type in history.
-  const ordered = [...entries].sort((a,b)=>
-    (a.date||"").localeCompare(b.date||"") ||
-    (a.createdAt?.seconds||0)-(b.createdAt?.seconds||0)
-  );
-  if (ordered.length) {
-    return ordered[ordered.length-1].type === "pickup" ? "drop" : "pickup";
+function renderHistory() {
+  const list=sortReadings(readings);
+  $("historySummary").textContent=`${list.length} saved reading${list.length===1?"":"s"}`;
+  if(!list.length) {
+    $("historyList").innerHTML='<div class="empty">No saved readings found for this bus yet.<br>After you save a pickup or drop reading, it will appear here and remain after refresh.</div>';
+    return;
   }
 
-  // Admin's initial odometer entry establishes the first opposite reading.
-  if (bus.odometerReadingType === "pickup") return "drop";
-  if (bus.odometerReadingType === "drop") return "pickup";
-  return "pickup";
+  $("historyList").innerHTML=list.map((r,index)=>{
+    const type=(r.type||"unknown").toLowerCase();
+    const label=type==="pickup"?"Pickup / Start":type==="drop"?"Drop / End":type;
+    const earlier=list.slice(index+1).find(x=>x.type===r.type);
+    return `<article class="entry">
+      <div>
+        <strong>${esc(label)}</strong>
+        <div class="muted">${esc(localDateTime(r))}</div>
+        <div class="muted">Bus: ${esc(bus?.registrationNo||r.busId||"—")}</div>
+      </div>
+      <div style="text-align:right">
+        <strong>${esc(r.reading??"—")} km</strong>
+        <div style="margin-top:7px"><span class="pill">${esc(type.toUpperCase())}</span></div>
+      </div>
+    </article>`;
+  }).join("");
 }
 
-async function loadEntries() {
-  const q = query(collection(db,"odometerEntries"),where("busId","==",bus.id));
-  const snap = await getDocs(q);
-  entries = snap.docs.map(d=>({id:d.id,...d.data()}));
-}
-
-function setSelectedType(type) {
-  selectedType = type;
-  $("pickupBtn").classList.toggle("active",type==="pickup");
-  $("dropBtn").classList.toggle("active",type==="drop");
-}
-
-async function renderSelectedDate() {
-  clearMessage("readingMessage");
-  const date = $("readingDate").value || localDate();
-  $("selectedDateLabel").textContent = "Readings for "+date;
-
-  const pickup = readingOf(date,"pickup");
-  const drop = readingOf(date,"drop");
-
-  $("summaryPickup").textContent = pickup ? Number(pickup.reading).toLocaleString("en-IN")+" km" : "Not entered";
-  $("summaryDrop").textContent = drop ? Number(drop.reading).toLocaleString("en-IN")+" km" : "Not entered";
-  $("summaryDistance").textContent = pickup && drop
-    ? (Number(drop.reading)-Number(pickup.reading)).toLocaleString("en-IN")+" km"
-    : "—";
-
-  const nextType = expectedTypeForDate(date);
-  setSelectedType(nextType);
-
-  if (pickup || drop) {
-    $("dayReadings").hidden = false;
-    $("dayReadings").textContent =
-      "Saved for this date — Pickup: "+(pickup ? pickup.reading+" km" : "not entered")+
-      "; Drop: "+(drop ? drop.reading+" km" : "not entered")+
-      ". Existing readings cannot be edited.";
-  } else {
-    $("dayReadings").hidden = true;
-  }
-
-  const both = pickup && drop;
-  const chosenExists = selectedType && Boolean(readingOf(date,selectedType));
-
-  $("odometerInput").value = "";
-  $("odometerInput").disabled = both || !selectedType;
-  $("pickupBtn").disabled = Boolean(pickup);
-  $("dropBtn").disabled = Boolean(drop);
-  $("saveReading").disabled = both || !selectedType || chosenExists;
-
-  if (both) {
-    $("dateNote").textContent = "Both readings are saved for this date. Choose another date to enter a reading.";
-  } else if (!nextType) {
-    $("dateNote").textContent = "No further reading is required for this date.";
-  } else {
-    $("dateNote").textContent = "Next required reading: "+nextType.toUpperCase()+". Only one entry per reading type and date is allowed.";
-  }
-}
+$("saveReadingBtn").addEventListener("click",saveReading);
 
 async function saveReading() {
-  if (saving || !currentUser || !bus) return;
+  if(!user||!profile||!bus||busy) {
+    showMessage("Your assigned bus is not loaded. Refresh and try again.","error");
+    return;
+  }
+  const date=$("readingDate").value;
+  const time=$("readingTime").value;
+  const type=$("readingType").value;
+  const reading=Number($("readingValue").value);
 
-  const date = $("readingDate").value;
-  const reading = Number($("odometerInput").value);
-  const type = selectedType;
-
-  if (!date) return showMessage("readingMessage","Select a date.","err");
-  if (!type) return showMessage("readingMessage","Both readings are already saved for this date.","err");
-  if (!Number.isFinite(reading) || reading < 0) return showMessage("readingMessage","Enter a valid odometer reading.","err");
-
-  if (readingOf(date,type)) {
-    return showMessage("readingMessage","This reading has already been entered and cannot be changed.","err");
+  if(!date||!time||$("readingValue").value.trim()===""||!Number.isFinite(reading)||reading<0) {
+    showMessage("Enter a valid date, time and non-negative odometer reading.","error");
+    return;
   }
 
-  saving = true;
-  $("saveReading").disabled = true;
-  clearMessage("readingMessage");
+  const id=`${bus.id}_${date}_${type}`;
+  const entryRef=doc(db,"odometerEntries",id);
+  const driverRef=doc(db,"users",user.uid);
+  const busRef=doc(db,"buses",bus.id);
+
+  busy=true;
+  $("saveReadingBtn").disabled=true;
+  $("saveReadingBtn").textContent="Saving…";
+  clearMessage();
 
   try {
-    const entryId = `${bus.id}_${date}_${type}`;
-    const entryRef = doc(db,"odometerEntries",entryId);
+    await runTransaction(db,async transaction=>{
+      const [entrySnap,driverSnap,busSnap]=await Promise.all([
+        transaction.get(entryRef),transaction.get(driverRef),transaction.get(busRef)
+      ]);
 
-    await runTransaction(db,async tx=>{
-      const existing = await tx.get(entryRef);
-      if (existing.exists()) {
-        throw new Error("A reading for this date and type already exists. It cannot be edited.");
+      if(entrySnap.exists()) {
+        throw new Error("A "+type+" reading is already saved for this bus on "+date+". Choose the other reading type or contact your administrator.");
       }
-
-      const latestUser = await tx.get(doc(db,"users",currentUser.uid));
-      if (!latestUser.exists() ||
-          latestUser.data().role !== "driver" ||
-          latestUser.data().approvalStatus !== "approved" ||
-          latestUser.data().assignedBusId !== bus.id) {
-        throw new Error("Your approval or bus assignment has changed. Refresh your portal.");
+      if(!driverSnap.exists()) throw new Error("Driver profile not found.");
+      const freshDriver=driverSnap.data();
+      if(freshDriver.role!=="driver"||freshDriver.approvalStatus!=="approved") {
+        throw new Error("Your driver account is not approved.");
       }
+      if(freshDriver.assignedBusId!==bus.id) {
+        throw new Error("This bus is no longer assigned to your account. Refresh and contact the administrator.");
+      }
+      if(!busSnap.exists()) throw new Error("Assigned bus no longer exists.");
 
-      tx.set(entryRef,{
+      transaction.set(entryRef,{
         busId:bus.id,
-        driverUid:currentUser.uid,
+        driverUid:user.uid,
         date,
+        time,
         type,
         reading,
-        createdAt:serverTimestamp()
+        createdAt:serverTimestamp(),
+        updatedAt:serverTimestamp()
       });
     });
 
-    showMessage("readingMessage","Reading saved successfully.","ok");
-    await loadEntries();
-    await renderSelectedDate();
-    await renderHistory();
-
-  } catch (error) {
-    console.error("Odometer save error:",error);
-    showMessage(
-      "readingMessage",
-      error.code === "permission-denied"
-        ? "Firestore denied this reading. Check your odometerEntries security rules."
-        : (error.message || "Could not save the reading."),
-      "err"
-    );
+    $("readingValue").value="";
+    showMessage("Reading saved successfully. Updating current odometer and history…","ok");
+    await loadAll();
+    showView("history");
+  } catch(error) {
+    console.error("Save reading failed:",error);
+    showMessage("Could not save reading: "+error.message,"error");
   } finally {
-    saving = false;
-    $("saveReading").disabled = false;
-    await renderSelectedDate();
+    busy=false;
+    $("saveReadingBtn").disabled=false;
+    $("saveReadingBtn").textContent="Save reading";
   }
 }
-
-async function renderHistory() {
-  const ordered = [...entries].sort((a,b)=>
-    (b.date||"").localeCompare(a.date||"") ||
-    (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0)
-  );
-
-  $("historyCount").textContent = ordered.length+" entries";
-
-  if (!ordered.length) {
-    $("historyList").innerHTML = '<div class="empty">No odometer readings recorded yet.</div>';
-    return;
-  }
-
-  $("historyList").innerHTML = ordered.map(e=>`
-    <div class="history-item">
-      <div>
-        <div class="history-date">${esc(e.date || "Unknown date")}</div>
-        <div class="history-meta">${esc(e.type || "Reading")} reading<br>Bus: ${esc(bus.registrationNo || bus.busCode || bus.id)}</div>
-      </div>
-      <div class="reading">
-        <strong>${esc(Number(e.reading).toLocaleString("en-IN"))} km</strong>
-        <span>Saved reading</span>
-      </div>
-    </div>
-  `).join("");
-}
-
-$("readingDate").addEventListener("change",async()=>{
-  await loadEntries();
-  await renderSelectedDate();
-});
-$("pickupBtn").addEventListener("click",()=>{
-  if (!readingOf($("readingDate").value,"pickup")) setSelectedType("pickup");
-});
-$("dropBtn").addEventListener("click",()=>{
-  if (!readingOf($("readingDate").value,"drop")) setSelectedType("drop");
-});
-$("saveReading").addEventListener("click",saveReading);
-
-document.querySelectorAll(".tab").forEach(btn=>{
-  btn.addEventListener("click",()=>localSection(btn.dataset.section));
-});
-
-$("signOut").addEventListener("click",()=>signOut(auth).then(()=>location.replace("../")));
-$("blockedSignOut").addEventListener("click",()=>signOut(auth).then(()=>location.replace("../")));
-
-$("refreshStatus").addEventListener("click",async()=>{
-  $("blocked").hidden = true;
-  $("loading").hidden = false;
-  try {
-    await verifyAndLoad();
-  } catch (error) {
-    console.error(error);
-    showBlocked("Could not check status","Could not read your profile or assignment. Check Firestore permissions and try again.","!");
-    showMessage("blockedMessage",error.code==="permission-denied"?"Firestore permission denied.":"Please try again.","err");
-  }
-});
-
-onAuthStateChanged(auth,async user=>{
-  currentUser = user;
-
-  if (!user) {
-    location.replace("../");
-    return;
-  }
-
-  $("loading").hidden = false;
-  $("portal").hidden = true;
-  $("blocked").hidden = true;
-
-  try {
-    await verifyAndLoad();
-  } catch (error) {
-    console.error("Driver portal error:",error);
-    showBlocked(
-      "Could not load driver portal",
-      "Your account could not be verified or your bus information could not be loaded.",
-      "!"
-    );
-    showMessage(
-      "blockedMessage",
-      error.code==="permission-denied"
-        ? "Firestore permission denied. Check users, buses and odometerEntries security rules."
-        : (error.message || "Please try again."),
-      "err"
-    );
-  }
-});
 </script>
 </body>
 </html>
