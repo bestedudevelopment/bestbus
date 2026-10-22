@@ -1,0 +1,561 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BEST | Reports & Analytics</title>
+<style>
+:root{--blue:#1769e0;--navy:#172740;--bg:#f4f7fc;--line:#e4eaf2;--muted:#6b788b;--green:#13834b}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--navy)}
+button,input,select{font:inherit}
+button{border:0;border-radius:9px;padding:11px 14px;font-weight:700;cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:225px;flex-shrink:0;background:white;border-right:1px solid var(--line);padding:22px 14px}
+.logo{font-size:23px;font-weight:900;color:var(--blue)}
+.sublogo{font-size:12px;color:var(--muted);margin:5px 0 25px}
+.nav a{display:block;text-decoration:none;color:#53627a;padding:12px;border-radius:9px;margin:5px 0;font-size:14px;font-weight:700}
+.nav a.active,.nav a:hover{background:#eaf2ff;color:var(--blue)}
+.main{flex:1;min-width:0;max-width:1650px;padding:25px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:13px;flex-wrap:wrap;margin-bottom:20px}
+h1{font-size:27px;margin:0 0 7px}
+h2{font-size:18px;margin:0 0 14px}
+.subtitle{font-size:13px;color:var(--muted)}
+.primary{background:var(--blue);color:white}
+.secondary{background:#edf2f8;color:#34445c}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:11px;margin-bottom:18px}
+.stat,.panel{background:white;border:1px solid var(--line);border-radius:13px;padding:16px}
+.stat span{display:block;color:var(--muted);font-size:12px;margin-bottom:8px}
+.stat strong{font-size:23px;overflow-wrap:anywhere}
+.filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:700;color:#53627a;margin-bottom:6px}
+.field input,.field select{width:100%;min-width:0;padding:11px;border:1px solid #dbe3ee;border-radius:9px;background:white;color:var(--navy)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.busgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.buscard{background:white;border:1px solid var(--line);border-radius:13px;padding:16px;min-width:0}
+.bushead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.bushead h3{font-size:16px;margin:0 0 5px;overflow-wrap:anywhere}
+.badge{display:inline-block;border-radius:20px;padding:6px 9px;font-size:11px;font-weight:800;background:#edf2f8;color:#53627a;white-space:nowrap}
+.badge.green{background:#e5f7ec;color:var(--green)}
+.muted{font-size:12px;color:var(--muted);line-height:1.6}
+.metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
+.metric{background:#f6f8fc;border-radius:9px;padding:10px;min-width:0}
+.metric span{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
+.metric strong{font-size:15px;overflow-wrap:anywhere}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:850px;font-size:12px}
+th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{background:#f5f7fb;color:#53627a}
+tr:last-child td{border-bottom:0}
+.notice{padding:12px 14px;border-radius:10px;background:#eaf2ff;color:#244f89;font-size:12px;line-height:1.6;margin-bottom:17px}
+.empty{padding:28px;text-align:center;color:var(--muted);background:white;border:1px dashed #d5deeb;border-radius:12px}
+.section{margin-bottom:20px}
+#message{display:none;position:fixed;right:18px;bottom:18px;background:#172740;color:white;padding:13px 16px;border-radius:10px;z-index:10;max-width:90vw}
+#message.error{background:#a82431}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.busgrid{grid-template-columns:1fr}}
+@media(max-width:600px){.layout{display:block}.sidebar{width:auto;padding:12px;border-right:0;border-bottom:1px solid var(--line)}.logo{font-size:20px}.sublogo{margin-bottom:8px}.nav{display:flex;gap:5px;overflow-x:auto}.nav a{white-space:nowrap;padding:10px;margin:0;font-size:12px}.main{padding:15px 11px}.top h1{font-size:23px}.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.stat,.panel{padding:12px}.stat strong{font-size:20px}.filters{grid-template-columns:1fr 1fr;gap:9px}}
+@media print{.sidebar,.no-print,#message{display:none!important}.layout{display:block}.main{padding:0}.busgrid{grid-template-columns:repeat(2,1fr)}.buscard,.panel,.stat{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo">BEST BUS</div>
+    <div class="sublogo">Bus Management System</div>
+    <nav class="nav">
+      <a href="../">Dashboard</a>
+      <a href="../addbus/">Add Bus</a>
+      <a href="../adddriver/">Add Driver</a>
+      <a href="../assign-deassign/">Assign / Deassign</a>
+      <a href="../diesel/">Diesel Management</a>
+      <a href="./" class="active">Reports</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div>
+        <h1>Reports & Analytics</h1>
+        <div class="subtitle">Fleet operations, diesel intervals, mileage, expenses and driver details.</div>
+      </div>
+      <div class="actions no-print">
+        <button class="secondary" id="refreshBtn">↻ Refresh</button>
+        <button class="primary" id="excelBtn">Download Excel</button>
+        <button class="secondary" id="pdfBtn">Print / PDF</button>
+      </div>
+    </div>
+
+    <div class="notice">
+      Mileage between diesel entries is calculated using consecutive refuelling records for the same bus. The odometer difference is divided by the litres recorded at the later entry. Missing readings and invalid intervals are excluded from average mileage.
+    </div>
+
+    <section class="panel no-print section">
+      <h2>Report identity</h2>
+      <div class="filters">
+        <div class="field">
+          <label for="orgName">School / College / Organisation name</label>
+          <input id="orgName" value="BEST Bus Management" placeholder="Enter school or college name">
+        </div>
+        <div class="field">
+          <label for="reportTitle">Report title</label>
+          <input id="reportTitle" value="Bus Operations & Diesel Report">
+        </div>
+        <div class="field">
+          <label for="fromDate">From date</label>
+          <input id="fromDate" type="date">
+        </div>
+        <div class="field">
+          <label for="toDate">To date</label>
+          <input id="toDate" type="date">
+        </div>
+        <div class="field">
+          <label for="busFilter">Bus</label>
+          <select id="busFilter"><option value="all">All buses</option></select>
+        </div>
+        <div class="field">
+          <label for="search">Search bus / route / driver</label>
+          <input id="search" placeholder="Search records">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="primary" id="applyBtn">Apply filters</button>
+        <button class="secondary" id="clearBtn">Clear filters</button>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat"><span>Buses in report</span><strong id="totalBuses">—</strong></div>
+      <div class="stat"><span>Assigned buses</span><strong id="assignedBuses">—</strong></div>
+      <div class="stat"><span>Distance (km)</span><strong id="totalDistance">—</strong></div>
+      <div class="stat"><span>Diesel (L)</span><strong id="totalLitres">—</strong></div>
+      <div class="stat"><span>Diesel expenses</span><strong id="totalAmount">—</strong></div>
+    </section>
+
+    <section class="section">
+      <div class="top">
+        <div><h2>Bus-wise summary</h2><div class="subtitle" id="periodLabel">All available records</div></div>
+      </div>
+      <div id="busGrid" class="busgrid"><div class="empty">Loading reports…</div></div>
+    </section>
+
+    <section class="panel section">
+      <h2>Average mileage between diesel entries</h2>
+      <div class="muted" style="margin-bottom:12px">Each interval uses two consecutive diesel records for a bus. The litres at the later refuelling entry are used for that interval.</div>
+      <div id="intervalTable" class="tablewrap"><div class="empty">Loading diesel intervals…</div></div>
+    </section>
+
+    <section class="panel section">
+      <h2>Daily odometer and diesel details</h2>
+      <div id="dailyTable" class="tablewrap"><div class="empty">Loading daily records…</div></div>
+    </section>
+  </main>
+</div>
+<div id="message"></div>
+
+<script type="module">
+import { auth, db } from "../../firebase.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const $ = id => document.getElementById(id);
+let buses=[],users=[],drivers=[],odometerEntries=[],dieselEntries=[],reports=[];
+let currentAdmin=null,loaded=false,loading=false;
+
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function num(v){const x=Number(v);return Number.isFinite(x)?x:0;}
+function validNum(v){return v!==null&&v!==undefined&&v!==""&&Number.isFinite(Number(v));}
+function fmt(v,d=2){return num(v).toLocaleString("en-IN",{maximumFractionDigits:d});}
+function money(v){return "₹"+fmt(v,2);}
+function labelDate(v){if(!v)return "—";const a=v.split("-");return a.length===3?`${a[2]}/${a[1]}/${a[0]}`:v;}
+function busReg(b){return b.registrationNo||"No registration";}
+function busCode(b){return b.busCode||"—";}
+function route(b){return [b.routeFrom,b.routeTo].filter(Boolean).join(" → ")||"Route not set";}
+function driverName(d){return d?.name||d?.fullName||d?.displayName||"Not assigned";}
+function driverPhone(d){return d?.phone||d?.phoneNumber||d?.mobile||"—";}
+function driverIdForBus(b){return b.assignedDriverId||b.driverUid||b.driverId||"";}
+function assigned(b){return Boolean(driverIdForBus(b)||b.assignedDriverName||String(b.status||"").toLowerCase()==="assigned");}
+function findDriver(b){return drivers.find(d=>d.id===driverIdForBus(b))||null;}
+function dateOf(e){return String(e.date||"");}
+function timeOf(e){return String(e.time||"00:00");}
+function timeKey(e){return `${dateOf(e)}T${timeOf(e)}`;}
+function chronological(a,b){return timeKey(a).localeCompare(timeKey(b));}
+function inRange(date,from,to){return Boolean(date)&&(!from||date>=from)&&(!to||date<=to);}
+function toast(msg,error=false){const el=$("message");el.textContent=msg;el.className=error?"error":"";el.style.display="block";clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.style.display="none",4000);}
+
+onAuthStateChanged(auth,async user=>{
+  if(!user){location.replace("../../");return;}
+  try{
+    const profile=await getDoc(doc(db,"users",user.uid));
+    if(!profile.exists()||String(profile.data().role||"").toLowerCase()!=="admin"){
+      await signOut(auth);location.replace("../../");return;
+    }
+    currentAdmin={...profile.data(),uid:user.uid,email:user.email||profile.data().email||""};
+    await loadData();
+  }catch(e){
+    console.error(e);
+    $("busGrid").innerHTML=`<div class="empty">Could not verify admin access or read reports.<br>${esc(e.message)}</div>`;
+    toast("Check admin access and Firestore read permissions.",true);
+  }
+});
+
+async function loadData(){
+  if(loading)return;
+  loading=true;$("refreshBtn").disabled=true;
+  $("busGrid").innerHTML='<div class="empty">Loading fleet and diesel records…</div>';
+  try{
+    const [bs,us,os,ds]=await Promise.all([
+      getDocs(collection(db,"buses")),
+      getDocs(collection(db,"users")),
+      getDocs(collection(db,"odometerEntries")),
+      getDocs(collection(db,"dieselEntries"))
+    ]);
+    buses=bs.docs.map(s=>({id:s.id,...s.data()}));
+    users=us.docs.map(s=>({id:s.id,...s.data()}));
+    drivers=users.filter(u=>String(u.role||"").toLowerCase()==="driver");
+    odometerEntries=os.docs.map(s=>({id:s.id,...s.data()}));
+    dieselEntries=ds.docs.map(s=>({id:s.id,...s.data()}));
+    populateBusFilter();loaded=true;renderReports();
+  }catch(e){
+    console.error(e);
+    $("busGrid").innerHTML=`<div class="empty">Unable to load report collections. Check read permissions for buses, users, odometerEntries and dieselEntries.<br>${esc(e.message)}</div>`;
+    toast("Could not load Firestore records.",true);
+  }finally{loading=false;$("refreshBtn").disabled=false;}
+}
+
+function populateBusFilter(){
+  const old=$("busFilter").value||"all";
+  $("busFilter").innerHTML='<option value="all">All buses</option>'+
+    [...buses].sort((a,b)=>busReg(a).localeCompare(busReg(b))).map(b=>
+      `<option value="${esc(b.id)}">${esc(busReg(b))} — ${esc(busCode(b))}</option>`).join("");
+  if([...$("busFilter").options].some(o=>o.value===old))$("busFilter").value=old;
+}
+
+/* Calculate intervals using the full diesel history, then filter intervals
+   by the date of the later refuelling entry. This preserves the previous
+   refuelling record when an interval crosses the start date of a report. */
+function mileageIntervals(busId,from,to){
+  const entries=dieselEntries
+    .filter(e=>e.busId===busId)
+    .sort(chronological);
+  const result=[];
+  for(let i=1;i<entries.length;i++){
+    const previous=entries[i-1],later=entries[i];
+    const previousOdo=previous.odometerReading;
+    const laterOdo=later.odometerReading;
+    const litres=later.litres;
+    if(!validNum(previousOdo)||!validNum(laterOdo)||!validNum(litres))continue;
+    const distance=Number(laterOdo)-Number(previousOdo);
+    if(distance<=0||Number(litres)<=0)continue;
+    if(!inRange(dateOf(later),from,to))continue;
+    result.push({
+      busId,registration:busReg(buses.find(b=>b.id===busId)||{}),
+      code:busCode(buses.find(b=>b.id===busId)||{}),
+      previousDate:dateOf(previous),date:dateOf(later),
+      previousTime:timeOf(previous),time:timeOf(later),
+      fromOdo:Number(previousOdo),toOdo:Number(laterOdo),
+      distance,litres:Number(litres),mileage:distance/Number(litres),
+      amount:num(later.amount),station:later.station||"—",
+      billNumber:later.billNumber||"—",
+      driverName:later.driverName||previous.driverName||"",
+      driverUid:later.driverUid||previous.driverUid||"",
+      previousEntryId:previous.id,laterEntryId:later.id
+    });
+  }
+  return result;
+}
+
+function dailyForBus(bus,from,to){
+  const readings=odometerEntries.filter(e=>e.busId===bus.id&&inRange(dateOf(e),from,to)).sort(chronological);
+  const fuels=dieselEntries.filter(e=>e.busId===bus.id&&inRange(dateOf(e),from,to)).sort(chronological);
+  const dates=[...new Set([...readings.map(dateOf),...fuels.map(dateOf)])].sort();
+  return dates.map(date=>{
+    const dayReadings=readings.filter(e=>dateOf(e)===date).sort(chronological);
+    const pickups=dayReadings.filter(e=>String(e.type||"").toLowerCase()==="pickup");
+    const drops=dayReadings.filter(e=>String(e.type||"").toLowerCase()==="drop");
+    const pickup=pickups[0]||null;
+    const drop=drops[drops.length-1]||null;
+    const distance=pickup&&drop&&validNum(pickup.reading)&&validNum(drop.reading)&&num(drop.reading)>=num(pickup.reading)
+      ?num(drop.reading)-num(pickup.reading):null;
+    const dayFuel=fuels.filter(e=>dateOf(e)===date);
+    return {
+      date,registration:busReg(bus),code:busCode(bus),
+      driverName:dayFuel.find(e=>e.driverName)?.driverName||driverName(findDriver(bus)),
+      pickup:pickup?.reading??null,drop:drop?.reading??null,distance,
+      litres:dayFuel.reduce((s,e)=>s+num(e.litres),0),
+      amount:dayFuel.reduce((s,e)=>s+num(e.amount),0),
+      stations:[...new Set(dayFuel.map(e=>e.station).filter(Boolean))].join(", ")||"—",
+      bills:[...new Set(dayFuel.map(e=>e.billNumber).filter(Boolean))].join(", ")||"—"
+    };
+  });
+}
+
+function renderReports(){
+  if(!loaded)return;
+  const from=$("fromDate").value,to=$("toDate").value;
+  if(from&&to&&from>to){toast("From date cannot be after To date.",true);return;}
+  const selected=$("busFilter").value;
+  const q=$("search").value.trim().toLowerCase();
+
+  const matching=buses.filter(b=>{
+    if(selected!=="all"&&b.id!==selected)return false;
+    const d=findDriver(b);
+    return [busReg(b),busCode(b),route(b),driverName(d),driverPhone(d),d?.email,b.assignedDriverName]
+      .join(" ").toLowerCase().includes(q);
+  });
+
+  reports=matching.map(bus=>{
+    const daily=dailyForBus(bus,from,to);
+    const intervals=mileageIntervals(bus.id,from,to);
+    const distance=daily.reduce((s,r)=>s+(r.distance===null?0:r.distance),0);
+    const litres=daily.reduce((s,r)=>s+r.litres,0);
+    const amount=daily.reduce((s,r)=>s+r.amount,0);
+    const intervalDistance=intervals.reduce((s,r)=>s+r.distance,0);
+    const intervalLitres=intervals.reduce((s,r)=>s+r.litres,0);
+    return {
+      bus,driver:findDriver(bus),daily,intervals,distance,litres,amount,
+      intervalDistance,intervalLitres,
+      average:intervalLitres>0?intervalDistance/intervalLitres:null
+    };
+  });
+
+  $("totalBuses").textContent=reports.length;
+  $("assignedBuses").textContent=reports.filter(r=>assigned(r.bus)).length;
+  $("totalDistance").textContent=fmt(reports.reduce((s,r)=>s+r.distance,0));
+  $("totalLitres").textContent=fmt(reports.reduce((s,r)=>s+r.litres,0));
+  $("totalAmount").textContent=money(reports.reduce((s,r)=>s+r.amount,0));
+  $("periodLabel").textContent=`${from?labelDate(from):"All dates"} – ${to?labelDate(to):"All dates"}`;
+
+  $("busGrid").innerHTML=reports.map(r=>`
+    <article class="buscard">
+      <div class="bushead">
+        <div><h3>${esc(busReg(r.bus))}</h3>
+          <div class="muted">Code: ${esc(busCode(r.bus))}</div>
+          <div class="muted">${esc(route(r.bus))}</div>
+        </div>
+        <span class="badge ${assigned(r.bus)?"green":""}">${assigned(r.bus)?"Assigned":"Available"}</span>
+      </div>
+      <div class="muted" style="margin-top:10px">Driver: <b>${esc(driverName(r.driver)!=="Not assigned"?driverName(r.driver):r.bus.assignedDriverName||"Not assigned")}</b></div>
+      <div class="metrics">
+        <div class="metric"><span>Odometer distance</span><strong>${fmt(r.distance)} km</strong></div>
+        <div class="metric"><span>Diesel recorded</span><strong>${fmt(r.litres)} L</strong></div>
+        <div class="metric"><span>Diesel expenses</span><strong>${money(r.amount)}</strong></div>
+        <div class="metric"><span>Average between refuels</span><strong>${r.average===null?"—":fmt(r.average)+" km/L"}</strong></div>
+      </div>
+      <div class="muted">Valid refuelling intervals: ${r.intervals.length} · Interval distance: ${fmt(r.intervalDistance)} km · Interval litres: ${fmt(r.intervalLitres)} L</div>
+    </article>`).join("")||'<div class="empty">No buses match these filters.</div>';
+
+  const allIntervals=reports.flatMap(r=>r.intervals.map(x=>({...x,driverProfile:drivers.find(d=>d.id===x.driverUid)||r.driver})))
+    .sort((a,b)=>b.date.localeCompare(a.date)||a.registration.localeCompare(b.registration));
+
+  $("intervalTable").innerHTML=allIntervals.length?`<table>
+    <thead><tr><th>Previous fuel date</th><th>Next fuel date</th><th>Bus</th><th>Bus code</th><th>Driver</th><th>Previous odo</th><th>Next odo</th><th>Distance</th><th>Litres at next entry</th><th>Interval km/L</th><th>Next fuel amount</th><th>Station</th><th>Bill no.</th></tr></thead>
+    <tbody>${allIntervals.map(x=>`<tr>
+      <td>${esc(labelDate(x.previousDate))}</td><td>${esc(labelDate(x.date))}</td>
+      <td>${esc(x.registration)}</td><td>${esc(x.code)}</td>
+      <td>${esc(x.driverName||driverName(x.driverProfile))}</td>
+      <td>${fmt(x.fromOdo)}</td><td>${fmt(x.toOdo)}</td><td>${fmt(x.distance)}</td>
+      <td>${fmt(x.litres)}</td><td><b>${fmt(x.mileage)}</b></td>
+      <td>${money(x.amount)}</td><td>${esc(x.station)}</td><td>${esc(x.billNumber)}</td>
+    </tr>`).join("")}</tbody></table>`:'<div class="empty">No valid consecutive diesel intervals found for this date range. Each interval needs two odometer readings and a positive litres value at the later entry.</div>';
+
+  const allDaily=reports.flatMap(r=>r.daily).sort((a,b)=>b.date.localeCompare(a.date)||a.registration.localeCompare(b.registration));
+  $("dailyTable").innerHTML=allDaily.length?`<table>
+    <thead><tr><th>Date</th><th>Bus registration</th><th>Bus code</th><th>Driver</th><th>Pickup km</th><th>Drop km</th><th>Daily distance km</th><th>Diesel L</th><th>Expense</th><th>Station</th><th>Bill no.</th></tr></thead>
+    <tbody>${allDaily.map(x=>`<tr><td>${esc(labelDate(x.date))}</td><td>${esc(x.registration)}</td><td>${esc(x.code)}</td><td>${esc(x.driverName)}</td><td>${x.pickup===null?"—":fmt(x.pickup)}</td><td>${x.drop===null?"—":fmt(x.drop)}</td><td>${x.distance===null?"—":fmt(x.distance)}</td><td>${fmt(x.litres)}</td><td>${money(x.amount)}</td><td>${esc(x.stations)}</td><td>${esc(x.bills)}</td></tr>`).join("")}</tbody></table>`:'<div class="empty">No odometer or diesel entries found for this period.</div>';
+}
+
+function reportMetadata(){
+  return {
+    organisation:$("orgName").value.trim()||"BEST Bus Management",
+    title:$("reportTitle").value.trim()||"Bus Operations & Diesel Report",
+    from:$("fromDate").value||"All dates",
+    to:$("toDate").value||"All dates",
+    generatedAt:new Date().toLocaleString("en-IN"),
+    generatedBy:currentAdmin?.email||"—",
+    adminUid:currentAdmin?.uid||"—"
+  };
+}
+
+function profileRows(){
+  const meta=reportMetadata();
+  return [
+    ["Organisation / School / College",meta.organisation],
+    ["Report title",meta.title],
+    ["Reporting period",`${meta.from} to ${meta.to}`],
+    ["Generated at",meta.generatedAt],
+    ["Generated by admin email",meta.generatedBy],
+    ["Admin profile UID",meta.adminUid],
+    ["Buses included",reports.length],
+    ["Total odometer distance (km)",reports.reduce((s,r)=>s+r.distance,0)],
+    ["Total diesel entries litres",reports.reduce((s,r)=>s+r.litres,0)],
+    ["Total diesel expenses",reports.reduce((s,r)=>s+r.amount,0)],
+    ["Average mileage method","Distance between consecutive diesel-entry odometer readings / litres at later entry"]
+  ];
+}
+
+async function downloadExcel(){
+  if(!loaded||!reports.length){toast("No report data to export.",true);return;}
+  const btn=$("excelBtn");btn.disabled=true;
+  try{
+    // SheetJS creates a genuine .xlsx workbook with separate summary and detail sheets.
+    if(!window.XLSX){
+      await loadScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js");
+    }
+    const XLSX=window.XLSX;
+    const meta=reportMetadata();
+    const workbook=XLSX.utils.book_new();
+
+    const summaryRows=profileRows();
+    summaryRows.push([]);
+    summaryRows.push(["BUS-WISE SUMMARY"]);
+    summaryRows.push([
+      "Organisation","Report title","Generated by","Driver name","Driver phone","Driver email",
+      "Driver profile UID","Driver username","Driver DOB","Bus registration","Bus code",
+      "Route from","Route to","Bus status","Expected mileage km/L",
+      "Daily distance km","Diesel litres","Diesel expense","Valid refuel intervals",
+      "Interval distance km","Interval litres","Average interval mileage km/L"
+    ]);
+
+    for(const r of reports){
+      const d=r.driver||{};
+      summaryRows.push([
+        meta.organisation,meta.title,meta.generatedBy,
+        driverName(d)==="Not assigned"?(r.bus.assignedDriverName||"Not assigned"):driverName(d),
+        driverPhone(d),d.email||"—",d.id||d.uid||"—",d.username||"—",d.dob||"—",
+        busReg(r.bus),busCode(r.bus),r.bus.routeFrom||"—",r.bus.routeTo||"—",
+        r.bus.status|| (assigned(r.bus)?"assigned":"available"),
+        r.bus.expectedMileage??"",r.distance,r.litres,r.amount,r.intervals.length,
+        r.intervalDistance,r.intervalLitres,r.average??""
+      ]);
+    }
+    const summarySheet=XLSX.utils.aoa_to_sheet(summaryRows);
+    summarySheet["!cols"]=[
+      {wch:28},{wch:30},{wch:30},{wch:24},{wch:17},{wch:30},{wch:30},{wch:20},
+      {wch:15},{wch:20},{wch:15},{wch:20},{wch:20},{wch:15},{wch:18},{wch:17},
+      {wch:15},{wch:17},{wch:20},{wch:20},{wch:17},{wch:25}
+    ];
+    XLSX.utils.book_append_sheet(workbook,summarySheet,"Bus Summary");
+
+    const intervalRows=[
+      ["Organisation",meta.organisation],
+      ["Report",meta.title],
+      ["Reporting period",`${meta.from} to ${meta.to}`],
+      ["Generated by",meta.generatedBy],
+      ["Admin profile UID",meta.adminUid],
+      [],
+      ["Previous fuel date","Next fuel date","Bus registration","Bus code","Route","Driver name",
+       "Driver phone","Driver email","Driver profile UID","Driver username","Driver DOB",
+       "Previous odometer km","Next odometer km","Distance since previous entry km",
+       "Litres at later diesel entry","Interval mileage km/L","Diesel amount at later entry",
+       "Station","Bill number","Full tank","Notes","Previous diesel entry ID","Later diesel entry ID"]
+    ];
+    const intervalDetails=reports.flatMap(r=>r.intervals.map(x=>{
+      const d=drivers.find(u=>u.id===x.driverUid)||r.driver||{};
+      const later=dieselEntries.find(e=>e.id===x.laterEntryId)||{};
+      return [
+        x.previousDate,x.date,x.registration,x.code,route(r.bus),x.driverName||driverName(d),
+        driverPhone(d),d.email||later.driverEmail||"—",d.id||d.uid||x.driverUid||"—",
+        d.username||"—",d.dob||"—",x.fromOdo,x.toOdo,x.distance,x.litres,x.mileage,x.amount,
+        x.station,x.billNumber,later.fullTank===true?"Yes":later.fullTank===false?"No":"—",
+        later.notes||"—",x.previousEntryId,x.laterEntryId
+      ];
+    }));
+    intervalRows.push(...intervalDetails);
+    const intervalSheet=XLSX.utils.aoa_to_sheet(intervalRows);
+    intervalSheet["!cols"]=Array.from({length:23},(_,i)=>({wch:[16,16,20,13,25,24,17,28,30,20,15,19,19,23,23,20,22,23,20,18,25,30,30][i]}));
+    XLSX.utils.book_append_sheet(workbook,intervalSheet,"Diesel Intervals");
+
+    const dailyRows=[
+      ["Organisation",meta.organisation],
+      ["Report",meta.title],
+      ["Reporting period",`${meta.from} to ${meta.to}`],
+      ["Generated by",meta.generatedBy],
+      [],
+      ["Date","Bus registration","Bus code","Route","Driver name","Driver phone","Driver email",
+       "Driver profile UID","Pickup km","Drop km","Distance km","Diesel litres","Diesel expense",
+       "Station","Bill number"]
+    ];
+    for(const r of reports){
+      for(const x of r.daily){
+        const d=r.driver||{};
+        const fuels=dieselEntries.filter(e=>e.busId===r.bus.id&&e.date===x.date);
+        dailyRows.push([
+          x.date,busReg(r.bus),busCode(r.bus),route(r.bus),x.driverName,
+          driverPhone(d),d.email||fuels.find(e=>e.driverEmail)?.driverEmail||"—",
+          d.id||d.uid||fuels.find(e=>e.driverUid)?.driverUid||"—",
+          x.pickup??"",x.drop??"",x.distance??"",x.litres,x.amount,x.stations,x.bills
+        ]);
+      }
+    }
+    const dailySheet=XLSX.utils.aoa_to_sheet(dailyRows);
+    dailySheet["!cols"]=Array.from({length:15},(_,i)=>({wch:[14,20,14,25,24,17,28,30,14,14,16,16,18,22,18][i]}));
+    XLSX.utils.book_append_sheet(workbook,dailySheet,"Daily Details");
+
+    const fuelRows=[
+      ["Organisation",meta.organisation],
+      ["Report",meta.title],
+      ["Reporting period",`${meta.from} to ${meta.to}`],
+      ["Generated by",meta.generatedBy],
+      [],
+      ["Date","Time","Bus registration","Bus code","Route","Driver name","Driver phone",
+       "Driver email","Driver profile UID","Driver username","Driver DOB","Odometer km",
+       "Litres","Amount","Station","Bill number","Full tank","Notes","Diesel entry ID"]
+    ];
+    const chosenBusIds=new Set(reports.map(r=>r.bus.id));
+    const from=$("fromDate").value,to=$("toDate").value;
+    const selectedFuel=dieselEntries.filter(e=>chosenBusIds.has(e.busId)&&inRange(dateOf(e),from,to))
+      .sort(chronological);
+    for(const e of selectedFuel){
+      const bus=buses.find(b=>b.id===e.busId)||{};
+      const d=drivers.find(u=>u.id===e.driverUid)||{};
+      fuelRows.push([
+        e.date||"—",e.time||"—",e.registrationNo||busReg(bus),e.busCode||busCode(bus),
+        route(bus),e.driverName||driverName(d),e.driverPhone||driverPhone(d),
+        e.driverEmail||d.email||"—",e.driverUid||d.id||"—",d.username||"—",d.dob||"—",
+        e.odometerReading??"",e.litres??"",e.amount??"",e.station||"—",e.billNumber||"—",
+        e.fullTank===true?"Yes":e.fullTank===false?"No":"—",e.notes||"—",e.id
+      ]);
+    }
+    const fuelSheet=XLSX.utils.aoa_to_sheet(fuelRows);
+    fuelSheet["!cols"]=Array.from({length:19},(_,i)=>({wch:[14,12,20,14,25,24,17,28,30,20,15,17,13,15,22,18,13,35,30][i]}));
+    XLSX.utils.book_append_sheet(workbook,fuelSheet,"Diesel Entries");
+
+    const filename=`BEST-Report-${new Date().toISOString().slice(0,10)}.xlsx`;
+    XLSX.writeFile(workbook,filename);
+    toast("Excel workbook downloaded.");
+  }catch(e){
+    console.error("Excel export failed:",e);
+    toast("Excel download failed. Check internet access and try again.",true);
+  }finally{btn.disabled=false;}
+}
+
+function loadScript(src){
+  return new Promise((resolve,reject)=>{
+    const script=document.createElement("script");
+    script.src=src;
+    script.onload=resolve;
+    script.onerror=()=>reject(new Error("Could not load export library"));
+    document.head.appendChild(script);
+  });
+}
+
+$("applyBtn").addEventListener("click",renderReports);
+$("fromDate").addEventListener("change",renderReports);
+$("toDate").addEventListener("change",renderReports);
+$("busFilter").addEventListener("change",renderReports);
+$("search").addEventListener("input",renderReports);
+$("refreshBtn").addEventListener("click",loadData);
+$("excelBtn").addEventListener("click",downloadExcel);
+$("clearBtn").addEventListener("click",()=>{
+  $("fromDate").value="";
+  $("toDate").value="";
+  $("busFilter").value="all";
+  $("search").value="";
+  renderReports();
+});
+$("pdfBtn").addEventListener("click",()=>window.print());
+</script>
+</body>
+</html>
