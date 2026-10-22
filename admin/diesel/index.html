@@ -1,0 +1,783 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diesel Management | BEST Bus Management</title>
+
+<style>
+:root{
+  --blue:#1769e0;
+  --blue-light:#edf4ff;
+  --bg:#f5f7fb;
+  --white:#fff;
+  --text:#17243b;
+  --muted:#718096;
+  --border:#e5eaf2;
+  --green:#13875a;
+  --orange:#b96b08;
+  --red:#d94848;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}
+.layout{max-width:1450px;margin:auto;padding:24px}
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:15px;flex-wrap:wrap;margin-bottom:23px
+}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{
+  width:46px;height:46px;background:var(--blue);color:#fff;
+  border-radius:14px;display:grid;place-items:center;
+  font-size:20px;font-weight:800
+}
+h1{font-size:25px;margin:0 0 5px}
+.subtitle{font-size:13px;color:var(--muted)}
+.btn{
+  border:0;border-radius:10px;padding:11px 15px;
+  font-weight:700;font-size:13px
+}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-light{background:#fff;border:1px solid var(--border);color:var(--text)}
+.stats{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;margin-bottom:23px
+}
+.stat,.panel{
+  background:#fff;border:1px solid var(--border);border-radius:16px
+}
+.stat{padding:19px}
+.stat-label{font-size:13px;color:var(--muted)}
+.stat-value{font-size:27px;font-weight:800;margin-top:9px;overflow-wrap:anywhere}
+.stat-note{font-size:12px;color:var(--muted);margin-top:5px}
+.toolbar{
+  display:flex;gap:10px;flex-wrap:wrap;margin-bottom:19px
+}
+.toolbar input,.toolbar select{
+  padding:12px;border:1px solid var(--border);
+  border-radius:10px;background:#fff;color:var(--text)
+}
+.toolbar input{flex:1;min-width:200px}
+.toolbar select{min-width:150px}
+.section-title{font-size:18px;margin:0 0 5px}
+.section-desc{font-size:12px;color:var(--muted);margin-bottom:18px}
+.bus-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px
+}
+.bus-card{
+  position:relative;text-align:left;width:100%;
+  background:#fff;border:1px solid var(--border);
+  border-radius:17px;padding:19px;color:var(--text);
+  transition:border-color .15s,transform .15s,box-shadow .15s
+}
+.bus-card:hover{
+  border-color:#9bbdf6;box-shadow:0 8px 24px #17345b0c;
+  transform:translateY(-2px)
+}
+.bus-card:focus-visible{outline:3px solid #1769e055;outline-offset:2px}
+.card-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.bus-icon{
+  width:43px;height:43px;border-radius:13px;background:var(--blue-light);
+  display:grid;place-items:center;font-size:22px;flex-shrink:0
+}
+.bus-reg{font-size:16px;font-weight:800;overflow-wrap:anywhere}
+.bus-code{font-size:12px;color:var(--muted);margin-top:5px}
+.pill{
+  display:inline-block;padding:5px 9px;border-radius:20px;
+  font-size:11px;font-weight:800;white-space:nowrap
+}
+.pill-green{background:#e8f8f0;color:var(--green)}
+.pill-blue{background:var(--blue-light);color:var(--blue)}
+.pill-orange{background:#fff4e3;color:var(--orange)}
+.card-route{
+  margin-top:17px;padding:11px 12px;border-radius:10px;
+  background:#f8faff;font-size:12px;font-weight:700;
+  overflow-wrap:anywhere
+}
+.route-arrow{color:var(--blue);padding:0 5px}
+.card-metrics{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:17px
+}
+.metric-label{font-size:11px;color:var(--muted)}
+.metric-value{font-size:18px;font-weight:800;margin-top:5px;overflow-wrap:anywhere}
+.metric-value small{font-size:11px;font-weight:500;color:var(--muted)}
+.card-bottom{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:10px;margin-top:17px;padding-top:13px;
+  border-top:1px solid var(--border);font-size:12px
+}
+.view-link{font-weight:800;color:var(--blue)}
+.muted{color:var(--muted)}
+.notice{
+  display:none;padding:13px 15px;border-radius:10px;
+  margin-bottom:18px;font-size:13px;line-height:1.5
+}
+.notice.error{display:block;background:#fff0f0;color:#a72e2e}
+.notice.info{display:block;background:var(--blue-light);color:#174e9d}
+.empty,.loading{padding:35px 12px;text-align:center;color:var(--muted);font-size:13px}
+.footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
+
+/* Full bus details */
+.detail-view{display:none}
+.detail-header{
+  display:flex;align-items:center;gap:13px;flex-wrap:wrap;
+  margin-bottom:20px
+}
+.detail-heading{flex:1;min-width:180px}
+.detail-heading h2{font-size:23px;margin:0 0 6px}
+.detail-heading p{margin:0;color:var(--muted);font-size:13px}
+.panel{padding:21px;margin-bottom:18px}
+.panel-heading{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:10px;flex-wrap:wrap;margin-bottom:17px
+}
+.panel-heading h3{font-size:16px;margin:0}
+.detail-stats{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;margin-bottom:18px
+}
+.detail-stat{
+  background:#fff;border:1px solid var(--border);
+  border-radius:13px;padding:16px;min-width:0
+}
+.detail-stat .label{font-size:12px;color:var(--muted)}
+.detail-stat .value{font-size:23px;font-weight:800;margin-top:9px;overflow-wrap:anywhere}
+.detail-stat .unit{font-size:11px;color:var(--muted);font-weight:500}
+.info-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
+.info-item{min-width:0}
+.info-label{font-size:11px;color:var(--muted);margin-bottom:6px}
+.info-value{font-size:13px;font-weight:700;overflow-wrap:anywhere;white-space:pre-wrap}
+.table-wrap{width:100%;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:780px}
+th{
+  text-align:left;padding:13px 12px;background:#f8faff;
+  color:var(--muted);font-size:11px;text-transform:uppercase;
+  letter-spacing:.4px;white-space:nowrap
+}
+td{padding:14px 12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+.bill-link{color:var(--blue);font-weight:700}
+@media(max-width:1050px){
+  .bus-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .detail-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px){
+  .layout{padding:15px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .bus-grid{grid-template-columns:1fr}
+  .info-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .panel{padding:16px}
+}
+@media(max-width:480px){
+  .layout{padding:11px}
+  h1{font-size:21px}
+  .topbar>.btn{width:100%}
+  .stat{padding:14px}
+  .stat-value{font-size:23px}
+  .detail-stat{padding:13px}
+  .detail-stat .value{font-size:20px}
+  .info-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+
+<body>
+<div class="layout">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">B</div>
+      <div>
+        <h1>Diesel Management</h1>
+        <div class="subtitle">BEST Bus Management · Fleet fuel overview</div>
+      </div>
+    </div>
+    <button class="btn btn-light" id="topBack">← Back to Dashboard</button>
+  </header>
+
+  <div id="notice" class="notice"></div>
+
+  <!-- Main fleet overview -->
+  <main id="overviewView">
+    <section class="stats">
+      <div class="stat">
+        <div class="stat-label">Total Buses</div>
+        <div class="stat-value" id="totalBuses">—</div>
+        <div class="stat-note">Registered fleet</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Buses With Diesel Data</div>
+        <div class="stat-value" id="busesWithData">—</div>
+        <div class="stat-note">At least one fuel entry</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Total Diesel Recorded</div>
+        <div class="stat-value" id="totalLitres">—</div>
+        <div class="stat-note">Across recorded entries</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Total Diesel Spending</div>
+        <div class="stat-value" id="totalAmount">—</div>
+        <div class="stat-note">Across recorded entries</div>
+      </div>
+    </section>
+
+    <div class="toolbar">
+      <input id="searchInput" type="search" placeholder="Search registration number, bus code or driver...">
+      <select id="busFilter">
+        <option value="all">All buses</option>
+        <option value="recorded">With diesel records</option>
+        <option value="none">No diesel records</option>
+      </select>
+      <button id="refreshBtn" class="btn btn-light">↻ Refresh</button>
+    </div>
+
+    <h2 class="section-title">Fleet Diesel Overview</h2>
+    <div class="section-desc">Select any bus card to view its complete diesel history and available details.</div>
+
+    <div id="busGrid" class="loading">Loading fleet data...</div>
+  </main>
+
+  <!-- Selected bus details -->
+  <main id="detailView" class="detail-view">
+    <div class="detail-header">
+      <button class="btn btn-light" id="backToFleet">← All Buses</button>
+      <div class="detail-heading">
+        <h2 id="detailTitle">Bus Details</h2>
+        <p id="detailSubtitle">Diesel history and fuel information</p>
+      </div>
+      <button class="btn btn-light" id="detailRefresh">↻ Refresh</button>
+    </div>
+
+    <section id="detailStats" class="detail-stats"></section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <h3>Bus & Driver Information</h3>
+        <span id="detailStatus" class="pill pill-blue">Bus</span>
+      </div>
+      <div id="busInfo" class="info-grid"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <div>
+          <h3>Diesel Entry History</h3>
+          <div class="subtitle" style="margin-top:5px">Fuel records saved by drivers</div>
+        </div>
+        <span class="pill pill-blue" id="entryCount">0 entries</span>
+      </div>
+      <div id="historyTable" class="loading">Loading diesel history...</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <h3>Odometer Reading History</h3>
+      </div>
+      <div id="odometerTable" class="loading">Loading odometer history...</div>
+    </section>
+  </main>
+
+  <div class="footer">BEST Bus Management System · Diesel records</div>
+</div>
+
+<script type="module">
+import { auth, db } from "../../firebase.js";
+
+import {
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const ADMIN_EMAIL = "admin.svtbest@gmail.com";
+
+let currentAdmin = null;
+let buses = [];
+let users = [];
+let dieselEntries = [];
+let odometerEntries = [];
+let selectedBusId = null;
+let loading = false;
+
+const $ = id => document.getElementById(id);
+
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[c]);
+}
+
+function money(value) {
+  const number = Number(value || 0);
+  return "₹" + number.toLocaleString("en-IN", {
+    maximumFractionDigits:2
+  });
+}
+
+function number(value, digits = 1) {
+  if (value === null || value === undefined || value === "") return "—";
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "—";
+  return n.toLocaleString("en-IN", {maximumFractionDigits:digits});
+}
+
+function busLabel(bus) {
+  return bus.registrationNo || bus.busCode || bus.id;
+}
+
+function busCode(bus) {
+  return bus.busCode || "—";
+}
+
+function driverName(driver) {
+  return driver?.name || driver?.fullName || driver?.displayName || "—";
+}
+
+function driverPhone(driver) {
+  return driver?.phone || driver?.phoneNumber || driver?.mobile || "—";
+}
+
+function getDriver(uid) {
+  return users.find(user => user.id === uid) || null;
+}
+
+function getAssignedDriverId(bus) {
+  return bus.assignedDriverId || bus.driverUid || bus.driverId || null;
+}
+
+function assigned(bus) {
+  return Boolean(
+    getAssignedDriverId(bus) ||
+    bus.assignedDriverName ||
+    String(bus.status || "").toLowerCase() === "assigned"
+  );
+}
+
+function entriesForBus(busId) {
+  return dieselEntries
+    .filter(entry => entry.busId === busId)
+    .sort((a,b) => {
+      const ad = `${a.date || ""} ${a.time || ""}`;
+      const bd = `${b.date || ""} ${b.time || ""}`;
+      return bd.localeCompare(ad);
+    });
+}
+
+function readingsForBus(busId) {
+  return odometerEntries
+    .filter(entry => entry.busId === busId)
+    .sort((a,b) => {
+      const ad = `${a.date || ""} ${a.time || ""}`;
+      const bd = `${b.date || ""} ${b.time || ""}`;
+      return bd.localeCompare(ad);
+    });
+}
+
+function latestOdometer(bus) {
+  const readings = readingsForBus(bus.id);
+  const diesel = entriesForBus(bus.id);
+
+  const candidates = [];
+
+  readings.forEach(entry => {
+    if (Number.isFinite(Number(entry.reading))) {
+      candidates.push({
+        value:Number(entry.reading),
+        date:`${entry.date || ""} ${entry.time || ""}`
+      });
+    }
+  });
+
+  diesel.forEach(entry => {
+    if (Number.isFinite(Number(entry.odometerReading))) {
+      candidates.push({
+        value:Number(entry.odometerReading),
+        date:`${entry.date || ""} ${entry.time || ""}`
+      });
+    }
+  });
+
+  if (!candidates.length) {
+    return bus.odometerReading !== undefined && bus.odometerReading !== null
+      ? Number(bus.odometerReading)
+      : null;
+  }
+
+  candidates.sort((a,b) => b.date.localeCompare(a.date));
+  return candidates[0].value;
+}
+
+function showNotice(message, type = "info") {
+  $("notice").textContent = message;
+  $("notice").className = "notice " + type;
+}
+
+function clearNotice() {
+  $("notice").textContent = "";
+  $("notice").className = "notice";
+}
+
+function updateOverviewStats() {
+  const busesWithData = buses.filter(bus => entriesForBus(bus.id).length > 0).length;
+  const litres = dieselEntries.reduce((sum, entry) => sum + (Number(entry.litres) || 0), 0);
+  const amount = dieselEntries.reduce((sum, entry) => sum + (Number(entry.amount) || 0), 0);
+
+  $("totalBuses").textContent = buses.length;
+  $("busesWithData").textContent = busesWithData;
+  $("totalLitres").textContent = number(litres) + " L";
+  $("totalAmount").textContent = money(amount);
+}
+
+function renderCards() {
+  const term = $("searchInput").value.trim().toLowerCase();
+  const filter = $("busFilter").value;
+
+  const filtered = buses.filter(bus => {
+    const records = entriesForBus(bus.id);
+    if (filter === "recorded" && records.length === 0) return false;
+    if (filter === "none" && records.length > 0) return false;
+
+    const uid = getAssignedDriverId(bus);
+    const driver = uid ? getDriver(uid) : null;
+
+    const searchable = [
+      bus.registrationNo,bus.busCode,bus.routeFrom,bus.routeTo,
+      driverName(driver),driverPhone(driver),driver?.email
+    ].join(" ").toLowerCase();
+
+    return searchable.includes(term);
+  });
+
+  if (!filtered.length) {
+    $("busGrid").innerHTML =
+      '<div class="empty">No buses match your search or filter.</div>';
+    return;
+  }
+
+  $("busGrid").innerHTML = `
+    <div class="bus-grid">
+      ${filtered.map(bus => {
+        const records = entriesForBus(bus.id);
+        const latest = records[0];
+        const uid = getAssignedDriverId(bus);
+        const driver = uid ? getDriver(uid) : null;
+        const odometer = latestOdometer(bus);
+
+        return `
+          <button type="button" class="bus-card" data-open-bus="${esc(bus.id)}">
+            <div class="card-top">
+              <div style="display:flex;gap:11px;min-width:0">
+                <div class="bus-icon">🚌</div>
+                <div style="min-width:0">
+                  <div class="bus-reg">${esc(busLabel(bus))}</div>
+                  <div class="bus-code">Bus code: ${esc(busCode(bus))}</div>
+                </div>
+              </div>
+              ${records.length
+                ? '<span class="pill pill-green">Fuel recorded</span>'
+                : '<span class="pill pill-orange">No fuel data</span>'}
+            </div>
+
+            <div class="card-route">
+              ${esc(bus.routeFrom || "—")}
+              <span class="route-arrow">→</span>
+              ${esc(bus.routeTo || "—")}
+            </div>
+
+            <div class="card-metrics">
+              <div>
+                <div class="metric-label">Current odometer</div>
+                <div class="metric-value">${number(odometer)} <small>km</small></div>
+              </div>
+              <div>
+                <div class="metric-label">Latest diesel</div>
+                <div class="metric-value">${latest ? number(latest.litres) : "—"} <small>${latest ? "litres" : ""}</small></div>
+              </div>
+              <div>
+                <div class="metric-label">Latest fuel amount</div>
+                <div class="metric-value">${latest ? money(latest.amount) : "—"}</div>
+              </div>
+              <div>
+                <div class="metric-label">Total fuel entries</div>
+                <div class="metric-value">${records.length}</div>
+              </div>
+            </div>
+
+            <div class="card-bottom">
+              <span class="muted">
+                Driver: ${esc(driver ? driverName(driver) : (bus.assignedDriverName || "Not assigned"))}
+              </span>
+              <span class="view-link">View details →</span>
+            </div>
+          </button>
+        `;
+      }).join("")}
+    </div>
+  `;
+
+  $("busGrid").querySelectorAll("[data-open-bus]").forEach(card => {
+    card.addEventListener("click", () => openBus(card.dataset.openBus));
+  });
+}
+
+function infoItem(label, value) {
+  return `
+    <div class="info-item">
+      <div class="info-label">${esc(label)}</div>
+      <div class="info-value">${esc(value ?? "—")}</div>
+    </div>
+  `;
+}
+
+function renderSelectedBus(bus) {
+  const entries = entriesForBus(bus.id);
+  const readings = readingsForBus(bus.id);
+  const totalLitres = entries.reduce((sum,e) => sum + (Number(e.litres) || 0),0);
+  const totalAmount = entries.reduce((sum,e) => sum + (Number(e.amount) || 0),0);
+  const latest = entries[0];
+  const uid = getAssignedDriverId(bus);
+  const driver = uid ? getDriver(uid) : null;
+  const odometer = latestOdometer(bus);
+
+  $("detailTitle").textContent = busLabel(bus);
+  $("detailSubtitle").textContent =
+    `Bus code: ${busCode(bus)} · ${bus.routeFrom || "—"} → ${bus.routeTo || "—"}`;
+
+  $("detailStatus").className = "pill " + (assigned(bus) ? "pill-green" : "pill-blue");
+  $("detailStatus").textContent = assigned(bus) ? "Driver assigned" : "No driver assigned";
+
+  $("detailStats").innerHTML = `
+    <div class="detail-stat">
+      <div class="label">Total Diesel</div>
+      <div class="value">${number(totalLitres)} <span class="unit">L</span></div>
+    </div>
+    <div class="detail-stat">
+      <div class="label">Total Spending</div>
+      <div class="value">${money(totalAmount)}</div>
+    </div>
+    <div class="detail-stat">
+      <div class="label">Current Odometer</div>
+      <div class="value">${number(odometer)} <span class="unit">km</span></div>
+    </div>
+    <div class="detail-stat">
+      <div class="label">Fuel Entries</div>
+      <div class="value">${entries.length}</div>
+    </div>
+  `;
+
+  $("busInfo").innerHTML = [
+    infoItem("Registration Number",bus.registrationNo),
+    infoItem("Bus Code",bus.busCode),
+    infoItem("Route From",bus.routeFrom),
+    infoItem("Route To",bus.routeTo),
+    infoItem("Expected Mileage",bus.expectedMileage != null ? `${bus.expectedMileage} km/l` : "—"),
+    infoItem("Initial Odometer",bus.odometerReading != null ? `${bus.odometerReading} km` : "—"),
+    infoItem("Assigned Driver",driver ? driverName(driver) : (bus.assignedDriverName || "Not assigned")),
+    infoItem("Driver Phone",driverPhone(driver)),
+    infoItem("Driver Email",driver?.email || "—"),
+    infoItem("Latest Diesel Date",latest ? `${latest.date || "—"} ${latest.time || ""}` : "No entry"),
+    infoItem("Latest Fuel Station",latest?.station || "—"),
+    infoItem("Latest Bill Number",latest?.billNumber || "—")
+  ].join("");
+
+  $("entryCount").textContent = `${entries.length} entries`;
+
+  if (!entries.length) {
+    $("historyTable").innerHTML =
+      '<div class="empty">No diesel entries have been recorded for this bus yet.</div>';
+  } else {
+    $("historyTable").innerHTML = `
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date / Time</th>
+              <th>Driver</th>
+              <th>Odometer</th>
+              <th>Litres</th>
+              <th>Amount</th>
+              <th>Fuel Station</th>
+              <th>Bill Number</th>
+              <th>Full Tank</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${entries.map(entry => `
+              <tr>
+                <td>${esc(entry.date || "—")}<div class="muted">${esc(entry.time || "")}</div></td>
+                <td>
+                  <div>${esc(entry.driverName || "—")}</div>
+                  <div class="muted">${esc(entry.driverPhone || entry.driverEmail || "")}</div>
+                </td>
+                <td>${number(entry.odometerReading)} km</td>
+                <td><strong>${number(entry.litres)}</strong></td>
+                <td><strong>${money(entry.amount)}</strong></td>
+                <td>${esc(entry.station || "—")}</td>
+                <td>${esc(entry.billNumber || "—")}</td>
+                <td>${entry.fullTank === true ? "Yes" : entry.fullTank === false ? "No" : "—"}</td>
+                <td>${esc(entry.notes || "—")}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  if (!readings.length) {
+    $("odometerTable").innerHTML =
+      '<div class="empty">No separate pickup/drop odometer records found for this bus.</div>';
+  } else {
+    $("odometerTable").innerHTML = `
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Reading Type</th>
+              <th>Odometer Reading</th>
+              <th>Driver UID</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${readings.map(entry => `
+              <tr>
+                <td>${esc(entry.date || "—")}</td>
+                <td>${esc(entry.time || "—")}</td>
+                <td>${esc(entry.type || "—")}</td>
+                <td><strong>${number(entry.reading)} km</strong></td>
+                <td>${esc(entry.driverUid || "—")}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+}
+
+function openBus(busId) {
+  const bus = buses.find(b => b.id === busId);
+  if (!bus) return;
+
+  selectedBusId = busId;
+  clearNotice();
+  $("overviewView").style.display = "none";
+  $("detailView").style.display = "block";
+  renderSelectedBus(bus);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function showFleet() {
+  selectedBusId = null;
+  $("detailView").style.display = "none";
+  $("overviewView").style.display = "block";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+async function loadData() {
+  if (loading) return;
+  loading = true;
+  clearNotice();
+
+  $("busGrid").innerHTML = '<div class="loading">Loading buses and diesel records...</div>';
+
+  try {
+    const [busSnap,userSnap,dieselSnap,odoSnap] = await Promise.all([
+      getDocs(collection(db,"buses")),
+      getDocs(collection(db,"users")),
+      getDocs(collection(db,"dieselEntries")),
+      getDocs(collection(db,"odometerEntries"))
+    ]);
+
+    buses = busSnap.docs.map(d => ({id:d.id,...d.data()}));
+    users = userSnap.docs.map(d => ({id:d.id,...d.data()}));
+    dieselEntries = dieselSnap.docs.map(d => ({id:d.id,...d.data()}));
+    odometerEntries = odoSnap.docs.map(d => ({id:d.id,...d.data()}));
+
+    updateOverviewStats();
+    renderCards();
+
+    if (selectedBusId) {
+      const bus = buses.find(b => b.id === selectedBusId);
+      if (bus) renderSelectedBus(bus);
+      else showFleet();
+    }
+  } catch (error) {
+    console.error(error);
+    showNotice(
+      "Could not load diesel data. Check Firestore read permissions. " +
+      (error.code || error.message || ""),
+      "error"
+    );
+    $("busGrid").innerHTML = '<div class="empty">Unable to load fleet data.</div>';
+  } finally {
+    loading = false;
+  }
+}
+
+$("topBack").addEventListener("click", () => {
+  if (selectedBusId) showFleet();
+  else location.href = "../";
+});
+$("backToFleet").addEventListener("click",showFleet);
+$("refreshBtn").addEventListener("click",loadData);
+$("detailRefresh").addEventListener("click",loadData);
+$("searchInput").addEventListener("input",renderCards);
+$("busFilter").addEventListener("change",renderCards);
+
+onAuthStateChanged(auth,async user => {
+  if (!user) {
+    location.href = "../../";
+    return;
+  }
+
+  try {
+    const profile = await getDoc(doc(db,"users",user.uid));
+
+    if (
+      user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase() ||
+      !profile.exists() ||
+      String(profile.data().role || "").toLowerCase() !== "admin"
+    ) {
+      showNotice("Admin access only. Redirecting to login...","error");
+      await signOut(auth);
+      setTimeout(() => location.href = "../../",1200);
+      return;
+    }
+
+    currentAdmin = user;
+    await loadData();
+  } catch(error) {
+    console.error(error);
+    showNotice(
+      "Could not verify admin access. Check the admin profile and Firestore rules.",
+      "error"
+    );
+  }
+});
+</script>
+</body>
+</html>
