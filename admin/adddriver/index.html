@@ -1,0 +1,569 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Driver | BEST Bus</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--blue:#2563eb;--bg:#f6f8fc;--border:#e5e9f1;--text:#172033;--muted:#748096}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+a{text-decoration:none;color:inherit}
+button,input,select{font:inherit}
+.sidebar{position:fixed;inset:0 auto 0 0;width:240px;background:#fff;border-right:1px solid var(--border);padding:24px 15px;display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:11px;padding:0 8px 30px}
+.logo{width:42px;height:42px;background:var(--blue);color:white;border-radius:12px;display:grid;place-items:center;font-size:22px}
+.brand strong{font-size:18px}
+.brand small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.nav-label{font-size:10px;color:#9aa3b3;letter-spacing:1.2px;margin:8px 12px 13px}
+.nav a{display:flex;align-items:center;gap:12px;padding:13px 12px;border-radius:9px;color:#657087;font-size:13px;font-weight:600;margin-bottom:5px}
+.nav a:hover,.nav a.active{background:#eff5ff;color:var(--blue)}
+.sidebar-bottom{margin-top:auto;border-top:1px solid var(--border);padding-top:15px}
+.logout{width:100%;padding:11px;border:1px solid var(--border);background:#fff;border-radius:9px;cursor:pointer;color:#596579}
+.main{margin-left:240px;min-height:100vh}
+.topbar{height:68px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px}
+.crumb{font-size:12px;color:var(--muted)}
+.crumb strong{color:var(--text)}
+.admin-label{background:#eff6ff;color:var(--blue);border-radius:20px;padding:8px 12px;font-size:11px;font-weight:700}
+.content{max-width:1000px;margin:auto;padding:30px 32px 55px}
+.back{display:inline-block;font-size:12px;color:#64748b;margin-bottom:22px}
+.page-title{display:flex;align-items:center;gap:13px;margin-bottom:8px}
+.title-icon{width:48px;height:48px;border-radius:13px;background:#eaf1ff;display:grid;place-items:center;font-size:24px}
+h1{font-size:26px;letter-spacing:-.6px}
+.subtitle{color:var(--muted);font-size:13px;line-height:1.6;margin:8px 0 25px}
+.form-card{background:#fff;border:1px solid var(--border);border-radius:15px;padding:26px}
+.section-title{font-size:14px;font-weight:800;margin-bottom:5px}
+.section-desc{font-size:12px;color:var(--muted);margin-bottom:22px;line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.field{min-width:0}
+.field.full{grid-column:1/-1}
+label{display:block;font-size:12px;font-weight:700;margin-bottom:8px;color:#344054}
+.required{color:#dc2626}
+input,select{width:100%;height:45px;border:1px solid #dce2eb;border-radius:9px;padding:0 12px;background:#fff;color:#172033;outline:none;font-size:13px}
+input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #2563eb12}
+input::placeholder{color:#a1a9b7}
+.hint{font-size:11px;color:#8791a2;margin-top:7px;line-height:1.5}
+.divider{height:1px;background:#edf0f5;margin:28px 0}
+.password-wrap{position:relative}
+.password-wrap input{padding-right:65px}
+.show-pass{position:absolute;right:10px;top:0;height:45px;border:0;background:transparent;color:var(--blue);font-size:11px;font-weight:700;cursor:pointer}
+.bus-preview{display:none;margin-top:13px;padding:13px;background:#f0fdf4;border:1px solid #dcfce7;border-radius:9px;color:#166534;font-size:12px;line-height:1.6}
+.notice{margin-top:20px;padding:13px 14px;background:#f8fafc;border:1px solid var(--border);border-radius:9px;color:#687387;font-size:11px;line-height:1.7}
+.form-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:25px;padding-top:22px;border-top:1px solid #edf0f5}
+.btn{border:1px solid var(--border);background:white;color:#344054;padding:12px 17px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer}
+.btn-primary{background:var(--blue);border-color:var(--blue);color:#fff;min-width:150px}
+.btn-primary:hover{background:#1d4ed8}
+.btn:disabled{opacity:.6;cursor:wait}
+.message{display:none;margin-top:16px;border-radius:9px;padding:12px;font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.message.error{display:block;background:#fff1f2;color:#be123c;border:1px solid #ffe4e6}
+.message.success{display:block;background:#f0fdf4;color:#166534;border:1px solid #dcfce7}
+.mobile-head{display:none}
+@media(max-width:760px){
+.sidebar{display:none}
+.main{margin-left:0;padding-bottom:25px}
+.mobile-head{display:flex;background:#fff;padding:13px 17px;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.mobile-brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:16px}
+.mobile-brand .logo{width:36px;height:36px;font-size:19px}
+.topbar{height:49px;padding:0 17px}
+.content{padding:22px 15px 35px}
+h1{font-size:23px}
+.form-card{padding:19px 15px}
+.grid{grid-template-columns:1fr;gap:17px}
+.field.full{grid-column:auto}
+.form-footer .btn{flex:1}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <a class="brand" href="../">
+    <div class="logo">🚌</div>
+    <div><strong>BEST Bus</strong><small>Management System</small></div>
+  </a>
+  <div class="nav-label">WORKSPACE</div>
+  <nav class="nav">
+    <a href="../"><span>⌂</span> Dashboard</a>
+    <a href="../addbus/"><span>🚌</span> Add Bus</a>
+    <a href="./" class="active"><span>♙</span> Add Driver</a>
+    <a href="../assign-deassign/"><span>⇄</span> Assign / Deassign</a>
+    <a href="../fleetinfo/"><span>▤</span> Fleet Information</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <button class="logout" id="logoutBtn">↪ &nbsp; Sign out</button>
+  </div>
+</aside>
+
+<header class="mobile-head">
+  <a class="mobile-brand" href="../"><span class="logo">🚌</span> BEST Bus</a>
+  <button class="btn" id="mobileLogout">Sign out</button>
+</header>
+
+<main class="main">
+  <header class="topbar">
+    <div class="crumb">Workspace / <a href="../">Dashboard</a> / <strong>Add Driver</strong></div>
+    <span class="admin-label">ADMIN PORTAL</span>
+  </header>
+
+  <div class="content">
+    <a class="back" href="../">← Back to dashboard</a>
+    <div class="page-title">
+      <div class="title-icon">♙</div>
+      <h1>Add New Driver</h1>
+    </div>
+    <p class="subtitle">Register the driver's details, create login credentials and optionally assign an available bus.</p>
+
+    <form id="driverForm" class="form-card">
+      <div class="section-title">Personal details</div>
+      <p class="section-desc">Enter the driver's name and contact number.</p>
+
+      <div class="grid">
+        <div class="field">
+          <label for="driverName">Driver Name <span class="required">*</span></label>
+          <input id="driverName" required maxlength="100" autocomplete="name" placeholder="Enter full name">
+        </div>
+
+        <div class="field">
+          <label for="phone">Driver Phone Number <span class="required">*</span></label>
+          <input id="phone" type="tel" required maxlength="16" autocomplete="tel" placeholder="e.g. 9876543210">
+          <p class="hint">Enter a valid contact number, including country code if needed.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-title">Driver login details</div>
+      <p class="section-desc">Create the username and initial password the driver will use to sign in.</p>
+
+      <div class="grid">
+        <div class="field">
+          <label for="username">Username <span class="required">*</span></label>
+          <input id="username" required minlength="4" maxlength="30" autocomplete="off" placeholder="e.g. driver101">
+          <p class="hint">Use letters, numbers, dots or underscores. At least 4 characters.</p>
+        </div>
+
+        <div class="field">
+          <label for="password">Initial Password <span class="required">*</span></label>
+          <div class="password-wrap">
+            <input id="password" type="password" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters">
+            <button class="show-pass" type="button" id="showPassword">Show</button>
+          </div>
+          <p class="hint">Give the driver this password securely. Never save it as plain text in Firestore.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-title">Bus assignment</div>
+      <p class="section-desc">Choose an available bus now, or leave the driver unassigned and assign one later.</p>
+
+      <div class="field">
+        <label for="busSelect">Assign Available Bus</label>
+        <select id="busSelect">
+          <option value="">No bus assigned — assign later</option>
+        </select>
+        <p class="hint" id="busHint">Loading available buses…</p>
+      </div>
+
+      <div id="busPreview" class="bus-preview"></div>
+
+      <div class="notice">
+        <strong>Account security:</strong> Firebase Authentication will handle the driver's password. The driver's profile will be stored in Firestore with role <code>driver</code>. The username is converted to an internal sign-in email; the driver login page must use the same conversion rule.
+      </div>
+
+      <div id="message" class="message" role="status" aria-live="polite"></div>
+
+      <div class="form-footer">
+        <button type="reset" class="btn" id="resetBtn">Clear form</button>
+        <button type="submit" class="btn btn-primary" id="saveBtn">Create Driver →</button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<script type="module">
+import { app, auth, db } from "../../firebase.js";
+
+import {
+  onAuthStateChanged,
+  signOut,
+  initializeAuth,
+  getAuth,
+  createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  setDoc,
+  updateDoc,
+  runTransaction,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import { initializeApp } from
+  "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+const ADMIN_EMAIL = "admin.svtbest@gmail.com";
+const DRIVER_DOMAIN = "drivers.bestbus-login.com";
+
+const form = document.getElementById("driverForm");
+const saveBtn = document.getElementById("saveBtn");
+const message = document.getElementById("message");
+const busSelect = document.getElementById("busSelect");
+
+let adminUser = null;
+let creating = false;
+let availableBuses = [];
+
+function showMessage(text, type) {
+  message.textContent = text;
+  message.className = "message " + type;
+  message.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+function clearMessage() {
+  message.textContent = "";
+  message.className = "message";
+}
+
+function usernameToEmail(username) {
+  return username.toLowerCase() + "@" + DRIVER_DOMAIN;
+}
+
+function normalizePhone(phone) {
+  return phone.replace(/[\s()-]/g, "");
+}
+
+function validPhone(phone) {
+  return /^\+?[0-9]{10,15}$/.test(phone);
+}
+
+async function logout() {
+  await signOut(auth);
+  window.location.replace("../../");
+}
+
+document.getElementById("logoutBtn").addEventListener("click", logout);
+document.getElementById("mobileLogout").addEventListener("click", logout);
+
+document.getElementById("showPassword").addEventListener("click", () => {
+  const input = document.getElementById("password");
+  const show = input.type === "password";
+  input.type = show ? "text" : "password";
+  document.getElementById("showPassword").textContent = show ? "Hide" : "Show";
+});
+
+document.getElementById("username").addEventListener("input", (event) => {
+  event.target.value = event.target.value
+    .toLowerCase()
+    .replace(/[^a-z0-9._]/g, "");
+});
+
+busSelect.addEventListener("change", () => {
+  const bus = availableBuses.find(item => item.id === busSelect.value);
+  const preview = document.getElementById("busPreview");
+
+  if (!bus) {
+    preview.style.display = "none";
+    preview.textContent = "";
+    return;
+  }
+
+  preview.style.display = "block";
+  preview.textContent =
+    "Selected bus: " + (bus.registrationNo || bus.id) +
+    " | Code: " + (bus.busCode || "Not provided") +
+    " | Route: " + (bus.routeFrom || "—") + " → " + (bus.routeTo || "—");
+});
+
+async function loadAvailableBuses() {
+  try {
+    const snapshot = await getDocs(collection(db, "buses"));
+    availableBuses = [];
+
+    snapshot.forEach(busDoc => {
+      const bus = busDoc.data();
+
+      const assigned =
+        bus.assignedDriverId ||
+        bus.driverId ||
+        bus.driverUid;
+
+      const status = String(bus.status || "available").toLowerCase();
+
+      if (!assigned && status === "available") {
+        availableBuses.push({ id: busDoc.id, ...bus });
+      }
+    });
+
+    availableBuses.sort((a, b) =>
+      String(a.registrationNo || a.busCode || a.id)
+        .localeCompare(String(b.registrationNo || b.busCode || b.id))
+    );
+
+    busSelect.innerHTML =
+      '<option value="">No bus assigned — assign later</option>';
+
+    availableBuses.forEach(bus => {
+      const option = document.createElement("option");
+      option.value = bus.id;
+      option.textContent =
+        (bus.registrationNo || bus.id) +
+        (bus.busCode ? " — " + bus.busCode : "") +
+        " (" + (bus.routeFrom || "Route not set") +
+        " → " + (bus.routeTo || "Route not set") + ")";
+      busSelect.appendChild(option);
+    });
+
+    document.getElementById("busHint").textContent =
+      availableBuses.length
+        ? availableBuses.length + " available bus(es) found."
+        : "No available buses found. You can create the driver without assigning a bus.";
+  } catch (error) {
+    console.error("Could not load buses:", error);
+    document.getElementById("busHint").textContent =
+      "Could not load buses. Check Firestore permissions.";
+  }
+}
+
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    window.location.replace("../../");
+    return;
+  }
+
+  if ((user.email || "").toLowerCase() !== ADMIN_EMAIL.toLowerCase() ||
+      !user.emailVerified) {
+    await signOut(auth);
+    window.location.replace("../../");
+    return;
+  }
+
+  try {
+    const profile = await getDoc(doc(db, "users", user.uid));
+
+    if (!profile.exists() || profile.data().role !== "admin") {
+      showMessage("Admin profile not found or access denied.", "error");
+      await signOut(auth);
+      setTimeout(() => window.location.replace("../../"), 1500);
+      return;
+    }
+
+    adminUser = user;
+    await loadAvailableBuses();
+  } catch (error) {
+    console.error("Admin verification failed:", error);
+    showMessage("Could not verify admin access. Check Firestore rules.", "error");
+  }
+});
+
+form.addEventListener("reset", () => {
+  setTimeout(() => {
+    clearMessage();
+    document.getElementById("showPassword").textContent = "Show";
+    document.getElementById("password").type = "password";
+    document.getElementById("busPreview").style.display = "none";
+  }, 0);
+});
+
+form.addEventListener("submit", async event => {
+  event.preventDefault();
+  clearMessage();
+
+  if (creating) return;
+
+  if (!adminUser) {
+    showMessage("Wait until admin access has been verified.", "error");
+    return;
+  }
+
+  const name = document.getElementById("driverName").value.trim();
+  const phone = normalizePhone(document.getElementById("phone").value.trim());
+  const username = document.getElementById("username").value.trim().toLowerCase();
+  const password = document.getElementById("password").value;
+  const busId = busSelect.value || null;
+  const email = usernameToEmail(username);
+
+  if (name.length < 2) {
+    showMessage("Enter the driver's full name.", "error");
+    return;
+  }
+
+  if (!validPhone(phone)) {
+    showMessage("Enter a valid phone number with 10–15 digits, optionally starting with +.", "error");
+    return;
+  }
+
+  if (!/^[a-z0-9._]{4,30}$/.test(username)) {
+    showMessage("Username must be 4–30 characters using letters, numbers, dots or underscores.", "error");
+    return;
+  }
+
+  if (password.length < 8) {
+    showMessage("Password must contain at least 8 characters.", "error");
+    return;
+  }
+
+  creating = true;
+  saveBtn.disabled = true;
+  saveBtn.textContent = "Creating driver…";
+
+  let secondaryApp = null;
+  let createdAuthUser = null;
+
+  try {
+    // Check for an existing username in driver profiles.
+    const existingUsername = await getDocs(query(
+      collection(db, "users"),
+      where("username", "==", username)
+    ));
+
+    if (!existingUsername.empty) {
+      showMessage("That username is already in use. Choose another one.", "error");
+      return;
+    }
+
+    // A secondary Firebase app prevents driver creation from signing out the admin.
+    secondaryApp = initializeApp(app.options, "driver-create-" + Date.now());
+    const secondaryAuth = getAuth(secondaryApp);
+
+    const credential = await createUserWithEmailAndPassword(
+      secondaryAuth,
+      email,
+      password
+    );
+
+    createdAuthUser = credential.user;
+
+    const driverUid = createdAuthUser.uid;
+    const busRef = busId ? doc(db, "buses", busId) : null;
+
+    // Write the driver profile and reserve the selected bus atomically.
+    await runTransaction(db, async transaction => {
+      const driverRef = doc(db, "users", driverUid);
+      const driverSnap = await transaction.get(driverRef);
+
+      if (driverSnap.exists()) {
+        throw new Error("DRIVER_PROFILE_EXISTS");
+      }
+
+      if (busRef) {
+        const busSnap = await transaction.get(busRef);
+
+        if (!busSnap.exists()) {
+          throw new Error("BUS_NOT_FOUND");
+        }
+
+        const bus = busSnap.data();
+        const currentAssignment =
+          bus.assignedDriverId || bus.driverId || bus.driverUid;
+
+        if (currentAssignment) {
+          throw new Error("BUS_ALREADY_ASSIGNED");
+        }
+
+        if (String(bus.status || "available").toLowerCase() !== "available") {
+          throw new Error("BUS_NOT_AVAILABLE");
+        }
+
+        transaction.update(busRef, {
+          assignedDriverId: driverUid,
+          assignedDriverName: name,
+          status: "assigned",
+          updatedAt: serverTimestamp()
+        });
+      }
+
+      transaction.set(driverRef, {
+        uid: driverUid,
+        name,
+        phone,
+        username,
+        email,
+        role: "driver",
+        assignedBusId: busId,
+        status: "active",
+        createdAt: serverTimestamp(),
+        createdBy: adminUser.uid,
+        updatedAt: serverTimestamp()
+      });
+    });
+
+    // Sign out only the secondary authentication instance.
+    await signOut(secondaryAuth);
+
+    showMessage(
+      "Driver created successfully. Username: " + username +
+      (busId ? ". Bus assigned." : ". No bus assigned."),
+      "success"
+    );
+
+    form.reset();
+    await loadAvailableBuses();
+
+  } catch (error) {
+    console.error("Driver creation failed:", error);
+
+    if (createdAuthUser) {
+      // Best-effort cleanup if the Firestore profile/assignment could not be saved.
+      // This requires the newly created account to still be signed in to the
+      // secondary auth instance and is not a substitute for server-side provisioning.
+      try {
+        const secondaryAuth = secondaryApp ? getAuth(secondaryApp) : null;
+        if (secondaryAuth && secondaryAuth.currentUser) {
+          await secondaryAuth.currentUser.delete();
+        }
+      } catch (cleanupError) {
+        console.error("Auth cleanup failed; review Firebase Authentication users:", cleanupError);
+      }
+    }
+
+    if (error.code === "auth/email-already-in-use") {
+      showMessage("This username is already registered in Firebase Authentication. Choose another username.", "error");
+    } else if (error.code === "auth/weak-password") {
+      showMessage("Choose a stronger password.", "error");
+    } else if (error.code === "permission-denied" || error.code === "firestore/permission-denied") {
+      showMessage("Firestore denied the driver profile or bus update. Your security rules must allow an authenticated admin to create driver profiles and update bus assignments.", "error");
+    } else if (error.message === "BUS_ALREADY_ASSIGNED") {
+      showMessage("That bus has just been assigned to another driver. Refresh and select an available bus.", "error");
+      await loadAvailableBuses();
+    } else if (error.message === "BUS_NOT_AVAILABLE") {
+      showMessage("That bus is no longer marked available. Refresh and choose another bus.", "error");
+      await loadAvailableBuses();
+    } else if (error.message === "BUS_NOT_FOUND") {
+      showMessage("The selected bus could not be found. Refresh the bus list.", "error");
+      await loadAvailableBuses();
+    } else {
+      showMessage(
+        "Driver creation failed: " + (error.message || "Unknown error") +
+        ". Check the browser console and Firebase configuration.",
+        "error"
+      );
+    }
+  } finally {
+    if (secondaryApp) {
+      try {
+        const { deleteApp } = await import(
+          "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js"
+        );
+        await deleteApp(secondaryApp);
+      } catch (cleanupError) {
+        console.warn("Secondary app cleanup:", cleanupError);
+      }
+    }
+
+    creating = false;
+    saveBtn.disabled = false;
+    saveBtn.textContent = "Create Driver →";
+  }
+});
+</script>
+</body>
+</html>
