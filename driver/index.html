@@ -1,0 +1,592 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BEST Bus | Driver Portal</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--blue:#2563eb;--bg:#f5f7fb;--border:#e5e9f0;--text:#172033;--muted:#748096}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+button,input{font:inherit}
+button{cursor:pointer}
+.top{height:68px;background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,calc((100% - 1050px)/2))}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px}
+.logo{width:40px;height:40px;border-radius:12px;background:var(--blue);display:grid;place-items:center;color:white;font-size:22px}
+.top-right{display:flex;align-items:center;gap:12px}
+.status{font-size:11px;color:#15803d;background:#f0fdf4;padding:8px 11px;border-radius:20px}
+.signout{border:1px solid var(--border);background:white;border-radius:8px;padding:9px 12px;font-size:12px}
+main{max-width:1050px;margin:auto;padding:28px 20px 45px}
+.hello{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:23px}
+h1{font-size:27px;letter-spacing:-.7px}
+.sub{color:var(--muted);font-size:13px;margin-top:8px;line-height:1.6}
+.date-chip{background:white;border:1px solid var(--border);padding:10px 12px;border-radius:10px;font-size:12px;color:#526078;white-space:nowrap}
+.card{background:white;border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:18px}
+.card-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px}
+h2{font-size:16px}
+.small{font-size:11px;color:var(--muted);line-height:1.6}
+.bus-card{background:linear-gradient(125deg,#1746b5,#2563eb);border:0;color:white;overflow:hidden;position:relative}
+.bus-card .card-heading{margin-bottom:20px}
+.bus-label{font-size:11px;letter-spacing:.7px;color:#dbe7ff}
+.bus-code{font-size:12px;border:1px solid #ffffff55;background:#ffffff15;border-radius:8px;padding:7px 10px}
+.reg{font-size:27px;font-weight:800;letter-spacing:.5px;margin-bottom:7px;overflow-wrap:anywhere}
+.route{font-size:13px;color:#e1eaff;line-height:1.7}
+.bus-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:24px}
+.bus-stat{border:1px solid #ffffff35;background:#ffffff12;border-radius:11px;padding:13px;min-width:0}
+.bus-stat span{display:block;color:#dbe7ff;font-size:10px;margin-bottom:8px}
+.bus-stat strong{font-size:14px;overflow-wrap:anywhere}
+.not-assigned{background:#fff;border:1px dashed #cbd5e1;border-radius:14px;padding:25px;text-align:center;margin-bottom:18px}
+.not-assigned .symbol{font-size:29px;margin-bottom:10px}
+.not-assigned h2{margin-bottom:8px}
+.not-assigned p{font-size:12px;color:var(--muted);line-height:1.7}
+.section{margin-top:25px}
+.section-title{font-size:17px;font-weight:800;margin-bottom:6px}
+.section-sub{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:17px}
+label{display:block;font-size:12px;font-weight:700;margin-bottom:8px}
+input{width:100%;height:45px;border:1px solid #dce2eb;border-radius:9px;padding:0 12px;background:white;color:var(--text);outline:none}
+input:focus{border-color:var(--blue);box-shadow:0 0 0 3px #2563eb12}
+.date-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end;margin-bottom:18px}
+.btn{border:1px solid var(--border);border-radius:9px;background:white;padding:12px 15px;font-size:12px;font-weight:700;color:#344054}
+.btn-blue{background:var(--blue);color:white;border-color:var(--blue)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.reading-box{border:1px solid var(--border);border-radius:12px;padding:18px;margin-top:12px}
+.reading-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px}
+.pill{border-radius:20px;padding:6px 9px;font-size:10px;font-weight:800}
+.pickup{background:#ecfdf5;color:#047857}
+.drop{background:#eff6ff;color:#1d4ed8}
+.reading-number{font-size:25px;font-weight:800;margin:7px 0}
+.reading-unit{font-size:12px;color:var(--muted)}
+.field-hint{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6}
+.notice{margin-top:14px;background:#f8fafc;border:1px solid var(--border);padding:12px;border-radius:9px;color:#657087;font-size:11px;line-height:1.7}
+.message{display:none;margin-top:14px;padding:12px;border-radius:9px;font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.message.error{display:block;background:#fff1f2;color:#be123c}
+.message.success{display:block;background:#f0fdf4;color:#166534}
+.history-list{display:grid;gap:10px}
+.history-item{border:1px solid var(--border);border-radius:11px;padding:15px;display:flex;justify-content:space-between;align-items:center;gap:15px}
+.history-title{font-size:13px;font-weight:700}
+.history-date{font-size:11px;color:var(--muted);margin-top:5px}
+.history-value{font-size:17px;font-weight:800;text-align:right}
+.history-value small{display:block;font-size:10px;color:var(--muted);font-weight:500;margin-top:4px}
+.empty{text-align:center;padding:24px 10px;color:var(--muted);font-size:12px;line-height:1.7}
+.profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.profile-field{border-bottom:1px solid #edf0f5;padding:0 0 13px;min-width:0}
+.profile-field span{display:block;font-size:11px;color:var(--muted);margin-bottom:7px}
+.profile-field strong{font-size:13px;overflow-wrap:anywhere}
+.bottom-nav{display:none}
+@media(max-width:650px){
+.top{height:60px;padding:0 15px}
+.brand{font-size:16px}
+.logo{width:35px;height:35px;font-size:19px}
+.status{display:none}
+main{padding:22px 13px 95px}
+.hello{align-items:flex-start;flex-direction:column;gap:12px}
+h1{font-size:24px}
+.card{padding:17px;border-radius:14px}
+.reg{font-size:23px}
+.bus-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.date-row{grid-template-columns:1fr}
+.date-row .btn{width:100%}
+.profile-grid{grid-template-columns:1fr}
+.bottom-nav{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:10px 5px max(10px,env(safe-area-inset-bottom));z-index:5}
+.bottom-nav button{border:0;background:transparent;color:#7b8798;font-size:10px;padding:5px}
+.bottom-nav button span{display:block;font-size:19px;margin-bottom:4px}
+.bottom-nav button.active{color:var(--blue);font-weight:800}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><div class="logo">🚌</div> BEST Bus</div>
+  <div class="top-right">
+    <span class="status">● Driver portal</span>
+    <button class="signout" id="signout">Sign out</button>
+  </div>
+</header>
+
+<main>
+  <section class="hello">
+    <div>
+      <h1 id="welcome">Driver Portal</h1>
+      <p class="sub">Your bus, daily odometer readings and trip history.</p>
+    </div>
+    <div class="date-chip" id="todayLabel">Today</div>
+  </section>
+
+  <section id="busAssigned" class="card bus-card" hidden>
+    <div class="card-heading">
+      <span class="bus-label">YOUR ASSIGNED BUS</span>
+      <span class="bus-code" id="busCode">Bus</span>
+    </div>
+    <div class="reg" id="registration">—</div>
+    <div class="route" id="route">Route loading…</div>
+    <div class="bus-grid">
+      <div class="bus-stat"><span>Expected mileage</span><strong id="mileage">—</strong></div>
+      <div class="bus-stat"><span>Latest odometer</span><strong id="latestOdo">—</strong></div>
+      <div class="bus-stat"><span>Assignment</span><strong>Assigned</strong></div>
+    </div>
+  </section>
+
+  <section id="noBus" class="not-assigned" hidden>
+    <div class="symbol">🚌</div>
+    <h2>Bus Not Assigned</h2>
+    <p>You do not currently have a bus assigned to your driver profile.<br>Please contact your administrator.</p>
+  </section>
+
+  <section id="readingSection" class="card" hidden>
+    <div class="section-title">Daily odometer</div>
+    <p class="section-sub">Select a date to view or enter that day's reading. Saved readings are locked.</p>
+
+    <div class="date-row">
+      <div>
+        <label for="readingDate">Select date</label>
+        <input type="date" id="readingDate">
+      </div>
+      <button class="btn" id="todayBtn" type="button">Go to today</button>
+    </div>
+
+    <div id="dayStatus" class="notice">Loading reading status…</div>
+    <div id="readingFormArea"></div>
+    <div id="readingMessage" class="message" role="status" aria-live="polite"></div>
+
+    <div class="notice">
+      Each date has at most one Pickup and one Drop entry. Once saved, a reading cannot be edited through this portal. Future dates are enabled for testing.
+    </div>
+  </section>
+
+  <section id="historySection" class="card" hidden>
+    <div class="card-heading">
+      <div>
+        <h2>Reading history</h2>
+        <p class="small" style="margin-top:6px">Saved entries for your assigned bus.</p>
+      </div>
+      <button class="btn" id="refreshHistory" type="button">Refresh</button>
+    </div>
+    <div id="historyList" class="history-list">
+      <div class="empty">Loading history…</div>
+    </div>
+  </section>
+
+  <section id="profileSection" class="card" hidden>
+    <div class="card-heading">
+      <div>
+        <h2>My profile</h2>
+        <p class="small" style="margin-top:6px">Your driver account details.</p>
+      </div>
+    </div>
+    <div class="profile-grid">
+      <div class="profile-field"><span>Driver name</span><strong id="profileName">—</strong></div>
+      <div class="profile-field"><span>Username</span><strong id="profileUsername">—</strong></div>
+      <div class="profile-field"><span>Phone number</span><strong id="profilePhone">—</strong></div>
+      <div class="profile-field"><span>Login email</span><strong id="profileEmail">—</strong></div>
+      <div class="profile-field"><span>Bus registration</span><strong id="profileBus">—</strong></div>
+      <div class="profile-field"><span>Route</span><strong id="profileRoute">—</strong></div>
+    </div>
+  </section>
+
+  <div id="globalMessage" class="message" role="status" aria-live="polite"></div>
+</main>
+
+<nav class="bottom-nav">
+  <button class="active" data-section="home"><span>⌂</span>Home</button>
+  <button data-section="historySection"><span>▤</span>History</button>
+  <button data-section="profileSection"><span>♙</span>Profile</button>
+</nav>
+
+<script type="module">
+import { auth, db } from "../firebase.js";
+import {
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import {
+  doc, getDoc, getDocs, collection, query, where,
+  runTransaction, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const ADMIN_EMAIL = "admin.svtbest@gmail.com";
+const $ = id => document.getElementById(id);
+
+let driver = null;
+let bus = null;
+let currentUid = null;
+let initialReadingType = "pickup";
+let savedEntries = [];
+let loadingDay = false;
+
+function localDateString(date = new Date()) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+function showMessage(id, text, type) {
+  const el = $(id);
+  el.textContent = text;
+  el.className = "message " + type;
+}
+function clearMessage(id) {
+  $(id).textContent = "";
+  $(id).className = "message";
+}
+function display(value) {
+  return value === undefined || value === null || value === "" ? "—" : String(value);
+}
+
+async function logout() {
+  await signOut(auth);
+  window.location.replace("../");
+}
+$("signout").addEventListener("click", logout);
+
+function showSection(section) {
+  const sections = ["busAssigned", "noBus", "readingSection", "historySection", "profileSection"];
+  sections.forEach(id => {
+    const el = $(id);
+    if (el && ["historySection", "profileSection"].includes(id)) {
+      el.hidden = !(section === id);
+    }
+  });
+
+  // Home shows bus and daily reading cards.
+  if (section === "home") {
+    $("busAssigned").hidden = !bus;
+    $("noBus").hidden = !!bus;
+    $("readingSection").hidden = !bus;
+    $("historySection").hidden = true;
+    $("profileSection").hidden = true;
+  }
+
+  document.querySelectorAll(".bottom-nav button").forEach(button => {
+    button.classList.toggle("active", button.dataset.section === section);
+  });
+}
+
+document.querySelectorAll(".bottom-nav button").forEach(button => {
+  button.addEventListener("click", async () => {
+    const section = button.dataset.section;
+    showSection(section);
+    if (section === "historySection") await loadHistory();
+  });
+});
+
+async function getBusForDriver(profile) {
+  const assignedId = profile.assignedBusId;
+  if (assignedId) {
+    const busSnap = await getDoc(doc(db, "buses", assignedId));
+    if (busSnap.exists()) return { id: busSnap.id, ...busSnap.data() };
+  }
+
+  // Compatibility with assignment data saved on bus documents.
+  const [a, b, c] = await Promise.all([
+    getDocs(query(collection(db, "buses"), where("assignedDriverId", "==", currentUid))),
+    getDocs(query(collection(db, "buses"), where("driverId", "==", currentUid))),
+    getDocs(query(collection(db, "buses"), where("driverUid", "==", currentUid)))
+  ]);
+
+  for (const result of [a, b, c]) {
+    if (!result.empty) {
+      const item = result.docs[0];
+      return { id: item.id, ...item.data() };
+    }
+  }
+  return null;
+}
+
+function renderBus() {
+  $("busAssigned").hidden = !bus;
+  $("noBus").hidden = !!bus;
+  $("readingSection").hidden = !bus;
+  $("historySection").hidden = true;
+
+  if (!bus) {
+    $("profileBus").textContent = "Not assigned";
+    $("profileRoute").textContent = "—";
+    return;
+  }
+
+  $("busCode").textContent = display(bus.busCode);
+  $("registration").textContent = display(bus.registrationNo);
+  $("route").textContent = `${display(bus.routeFrom)} → ${display(bus.routeTo)}`;
+  $("mileage").textContent = bus.expectedMileage ? `${bus.expectedMileage} km/L` : "—";
+  $("profileBus").textContent = display(bus.registrationNo);
+  $("profileRoute").textContent = `${display(bus.routeFrom)} → ${display(bus.routeTo)}`;
+
+  initialReadingType = String(bus.odometerReadingType || "pickup").toLowerCase();
+
+  $("latestOdo").textContent = bus.odometerReading !== undefined
+    ? `${bus.odometerReading} km (${initialReadingType})`
+    : "No reading";
+}
+
+function renderProfile() {
+  $("welcome").textContent = `Hello, ${driver.name || "Driver"}`;
+  $("profileName").textContent = display(driver.name);
+  $("profileUsername").textContent = display(driver.username);
+  $("profilePhone").textContent = display(driver.phone);
+  $("profileEmail").textContent = display(driver.email || auth.currentUser?.email);
+}
+
+function entryDocId(date, type) {
+  return `${bus.id}_${date}_${type}`;
+}
+
+function entriesForDate(date) {
+  return savedEntries.filter(entry => entry.date === date);
+}
+
+function expectedTypeForDate(date, entries) {
+  // The bus's initial admin-entered reading determines the next type.
+  // Subsequent readings alternate Pickup and Drop.
+  const dayEntries = entriesForDate(date);
+  const hasPickup = dayEntries.some(e => e.type === "pickup");
+  const hasDrop = dayEntries.some(e => e.type === "drop");
+
+  if (hasPickup && hasDrop) return null;
+  if (hasPickup) return "drop";
+  if (hasDrop) return "pickup";
+
+  // For the first driver entry, use the opposite of the initial bus reading.
+  // On later dates, begin with Pickup.
+  const earliestEntry = [...entries].sort((a, b) => a.date.localeCompare(b.date))[0];
+  if (!earliestEntry) {
+    return initialReadingType === "pickup" ? "drop" : "pickup";
+  }
+
+  return "pickup";
+}
+
+async function loadEntries() {
+  const snapshot = await getDocs(query(
+    collection(db, "odometerEntries"),
+    where("busId", "==", bus.id)
+  ));
+
+  savedEntries = snapshot.docs.map(snap => ({ id: snap.id, ...snap.data() }));
+  savedEntries.sort((a, b) =>
+    a.date.localeCompare(b.date) || String(a.type).localeCompare(String(b.type))
+  );
+}
+
+function renderSavedReading(entry) {
+  const typeClass = entry.type === "pickup" ? "pickup" : "drop";
+  const typeLabel = entry.type === "pickup" ? "PICKUP" : "DROP";
+  return `
+    <div class="reading-box">
+      <div class="reading-top">
+        <strong>${typeLabel} READING</strong>
+        <span class="pill ${typeClass}">SAVED · LOCKED</span>
+      </div>
+      <div class="reading-number">${Number(entry.reading).toLocaleString("en-IN")} <span class="reading-unit">km</span></div>
+      <p class="small">This reading is already saved and cannot be edited here.</p>
+    </div>`;
+}
+
+async function renderSelectedDate() {
+  if (!bus || loadingDay) return;
+  loadingDay = true;
+  clearMessage("readingMessage");
+  const date = $("readingDate").value;
+
+  if (!date) {
+    $("dayStatus").textContent = "Choose a date.";
+    $("readingFormArea").innerHTML = "";
+    loadingDay = false;
+    return;
+  }
+
+  try {
+    await loadEntries();
+    const dayEntries = entriesForDate(date);
+    const pickupEntry = dayEntries.find(e => e.type === "pickup");
+    const dropEntry = dayEntries.find(e => e.type === "drop");
+
+    $("dayStatus").textContent = `Selected date: ${date}. ${dayEntries.length} reading(s) saved.`;
+
+    let html = "";
+    if (pickupEntry) html += renderSavedReading(pickupEntry);
+    if (dropEntry) html += renderSavedReading(dropEntry);
+
+    if (pickupEntry && dropEntry) {
+      html += '<div class="notice">Both readings are saved for this date. They are locked against editing.</div>';
+    } else {
+      const nextType = expectedTypeForDate(date, savedEntries);
+      if (!nextType) {
+        $("readingFormArea").innerHTML = html;
+        loadingDay = false;
+        return;
+      }
+
+      const typeClass = nextType === "pickup" ? "pickup" : "drop";
+      const label = nextType === "pickup" ? "Pickup" : "Drop";
+      html += `
+        <div class="reading-box">
+          <div class="reading-top">
+            <strong>${label} odometer reading</strong>
+            <span class="pill ${typeClass}">NEXT ENTRY</span>
+          </div>
+          <label for="newReading">Odometer reading (km)</label>
+          <input type="number" id="newReading" min="0" max="99999999" step="0.1" placeholder="Enter current odometer reading">
+          <p class="field-hint">You can save this reading once for the selected date. It cannot be edited afterwards.</p>
+          <button class="btn btn-blue" style="width:100%;margin-top:15px" id="saveReading" type="button">Save ${label} Reading</button>
+        </div>`;
+
+      $("readingFormArea").innerHTML = html;
+      $("saveReading").addEventListener("click", () => saveReading(date, nextType));
+      loadingDay = false;
+      return;
+    }
+
+    $("readingFormArea").innerHTML = html;
+  } catch (error) {
+    console.error("Unable to load selected date:", error);
+    showMessage("readingMessage", "Could not load readings. Check Firestore permissions.", "error");
+  } finally {
+    loadingDay = false;
+  }
+}
+
+async function saveReading(date, type) {
+  clearMessage("readingMessage");
+  const input = $("newReading");
+  if (!input) return;
+
+  const reading = Number(input.value);
+  if (!Number.isFinite(reading) || reading < 0) {
+    showMessage("readingMessage", "Enter a valid odometer reading.", "error");
+    return;
+  }
+
+  const button = $("saveReading");
+  button.disabled = true;
+  button.textContent = "Saving…";
+
+  const id = entryDocId(date, type);
+  const ref = doc(db, "odometerEntries", id);
+
+  try {
+    // Transaction refuses to overwrite an existing reading.
+    await runTransaction(db, async transaction => {
+      const existing = await transaction.get(ref);
+      if (existing.exists()) {
+        throw new Error("READING_ALREADY_EXISTS");
+      }
+
+      transaction.set(ref, {
+        busId: bus.id,
+        driverUid: currentUid,
+        date,
+        type,
+        reading,
+        createdAt: serverTimestamp()
+      });
+    });
+
+    showMessage("readingMessage", `${type === "pickup" ? "Pickup" : "Drop"} reading saved and locked.`, "success");
+
+    // Refresh bus display and selected-day readings.
+    bus.odometerReading = reading;
+    bus.odometerReadingType = type;
+    $("latestOdo").textContent = `${reading} km (${type})`;
+
+    await renderSelectedDate();
+  } catch (error) {
+    console.error("Saving odometer reading failed:", error);
+    if (error.message === "READING_ALREADY_EXISTS") {
+      showMessage("readingMessage", "A reading of this type already exists for that date. It cannot be edited.", "error");
+    } else if (error.code === "permission-denied") {
+      showMessage("readingMessage", "Firestore blocked this save. Check the odometerEntries security rules.", "error");
+    } else {
+      showMessage("readingMessage", "Could not save the reading. Check your connection and try again.", "error");
+    }
+  } finally {
+    const currentButton = $("saveReading");
+    if (currentButton) {
+      currentButton.disabled = false;
+      currentButton.textContent = `Save ${type === "pickup" ? "Pickup" : "Drop"} Reading`;
+    }
+  }
+}
+
+async function loadHistory() {
+  if (!bus) return;
+  $("historyList").innerHTML = '<div class="empty">Loading history…</div>';
+
+  try {
+    await loadEntries();
+
+    if (!savedEntries.length) {
+      $("historyList").innerHTML = '<div class="empty">No odometer readings saved yet.</div>';
+      return;
+    }
+
+    $("historyList").innerHTML = savedEntries
+      .slice()
+      .sort((a,b) => b.date.localeCompare(a.date) || b.type.localeCompare(a.type))
+      .map(entry => `
+        <div class="history-item">
+          <div>
+            <div class="history-title">${entry.type === "pickup" ? "Pickup reading" : "Drop reading"}</div>
+            <div class="history-date">${entry.date} · Saved and locked</div>
+          </div>
+          <div class="history-value">
+            ${Number(entry.reading).toLocaleString("en-IN")} km
+            <small>${entry.type.toUpperCase()}</small>
+          </div>
+        </div>
+      `).join("");
+  } catch (error) {
+    console.error("History loading failed:", error);
+    $("historyList").innerHTML = '<div class="empty">Could not load history. Check Firestore permissions.</div>';
+  }
+}
+
+$("readingDate").value = localDateString();
+$("todayLabel").textContent = new Date().toLocaleDateString("en-IN", {
+  weekday:"short", day:"numeric", month:"short", year:"numeric"
+});
+$("readingDate").addEventListener("change", renderSelectedDate);
+$("todayBtn").addEventListener("click", () => {
+  $("readingDate").value = localDateString();
+  renderSelectedDate();
+});
+$("refreshHistory").addEventListener("click", loadHistory);
+
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    window.location.replace("../");
+    return;
+  }
+
+  if ((user.email || "").toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+    window.location.replace("../admin/");
+    return;
+  }
+
+  currentUid = user.uid;
+
+  try {
+    const profileSnap = await getDoc(doc(db, "users", user.uid));
+
+    if (!profileSnap.exists() || profileSnap.data().role !== "driver") {
+      showMessage("globalMessage", "Driver profile not found. Contact your administrator.", "error");
+      return;
+    }
+
+    driver = profileSnap.data();
+    renderProfile();
+
+    bus = await getBusForDriver(driver);
+    renderBus();
+    showSection("home");
+
+    if (bus) await renderSelectedDate();
+  } catch (error) {
+    console.error("Driver portal initialization failed:", error);
+    showMessage("globalMessage", "Could not load your driver profile. Check Firestore rules.", "error");
+  }
+});
+</script>
+</body>
+</html>
