@@ -1,0 +1,361 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assign / De-assign | BEST Bus Management</title>
+<style>
+:root {
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --text:#172033;
+  --muted:#778198;
+  --line:#e7ebf2;
+  --blue:#2457e6;
+  --green:#087f5b;
+  --red:#c73535;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+header{background:#fff;border-bottom:1px solid var(--line);padding:19px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-size:18px;font-weight:800;letter-spacing:-.4px}
+.brand span{color:var(--blue)}
+header a{color:var(--muted);text-decoration:none;font-size:13px}
+main{max-width:1100px;margin:30px auto;padding:0 18px 40px}
+.heading{margin-bottom:22px}
+.heading h1{font-size:28px;margin:0 0 7px;letter-spacing:-.8px}
+.heading p{color:var(--muted);margin:0;font-size:14px;line-height:1.5}
+.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:22px;margin-bottom:22px;box-shadow:0 4px 16px #17203306}
+.card h2{font-size:17px;margin:0 0 5px}
+.sub{font-size:13px;color:var(--muted);margin:0 0 20px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{display:block;font-size:12px;font-weight:700;color:#526078;margin-bottom:8px}
+select{width:100%;padding:13px 12px;border:1px solid #dce2ec;border-radius:10px;background:white;color:var(--text);font-size:14px;outline:none}
+select:focus{border-color:var(--blue)}
+.actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+button{border:0;border-radius:10px;padding:12px 17px;font-size:13px;font-weight:700;cursor:pointer}
+.primary{background:var(--blue);color:#fff}
+.secondary{background:#eef2ff;color:var(--blue)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.notice{display:none;padding:12px 14px;border-radius:10px;font-size:13px;margin-top:15px;line-height:1.5}
+.notice.ok{display:block;background:#e8f7f0;color:#087f5b}
+.notice.err{display:block;background:#fff0f0;color:#b42323}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.stat{padding:17px;background:white;border:1px solid var(--line);border-radius:14px}
+.stat span{font-size:12px;color:var(--muted)}
+.stat strong{display:block;font-size:27px;margin-top:8px}
+.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}
+.sectionhead h2{margin:0;font-size:17px}
+.pill{font-size:11px;font-weight:700;padding:6px 9px;border-radius:30px;background:#e7f7ef;color:var(--green)}
+.pill.gray{background:#eef1f5;color:#667085}
+.list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.bus{border:1px solid var(--line);border-radius:13px;padding:16px;min-width:0}
+.bushead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.busname{font-size:15px;font-weight:800;overflow-wrap:anywhere}
+.buscode{font-size:12px;color:var(--muted);margin-top:5px}
+.details{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:17px 0}
+.detail span{font-size:11px;color:var(--muted);display:block;margin-bottom:5px}
+.detail strong{font-size:13px;overflow-wrap:anywhere}
+.bus button{width:100%}
+.empty{padding:23px;text-align:center;color:var(--muted);font-size:13px;border:1px dashed #d8deea;border-radius:12px;grid-column:1/-1}
+.smallnote{font-size:12px;color:var(--muted);line-height:1.6;margin-top:12px}
+#loading{text-align:center;padding:50px;color:var(--muted)}
+@media(max-width:650px){
+ header{padding:16px}
+ main{margin-top:22px;padding:0 12px 28px}
+ .heading h1{font-size:24px}
+ .card{padding:16px}
+ .formgrid,.list{grid-template-columns:1fr}
+ .stats{gap:8px}
+ .stat{padding:12px}
+ .stat strong{font-size:22px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">BEST <span>BUS</span> MANAGEMENT</div>
+  <a href="../">← Admin dashboard</a>
+</header>
+
+<main>
+  <div class="heading">
+    <h1>Assign / De-assign</h1>
+    <p>Manage bus and driver assignments from one place.</p>
+  </div>
+
+  <div id="loading">Loading buses and drivers…</div>
+
+  <div id="app" hidden>
+    <div class="stats">
+      <div class="stat"><span>Total buses</span><strong id="totalCount">0</strong></div>
+      <div class="stat"><span>Assigned buses</span><strong id="assignedCount">0</strong></div>
+      <div class="stat"><span>Available buses</span><strong id="availableCount">0</strong></div>
+    </div>
+
+    <section class="card">
+      <h2>Assign a bus</h2>
+      <p class="sub">Choose an available bus and an active driver.</p>
+      <div class="formgrid">
+        <div>
+          <label for="busSelect">AVAILABLE BUS</label>
+          <select id="busSelect"><option value="">Select bus</option></select>
+        </div>
+        <div>
+          <label for="driverSelect">DRIVER</label>
+          <select id="driverSelect"><option value="">Select driver</option></select>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="primary" id="assignBtn">Assign bus</button>
+      </div>
+      <div id="notice" class="notice"></div>
+    </section>
+
+    <section class="card">
+      <div class="sectionhead">
+        <h2>Currently assigned</h2>
+        <span class="pill" id="assignedPill">0 buses</span>
+      </div>
+      <div class="list" id="assignedList"></div>
+    </section>
+
+    <section class="card">
+      <div class="sectionhead">
+        <h2>De-assigned / Available buses</h2>
+        <span class="pill gray" id="availablePill">0 buses</span>
+      </div>
+      <div class="list" id="availableList"></div>
+    </section>
+    <p class="smallnote">Assignments are saved in Firestore. A driver can have only one bus assigned at a time through this page.</p>
+  </div>
+</main>
+
+<script type="module">
+import { app, auth, db } from "../../firebase.js";
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import {
+  collection, getDocs, doc, getDoc, runTransaction, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const $ = id => document.getElementById(id);
+let buses = [];
+let drivers = [];
+let adminUser = null;
+let busy = false;
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[ch]);
+}
+function isAssigned(bus) {
+  return Boolean(bus.assignedDriverId || bus.driverId || bus.driverUid);
+}
+function busDriverId(bus) {
+  return bus.assignedDriverId || bus.driverId || bus.driverUid || "";
+}
+function driverName(id) {
+  const d = drivers.find(x => x.id === id);
+  return d?.name || d?.username || busDriverId(id) || "Driver";
+}
+function showNotice(message, type="ok") {
+  const n = $("notice");
+  n.textContent = message;
+  n.className = "notice " + type;
+}
+function hideNotice() {
+  $("notice").className = "notice";
+}
+function busLabel(bus) {
+  return `${bus.registrationNo || "No registration"}${bus.busCode ? " · " + bus.busCode : ""}`;
+}
+function render() {
+  const assigned = buses.filter(isAssigned);
+  const available = buses.filter(b => !isAssigned(b));
+  $("totalCount").textContent = buses.length;
+  $("assignedCount").textContent = assigned.length;
+  $("availableCount").textContent = available.length;
+  $("assignedPill").textContent = `${assigned.length} buses`;
+  $("availablePill").textContent = `${available.length} buses`;
+
+  $("busSelect").innerHTML = '<option value="">Select bus</option>' +
+    available.map(b => `<option value="${escapeHtml(b.id)}">${escapeHtml(busLabel(b))}</option>`).join("");
+
+  const eligibleDrivers = drivers.filter(d =>
+    d.status !== "inactive" &&
+    !buses.some(b => isAssigned(b) && busDriverId(b) === d.id)
+  );
+  $("driverSelect").innerHTML = '<option value="">Select driver</option>' +
+    eligibleDrivers.map(d => `<option value="${escapeHtml(d.id)}">${escapeHtml(d.name || d.username || d.id)}${d.phone ? " — " + escapeHtml(d.phone) : ""}</option>`).join("");
+
+  $("assignedList").innerHTML = assigned.length ? assigned.map(b => {
+    const id = busDriverId(b);
+    const driver = drivers.find(d => d.id === id);
+    return `<article class="bus">
+      <div class="bushead">
+        <div><div class="busname">${escapeHtml(b.registrationNo || "Bus registration not set")}</div>
+        <div class="buscode">${escapeHtml(b.busCode || "No bus code")}</div></div>
+        <span class="pill">Assigned</span>
+      </div>
+      <div class="details">
+        <div class="detail"><span>DRIVER</span><strong>${escapeHtml(driver?.name || b.assignedDriverName || driver?.username || "Driver profile not found")}</strong></div>
+        <div class="detail"><span>PHONE</span><strong>${escapeHtml(driver?.phone || "—")}</strong></div>
+        <div class="detail"><span>ROUTE</span><strong>${escapeHtml(b.routeFrom || "—")} → ${escapeHtml(b.routeTo || "—")}</strong></div>
+        <div class="detail"><span>ODOMETER</span><strong>${escapeHtml(b.odometerReading ?? "—")}</strong></div>
+      </div>
+      <button class="secondary deassignBtn" data-bus="${escapeHtml(b.id)}">De-assign bus</button>
+    </article>`;
+  }).join("") : '<div class="empty">No buses are currently assigned.</div>';
+
+  $("availableList").innerHTML = available.length ? available.map(b => `
+    <article class="bus">
+      <div class="bushead">
+        <div><div class="busname">${escapeHtml(b.registrationNo || "Bus registration not set")}</div>
+        <div class="buscode">${escapeHtml(b.busCode || "No bus code")}</div></div>
+        <span class="pill gray">Available</span>
+      </div>
+      <div class="details">
+        <div class="detail"><span>ROUTE</span><strong>${escapeHtml(b.routeFrom || "—")} → ${escapeHtml(b.routeTo || "—")}</strong></div>
+        <div class="detail"><span>ODOMETER</span><strong>${escapeHtml(b.odometerReading ?? "—")}</strong></div>
+      </div>
+      <button class="secondary useBusBtn" data-bus="${escapeHtml(b.id)}">Select for assignment</button>
+    </article>
+  `).join("") : '<div class="empty">No available buses.</div>';
+
+  document.querySelectorAll(".deassignBtn").forEach(btn =>
+    btn.addEventListener("click", () => deassignBus(btn.dataset.bus))
+  );
+  document.querySelectorAll(".useBusBtn").forEach(btn =>
+    btn.addEventListener("click", () => {
+      $("busSelect").value = btn.dataset.bus;
+      $("busSelect").scrollIntoView({behavior:"smooth",block:"center"});
+    })
+  );
+}
+async function loadData() {
+  const [busSnap, userSnap] = await Promise.all([
+    getDocs(collection(db, "buses")),
+    getDocs(collection(db, "users"))
+  ]);
+  buses = busSnap.docs.map(d => ({id:d.id, ...d.data()}));
+  drivers = userSnap.docs
+    .map(d => ({id:d.id, ...d.data()}))
+    .filter(u => u.role === "driver");
+  render();
+}
+async function verifyAdmin(user) {
+  if (!user) return false;
+  const snap = await getDoc(doc(db, "users", user.uid));
+  return user.email === "admin.svtbest@gmail.com" && snap.exists() && snap.data().role === "admin";
+}
+async function assignBus() {
+  if (busy) return;
+  const busId = $("busSelect").value;
+  const driverId = $("driverSelect").value;
+  if (!busId || !driverId) return showNotice("Select both a bus and a driver.", "err");
+  busy = true;
+  $("assignBtn").disabled = true;
+  hideNotice();
+  try {
+    const busRef = doc(db, "buses", busId);
+    const driverRef = doc(db, "users", driverId);
+    await runTransaction(db, async tx => {
+      const [busSnap, driverSnap] = await Promise.all([tx.get(busRef), tx.get(driverRef)]);
+      if (!busSnap.exists()) throw new Error("Bus not found.");
+      if (!driverSnap.exists() || driverSnap.data().role !== "driver") throw new Error("Driver profile not found.");
+      const bus = busSnap.data();
+      const driver = driverSnap.data();
+      if (bus.assignedDriverId || bus.driverId || bus.driverUid) throw new Error("This bus is already assigned.");
+      if (driver.status === "inactive") throw new Error("This driver is inactive.");
+      if (driver.assignedBusId) throw new Error("This driver already has a bus assigned.");
+      tx.update(busRef, {
+        assignedDriverId: driverId,
+        assignedDriverName: driver.name || driver.username || "",
+        status: "assigned",
+        updatedAt: serverTimestamp(),
+        updatedBy: adminUser.uid
+      });
+      tx.update(driverRef, {
+        assignedBusId: busId,
+        updatedAt: serverTimestamp()
+      });
+    });
+    showNotice("Bus assigned successfully.");
+    await loadData();
+  } catch (err) {
+    console.error(err);
+    showNotice(err.message || "Could not assign bus. Check Firestore permissions.", "err");
+  } finally {
+    busy = false;
+    $("assignBtn").disabled = false;
+  }
+}
+async function deassignBus(busId) {
+  if (busy) return;
+  const bus = buses.find(b => b.id === busId);
+  if (!bus || !isAssigned(bus)) return;
+  const id = busDriverId(bus);
+  if (!confirm(`De-assign ${bus.registrationNo || bus.busCode || "this bus"} from ${driverName(id)}?`)) return;
+  busy = true;
+  hideNotice();
+  document.querySelectorAll(".deassignBtn").forEach(b => b.disabled = true);
+  try {
+    const busRef = doc(db, "buses", busId);
+    const driverRef = id ? doc(db, "users", id) : null;
+    await runTransaction(db, async tx => {
+      const busSnap = await tx.get(busRef);
+      if (!busSnap.exists()) throw new Error("Bus not found.");
+      const current = busSnap.data();
+      const currentDriverId = current.assignedDriverId || current.driverId || current.driverUid || "";
+      if (!currentDriverId) throw new Error("This bus is already de-assigned.");
+      tx.update(busRef, {
+        assignedDriverId: null,
+        assignedDriverName: null,
+        status: "available",
+        updatedAt: serverTimestamp(),
+        updatedBy: adminUser.uid
+      });
+      if (driverRef) {
+        const driverSnap = await tx.get(driverRef);
+        if (driverSnap.exists() && driverSnap.data().assignedBusId === busId) {
+          tx.update(driverRef, {
+            assignedBusId: null,
+            updatedAt: serverTimestamp()
+          });
+        }
+      }
+    });
+    showNotice("Bus de-assigned successfully.");
+    await loadData();
+  } catch (err) {
+    console.error(err);
+    showNotice(err.message || "Could not de-assign bus. Check Firestore permissions.", "err");
+  } finally {
+    busy = false;
+  }
+}
+
+$("assignBtn").addEventListener("click", assignBus);
+
+onAuthStateChanged(auth, async user => {
+  try {
+    if (!user || !(await verifyAdmin(user))) {
+      location.href = "../../";
+      return;
+    }
+    adminUser = user;
+    await loadData();
+    $("loading").hidden = true;
+    $("app").hidden = false;
+  } catch (err) {
+    console.error(err);
+    $("loading").textContent = "Could not load assignment data. Check Firestore rules and browser console.";
+  }
+});
+</script>
+</body>
+</html>
