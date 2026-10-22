@@ -4,201 +4,433 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111b2a">
 <title>BEST | Diesel Management</title>
+
 <style>
-:root{
-  --bg:#f4f6fa;--white:#fff;--ink:#172033;--muted:#758096;
-  --line:#e5e9f0;--blue:#2457e6;--green:#138a53;--orange:#b86a00;
+:root {
+  --navy:#111b2a;
+  --navy-light:#1b2b40;
+  --yellow:#f5bd3d;
+  --bg:#f4f6f9;
+  --white:#fff;
+  --ink:#172334;
+  --muted:#778396;
+  --line:#e5e9ef;
+  --blue:#2563eb;
+  --green:#16834a;
+  --red:#d92d43;
+  --shadow:0 5px 22px rgba(25,40,60,.045);
 }
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
-button,input,textarea{font:inherit}
-button{cursor:pointer}
-.topbar{background:#fff;border-bottom:1px solid var(--line);padding:16px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.brand{font-size:19px;font-weight:800}.brand span{color:var(--blue)}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
-.btn{padding:10px 13px;border:1px solid var(--line);border-radius:9px;background:white;color:var(--ink);font-weight:650}
-.primary{background:var(--blue);border-color:var(--blue);color:white}
-.shell{max-width:1150px;margin:auto;padding:22px}
-.heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
-h1{font-size:25px;margin:0 0 7px}h2{font-size:17px;margin:0 0 15px}
-.muted{font-size:13px;color:var(--muted);line-height:1.6}
-.buscard{background:#172b57;color:#fff;border-radius:15px;padding:21px;margin-bottom:16px}
-.buscard .muted{color:#d4def5}
-.busnumber{font-size:25px;font-weight:800;margin:8px 0}
-.busdetails{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px}
-.busdetail{background:#ffffff12;border:1px solid #ffffff20;border-radius:10px;padding:12px;min-width:0}
-.busdetail label{font-size:12px;color:#d4def5;display:block;margin-bottom:7px}
-.busdetail strong{font-size:14px;overflow-wrap:anywhere}
-.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:16px}
-.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:19px;min-width:0}
-.stat-label{color:var(--muted);font-size:13px}
-.stat-value{font-size:29px;font-weight:800;margin:10px 0 6px;overflow-wrap:anywhere}
-.stat-sub{font-size:12px;color:var(--muted);line-height:1.5}
-.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:19px;margin-bottom:16px}
-.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;transition:.18s ease}
+button:disabled{opacity:.6;cursor:not-allowed}
+
+.sidebar{
+  position:fixed;inset:0 auto 0 0;z-index:30;
+  display:flex;flex-direction:column;width:245px;
+  padding:25px 17px 18px;background:var(--navy);color:white
+}
+.brand{display:flex;align-items:center;gap:12px;padding:0 9px 27px;border-bottom:1px solid #2b3646}
+.brand-icon{
+  display:grid;place-items:center;flex:0 0 43px;width:43px;height:43px;
+  border-radius:13px;background:var(--yellow);color:var(--navy);
+  font-size:23px;font-weight:900
+}
+.brand-name{font-size:21px;font-weight:850;letter-spacing:1px;line-height:1.1}
+.brand-caption{margin-top:5px;color:#a9b7c9;font-size:9px;font-weight:700;letter-spacing:1.35px}
+.side-label{padding:26px 11px 10px;color:#8493a7;font-size:10px;font-weight:800;letter-spacing:1.4px}
+.nav{display:grid;gap:6px}
+.nav button{
+  display:flex;align-items:center;gap:13px;width:100%;min-height:47px;
+  padding:12px 13px;border:1px solid transparent;border-radius:11px;
+  background:transparent;color:#c1ccda;text-align:left;font-size:13px;font-weight:600
+}
+.nav button:hover{background:#1b2a3d;color:white}
+.nav button.active{border-color:#35445a;background:#26364c;color:white}
+.nav button.active .nav-icon{color:var(--yellow)}
+.nav-icon{display:inline-grid;place-items:center;width:23px;font-size:18px}
+.side-bottom{margin-top:auto;padding-top:18px;border-top:1px solid #2b3646}
+.account-box{display:flex;align-items:center;gap:10px;padding:11px 7px 15px;min-width:0}
+.avatar{
+  display:grid;place-items:center;flex:0 0 37px;width:37px;height:37px;
+  border-radius:50%;background:#34465d;color:white;font-weight:800
+}
+.account-text{min-width:0;flex:1}
+.account-text strong,.account-text span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.account-text strong{font-size:12px}
+.account-text span{margin-top:3px;color:#a9b7c9;font-size:11px}
+.side-signout{
+  width:100%;padding:11px 12px;border:1px solid #344255;border-radius:10px;
+  background:transparent;color:#d5deea;text-align:left;font-size:12px;font-weight:600
+}
+.side-signout:hover{background:#273548}
+
+.main-area{min-height:100vh;margin-left:245px}
+.top{
+  position:sticky;top:0;z-index:20;display:flex;align-items:center;
+  justify-content:space-between;gap:14px;min-height:72px;padding:15px 34px;
+  border-bottom:1px solid var(--line);background:rgba(255,255,255,.94);
+  backdrop-filter:blur(16px)
+}
+.top-title{font-size:15px;font-weight:750}
+.top-subtitle{margin-top:2px;color:var(--muted);font-size:11px}
+.topright{display:flex;align-items:center;gap:9px}
+.small{color:var(--muted);font-size:12px}
+
+.shell{width:100%;max-width:1260px;margin:0 auto;padding:32px 34px 50px}
+.heading{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:15px;flex-wrap:wrap;margin-bottom:24px
+}
+h1{margin:0 0 6px;font-size:clamp(25px,3vw,32px);font-weight:800;letter-spacing:-1px;line-height:1.2}
+h2{margin:0 0 12px;font-size:18px;font-weight:750;letter-spacing:-.4px}
+h3{margin:0 0 8px;font-size:14px;font-weight:700}
+.muted{color:var(--muted);font-size:12px;line-height:1.7}
+.status{
+  display:inline-flex;align-items:center;gap:6px;padding:7px 11px;
+  border:1px solid #ccebd8;border-radius:30px;background:#effaf3;
+  color:var(--green);font-size:11px;font-weight:750
+}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+.card{
+  min-width:0;padding:23px;border:1px solid var(--line);
+  border-radius:17px;background:var(--white);box-shadow:var(--shadow)
+}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  min-height:41px;padding:10px 15px;border:1px solid #dfe4eb;
+  border-radius:10px;background:white;color:#253348;font-size:12px;font-weight:700
+}
+.btn:hover{background:#f6f8fb;border-color:#cbd3df}
+.btn.primary{border-color:var(--navy);background:var(--navy);color:white}
+.btn.primary:hover{background:#26374d}
+.btn.danger{border-color:#f7d4d9;background:#fff4f5;color:var(--red)}
+
+.vehicle-card{
+  position:relative;overflow:hidden;margin-bottom:18px;padding:25px;
+  border:1px solid #26384d;border-radius:20px;
+  background:linear-gradient(125deg,#111b2a,#233750);color:white;
+  box-shadow:0 12px 30px rgba(17,27,42,.11)
+}
+.vehicle-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.vehicle-label{color:#c0ccdb;font-size:11px;font-weight:750;letter-spacing:1px}
+.registration{margin:8px 0;font-size:27px;font-weight:850;letter-spacing:-.6px;overflow-wrap:anywhere}
+.route{color:#c0ccdb;font-size:12px}
+.fuel-icon{
+  display:grid;place-items:center;flex:0 0 49px;width:49px;height:49px;
+  border-radius:14px;background:rgba(245,189,61,.15);color:var(--yellow);font-size:25px
+}
+.vehicle-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:20px}
+.vehicle-detail{min-width:0;padding:14px;border:1px solid rgba(255,255,255,.13);border-radius:12px;background:rgba(255,255,255,.075)}
+.vehicle-detail label{display:block;margin-bottom:5px;color:#bdc9d8;font-size:11px}
+.vehicle-detail strong{font-size:14px;font-weight:750;overflow-wrap:anywhere}
+.odometer-value{margin-top:5px;font-size:29px;font-weight:850;letter-spacing:-.7px;font-variant-numeric:tabular-nums}
+.odometer-value span{font-size:12px;font-weight:500;color:#c0ccdb;letter-spacing:0}
+
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-bottom:18px}
+.stat{padding:19px;border:1px solid var(--line);border-radius:15px;background:white;box-shadow:var(--shadow);min-width:0}
+.stat-label{color:var(--muted);font-size:11px;font-weight:700}
+.stat-value{margin-top:8px;font-size:25px;font-weight:850;letter-spacing:-.7px;overflow-wrap:anywhere}
+.stat-unit{color:var(--muted);font-size:11px;font-weight:500;letter-spacing:0}
+
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
 .field{display:flex;flex-direction:column;gap:7px;min-width:0}
-.field label{font-size:13px;font-weight:700;color:#4a5568}
-.field input,.field textarea{width:100%;min-width:0;border:1px solid #dce2ec;border-radius:9px;padding:12px;background:white;outline:none}
-.field input:focus,.field textarea:focus{border-color:var(--blue)}
-.full{grid-column:1/-1}
-.formactions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
-.message{display:none;padding:12px 14px;border-radius:10px;margin-bottom:14px;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
-.message.show{display:block}.message.ok{background:#e8f7ef;color:#116b41}.message.error{background:#fff0f1;color:#a61c30}.message.info{background:#eaf0ff;color:#2149b9}
-.historytop{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-.entry{border:1px solid var(--line);border-radius:12px;padding:15px;margin-top:11px}
-.entryhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
-.entrytitle{font-weight:800;font-size:15px}
-.pill{display:inline-block;border-radius:20px;padding:5px 9px;font-size:11px;font-weight:750;background:#e8f7ef;color:var(--green)}
-.entrygrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}
-.entrycell{background:#f7f8fb;padding:11px;border-radius:9px;min-width:0}
-.entrycell label{font-size:11px;color:var(--muted);display:block;margin-bottom:6px}
-.entrycell strong{font-size:14px;overflow-wrap:anywhere}
-.avgrow{margin-top:12px;padding:12px;background:#eaf0ff;border-radius:9px;font-size:13px;line-height:1.6;color:#2149b9}
-.empty{text-align:center;padding:27px 14px;border:1px dashed #dce2ec;border-radius:11px;color:var(--muted);font-size:14px;line-height:1.7}
-@media(max-width:700px){
- .shell{padding:13px}.topbar{padding:14px}h1{font-size:22px}
- .card{padding:14px}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}
- .buscard{padding:16px}.busdetails{grid-template-columns:repeat(2,minmax(0,1fr))}
- .entrygrid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .stat{padding:15px}.stat-value{font-size:25px}
+.field label{color:#354155;font-size:12px;font-weight:700}
+.field input,.field select,.field textarea{
+  width:100%;min-width:0;min-height:45px;padding:11px 13px;
+  border:1px solid #dce2e9;border-radius:10px;outline:none;
+  background:white;color:var(--ink);font-size:13px;transition:border-color .2s,box-shadow .2s
 }
-@media(max-width:360px){.entrygrid{grid-template-columns:1fr}.busdetails{grid-template-columns:1fr}}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.11)
+}
+.field textarea{resize:vertical;min-height:90px}
+.full{grid-column:1/-1}
+.formactions{display:flex;flex-wrap:wrap;gap:10px;margin-top:21px}
+
+.message{
+  display:none;margin-bottom:17px;padding:13px 15px;border:1px solid transparent;
+  border-radius:12px;font-size:13px;line-height:1.6;overflow-wrap:anywhere
+}
+.message.show{display:block}
+.message.ok{border-color:#d0ecd9;background:#effaf3;color:#176b39}
+.message.error{border-color:#f5d0d5;background:#fff3f4;color:#ae2638}
+.message.info{border-color:#d3e5ff;background:#eff6ff;color:#2055a4}
+
+.history{display:grid;gap:11px}
+.entry{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  flex-wrap:wrap;padding:16px;border:1px solid var(--line);border-radius:13px;background:white
+}
+.entry strong{font-size:13px;font-weight:750;font-variant-numeric:tabular-nums}
+.entry .muted{margin-top:4px;overflow-wrap:anywhere}
+.pill{
+  display:inline-block;padding:5px 9px;border:1px solid #e1e6ed;
+  border-radius:30px;background:#f2f5f9;color:#536174;font-size:10px;font-weight:800;letter-spacing:.4px
+}
+.empty{
+  padding:29px 15px;border:1px dashed #d8dee7;border-radius:13px;
+  background:#fafbfd;color:var(--muted);font-size:13px;line-height:1.8;text-align:center
+}
+.hidden{display:none!important}
+.mobile-bottom{display:none}
+
+@media(max-width:1000px){
+  .sidebar{width:215px;padding-right:13px;padding-left:13px}
+  .main-area{margin-left:215px}
+  .shell{padding:26px 22px 40px}
+  .top{padding-right:22px;padding-left:22px}
+  .card{padding:19px}
+}
+
+@media(max-width:720px){
+  body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+  .sidebar{display:none}
+  .main-area{margin-left:0}
+  .top{position:relative;min-height:66px;padding:13px 16px}
+  .top-title{font-size:14px}
+  .top-subtitle{font-size:10px}
+  .topright{gap:6px}
+  .topright .small{display:none}
+  .topright .btn{min-height:37px;padding:8px 10px;font-size:11px}
+  .shell{padding:22px 14px 28px}
+  .heading{align-items:flex-start;margin-bottom:19px}
+  h1{font-size:27px;letter-spacing:-.8px}
+  .grid{grid-template-columns:1fr;gap:13px}
+  .card{padding:19px;border-radius:16px}
+  .vehicle-card{padding:21px 17px;border-radius:18px}
+  .registration{font-size:24px}
+  .vehicle-details{gap:9px}
+  .vehicle-detail{padding:12px}
+  .odometer-value{font-size:25px}
+  .stats{grid-template-columns:1fr;gap:10px}
+  .stat{padding:15px 17px}
+  .stat-value{font-size:23px}
+  .formgrid{grid-template-columns:1fr;gap:15px}
+  .full{grid-column:auto}
+  .field input,.field select,.field textarea{min-height:47px;font-size:16px}
+  .formactions{display:grid;grid-template-columns:1fr;gap:9px}
+  .formactions .btn{width:100%;min-height:46px}
+  .entry{align-items:flex-start;padding:14px;gap:10px}
+  .entry>div:last-child{text-align:left!important}
+  .empty{padding:25px 13px}
+  .mobile-bottom{
+    position:fixed;inset:auto 0 0;z-index:50;
+    display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;
+    padding:7px 5px calc(7px + env(safe-area-inset-bottom));
+    border-top:1px solid #e3e7ed;background:rgba(255,255,255,.96);
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)
+  }
+  .mobile-bottom button{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:4px;min-width:0;min-height:51px;padding:4px 1px;
+    border:0;border-radius:9px;background:transparent;color:#778396;font-size:10px;font-weight:700
+  }
+  .mobile-bottom button.active{color:#175bc2;background:#edf4ff}
+  .mobile-bottom .nav-icon{width:auto;font-size:19px;line-height:1.2}
+}
+@media(max-width:380px){
+  .vehicle-details{grid-template-columns:1fr}
+  .topright .btn{padding:8px;font-size:10px}
+}
 </style>
 </head>
+
 <body>
-
-<header class="topbar">
-  <div class="brand">BEST <span>DIESEL MANAGEMENT</span></div>
-  <div class="actions">
-    <button class="btn" id="backBtn">← Driver Portal</button>
-    <button class="btn" id="refreshBtn">↻ Refresh</button>
-  </div>
-</header>
-
-<main class="shell">
-  <div class="heading">
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-icon">B</div>
     <div>
-      <h1>Diesel / Fuel Log</h1>
-      <div class="muted">Fuel entries and mileage for your assigned bus.</div>
+      <div class="brand-name">BEST</div>
+      <div class="brand-caption">TRANSPORT OPERATIONS</div>
     </div>
-    <span class="pill" id="statusBadge">Checking account</span>
   </div>
 
-  <div class="message" id="message" role="status"></div>
+  <div class="side-label">DRIVER WORKSPACE</div>
+  <nav class="nav">
+    <button id="dashboardNav"><span class="nav-icon">▦</span> Dashboard</button>
+    <button id="odometerNav"><span class="nav-icon">◷</span> Odometer</button>
+    <button class="active"><span class="nav-icon">⛽</span> Diesel management</button>
+    <button id="historyNav"><span class="nav-icon">↻</span> Fuel history</button>
+  </nav>
 
-  <section class="buscard">
-    <div class="muted">YOUR ASSIGNED BUS</div>
-    <div class="busnumber" id="busNumber">Loading bus…</div>
-    <div class="muted" id="busRoute">Loading route…</div>
-    <div class="busdetails">
-      <div class="busdetail">
-        <label>Current odometer</label>
-        <strong id="currentOdometer">—</strong>
-      </div>
-      <div class="busdetail">
-        <label>Driver</label>
-        <strong id="driverName">—</strong>
-      </div>
-      <div class="busdetail">
-        <label>Bus code</label>
-        <strong id="busCode">—</strong>
+  <div class="side-bottom">
+    <div class="account-box">
+      <div class="avatar" id="sideAvatar">D</div>
+      <div class="account-text">
+        <strong id="sideDriverName">Driver account</strong>
+        <span id="sideDriverStatus">Verifying account…</span>
       </div>
     </div>
-  </section>
+    <button class="side-signout" id="sideLogoutBtn">↪ &nbsp; Sign out</button>
+  </div>
+</aside>
 
-  <section class="stats">
-    <div class="stat">
-      <div class="stat-label">Total diesel entries</div>
-      <div class="stat-value" id="totalEntries">0</div>
-      <div class="stat-sub">Saved fuel records for this bus</div>
+<div class="main-area">
+  <header class="top">
+    <div>
+      <div class="top-title">Diesel Management</div>
+      <div class="top-subtitle">Fuel records and vehicle efficiency</div>
     </div>
-    <div class="stat">
-      <div class="stat-label">Average mileage</div>
-      <div class="stat-value" id="averageMileage">—</div>
-      <div class="stat-sub" id="averageExplanation">Waiting for two fuel entries</div>
+    <div class="topright">
+      <span id="driverLabel" class="small">Checking account…</span>
+      <button class="btn" id="refreshBtn">↻ Refresh</button>
+      <button class="btn" id="logoutBtn">Sign out</button>
     </div>
-  </section>
+  </header>
 
-  <section class="card">
-    <h2>Enter diesel fill-up</h2>
-    <div class="muted" style="margin-bottom:15px">
-      Record the actual odometer reading when the fuel is filled, the number of litres, and the total bill amount.
-    </div>
-
-    <div class="formgrid">
-      <div class="field">
-        <label for="fuelDate">Fuel date</label>
-        <input type="date" id="fuelDate" required>
-      </div>
-      <div class="field">
-        <label for="fuelTime">Fuel time</label>
-        <input type="time" id="fuelTime" required>
-      </div>
-      <div class="field">
-        <label for="fuelOdometer">Odometer at refuelling (km)</label>
-        <input type="number" id="fuelOdometer" min="0" step="0.1" placeholder="e.g. 42850" required>
-      </div>
-      <div class="field">
-        <label for="fuelLitres">Diesel filled (litres)</label>
-        <input type="number" id="fuelLitres" min="0.01" step="0.01" placeholder="e.g. 65.50" required>
-      </div>
-      <div class="field">
-        <label for="fuelCost">Total cost (₹)</label>
-        <input type="number" id="fuelCost" min="0" step="0.01" placeholder="e.g. 6200" required>
-      </div>
-      <div class="field">
-        <label for="station">Fuel station (optional)</label>
-        <input type="text" id="station" maxlength="120" placeholder="Station name">
-      </div>
-      <div class="field">
-        <label for="billNumber">Bill / receipt number (optional)</label>
-        <input type="text" id="billNumber" maxlength="100" placeholder="Receipt number">
-      </div>
-      <div class="field">
-        <label for="fullTank">Was the tank filled completely?</label>
-        <input type="text" id="fullTank" list="tankOptions" placeholder="Select Yes or No">
-        <datalist id="tankOptions">
-          <option value="Yes">
-          <option value="No">
-        </datalist>
-      </div>
-      <div class="field full">
-        <label for="notes">Notes (optional)</label>
-        <textarea id="notes" rows="2" maxlength="500" placeholder="Additional information"></textarea>
-      </div>
-    </div>
-
-    <div class="formactions">
-      <button class="btn primary" id="saveBtn">Save diesel entry</button>
-      <button class="btn" id="clearBtn">Clear form</button>
-    </div>
-    <div class="muted" style="margin-top:12px">
-      Mileage is an estimate based on the distance between recorded fill-ups divided by the litres entered for the later fill-up. It is most useful when both fill-ups are full-tank fills.
-    </div>
-  </section>
-
-  <section class="card">
-    <div class="historytop">
+  <main class="shell">
+    <div class="heading">
       <div>
-        <h2 style="margin-bottom:5px">Diesel History</h2>
-        <div class="muted" id="historyCount">Loading records…</div>
+        <h1>Fuel operations</h1>
+        <div class="muted">Record every refuelling and track your bus mileage.</div>
       </div>
-      <button class="btn" id="reloadHistoryBtn">Reload history</button>
+      <span class="status" id="approvalBadge">Verifying</span>
     </div>
-    <div id="historyList">
-      <div class="empty">Loading saved fuel records…</div>
-    </div>
-  </section>
-</main>
+
+    <div id="message" class="message" role="status"></div>
+
+    <section class="vehicle-card">
+      <div class="vehicle-top">
+        <div>
+          <div class="vehicle-label">YOUR ASSIGNED VEHICLE</div>
+          <div class="registration" id="busRegistration">Loading bus…</div>
+          <div class="route" id="busRoute">Loading route…</div>
+        </div>
+        <div class="fuel-icon">⛽</div>
+      </div>
+
+      <div class="vehicle-details">
+        <div class="vehicle-detail">
+          <label>Current odometer</label>
+          <div class="odometer-value"><span id="currentReading">—</span> <span>km</span></div>
+        </div>
+        <div class="vehicle-detail">
+          <label>Bus code</label>
+          <strong id="busCode">—</strong>
+        </div>
+        <div class="vehicle-detail">
+          <label>Driver</label>
+          <strong id="driverName">—</strong>
+        </div>
+        <div class="vehicle-detail">
+          <label>Expected mileage</label>
+          <strong id="expectedMileage">—</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat">
+        <div class="stat-label">TOTAL FUEL ENTRIES</div>
+        <div class="stat-value" id="totalEntries">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">TOTAL LITRES RECORDED</div>
+        <div class="stat-value" id="totalLitres">0 <span class="stat-unit">L</span></div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">AVERAGE MILEAGE</div>
+        <div class="stat-value" id="averageMileage">— <span class="stat-unit">km/L</span></div>
+      </div>
+    </section>
+
+    <section class="card" id="fuelFormSection">
+      <h2>Record refuelling</h2>
+      <p class="muted">Enter the details exactly as shown on the fuel bill and vehicle meter.</p>
+
+      <div class="formgrid">
+        <div class="field">
+          <label for="fuelDate">Refuelling date</label>
+          <input type="date" id="fuelDate" required>
+        </div>
+
+        <div class="field">
+          <label for="fuelTime">Refuelling time</label>
+          <input type="time" id="fuelTime" required>
+        </div>
+
+        <div class="field">
+          <label for="fuelOdometer">Odometer reading (km)</label>
+          <input type="number" id="fuelOdometer" min="0" step="0.1" placeholder="e.g. 24580" required>
+        </div>
+
+        <div class="field">
+          <label for="fuelLitres">Diesel quantity (litres)</label>
+          <input type="number" id="fuelLitres" min="0.01" step="0.01" placeholder="e.g. 65.5" required>
+        </div>
+
+        <div class="field">
+          <label for="fuelAmount">Total cost (₹)</label>
+          <input type="number" id="fuelAmount" min="0" step="0.01" placeholder="e.g. 6000" required>
+        </div>
+
+        <div class="field">
+          <label for="fuelStation">Fuel station</label>
+          <input type="text" id="fuelStation" placeholder="Station name">
+        </div>
+
+        <div class="field">
+          <label for="fuelBill">Bill / invoice number</label>
+          <input type="text" id="fuelBill" placeholder="Enter bill number">
+        </div>
+
+        <div class="field">
+          <label for="fullTank">Full tank filled?</label>
+          <select id="fullTank">
+            <option value="yes">Yes — full tank</option>
+            <option value="no">No — partial refill</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label for="fuelNotes">Notes (optional)</label>
+          <textarea id="fuelNotes" placeholder="Additional information…"></textarea>
+        </div>
+      </div>
+
+      <div class="formactions">
+        <button class="btn primary" id="saveFuelBtn">Save fuel record</button>
+        <button class="btn" id="clearFuelBtn">Clear form</button>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:18px" id="fuelHistorySection">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+        <div>
+          <h2 style="margin-bottom:5px">Fuel history</h2>
+          <div class="muted">Your saved refuelling records and calculated mileage.</div>
+        </div>
+        <button class="btn" id="historyRefreshBtn">↻ Reload</button>
+      </div>
+
+      <div id="historyList" class="history">
+        <div class="empty">Loading diesel records…</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav class="mobile-bottom" aria-label="Driver navigation">
+  <button id="mobileDashboard"><span class="nav-icon">▦</span><span>Dashboard</span></button>
+  <button id="mobileOdometer"><span class="nav-icon">◷</span><span>Odometer</span></button>
+  <button class="active" id="mobileDiesel"><span class="nav-icon">⛽</span><span>Diesel</span></button>
+  <button id="mobileHistory"><span class="nav-icon">↻</span><span>History</span></button>
+</nav>
 
 <script type="module">
 import { auth, db } from "../../firebase.js";
-
 import {
-  onAuthStateChanged
+  onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
 import {
   collection, doc, getDoc, getDocs, query, where,
   addDoc, serverTimestamp
@@ -209,14 +441,23 @@ const $ = id => document.getElementById(id);
 let user = null;
 let profile = null;
 let bus = null;
-let fuelRecords = [];
+let dieselRecords = [];
 let saving = false;
 
-function escapeHTML(value = "") {
-  return String(value).replace(/[&<>"']/g, c => ({
-    "&":"&amp;", "<":"&lt;", ">":"&gt;",
-    '"':"&quot;", "'":"&#39;"
-  })[c]);
+const localDate = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+};
+
+const localTime = () => {
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+};
+
+function esc(v = "") {
+  return String(v).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
 }
 
 function showMessage(text, type = "info") {
@@ -225,67 +466,74 @@ function showMessage(text, type = "info") {
 }
 
 function clearMessage() {
-  $("message").textContent = "";
   $("message").className = "message";
+  $("message").textContent = "";
 }
 
-function localDate() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+function goToDriverPage() {
+  location.href = "../";
 }
 
-function localTime() {
-  const d = new Date();
-  return `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+function goToOdometer() {
+  goToDriverPage();
 }
 
-function number(value, digits = 2) {
-  const n = Number(value);
-  return Number.isFinite(n)
-    ? n.toLocaleString("en-IN", {maximumFractionDigits:digits})
-    : "—";
+function goToHistory() {
+  $("fuelHistorySection").scrollIntoView({behavior:"smooth",block:"start"});
 }
 
-function registration(busData) {
-  return busData?.registrationNo || busData?.busCode || busData?.id || "Bus";
+$("dashboardNav").addEventListener("click", goToDriverPage);
+$("odometerNav").addEventListener("click", goToOdometer);
+$("historyNav").addEventListener("click", goToHistory);
+$("mobileDashboard").addEventListener("click", goToDriverPage);
+$("mobileOdometer").addEventListener("click", goToOdometer);
+$("mobileDiesel").addEventListener("click", () => window.scrollTo({top:0,behavior:"smooth"}));
+$("mobileHistory").addEventListener("click", goToHistory);
+
+async function logout() {
+  await signOut(auth);
+  location.replace("../../");
 }
+
+$("logoutBtn").addEventListener("click", logout);
+$("sideLogoutBtn").addEventListener("click", logout);
+$("refreshBtn").addEventListener("click", loadAll);
+$("historyRefreshBtn").addEventListener("click", loadDieselRecords);
 
 $("fuelDate").value = localDate();
 $("fuelTime").value = localTime();
 
-$("backBtn").addEventListener("click", () => location.href = "../");
-$("refreshBtn").addEventListener("click", loadPage);
-$("reloadHistoryBtn").addEventListener("click", loadFuelRecords);
-
-$("clearBtn").addEventListener("click", () => {
-  ["fuelOdometer","fuelLitres","fuelCost","station","billNumber","notes","fullTank"]
-    .forEach(id => $(id).value = "");
+$("clearFuelBtn").addEventListener("click", () => {
+  $("fuelOdometer").value = "";
+  $("fuelLitres").value = "";
+  $("fuelAmount").value = "";
+  $("fuelStation").value = "";
+  $("fuelBill").value = "";
+  $("fuelNotes").value = "";
   $("fuelDate").value = localDate();
   $("fuelTime").value = localTime();
+  $("fullTank").value = "yes";
   clearMessage();
 });
-
-$("saveBtn").addEventListener("click", saveFuelEntry);
 
 onAuthStateChanged(auth, async signedInUser => {
   if (!signedInUser) {
     location.replace("../../");
     return;
   }
-
   user = signedInUser;
-  await loadPage();
+  await loadAll();
 });
 
-async function loadPage() {
+async function loadAll() {
   if (!user || saving) return;
   clearMessage();
 
   try {
-    const profileSnap = await getDoc(doc(db, "users", user.uid));
+    const profileSnap = await getDoc(doc(db,"users",user.uid));
 
     if (!profileSnap.exists()) {
-      showMessage("Driver profile not found.", "error");
+      showMessage("Driver profile not found. Please sign in again or contact the administrator.","error");
       return;
     }
 
@@ -296,264 +544,187 @@ async function loadPage() {
       return;
     }
 
-    if (profile.role !== "driver" || profile.approvalStatus !== "approved") {
-      showMessage("An approved driver account is required.", "error");
+    if (profile.role !== "driver") {
+      showMessage("This portal is for driver accounts only.","error");
       return;
     }
+
+    if (profile.approvalStatus !== "approved") {
+      $("approvalBadge").textContent = "Not approved";
+      $("sideDriverStatus").textContent = "Awaiting approval";
+      showMessage("Your driver account is not approved yet. Please contact the administrator.","info");
+      return;
+    }
+
+    $("driverLabel").textContent = profile.name || user.email || "Driver";
+    $("sideDriverName").textContent = profile.name || "Driver";
+    $("sideDriverStatus").textContent = "Approved driver";
+    $("sideAvatar").textContent = (profile.name || "D").trim().charAt(0).toUpperCase();
+    $("driverName").textContent = profile.name || user.email || "Driver";
+    $("approvalBadge").textContent = "Approved";
 
     bus = null;
 
     if (profile.assignedBusId) {
-      const busSnap = await getDoc(doc(db, "buses", profile.assignedBusId));
-      if (busSnap.exists()) {
-        bus = {id:busSnap.id, ...busSnap.data()};
-      }
+      const busSnap = await getDoc(doc(db,"buses",profile.assignedBusId));
+      if (busSnap.exists()) bus = {id:busSnap.id,...busSnap.data()};
     }
 
     if (!bus) {
       const linked = await getDocs(query(
-        collection(db, "buses"),
-        where("assignedDriverId", "==", user.uid)
+        collection(db,"buses"),
+        where("assignedDriverId","==",user.uid)
       ));
-
-      if (!linked.empty) {
-        bus = {id:linked.docs[0].id, ...linked.docs[0].data()};
-      }
+      if (!linked.empty) bus = {id:linked.docs[0].id,...linked.docs[0].data()};
     }
 
     if (!bus) {
-      $("busNumber").textContent = "No bus assigned";
+      $("busRegistration").textContent = "No bus assigned";
       $("busRoute").textContent = "Please contact your administrator.";
-      $("currentOdometer").textContent = "—";
-      $("driverName").textContent = profile.name || user.email || "Driver";
+      $("currentReading").textContent = "—";
       $("busCode").textContent = "—";
-      $("saveBtn").disabled = true;
-      $("statusBadge").textContent = "No bus";
-      showMessage("Your approved account does not currently have an assigned bus.", "info");
+      $("expectedMileage").textContent = "—";
+      showMessage("Your account is approved, but no bus is assigned yet.","info");
       return;
     }
 
-    $("busNumber").textContent = registration(bus);
-    $("busRoute").textContent = `${bus.routeFrom || "—"} → ${bus.routeTo || "—"}`;
-    $("driverName").textContent = profile.name || user.displayName || user.email || "Driver";
+    $("busRegistration").textContent = bus.registrationNo || "Bus";
+    $("busRoute").textContent = (bus.routeFrom || "—") + " → " + (bus.routeTo || "—");
     $("busCode").textContent = bus.busCode || "—";
-    $("statusBadge").textContent = "Assigned bus";
-    $("saveBtn").disabled = false;
+    $("expectedMileage").textContent = bus.expectedMileage != null ? bus.expectedMileage + " km/l" : "—";
 
-    await loadFuelRecords();
-  } catch (error) {
+    await loadDieselRecords();
+
+  } catch(error) {
     console.error(error);
-    showMessage("Could not load diesel page: " + error.message, "error");
+    showMessage("Unable to load diesel page: " + error.message,"error");
   }
 }
 
-async function loadFuelRecords() {
+async function loadDieselRecords() {
   if (!user) return;
 
-  $("historyList").innerHTML = '<div class="empty">Loading records from Firestore…</div>';
+  $("historyList").innerHTML = '<div class="empty">Loading diesel records…</div>';
 
   try {
-    const result = await getDocs(query(
-      collection(db, "dieselEntries"),
-      where("driverUid", "==", user.uid)
+    const snap = await getDocs(query(
+      collection(db,"dieselEntries"),
+      where("driverUid","==",user.uid)
     ));
 
-    let list = result.docs.map(s => ({id:s.id, ...s.data()}));
+    dieselRecords = snap.docs.map(s => ({id:s.id,...s.data()}));
 
-    // Show records belonging to this assigned bus only.
-    if (bus) list = list.filter(r => r.busId === bus.id);
+    if (bus) dieselRecords = dieselRecords.filter(r => r.busId === bus.id);
 
-    list.sort((a,b) =>
-      `${a.date || ""}T${a.time || ""}`.localeCompare(`${b.date || ""}T${b.time || ""}`)
-    );
+    dieselRecords.sort((a,b) => {
+      const aa = `${a.date || ""}T${a.time || "00:00"}`;
+      const bb = `${b.date || ""}T${b.time || "00:00"}`;
+      return bb.localeCompare(aa);
+    });
 
-    fuelRecords = list;
-    await updateCurrentOdometer();
-    renderSummary();
-    renderHistory();
-  } catch (error) {
-    console.error("Diesel history load failed:", error);
-    $("historyList").innerHTML = '<div class="empty">Could not load saved diesel records.</div>';
-    showMessage(
-      "Unable to read diesel history: " + error.message +
-      ". Check Firestore read permissions for dieselEntries.",
-      "error"
-    );
+    renderFuelSummary();
+    renderFuelHistory();
+
+  } catch(error) {
+    console.error("Diesel history load failed:",error);
+    $("historyList").innerHTML = '<div class="empty">Could not load diesel records.</div>';
+    showMessage("Could not load diesel records: " + error.message + ". Check Firestore read rules for dieselEntries.","error");
   }
 }
 
-async function updateCurrentOdometer() {
-  if (!user || !bus) return;
-
-  try {
-    const result = await getDocs(query(
-      collection(db, "odometerEntries"),
-      where("driverUid", "==", user.uid)
-    ));
-
-    const list = result.docs
-      .map(s => s.data())
-      .filter(r => r.busId === bus.id)
-      .sort((a,b) =>
-        `${b.date || ""}T${b.time || ""}`.localeCompare(`${a.date || ""}T${a.time || ""}`)
-      );
-
-    const newestReading = list[0];
-    const newestFuel = [...fuelRecords].sort((a,b) =>
-      `${b.date || ""}T${b.time || ""}`.localeCompare(`${a.date || ""}T${a.time || ""}`)
-    )[0];
-
-    // Display the newest available recorded odometer value.
-    const candidates = [
-      newestReading ? Number(newestReading.reading) : null,
-      newestFuel ? Number(newestFuel.odometerReading) : null,
-      bus.odometerReading != null ? Number(bus.odometerReading) : null
-    ].filter(n => n !== null && Number.isFinite(n));
-
-    $("currentOdometer").textContent = candidates.length
-      ? number(Math.max(...candidates), 1) + " km"
-      : "Not recorded";
-  } catch (error) {
-    console.warn("Could not retrieve odometer entries:", error);
-    $("currentOdometer").textContent = bus.odometerReading != null
-      ? number(bus.odometerReading, 1) + " km"
-      : "Not recorded";
-  }
+function chronologicalRecords() {
+  return [...dieselRecords].sort((a,b) => {
+    const aa = `${a.date || ""}T${a.time || "00:00"}`;
+    const bb = `${b.date || ""}T${b.time || "00:00"}`;
+    return aa.localeCompare(bb);
+  });
 }
 
-/*
-  Mileage estimate for each interval:
-  distance since previous fill-up / litres entered at the later fill-up.
-  This assumes the fill-up records are comparable, ideally full-tank fills.
-*/
-function mileageIntervals() {
-  const intervals = [];
+function getMileageData() {
+  const records = chronologicalRecords();
+  let totalLitres = 0;
+  let totalDistance = 0;
+  const intervalMileage = new Map();
 
-  for (let i = 1; i < fuelRecords.length; i++) {
-    const previous = fuelRecords[i-1];
-    const current = fuelRecords[i];
+  for (let i = 0; i < records.length; i++) {
+    const current = records[i];
+    totalLitres += Number(current.litres) || 0;
 
+    if (i === 0) continue;
+
+    const previous = records[i-1];
     const distance = Number(current.odometerReading) - Number(previous.odometerReading);
     const litres = Number(current.litres);
 
-    if (
-      Number.isFinite(distance) && distance > 0 &&
-      Number.isFinite(litres) && litres > 0
-    ) {
-      intervals.push({
-        from: previous,
-        to: current,
-        distance,
-        litres,
-        mileage: distance / litres
-      });
+    if (distance > 0 && litres > 0) {
+      const mileage = distance / litres;
+      intervalMileage.set(current.id, mileage);
+      totalDistance += distance;
     }
   }
 
-  return intervals;
+  // The interval calculation assumes the fuel entries represent comparable refuelling intervals.
+  const validLitres = records.reduce((sum,r) => {
+    return sum + (intervalMileage.has(r.id) ? (Number(r.litres) || 0) : 0);
+  },0);
+
+  const average = validLitres > 0 ? totalDistance / validLitres : null;
+
+  return {records,totalLitres,totalDistance,average,intervalMileage};
 }
 
-function renderSummary() {
-  const intervals = mileageIntervals();
+function renderFuelSummary() {
+  const {records,totalLitres,average} = getMileageData();
 
-  $("totalEntries").textContent = fuelRecords.length;
-  $("historyCount").textContent =
-    `${fuelRecords.length} saved fuel entr${fuelRecords.length === 1 ? "y" : "ies"}`;
+  $("totalEntries").textContent = records.length.toLocaleString();
+  $("totalLitres").innerHTML = `${totalLitres.toLocaleString(undefined,{maximumFractionDigits:2})} <span class="stat-unit">L</span>`;
+  $("averageMileage").innerHTML = `${average == null ? "—" : average.toFixed(2)} <span class="stat-unit">km/L</span>`;
 
-  if (!intervals.length) {
-    $("averageMileage").textContent = "—";
-    $("averageExplanation").textContent =
-      fuelRecords.length < 2
-        ? "Add another fill-up to calculate mileage."
-        : "No valid increasing odometer interval is available.";
-    return;
-  }
+  // Display the greatest available odometer reading as a simple current-meter reference.
+  const readings = [
+    Number(bus?.odometerReading),
+    ...dieselRecords.map(r => Number(r.odometerReading))
+  ].filter(Number.isFinite);
 
-  const totalDistance = intervals.reduce((sum, item) => sum + item.distance, 0);
-  const totalLitres = intervals.reduce((sum, item) => sum + item.litres, 0);
-  const average = totalLitres > 0 ? totalDistance / totalLitres : 0;
-
-  $("averageMileage").textContent = average > 0
-    ? number(average, 2) + " km/L"
+  $("currentReading").textContent = readings.length
+    ? Math.max(...readings).toLocaleString(undefined,{maximumFractionDigits:1})
     : "—";
-
-  $("averageExplanation").textContent =
-    `${number(totalDistance,1)} km across ${intervals.length} interval(s); ` +
-    `${number(totalLitres)} L used in the estimate.`;
 }
 
-function renderHistory() {
-  if (!fuelRecords.length) {
-    $("historyList").innerHTML =
-      '<div class="empty">No diesel entries yet.<br>Save your first fuel entry above. It will remain available after refreshing the browser.</div>';
+function renderFuelHistory() {
+  const {records,intervalMileage} = getMileageData();
+  const list = [...records].reverse();
+
+  if (!list.length) {
+    $("historyList").innerHTML = '<div class="empty">No diesel records found for this bus yet.<br>Saved refuelling entries will appear here.</div>';
     return;
   }
 
-  const intervals = mileageIntervals();
-  const intervalByRecord = new Map(intervals.map(item => [item.to.id, item]));
+  $("historyList").innerHTML = list.map(r => {
+    const mileage = intervalMileage.get(r.id);
+    const dateTime = `${r.date || ""} ${r.time || ""}`.trim() || "Date not recorded";
 
-  $("historyList").innerHTML = [...fuelRecords].reverse().map(record => {
-    const interval = intervalByRecord.get(record.id);
-    const driver = record.driverName || profile?.name || user?.displayName || user?.email || "Driver";
-    const busNo = record.registrationNo || registration(bus);
-
-    return `
-      <article class="entry">
-        <div class="entryhead">
-          <div>
-            <div class="entrytitle">${escapeHTML(record.date || "Date unavailable")} · ${escapeHTML(record.time || "Time unavailable")}</div>
-            <div class="muted">${escapeHTML(busNo)} · ${escapeHTML(driver)}</div>
-          </div>
-          <span class="pill">${escapeHTML(record.fullTank || "Tank status not recorded")}</span>
-        </div>
-
-        <div class="entrygrid">
-          <div class="entrycell">
-            <label>Odometer</label>
-            <strong>${escapeHTML(number(record.odometerReading,1))} km</strong>
-          </div>
-          <div class="entrycell">
-            <label>Diesel filled</label>
-            <strong>${escapeHTML(number(record.litres))} L</strong>
-          </div>
-          <div class="entrycell">
-            <label>Total cost</label>
-            <strong>₹${escapeHTML(number(record.amount))}</strong>
-          </div>
-          <div class="entrycell">
-            <label>Price per litre</label>
-            <strong>${Number(record.litres) > 0 ? "₹" + escapeHTML(number(Number(record.amount)/Number(record.litres))) : "—"}</strong>
-          </div>
-        </div>
-
-        ${interval ? `
-          <div class="avgrow">
-            <strong>Interval mileage: ${escapeHTML(number(interval.mileage))} km/L</strong><br>
-            From ${escapeHTML(interval.from.date || "—")} (${escapeHTML(number(interval.from.odometerReading,1))} km)
-            to ${escapeHTML(interval.to.date || "—")} (${escapeHTML(number(interval.to.odometerReading,1))} km).<br>
-            Distance: ${escapeHTML(number(interval.distance,1))} km ÷ ${escapeHTML(number(interval.litres))} L.
-          </div>
-        ` : `
-          <div class="avgrow">
-            ${fuelRecords[0]?.id === record.id
-              ? "Starting fill-up: mileage will be estimated after a subsequent valid fill-up."
-              : "Mileage is unavailable for this interval because the odometer did not increase or the entry data is invalid."}
-          </div>
-        `}
-
-        <div class="muted" style="margin-top:12px">
-          Station: ${escapeHTML(record.station || "—")} ·
-          Receipt: ${escapeHTML(record.billNumber || "—")}
-          ${record.notes ? " · Notes: " + escapeHTML(record.notes) : ""}
-        </div>
-      </article>
-    `;
+    return `<article class="entry">
+      <div>
+        <strong>${esc(dateTime)}</strong>
+        <div class="muted">${esc(r.station || "Fuel station not recorded")}</div>
+        <div class="muted">Odometer: ${esc(r.odometerReading ?? "—")} km · ${esc(r.litres ?? "—")} L</div>
+        <div class="muted">Bill: ${esc(r.billNumber || "—")} · Full tank: ${r.fullTank === "yes" ? "Yes" : "No"}</div>
+        ${r.notes ? `<div class="muted">${esc(r.notes)}</div>` : ""}
+      </div>
+      <div>
+        <strong>₹${(Number(r.amount)||0).toLocaleString(undefined,{maximumFractionDigits:2})}</strong>
+        <div style="margin-top:7px"><span class="pill">${mileage == null ? "MILEAGE PENDING" : mileage.toFixed(2) + " KM/L"}</span></div>
+      </div>
+    </article>`;
   }).join("");
 }
 
-async function saveFuelEntry() {
+$("saveFuelBtn").addEventListener("click", saveFuel);
+
+async function saveFuel() {
   if (!user || !profile || !bus || saving) {
-    showMessage("Your assigned bus is not ready. Refresh and try again.", "error");
+    showMessage("Your assigned bus is not loaded. Refresh and try again.","error");
     return;
   }
 
@@ -561,77 +732,64 @@ async function saveFuelEntry() {
   const time = $("fuelTime").value;
   const odometerReading = Number($("fuelOdometer").value);
   const litres = Number($("fuelLitres").value);
-  const amount = Number($("fuelCost").value);
-  const station = $("station").value.trim();
-  const billNumber = $("billNumber").value.trim();
-  const fullTank = $("fullTank").value.trim();
-  const notes = $("notes").value.trim();
+  const amount = Number($("fuelAmount").value);
+  const station = $("fuelStation").value.trim();
+  const billNumber = $("fuelBill").value.trim();
+  const fullTank = $("fullTank").value;
+  const notes = $("fuelNotes").value.trim();
 
-  if (!date || !time) {
-    showMessage("Please enter the fuel date and time.", "error");
-    return;
-  }
-  if ($("fuelOdometer").value === "" || !Number.isFinite(odometerReading) || odometerReading < 0) {
-    showMessage("Enter a valid odometer reading.", "error");
-    return;
-  }
-  if ($("fuelLitres").value === "" || !Number.isFinite(litres) || litres <= 0) {
-    showMessage("Enter a valid diesel quantity greater than zero.", "error");
-    return;
-  }
-  if ($("fuelCost").value === "" || !Number.isFinite(amount) || amount < 0) {
-    showMessage("Enter a valid total cost.", "error");
-    return;
-  }
-  if (fullTank && !["Yes","No"].includes(fullTank)) {
-    showMessage("For tank status, select or type Yes or No.", "error");
+  if (!date || !time ||
+      $("fuelOdometer").value.trim() === "" ||
+      $("fuelLitres").value.trim() === "" ||
+      $("fuelAmount").value.trim() === "" ||
+      !Number.isFinite(odometerReading) || odometerReading < 0 ||
+      !Number.isFinite(litres) || litres <= 0 ||
+      !Number.isFinite(amount) || amount < 0) {
+    showMessage("Enter a valid date, time, odometer reading, litres and total cost.","error");
     return;
   }
 
   saving = true;
-  $("saveBtn").disabled = true;
-  $("saveBtn").textContent = "Saving…";
+  $("saveFuelBtn").disabled = true;
+  $("saveFuelBtn").textContent = "Saving…";
   clearMessage();
 
   try {
-    // Re-check current assignment before writing the fuel record.
-    const [freshProfileSnap, freshBusSnap] = await Promise.all([
-      getDoc(doc(db, "users", user.uid)),
-      getDoc(doc(db, "buses", bus.id))
-    ]);
+    const freshProfileSnap = await getDoc(doc(db,"users",user.uid));
 
-    if (!freshProfileSnap.exists() || !freshBusSnap.exists()) {
-      throw new Error("Driver profile or bus was not found.");
-    }
+    if (!freshProfileSnap.exists()) throw new Error("Driver profile not found.");
 
     const freshProfile = freshProfileSnap.data();
-    const freshBus = freshBusSnap.data();
 
-    if (
-      freshProfile.role !== "driver" ||
-      freshProfile.approvalStatus !== "approved" ||
-      freshProfile.assignedBusId !== bus.id
-    ) {
-      throw new Error("This bus is no longer assigned to your account. Contact the administrator.");
+    if (freshProfile.role !== "driver" || freshProfile.approvalStatus !== "approved") {
+      throw new Error("Your driver account is not approved.");
     }
 
-    const assignedIds = [
-      freshBus.assignedDriverId,
-      freshBus.driverId,
-      freshBus.driverUid
-    ].filter(Boolean);
-
-    if (!assignedIds.includes(user.uid)) {
-      throw new Error("The bus does not currently link to your driver account. Contact the administrator.");
+    if (freshProfile.assignedBusId !== bus.id) {
+      throw new Error("This bus is no longer assigned to your account. Refresh and contact your administrator.");
     }
 
-    const record = {
-      busId: bus.id,
-      registrationNo: freshBus.registrationNo || "",
-      busCode: freshBus.busCode || "",
-      driverUid: user.uid,
-      driverName: freshProfile.name || user.displayName || user.email || "Driver",
-      driverEmail: freshProfile.email || user.email || "",
+    const busSnap = await getDoc(doc(db,"buses",bus.id));
+
+    if (!busSnap.exists()) throw new Error("Assigned bus no longer exists.");
+
+    const freshBus = busSnap.data();
+    const stillAssigned =
+      freshBus.assignedDriverId === user.uid ||
+      freshBus.driverId === user.uid ||
+      freshBus.driverUid === user.uid;
+
+    if (!stillAssigned) {
+      throw new Error("This bus is no longer assigned to your account. Contact your administrator.");
+    }
+
+    await addDoc(collection(db,"dieselEntries"),{
+      busId:bus.id,
+      registrationNo:bus.registrationNo || "",
+      busCode:bus.busCode || "",
+      driverUid:user.uid,
+      driverName:profile.name || "",
+      driverEmail:user.email || "",
       date,
       time,
       odometerReading,
@@ -639,29 +797,32 @@ async function saveFuelEntry() {
       amount,
       station,
       billNumber,
-      fullTank: fullTank || "",
+      fullTank,
       notes,
-      createdAt: serverTimestamp()
-    };
+      createdAt:serverTimestamp()
+    });
 
-    await addDoc(collection(db, "dieselEntries"), record);
-
-    // Update form defaults after a successful save.
-    ["fuelOdometer","fuelLitres","fuelCost","station","billNumber","notes","fullTank"]
-      .forEach(id => $(id).value = "");
-
+    $("fuelOdometer").value = "";
+    $("fuelLitres").value = "";
+    $("fuelAmount").value = "";
+    $("fuelStation").value = "";
+    $("fuelBill").value = "";
+    $("fuelNotes").value = "";
     $("fuelDate").value = localDate();
     $("fuelTime").value = localTime();
+    $("fullTank").value = "yes";
 
-    showMessage("Diesel entry saved successfully with driver, bus, date, time, odometer, litres and cost.", "ok");
-    await loadFuelRecords();
-  } catch (error) {
-    console.error("Diesel entry save failed:", error);
-    showMessage("Could not save diesel entry: " + error.message, "error");
+    showMessage("Diesel record saved successfully.","ok");
+    await loadDieselRecords();
+    $("fuelHistorySection").scrollIntoView({behavior:"smooth",block:"start"});
+
+  } catch(error) {
+    console.error("Save diesel record failed:",error);
+    showMessage("Could not save diesel record: " + error.message,"error");
   } finally {
     saving = false;
-    $("saveBtn").disabled = false;
-    $("saveBtn").textContent = "Save diesel entry";
+    $("saveFuelBtn").disabled = false;
+    $("saveFuelBtn").textContent = "Save fuel record";
   }
 }
 </script>
