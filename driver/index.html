@@ -71,7 +71,54 @@ button:disabled {
   background: var(--navy);
   color: white;
 }
+/* Services navigation link */
+#navigation a.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 17px 16px;
+    margin: 4px 0;
+    box-sizing: border-box;
 
+    color: #dce6f5;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    text-decoration: none;
+
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* Wrench icon */
+#navigation a.nav-link .nav-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 20px;
+    font-size: 18px;
+}
+
+/* Hover effect */
+#navigation a.nav-link:hover {
+    color: #ffffff;
+    background: #1e2c40;
+    text-decoration: none;
+}
+
+/* Optional active state */
+#navigation a.nav-link.active {
+    color: #ffffff;
+    background: #263950;
+    border: 1px solid #35485f;
+}
 .brand {
   display: flex;
   align-items: center;
