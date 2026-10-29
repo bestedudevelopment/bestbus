@@ -2,829 +2,1192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#111b2a">
-<title>BEST | Diesel Management</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BEST Bus | Diesel Management</title>
 
-<style>
-:root {
-  --navy:#111b2a;
-  --navy-light:#1b2b40;
-  --yellow:#f5bd3d;
-  --bg:#f4f6f9;
-  --white:#fff;
-  --ink:#172334;
-  --muted:#778396;
-  --line:#e5e9ef;
-  --blue:#2563eb;
-  --green:#16834a;
-  --red:#d92d43;
-  --shadow:0 5px 22px rgba(25,40,60,.045);
-}
+  <style>
+    :root {
+      --navy: #111b2a;
+      --navy-light: #1b2a40;
+      --yellow: #f5bd3d;
+      --bg: #f4f6fa;
+      --white: #fff;
+      --text: #172338;
+      --muted: #778397;
+      --border: #e2e7ef;
+      --green: #13875b;
+      --red: #c83c3c;
+      --radius: 16px;
+    }
 
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{
-  margin:0;background:var(--bg);color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-  font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased
-}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer;transition:.18s ease}
-button:disabled{opacity:.6;cursor:not-allowed}
+    * { box-sizing: border-box; }
 
-.sidebar{
-  position:fixed;inset:0 auto 0 0;z-index:30;
-  display:flex;flex-direction:column;width:245px;
-  padding:25px 17px 18px;background:var(--navy);color:white
-}
-.brand{display:flex;align-items:center;gap:12px;padding:0 9px 27px;border-bottom:1px solid #2b3646}
-.brand-icon{
-  display:grid;place-items:center;flex:0 0 43px;width:43px;height:43px;
-  border-radius:13px;background:var(--yellow);color:var(--navy);
-  font-size:23px;font-weight:900
-}
-.brand-name{font-size:21px;font-weight:850;letter-spacing:1px;line-height:1.1}
-.brand-caption{margin-top:5px;color:#a9b7c9;font-size:9px;font-weight:700;letter-spacing:1.35px}
-.side-label{padding:26px 11px 10px;color:#8493a7;font-size:10px;font-weight:800;letter-spacing:1.4px}
-.nav{display:grid;gap:6px}
-.nav button{
-  display:flex;align-items:center;gap:13px;width:100%;min-height:47px;
-  padding:12px 13px;border:1px solid transparent;border-radius:11px;
-  background:transparent;color:#c1ccda;text-align:left;font-size:13px;font-weight:600
-}
-.nav button:hover{background:#1b2a3d;color:white}
-.nav button.active{border-color:#35445a;background:#26364c;color:white}
-.nav button.active .nav-icon{color:var(--yellow)}
-.nav-icon{display:inline-grid;place-items:center;width:23px;font-size:18px}
-.side-bottom{margin-top:auto;padding-top:18px;border-top:1px solid #2b3646}
-.account-box{display:flex;align-items:center;gap:10px;padding:11px 7px 15px;min-width:0}
-.avatar{
-  display:grid;place-items:center;flex:0 0 37px;width:37px;height:37px;
-  border-radius:50%;background:#34465d;color:white;font-weight:800
-}
-.account-text{min-width:0;flex:1}
-.account-text strong,.account-text span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.account-text strong{font-size:12px}
-.account-text span{margin-top:3px;color:#a9b7c9;font-size:11px}
-.side-signout{
-  width:100%;padding:11px 12px;border:1px solid #344255;border-radius:10px;
-  background:transparent;color:#d5deea;text-align:left;font-size:12px;font-weight:600
-}
-.side-signout:hover{background:#273548}
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
 
-.main-area{min-height:100vh;margin-left:245px}
-.top{
-  position:sticky;top:0;z-index:20;display:flex;align-items:center;
-  justify-content:space-between;gap:14px;min-height:72px;padding:15px 34px;
-  border-bottom:1px solid var(--line);background:rgba(255,255,255,.94);
-  backdrop-filter:blur(16px)
-}
-.top-title{font-size:15px;font-weight:750}
-.top-subtitle{margin-top:2px;color:var(--muted);font-size:11px}
-.topright{display:flex;align-items:center;gap:9px}
-.small{color:var(--muted);font-size:12px}
+    button, input, textarea { font: inherit; }
 
-.shell{width:100%;max-width:1260px;margin:0 auto;padding:32px 34px 50px}
-.heading{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:15px;flex-wrap:wrap;margin-bottom:24px
-}
-h1{margin:0 0 6px;font-size:clamp(25px,3vw,32px);font-weight:800;letter-spacing:-1px;line-height:1.2}
-h2{margin:0 0 12px;font-size:18px;font-weight:750;letter-spacing:-.4px}
-h3{margin:0 0 8px;font-size:14px;font-weight:700}
-.muted{color:var(--muted);font-size:12px;line-height:1.7}
-.status{
-  display:inline-flex;align-items:center;gap:6px;padding:7px 11px;
-  border:1px solid #ccebd8;border-radius:30px;background:#effaf3;
-  color:var(--green);font-size:11px;font-weight:750
-}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
-.card{
-  min-width:0;padding:23px;border:1px solid var(--line);
-  border-radius:17px;background:var(--white);box-shadow:var(--shadow)
-}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:7px;
-  min-height:41px;padding:10px 15px;border:1px solid #dfe4eb;
-  border-radius:10px;background:white;color:#253348;font-size:12px;font-weight:700
-}
-.btn:hover{background:#f6f8fb;border-color:#cbd3df}
-.btn.primary{border-color:var(--navy);background:var(--navy);color:white}
-.btn.primary:hover{background:#26374d}
-.btn.danger{border-color:#f7d4d9;background:#fff4f5;color:var(--red)}
+    button { cursor: pointer; }
 
-.vehicle-card{
-  position:relative;overflow:hidden;margin-bottom:18px;padding:25px;
-  border:1px solid #26384d;border-radius:20px;
-  background:linear-gradient(125deg,#111b2a,#233750);color:white;
-  box-shadow:0 12px 30px rgba(17,27,42,.11)
-}
-.vehicle-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-.vehicle-label{color:#c0ccdb;font-size:11px;font-weight:750;letter-spacing:1px}
-.registration{margin:8px 0;font-size:27px;font-weight:850;letter-spacing:-.6px;overflow-wrap:anywhere}
-.route{color:#c0ccdb;font-size:12px}
-.fuel-icon{
-  display:grid;place-items:center;flex:0 0 49px;width:49px;height:49px;
-  border-radius:14px;background:rgba(245,189,61,.15);color:var(--yellow);font-size:25px
-}
-.vehicle-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:20px}
-.vehicle-detail{min-width:0;padding:14px;border:1px solid rgba(255,255,255,.13);border-radius:12px;background:rgba(255,255,255,.075)}
-.vehicle-detail label{display:block;margin-bottom:5px;color:#bdc9d8;font-size:11px}
-.vehicle-detail strong{font-size:14px;font-weight:750;overflow-wrap:anywhere}
-.odometer-value{margin-top:5px;font-size:29px;font-weight:850;letter-spacing:-.7px;font-variant-numeric:tabular-nums}
-.odometer-value span{font-size:12px;font-weight:500;color:#c0ccdb;letter-spacing:0}
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+    }
 
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-bottom:18px}
-.stat{padding:19px;border:1px solid var(--line);border-radius:15px;background:white;box-shadow:var(--shadow);min-width:0}
-.stat-label{color:var(--muted);font-size:11px;font-weight:700}
-.stat-value{margin-top:8px;font-size:25px;font-weight:850;letter-spacing:-.7px;overflow-wrap:anywhere}
-.stat-unit{color:var(--muted);font-size:11px;font-weight:500;letter-spacing:0}
+    .sidebar {
+      background: var(--navy);
+      color: white;
+      padding: 25px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
 
-.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
-.field{display:flex;flex-direction:column;gap:7px;min-width:0}
-.field label{color:#354155;font-size:12px;font-weight:700}
-.field input,.field select,.field textarea{
-  width:100%;min-width:0;min-height:45px;padding:11px 13px;
-  border:1px solid #dce2e9;border-radius:10px;outline:none;
-  background:white;color:var(--ink);font-size:13px;transition:border-color .2s,box-shadow .2s
-}
-.field input:focus,.field select:focus,.field textarea:focus{
-  border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.11)
-}
-.field textarea{resize:vertical;min-height:90px}
-.full{grid-column:1/-1}
-.formactions{display:flex;flex-wrap:wrap;gap:10px;margin-top:21px}
+    .brand {
+      font-size: 23px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
 
-.message{
-  display:none;margin-bottom:17px;padding:13px 15px;border:1px solid transparent;
-  border-radius:12px;font-size:13px;line-height:1.6;overflow-wrap:anywhere
-}
-.message.show{display:block}
-.message.ok{border-color:#d0ecd9;background:#effaf3;color:#176b39}
-.message.error{border-color:#f5d0d5;background:#fff3f4;color:#ae2638}
-.message.info{border-color:#d3e5ff;background:#eff6ff;color:#2055a4}
+    .brand span { color: var(--yellow); }
 
-.history{display:grid;gap:11px}
-.entry{
-  display:flex;align-items:center;justify-content:space-between;gap:14px;
-  flex-wrap:wrap;padding:16px;border:1px solid var(--line);border-radius:13px;background:white
-}
-.entry strong{font-size:13px;font-weight:750;font-variant-numeric:tabular-nums}
-.entry .muted{margin-top:4px;overflow-wrap:anywhere}
-.pill{
-  display:inline-block;padding:5px 9px;border:1px solid #e1e6ed;
-  border-radius:30px;background:#f2f5f9;color:#536174;font-size:10px;font-weight:800;letter-spacing:.4px
-}
-.empty{
-  padding:29px 15px;border:1px dashed #d8dee7;border-radius:13px;
-  background:#fafbfd;color:var(--muted);font-size:13px;line-height:1.8;text-align:center
-}
-.hidden{display:none!important}
-.mobile-bottom{display:none}
+    .brand-sub {
+      color: #b7c2d1;
+      font-size: 12px;
+      margin-top: 6px;
+    }
 
-@media(max-width:1000px){
-  .sidebar{width:215px;padding-right:13px;padding-left:13px}
-  .main-area{margin-left:215px}
-  .shell{padding:26px 22px 40px}
-  .top{padding-right:22px;padding-left:22px}
-  .card{padding:19px}
-}
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
-@media(max-width:720px){
-  body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
-  .sidebar{display:none}
-  .main-area{margin-left:0}
-  .top{position:relative;min-height:66px;padding:13px 16px}
-  .top-title{font-size:14px}
-  .top-subtitle{font-size:10px}
-  .topright{gap:6px}
-  .topright .small{display:none}
-  .topright .btn{min-height:37px;padding:8px 10px;font-size:11px}
-  .shell{padding:22px 14px 28px}
-  .heading{align-items:flex-start;margin-bottom:19px}
-  h1{font-size:27px;letter-spacing:-.8px}
-  .grid{grid-template-columns:1fr;gap:13px}
-  .card{padding:19px;border-radius:16px}
-  .vehicle-card{padding:21px 17px;border-radius:18px}
-  .registration{font-size:24px}
-  .vehicle-details{gap:9px}
-  .vehicle-detail{padding:12px}
-  .odometer-value{font-size:25px}
-  .stats{grid-template-columns:1fr;gap:10px}
-  .stat{padding:15px 17px}
-  .stat-value{font-size:23px}
-  .formgrid{grid-template-columns:1fr;gap:15px}
-  .full{grid-column:auto}
-  .field input,.field select,.field textarea{min-height:47px;font-size:16px}
-  .formactions{display:grid;grid-template-columns:1fr;gap:9px}
-  .formactions .btn{width:100%;min-height:46px}
-  .entry{align-items:flex-start;padding:14px;gap:10px}
-  .entry>div:last-child{text-align:left!important}
-  .empty{padding:25px 13px}
-  .mobile-bottom{
-    position:fixed;inset:auto 0 0;z-index:50;
-    display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;
-    padding:7px 5px calc(7px + env(safe-area-inset-bottom));
-    border-top:1px solid #e3e7ed;background:rgba(255,255,255,.96);
-    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)
-  }
-  .mobile-bottom button{
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:4px;min-width:0;min-height:51px;padding:4px 1px;
-    border:0;border-radius:9px;background:transparent;color:#778396;font-size:10px;font-weight:700
-  }
-  .mobile-bottom button.active{color:#175bc2;background:#edf4ff}
-  .mobile-bottom .nav-icon{width:auto;font-size:19px;line-height:1.2}
-}
-@media(max-width:380px){
-  .vehicle-details{grid-template-columns:1fr}
-  .topright .btn{padding:8px;font-size:10px}
-}
-</style>
+    .nav a {
+      text-decoration: none;
+      color: #d7deea;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .nav a.active {
+      background: var(--yellow);
+      color: var(--navy);
+      font-weight: 800;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      font-size: 12px;
+      color: #b7c2d1;
+      line-height: 1.6;
+    }
+
+    .main { min-width: 0; }
+
+    .topbar {
+      height: 76px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .topbar h1 {
+      font-size: 21px;
+      margin: 0;
+    }
+
+    .driver-label {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .content {
+      max-width: 1150px;
+      padding: 28px;
+      margin: auto;
+    }
+
+    .welcome {
+      background: var(--navy);
+      color: white;
+      border-radius: var(--radius);
+      padding: 25px;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .welcome h2 {
+      margin: 0 0 8px;
+      font-size: 23px;
+    }
+
+    .welcome p {
+      margin: 0;
+      color: #c5cedb;
+      font-size: 14px;
+    }
+
+    .bus-chip {
+      background: var(--yellow);
+      color: var(--navy);
+      font-weight: 800;
+      padding: 12px 15px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 18px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .tab.active {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: white;
+    }
+
+    .panel {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 15px rgba(17, 27, 42, .035);
+    }
+
+    .panel h3 {
+      margin: 0 0 6px;
+      font-size: 19px;
+    }
+
+    .sub {
+      margin: 0 0 23px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    input, textarea {
+      width: 100%;
+      border: 1px solid #dce3ed;
+      background: #fff;
+      border-radius: 10px;
+      padding: 12px;
+      min-width: 0;
+      outline: none;
+      color: var(--text);
+    }
+
+    input:focus, textarea:focus {
+      border-color: #537ed3;
+      box-shadow: 0 0 0 3px rgba(83, 126, 211, .1);
+    }
+
+    input[readonly] { background: #f5f7fa; }
+
+    textarea {
+      min-height: 85px;
+      resize: vertical;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .photo-box {
+      border: 1px dashed #aab8cc;
+      border-radius: 13px;
+      padding: 18px;
+      background: #f8faff;
+    }
+
+    .photo-preview {
+      display: none;
+      margin-top: 14px;
+      width: 100%;
+      max-width: 330px;
+      max-height: 260px;
+      object-fit: contain;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: white;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 13px 18px;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      background: var(--yellow);
+      color: var(--navy);
+    }
+
+    .btn-dark {
+      background: var(--navy);
+      color: white;
+    }
+
+    .btn-light {
+      background: #edf1f7;
+      color: var(--text);
+    }
+
+    .btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      margin: 15px 0;
+      padding: 13px;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .message.error {
+      display: block;
+      background: #fff0f0;
+      color: var(--red);
+    }
+
+    .message.success {
+      display: block;
+      background: #eaf8f1;
+      color: var(--green);
+    }
+
+    .message.info {
+      display: block;
+      background: #edf4ff;
+      color: #2456a4;
+    }
+
+    .history-list {
+      display: grid;
+      gap: 13px;
+    }
+
+    .record {
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 17px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 15px;
+    }
+
+    .record h4 { margin: 0 0 8px; }
+
+    .record p {
+      margin: 5px 0;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .record-amount {
+      font-weight: 900;
+      font-size: 19px;
+      white-space: nowrap;
+    }
+
+    .bill-link {
+      display: inline-block;
+      margin-top: 9px;
+      color: #245fc9;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .empty {
+      padding: 30px 15px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 760px) {
+      .app { display: block; }
+
+      .sidebar {
+        padding: 13px 15px;
+        gap: 12px;
+      }
+
+      .brand { font-size: 20px; }
+
+      .brand-sub, .sidebar-bottom { display: none; }
+
+      .nav {
+        flex-direction: row;
+        overflow-x: auto;
+      }
+
+      .nav a {
+        white-space: nowrap;
+        font-size: 12px;
+        padding: 10px;
+      }
+
+      .topbar {
+        height: auto;
+        min-height: 65px;
+        padding: 15px;
+      }
+
+      .topbar h1 { font-size: 18px; }
+
+      .content { padding: 15px; }
+
+      .welcome {
+        padding: 19px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .welcome h2 { font-size: 20px; }
+
+      .panel { padding: 18px; }
+
+      .grid { grid-template-columns: 1fr; }
+
+      .field.full { grid-column: auto; }
+
+      .record { flex-direction: column; }
+
+      .record-amount { font-size: 17px; }
+
+      .button-row .btn { flex: 1; }
+    }
+  </style>
 </head>
 
 <body>
-<aside class="sidebar">
-  <div class="brand">
-    <div class="brand-icon">B</div>
+<div class="app">
+
+  <aside class="sidebar">
     <div>
-      <div class="brand-name">BEST</div>
-      <div class="brand-caption">TRANSPORT OPERATIONS</div>
+      <div class="brand">BEST<span> BUS</span></div>
+      <div class="brand-sub">BUS MANAGEMENT SYSTEM</div>
     </div>
-  </div>
 
-  <div class="side-label">DRIVER WORKSPACE</div>
-  <nav class="nav">
-    <button id="dashboardNav"><span class="nav-icon">▦</span> Dashboard</button>
-    <button id="odometerNav"><span class="nav-icon">◷</span> Odometer</button>
-    <button class="active"><span class="nav-icon">⛽</span> Diesel management</button>
-    <button id="historyNav"><span class="nav-icon">↻</span> Fuel history</button>
-  </nav>
+    <nav class="nav">
+      <a href="../index.html">Dashboard</a>
+      <a href="./index.html" class="active">⛽ Diesel</a>
+      <a href="./index.html#history" id="historyNav">◷ History</a>
+    </nav>
 
-  <div class="side-bottom">
-    <div class="account-box">
-      <div class="avatar" id="sideAvatar">D</div>
-      <div class="account-text">
-        <strong id="sideDriverName">Driver account</strong>
-        <span id="sideDriverStatus">Verifying account…</span>
+    <div class="sidebar-bottom">
+      Driver Portal<br />
+      BEST Bus Management
+      <div style="margin-top:14px">
+        <button id="logoutBtn" class="btn btn-light" type="button">
+          Sign out
+        </button>
       </div>
     </div>
-    <button class="side-signout" id="sideLogoutBtn">↪ &nbsp; Sign out</button>
-  </div>
-</aside>
+  </aside>
 
-<div class="main-area">
-  <header class="top">
-    <div>
-      <div class="top-title">Diesel Management</div>
-      <div class="top-subtitle">Fuel records and vehicle efficiency</div>
-    </div>
-    <div class="topright">
-      <span id="driverLabel" class="small">Checking account…</span>
-      <button class="btn" id="refreshBtn">↻ Refresh</button>
-      <button class="btn" id="logoutBtn">Sign out</button>
-    </div>
-  </header>
+  <main class="main">
+    <header class="topbar">
+      <h1>Diesel Management</h1>
+      <div id="driverLabel" class="driver-label">Checking login…</div>
+    </header>
 
-  <main class="shell">
-    <div class="heading">
-      <div>
-        <h1>Fuel operations</h1>
-        <div class="muted">Record every refuelling and track your bus mileage.</div>
-      </div>
-      <span class="status" id="approvalBadge">Verifying</span>
-    </div>
+    <div class="content">
 
-    <div id="message" class="message" role="status"></div>
-
-    <section class="vehicle-card">
-      <div class="vehicle-top">
+      <section class="welcome">
         <div>
-          <div class="vehicle-label">YOUR ASSIGNED VEHICLE</div>
-          <div class="registration" id="busRegistration">Loading bus…</div>
-          <div class="route" id="busRoute">Loading route…</div>
+          <h2>Diesel Entry</h2>
+          <p>Record fuel purchases and attach the original bill photo.</p>
         </div>
-        <div class="fuel-icon">⛽</div>
+        <div id="busChip" class="bus-chip">Bus: Loading…</div>
+      </section>
+
+      <div class="tabs">
+        <button type="button" class="tab active" id="entryTab">
+          ⛽ New Entry
+        </button>
+        <button type="button" class="tab" id="historyTab">
+          ◷ History
+        </button>
       </div>
 
-      <div class="vehicle-details">
-        <div class="vehicle-detail">
-          <label>Current odometer</label>
-          <div class="odometer-value"><span id="currentReading">—</span> <span>km</span></div>
-        </div>
-        <div class="vehicle-detail">
-          <label>Bus code</label>
-          <strong id="busCode">—</strong>
-        </div>
-        <div class="vehicle-detail">
-          <label>Driver</label>
-          <strong id="driverName">—</strong>
-        </div>
-        <div class="vehicle-detail">
-          <label>Expected mileage</label>
-          <strong id="expectedMileage">—</strong>
-        </div>
-      </div>
-    </section>
+      <div id="pageMessage" class="message"></div>
 
-    <section class="stats">
-      <div class="stat">
-        <div class="stat-label">TOTAL FUEL ENTRIES</div>
-        <div class="stat-value" id="totalEntries">0</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">TOTAL LITRES RECORDED</div>
-        <div class="stat-value" id="totalLitres">0 <span class="stat-unit">L</span></div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">AVERAGE MILEAGE</div>
-        <div class="stat-value" id="averageMileage">— <span class="stat-unit">km/L</span></div>
-      </div>
-    </section>
+      <section id="entrySection" class="panel">
+        <h3>Fuel purchase details</h3>
+        <p class="sub">
+          Complete the details below. A bill photo is compulsory.
+        </p>
 
-    <section class="card" id="fuelFormSection">
-      <h2>Record refuelling</h2>
-      <p class="muted">Enter the details exactly as shown on the fuel bill and vehicle meter.</p>
+        <form id="dieselForm">
+          <div class="grid">
 
-      <div class="formgrid">
-        <div class="field">
-          <label for="fuelDate">Refuelling date</label>
-          <input type="date" id="fuelDate" required>
+            <div class="field">
+              <label for="entryDate">Date *</label>
+              <input id="entryDate" type="date" required />
+            </div>
+
+            <div class="field">
+              <label for="entryTime">Time *</label>
+              <input id="entryTime" type="time" required />
+            </div>
+
+            <div class="field">
+              <label for="busCode">Bus code</label>
+              <input id="busCode" readonly placeholder="Assigned bus" />
+            </div>
+
+            <div class="field">
+              <label for="registrationNo">Registration number</label>
+              <input id="registrationNo" readonly placeholder="Bus registration" />
+            </div>
+
+            <div class="field">
+              <label for="odometer">Odometer reading (km) *</label>
+              <input
+                id="odometer"
+                type="number"
+                min="0"
+                step="0.1"
+                required
+                placeholder="e.g. 45820"
+              />
+            </div>
+
+            <div class="field">
+              <label for="litres">Diesel quantity (litres) *</label>
+              <input
+                id="litres"
+                type="number"
+                min="0.01"
+                step="0.01"
+                required
+                placeholder="e.g. 45"
+              />
+            </div>
+
+            <div class="field">
+              <label for="amount">Total bill amount (₹) *</label>
+              <input
+                id="amount"
+                type="number"
+                min="0.01"
+                step="0.01"
+                required
+                placeholder="e.g. 4200"
+              />
+            </div>
+
+            <div class="field">
+              <label for="station">Petrol pump / station *</label>
+              <input
+                id="station"
+                type="text"
+                maxlength="150"
+                required
+                placeholder="Enter station name"
+              />
+            </div>
+
+            <div class="field">
+              <label for="billNumber">Bill / invoice number</label>
+              <input
+                id="billNumber"
+                type="text"
+                maxlength="100"
+                placeholder="Enter invoice number"
+              />
+            </div>
+
+            <div class="field">
+              <label for="fullTank">Full tank?</label>
+              <select
+                id="fullTank"
+                style="width:100%;padding:12px;border:1px solid #dce3ed;border-radius:10px;background:white"
+              >
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+            </div>
+
+            <div class="field full">
+              <label for="billPhoto">Bill photo * (JPEG, PNG or WEBP)</label>
+              <div class="photo-box">
+                <input
+                  id="billPhoto"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  required
+                />
+                <p class="hint">
+                  Select a clear photo of the original diesel bill.
+                  Maximum size: 5 MB. The photo will be uploaded to ImgBB.
+                </p>
+                <img id="photoPreview" class="photo-preview" alt="Bill photo preview" />
+              </div>
+            </div>
+
+            <div class="field full">
+              <label for="notes">Additional information</label>
+              <textarea
+                id="notes"
+                maxlength="1000"
+                placeholder="Optional notes about this fuel purchase"
+              ></textarea>
+            </div>
+
+          </div>
+
+          <div id="formMessage" class="message"></div>
+
+          <div class="button-row">
+            <button id="saveBtn" class="btn btn-primary" type="submit">
+              Upload Bill & Save Entry
+            </button>
+            <button id="clearBtn" class="btn btn-light" type="button">
+              Clear Form
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section id="historySection" class="panel hidden">
+        <h3>Diesel history</h3>
+        <p class="sub">Your previous diesel purchase records.</p>
+
+        <div class="button-row" style="margin-top:0;margin-bottom:18px">
+          <button id="refreshBtn" class="btn btn-dark" type="button">
+            Refresh History
+          </button>
         </div>
 
-        <div class="field">
-          <label for="fuelTime">Refuelling time</label>
-          <input type="time" id="fuelTime" required>
+        <div id="historyMessage" class="message"></div>
+        <div id="historyList" class="history-list">
+          <div class="empty">Loading records…</div>
         </div>
+      </section>
 
-        <div class="field">
-          <label for="fuelOdometer">Odometer reading (km)</label>
-          <input type="number" id="fuelOdometer" min="0" step="0.1" placeholder="e.g. 24580" required>
-        </div>
-
-        <div class="field">
-          <label for="fuelLitres">Diesel quantity (litres)</label>
-          <input type="number" id="fuelLitres" min="0.01" step="0.01" placeholder="e.g. 65.5" required>
-        </div>
-
-        <div class="field">
-          <label for="fuelAmount">Total cost (₹)</label>
-          <input type="number" id="fuelAmount" min="0" step="0.01" placeholder="e.g. 6000" required>
-        </div>
-
-        <div class="field">
-          <label for="fuelStation">Fuel station</label>
-          <input type="text" id="fuelStation" placeholder="Station name">
-        </div>
-
-        <div class="field">
-          <label for="fuelBill">Bill / invoice number</label>
-          <input type="text" id="fuelBill" placeholder="Enter bill number">
-        </div>
-
-        <div class="field">
-          <label for="fullTank">Full tank filled?</label>
-          <select id="fullTank">
-            <option value="yes">Yes — full tank</option>
-            <option value="no">No — partial refill</option>
-          </select>
-        </div>
-
-        <div class="field full">
-          <label for="fuelNotes">Notes (optional)</label>
-          <textarea id="fuelNotes" placeholder="Additional information…"></textarea>
-        </div>
-      </div>
-
-      <div class="formactions">
-        <button class="btn primary" id="saveFuelBtn">Save fuel record</button>
-        <button class="btn" id="clearFuelBtn">Clear form</button>
-      </div>
-    </section>
-
-    <section class="card" style="margin-top:18px" id="fuelHistorySection">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
-        <div>
-          <h2 style="margin-bottom:5px">Fuel history</h2>
-          <div class="muted">Your saved refuelling records and calculated mileage.</div>
-        </div>
-        <button class="btn" id="historyRefreshBtn">↻ Reload</button>
-      </div>
-
-      <div id="historyList" class="history">
-        <div class="empty">Loading diesel records…</div>
-      </div>
-    </section>
+    </div>
   </main>
 </div>
 
-<nav class="mobile-bottom" aria-label="Driver navigation">
-  <button id="mobileDashboard"><span class="nav-icon">▦</span><span>Dashboard</span></button>
-  <button id="mobileOdometer"><span class="nav-icon">◷</span><span>Odometer</span></button>
-  <button class="active" id="mobileDiesel"><span class="nav-icon">⛽</span><span>Diesel</span></button>
-  <button id="mobileHistory"><span class="nav-icon">↻</span><span>History</span></button>
-</nav>
-
 <script type="module">
-import { auth, db } from "../../firebase.js";
-import {
-  onAuthStateChanged, signOut
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-import {
-  collection, doc, getDoc, getDocs, query, where,
-  addDoc, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+  import { auth, db } from "../../firebase.js";
 
-const $ = id => document.getElementById(id);
+  import {
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-let user = null;
-let profile = null;
-let bus = null;
-let dieselRecords = [];
-let saving = false;
+  import {
+    collection,
+    doc,
+    getDoc,
+    getDocs,
+    query,
+    where,
+    addDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-const localDate = () => {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-};
+  // =========================================================
+  // CONFIGURATION
+  // Add your ImgBB API key below.
+  // IMPORTANT: A key in public GitHub Pages code is visible
+  // to visitors. Use a server-side proxy for production.
+  // =========================================================
 
-const localTime = () => {
-  const d = new Date();
-  return `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
-};
+  const IMGBB_API_KEY = "PASTE_YOUR_IMGBB_API_KEY_HERE";
 
-function esc(v = "") {
-  return String(v).replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
-}
+  const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
-function showMessage(text, type = "info") {
-  $("message").textContent = text;
-  $("message").className = "message show " + type;
-}
+  let currentUser = null;
+  let currentProfile = null;
+  let assignedBus = null;
+  let isSaving = false;
 
-function clearMessage() {
-  $("message").className = "message";
-  $("message").textContent = "";
-}
+  const $ = (id) => document.getElementById(id);
 
-function goToDriverPage() {
-  location.href = "../";
-}
-
-function goToOdometer() {
-  goToDriverPage();
-}
-
-function goToHistory() {
-  $("fuelHistorySection").scrollIntoView({behavior:"smooth",block:"start"});
-}
-
-$("dashboardNav").addEventListener("click", goToDriverPage);
-$("odometerNav").addEventListener("click", goToOdometer);
-$("historyNav").addEventListener("click", goToHistory);
-$("mobileDashboard").addEventListener("click", goToDriverPage);
-$("mobileOdometer").addEventListener("click", goToOdometer);
-$("mobileDiesel").addEventListener("click", () => window.scrollTo({top:0,behavior:"smooth"}));
-$("mobileHistory").addEventListener("click", goToHistory);
-
-async function logout() {
-  await signOut(auth);
-  location.replace("../../");
-}
-
-$("logoutBtn").addEventListener("click", logout);
-$("sideLogoutBtn").addEventListener("click", logout);
-$("refreshBtn").addEventListener("click", loadAll);
-$("historyRefreshBtn").addEventListener("click", loadDieselRecords);
-
-$("fuelDate").value = localDate();
-$("fuelTime").value = localTime();
-
-$("clearFuelBtn").addEventListener("click", () => {
-  $("fuelOdometer").value = "";
-  $("fuelLitres").value = "";
-  $("fuelAmount").value = "";
-  $("fuelStation").value = "";
-  $("fuelBill").value = "";
-  $("fuelNotes").value = "";
-  $("fuelDate").value = localDate();
-  $("fuelTime").value = localTime();
-  $("fullTank").value = "yes";
-  clearMessage();
-});
-
-onAuthStateChanged(auth, async signedInUser => {
-  if (!signedInUser) {
-    location.replace("../../");
-    return;
+  function showMessage(id, message, type = "info") {
+    const el = $(id);
+    el.textContent = message;
+    el.className = "message " + type;
   }
-  user = signedInUser;
-  await loadAll();
-});
 
-async function loadAll() {
-  if (!user || saving) return;
-  clearMessage();
-
-  try {
-    const profileSnap = await getDoc(doc(db,"users",user.uid));
-
-    if (!profileSnap.exists()) {
-      showMessage("Driver profile not found. Please sign in again or contact the administrator.","error");
-      return;
-    }
-
-    profile = profileSnap.data();
-
-    if (profile.role === "admin") {
-      location.replace("../../admin/");
-      return;
-    }
-
-    if (profile.role !== "driver") {
-      showMessage("This portal is for driver accounts only.","error");
-      return;
-    }
-
-    if (profile.approvalStatus !== "approved") {
-      $("approvalBadge").textContent = "Not approved";
-      $("sideDriverStatus").textContent = "Awaiting approval";
-      showMessage("Your driver account is not approved yet. Please contact the administrator.","info");
-      return;
-    }
-
-    $("driverLabel").textContent = profile.name || user.email || "Driver";
-    $("sideDriverName").textContent = profile.name || "Driver";
-    $("sideDriverStatus").textContent = "Approved driver";
-    $("sideAvatar").textContent = (profile.name || "D").trim().charAt(0).toUpperCase();
-    $("driverName").textContent = profile.name || user.email || "Driver";
-    $("approvalBadge").textContent = "Approved";
-
-    bus = null;
-
-    if (profile.assignedBusId) {
-      const busSnap = await getDoc(doc(db,"buses",profile.assignedBusId));
-      if (busSnap.exists()) bus = {id:busSnap.id,...busSnap.data()};
-    }
-
-    if (!bus) {
-      const linked = await getDocs(query(
-        collection(db,"buses"),
-        where("assignedDriverId","==",user.uid)
-      ));
-      if (!linked.empty) bus = {id:linked.docs[0].id,...linked.docs[0].data()};
-    }
-
-    if (!bus) {
-      $("busRegistration").textContent = "No bus assigned";
-      $("busRoute").textContent = "Please contact your administrator.";
-      $("currentReading").textContent = "—";
-      $("busCode").textContent = "—";
-      $("expectedMileage").textContent = "—";
-      showMessage("Your account is approved, but no bus is assigned yet.","info");
-      return;
-    }
-
-    $("busRegistration").textContent = bus.registrationNo || "Bus";
-    $("busRoute").textContent = (bus.routeFrom || "—") + " → " + (bus.routeTo || "—");
-    $("busCode").textContent = bus.busCode || "—";
-    $("expectedMileage").textContent = bus.expectedMileage != null ? bus.expectedMileage + " km/l" : "—";
-
-    await loadDieselRecords();
-
-  } catch(error) {
-    console.error(error);
-    showMessage("Unable to load diesel page: " + error.message,"error");
+  function clearMessage(id) {
+    const el = $(id);
+    el.textContent = "";
+    el.className = "message";
   }
-}
 
-async function loadDieselRecords() {
-  if (!user) return;
+  function setToday() {
+    const now = new Date();
+    const localDate = new Date(
+      now.getTime() - now.getTimezoneOffset() * 60000
+    ).toISOString();
 
-  $("historyList").innerHTML = '<div class="empty">Loading diesel records…</div>';
+    $("entryDate").value = localDate.slice(0, 10);
+    $("entryTime").value = localDate.slice(11, 16);
+  }
 
-  try {
-    const snap = await getDocs(query(
-      collection(db,"dieselEntries"),
-      where("driverUid","==",user.uid)
-    ));
+  function safeText(value, fallback = "—") {
+    if (value === undefined || value === null || value === "") {
+      return fallback;
+    }
+    return String(value);
+  }
 
-    dieselRecords = snap.docs.map(s => ({id:s.id,...s.data()}));
-
-    if (bus) dieselRecords = dieselRecords.filter(r => r.busId === bus.id);
-
-    dieselRecords.sort((a,b) => {
-      const aa = `${a.date || ""}T${a.time || "00:00"}`;
-      const bb = `${b.date || ""}T${b.time || "00:00"}`;
-      return bb.localeCompare(aa);
+  function formatMoney(value) {
+    return Number(value || 0).toLocaleString("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 2
     });
-
-    renderFuelSummary();
-    renderFuelHistory();
-
-  } catch(error) {
-    console.error("Diesel history load failed:",error);
-    $("historyList").innerHTML = '<div class="empty">Could not load diesel records.</div>';
-    showMessage("Could not load diesel records: " + error.message + ". Check Firestore read rules for dieselEntries.","error");
   }
-}
 
-function chronologicalRecords() {
-  return [...dieselRecords].sort((a,b) => {
-    const aa = `${a.date || ""}T${a.time || "00:00"}`;
-    const bb = `${b.date || ""}T${b.time || "00:00"}`;
-    return aa.localeCompare(bb);
-  });
-}
+  function formatDate(value) {
+    if (!value) return "—";
 
-function getMileageData() {
-  const records = chronologicalRecords();
-  let totalLitres = 0;
-  let totalDistance = 0;
-  const intervalMileage = new Map();
+    if (typeof value === "string") {
+      return value;
+    }
 
-  for (let i = 0; i < records.length; i++) {
-    const current = records[i];
-    totalLitres += Number(current.litres) || 0;
+    if (value.toDate) {
+      return value.toDate().toLocaleString("en-IN");
+    }
 
-    if (i === 0) continue;
+    return "—";
+  }
 
-    const previous = records[i-1];
-    const distance = Number(current.odometerReading) - Number(previous.odometerReading);
-    const litres = Number(current.litres);
+  async function getAssignedBus(uid, profile) {
+    // Prefer the existing user-to-bus assignment.
+    const assignedBusId = profile.assignedBusId;
 
-    if (distance > 0 && litres > 0) {
-      const mileage = distance / litres;
-      intervalMileage.set(current.id, mileage);
-      totalDistance += distance;
+    if (assignedBusId) {
+      const busSnap = await getDoc(doc(db, "buses", assignedBusId));
+
+      if (busSnap.exists()) {
+        const bus = { id: busSnap.id, ...busSnap.data() };
+
+        if (
+          bus.assignedDriverId === uid ||
+          bus.driverId === uid ||
+          bus.driverUid === uid ||
+          profile.assignedBusId === bus.id
+        ) {
+          return bus;
+        }
+      }
+    }
+
+    // Support the other assignment fields used by some existing setups.
+    const fields = ["assignedDriverId", "driverId", "driverUid"];
+
+    for (const field of fields) {
+      const q = query(
+        collection(db, "buses"),
+        where(field, "==", uid)
+      );
+
+      const result = await getDocs(q);
+
+      if (!result.empty) {
+        const first = result.docs[0];
+        return { id: first.id, ...first.data() };
+      }
+    }
+
+    return null;
+  }
+
+  function showBusDetails(bus) {
+    if (!bus) {
+      $("busChip").textContent = "No bus assigned";
+      $("busCode").value = "";
+      $("registrationNo").value = "";
+
+      showMessage(
+        "pageMessage",
+        "No assigned bus was found. Ask your administrator to assign a bus before adding diesel entries.",
+        "error"
+      );
+      return;
+    }
+
+    $("busChip").textContent =
+      "Bus: " + safeText(bus.busCode || bus.code || bus.id);
+
+    $("busCode").value = safeText(bus.busCode || bus.code || bus.id, "");
+    $("registrationNo").value = safeText(
+      bus.registrationNo || bus.registrationNumber || bus.numberPlate,
+      ""
+    );
+  }
+
+  async function uploadBillToImgBB(file) {
+    if (
+      !IMGBB_API_KEY ||
+      IMGBB_API_KEY === "PASTE_YOUR_IMGBB_API_KEY_HERE"
+    ) {
+      throw new Error(
+        "Add your ImgBB API key in the IMGBB_API_KEY setting first."
+      );
+    }
+
+    if (!file) {
+      throw new Error("Please select the original diesel bill photo.");
+    }
+
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      throw new Error("Only JPEG, PNG and WEBP images are accepted.");
+    }
+
+    if (file.size <= 0 || file.size > MAX_IMAGE_SIZE) {
+      throw new Error("The bill photo must be smaller than 5 MB.");
+    }
+
+    const body = new FormData();
+    body.append("image", file, file.name);
+    body.append("name", "diesel-bill-" + Date.now());
+
+    const response = await fetch(
+      "https://api.imgbb.com/1/upload?key=" +
+        encodeURIComponent(IMGBB_API_KEY),
+      {
+        method: "POST",
+        body
+      }
+    );
+
+    let result;
+
+    try {
+      result = await response.json();
+    } catch {
+      throw new Error("ImgBB returned an unreadable response.");
+    }
+
+    if (!response.ok || !result.success || !result.data?.url) {
+      throw new Error(
+        result.error?.message ||
+        "ImgBB upload failed. Please check the API key and try again."
+      );
+    }
+
+    return {
+      url: result.data.url,
+      displayUrl: result.data.display_url || result.data.url,
+      imageId: result.data.id || "",
+      name: file.name,
+      size: file.size,
+      mime: file.type
+    };
+  }
+
+  async function loadHistory() {
+    if (!currentUser) return;
+
+    $("historyList").innerHTML =
+      '<div class="empty">Loading diesel records…</div>';
+
+    clearMessage("historyMessage");
+
+    try {
+      // No orderBy: avoids requiring a composite index.
+      const q = query(
+        collection(db, "dieselEntries"),
+        where("driverUid", "==", currentUser.uid)
+      );
+
+      const snapshot = await getDocs(q);
+
+      const records = snapshot.docs
+        .map((item) => ({ id: item.id, ...item.data() }))
+        .filter((item) => !assignedBus || item.busId === assignedBus.id)
+        .sort((a, b) => {
+          const ta = a.createdAt?.toMillis?.() || 0;
+          const tb = b.createdAt?.toMillis?.() || 0;
+          return tb - ta;
+        });
+
+      if (records.length === 0) {
+        $("historyList").innerHTML =
+          '<div class="empty">No diesel records found for this bus.</div>';
+        return;
+      }
+
+      $("historyList").replaceChildren();
+
+      for (const item of records) {
+        const card = document.createElement("article");
+        card.className = "record";
+
+        const left = document.createElement("div");
+        const heading = document.createElement("h4");
+        heading.textContent =
+          safeText(item.station, "Fuel station") +
+          " · " + safeText(item.date);
+
+        const details = document.createElement("p");
+        details.textContent =
+          "Time: " + safeText(item.time) +
+          " | Odometer: " + safeText(item.odometerReading) + " km";
+
+        const fuel = document.createElement("p");
+        fuel.textContent =
+          "Diesel: " + safeText(item.litres) + " L" +
+          " | Bill: " + safeText(item.billNumber);
+
+        const bus = document.createElement("p");
+        bus.textContent =
+          "Bus: " + safeText(item.busCode) +
+          " | Full tank: " + (item.fullTank ? "Yes" : "No");
+
+        left.append(heading, details, fuel, bus);
+
+        if (item.billPhotoUrl) {
+          const link = document.createElement("a");
+          link.className = "bill-link";
+          link.href = item.billPhotoUrl;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = "View original bill ↗";
+          left.appendChild(link);
+        }
+
+        const right = document.createElement("div");
+        right.className = "record-amount";
+        right.textContent = formatMoney(item.amount);
+
+        card.append(left, right);
+        $("historyList").appendChild(card);
+      }
+
+    } catch (error) {
+      console.error("Diesel history error:", error);
+
+      $("historyList").innerHTML =
+        '<div class="empty">Could not load diesel records.</div>';
+
+      showMessage(
+        "historyMessage",
+        "Could not load diesel records: " + error.message +
+          ". Check Firestore read rules for dieselEntries.",
+        "error"
+      );
     }
   }
 
-  // The interval calculation assumes the fuel entries represent comparable refuelling intervals.
-  const validLitres = records.reduce((sum,r) => {
-    return sum + (intervalMileage.has(r.id) ? (Number(r.litres) || 0) : 0);
-  },0);
+  function switchTab(tab) {
+    const showHistory = tab === "history";
 
-  const average = validLitres > 0 ? totalDistance / validLitres : null;
+    $("entrySection").classList.toggle("hidden", showHistory);
+    $("historySection").classList.toggle("hidden", !showHistory);
 
-  return {records,totalLitres,totalDistance,average,intervalMileage};
-}
+    $("entryTab").classList.toggle("active", !showHistory);
+    $("historyTab").classList.toggle("active", showHistory);
 
-function renderFuelSummary() {
-  const {records,totalLitres,average} = getMileageData();
+    if (showHistory) {
+      $("historySection").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
 
-  $("totalEntries").textContent = records.length.toLocaleString();
-  $("totalLitres").innerHTML = `${totalLitres.toLocaleString(undefined,{maximumFractionDigits:2})} <span class="stat-unit">L</span>`;
-  $("averageMileage").innerHTML = `${average == null ? "—" : average.toFixed(2)} <span class="stat-unit">km/L</span>`;
-
-  // Display the greatest available odometer reading as a simple current-meter reference.
-  const readings = [
-    Number(bus?.odometerReading),
-    ...dieselRecords.map(r => Number(r.odometerReading))
-  ].filter(Number.isFinite);
-
-  $("currentReading").textContent = readings.length
-    ? Math.max(...readings).toLocaleString(undefined,{maximumFractionDigits:1})
-    : "—";
-}
-
-function renderFuelHistory() {
-  const {records,intervalMileage} = getMileageData();
-  const list = [...records].reverse();
-
-  if (!list.length) {
-    $("historyList").innerHTML = '<div class="empty">No diesel records found for this bus yet.<br>Saved refuelling entries will appear here.</div>';
-    return;
+      loadHistory();
+    } else {
+      $("entrySection").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
   }
 
-  $("historyList").innerHTML = list.map(r => {
-    const mileage = intervalMileage.get(r.id);
-    const dateTime = `${r.date || ""} ${r.time || ""}`.trim() || "Date not recorded";
+  $("entryTab").addEventListener("click", () => switchTab("entry"));
+  $("historyTab").addEventListener("click", () => switchTab("history"));
+  $("historyNav").addEventListener("click", (event) => {
+    event.preventDefault();
+    switchTab("history");
+  });
+  $("refreshBtn").addEventListener("click", loadHistory);
 
-    return `<article class="entry">
-      <div>
-        <strong>${esc(dateTime)}</strong>
-        <div class="muted">${esc(r.station || "Fuel station not recorded")}</div>
-        <div class="muted">Odometer: ${esc(r.odometerReading ?? "—")} km · ${esc(r.litres ?? "—")} L</div>
-        <div class="muted">Bill: ${esc(r.billNumber || "—")} · Full tank: ${r.fullTank === "yes" ? "Yes" : "No"}</div>
-        ${r.notes ? `<div class="muted">${esc(r.notes)}</div>` : ""}
-      </div>
-      <div>
-        <strong>₹${(Number(r.amount)||0).toLocaleString(undefined,{maximumFractionDigits:2})}</strong>
-        <div style="margin-top:7px"><span class="pill">${mileage == null ? "MILEAGE PENDING" : mileage.toFixed(2) + " KM/L"}</span></div>
-      </div>
-    </article>`;
-  }).join("");
-}
+  $("billPhoto").addEventListener("change", () => {
+    clearMessage("formMessage");
 
-$("saveFuelBtn").addEventListener("click", saveFuel);
+    const file = $("billPhoto").files?.[0];
+    const preview = $("photoPreview");
 
-async function saveFuel() {
-  if (!user || !profile || !bus || saving) {
-    showMessage("Your assigned bus is not loaded. Refresh and try again.","error");
-    return;
-  }
+    if (!file) {
+      preview.removeAttribute("src");
+      preview.style.display = "none";
+      return;
+    }
 
-  const date = $("fuelDate").value;
-  const time = $("fuelTime").value;
-  const odometerReading = Number($("fuelOdometer").value);
-  const litres = Number($("fuelLitres").value);
-  const amount = Number($("fuelAmount").value);
-  const station = $("fuelStation").value.trim();
-  const billNumber = $("fuelBill").value.trim();
-  const fullTank = $("fullTank").value;
-  const notes = $("fuelNotes").value.trim();
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      $("billPhoto").value = "";
+      preview.style.display = "none";
+      showMessage("formMessage", "Please select a JPEG, PNG or WEBP image.", "error");
+      return;
+    }
 
-  if (!date || !time ||
-      $("fuelOdometer").value.trim() === "" ||
-      $("fuelLitres").value.trim() === "" ||
-      $("fuelAmount").value.trim() === "" ||
+    if (file.size > MAX_IMAGE_SIZE) {
+      $("billPhoto").value = "";
+      preview.style.display = "none";
+      showMessage("formMessage", "The image must be smaller than 5 MB.", "error");
+      return;
+    }
+
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = "block";
+  });
+
+  $("clearBtn").addEventListener("click", () => {
+    $("dieselForm").reset();
+    setToday();
+    $("photoPreview").removeAttribute("src");
+    $("photoPreview").style.display = "none";
+    clearMessage("formMessage");
+  });
+
+  $("dieselForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (isSaving) return;
+
+    if (!currentUser || !currentProfile) {
+      showMessage("formMessage", "Your session is not ready. Sign in again.", "error");
+      return;
+    }
+
+    if (
+      currentProfile.role !== "driver" ||
+      currentProfile.approvalStatus !== "approved"
+    ) {
+      showMessage("formMessage", "Your driver account is not approved.", "error");
+      return;
+    }
+
+    if (!assignedBus) {
+      showMessage("formMessage", "You must have an assigned bus to save a diesel entry.", "error");
+      return;
+    }
+
+    const file = $("billPhoto").files?.[0];
+
+    if (!file) {
+      showMessage("formMessage", "Bill photo is compulsory.", "error");
+      return;
+    }
+
+    const odometerReading = Number($("odometer").value);
+    const litres = Number($("litres").value);
+    const amount = Number($("amount").value);
+
+    if (
       !Number.isFinite(odometerReading) || odometerReading < 0 ||
       !Number.isFinite(litres) || litres <= 0 ||
-      !Number.isFinite(amount) || amount < 0) {
-    showMessage("Enter a valid date, time, odometer reading, litres and total cost.","error");
-    return;
-  }
-
-  saving = true;
-  $("saveFuelBtn").disabled = true;
-  $("saveFuelBtn").textContent = "Saving…";
-  clearMessage();
-
-  try {
-    const freshProfileSnap = await getDoc(doc(db,"users",user.uid));
-
-    if (!freshProfileSnap.exists()) throw new Error("Driver profile not found.");
-
-    const freshProfile = freshProfileSnap.data();
-
-    if (freshProfile.role !== "driver" || freshProfile.approvalStatus !== "approved") {
-      throw new Error("Your driver account is not approved.");
+      !Number.isFinite(amount) || amount <= 0
+    ) {
+      showMessage("formMessage", "Enter valid odometer, litres and amount values.", "error");
+      return;
     }
 
-    if (freshProfile.assignedBusId !== bus.id) {
-      throw new Error("This bus is no longer assigned to your account. Refresh and contact your administrator.");
+    isSaving = true;
+    $("saveBtn").disabled = true;
+    $("saveBtn").textContent = "Uploading bill and saving…";
+
+    try {
+      showMessage("formMessage", "Step 1 of 2: Uploading bill photo to ImgBB…", "info");
+
+      const bill = await uploadBillToImgBB(file);
+
+      showMessage("formMessage", "Step 2 of 2: Saving diesel record…", "info");
+
+      const payload = {
+        busId: assignedBus.id,
+        registrationNo: assignedBus.registrationNo ||
+          assignedBus.registrationNumber ||
+          assignedBus.numberPlate || "",
+        busCode: assignedBus.busCode || assignedBus.code || assignedBus.id,
+
+        driverUid: currentUser.uid,
+        driverName: currentProfile.name ||
+          currentProfile.displayName ||
+          currentUser.displayName || "",
+        driverEmail: currentUser.email || "",
+
+        date: $("entryDate").value,
+        time: $("entryTime").value,
+        odometerReading,
+        litres,
+        amount,
+        station: $("station").value.trim(),
+        billNumber: $("billNumber").value.trim(),
+        fullTank: $("fullTank").value === "yes",
+        notes: $("notes").value.trim(),
+
+        // ImgBB URL fields: no Firebase Storage upload required.
+        billPhotoUrl: bill.url,
+        billPhotoDisplayUrl: bill.displayUrl,
+        billPhotoName: bill.name,
+        billPhotoSize: bill.size,
+        billPhotoMime: bill.mime,
+        billPhotoHost: "imgbb",
+        billPhotoImageId: bill.imageId,
+
+        createdAt: serverTimestamp()
+      };
+
+      await addDoc(collection(db, "dieselEntries"), payload);
+
+      showMessage(
+        "formMessage",
+        "Diesel entry saved successfully. Your bill photo link has been recorded.",
+        "success"
+      );
+
+      $("dieselForm").reset();
+      setToday();
+      $("photoPreview").removeAttribute("src");
+      $("photoPreview").style.display = "none";
+
+    } catch (error) {
+      console.error("Diesel save error:", error);
+
+      showMessage(
+        "formMessage",
+        "Could not save diesel entry: " + (error.message || "Unknown error") +
+        ". If the bill uploaded but Firestore saving failed, the image may already exist on ImgBB.",
+        "error"
+      );
+    } finally {
+      isSaving = false;
+      $("saveBtn").disabled = false;
+      $("saveBtn").textContent = "Upload Bill & Save Entry";
+    }
+  });
+
+  $("logoutBtn").addEventListener("click", async () => {
+    try {
+      await signOut(auth);
+      location.href = "../../index.html";
+    } catch (error) {
+      showMessage("pageMessage", "Sign out failed: " + error.message, "error");
+    }
+  });
+
+  onAuthStateChanged(auth, async (user) => {
+    currentUser = user;
+
+    if (!user) {
+      location.href = "../../index.html";
+      return;
     }
 
-    const busSnap = await getDoc(doc(db,"buses",bus.id));
+    try {
+      const profileSnap = await getDoc(doc(db, "users", user.uid));
 
-    if (!busSnap.exists()) throw new Error("Assigned bus no longer exists.");
+      if (!profileSnap.exists()) {
+        showMessage("pageMessage", "Driver profile was not found.", "error");
+        return;
+      }
 
-    const freshBus = busSnap.data();
-    const stillAssigned =
-      freshBus.assignedDriverId === user.uid ||
-      freshBus.driverId === user.uid ||
-      freshBus.driverUid === user.uid;
+      currentProfile = profileSnap.data();
 
-    if (!stillAssigned) {
-      throw new Error("This bus is no longer assigned to your account. Contact your administrator.");
+      if (
+        currentProfile.role !== "driver" ||
+        currentProfile.approvalStatus !== "approved"
+      ) {
+        showMessage("pageMessage", "Your driver account is not approved for access.", "error");
+        return;
+      }
+
+      $("driverLabel").textContent =
+        currentProfile.name || user.displayName || user.email || "Driver";
+
+      assignedBus = await getAssignedBus(user.uid, currentProfile);
+      showBusDetails(assignedBus);
+      setToday();
+
+    } catch (error) {
+      console.error("Driver initialization error:", error);
+
+      showMessage(
+        "pageMessage",
+        "Could not load your driver profile or bus assignment: " + error.message,
+        "error"
+      );
     }
-
-    await addDoc(collection(db,"dieselEntries"),{
-      busId:bus.id,
-      registrationNo:bus.registrationNo || "",
-      busCode:bus.busCode || "",
-      driverUid:user.uid,
-      driverName:profile.name || "",
-      driverEmail:user.email || "",
-      date,
-      time,
-      odometerReading,
-      litres,
-      amount,
-      station,
-      billNumber,
-      fullTank,
-      notes,
-      createdAt:serverTimestamp()
-    });
-
-    $("fuelOdometer").value = "";
-    $("fuelLitres").value = "";
-    $("fuelAmount").value = "";
-    $("fuelStation").value = "";
-    $("fuelBill").value = "";
-    $("fuelNotes").value = "";
-    $("fuelDate").value = localDate();
-    $("fuelTime").value = localTime();
-    $("fullTank").value = "yes";
-
-    showMessage("Diesel record saved successfully.","ok");
-    await loadDieselRecords();
-    $("fuelHistorySection").scrollIntoView({behavior:"smooth",block:"start"});
-
-  } catch(error) {
-    console.error("Save diesel record failed:",error);
-    showMessage("Could not save diesel record: " + error.message,"error");
-  } finally {
-    saving = false;
-    $("saveFuelBtn").disabled = false;
-    $("saveFuelBtn").textContent = "Save fuel record";
-  }
-}
+  });
 </script>
 </body>
 </html>
