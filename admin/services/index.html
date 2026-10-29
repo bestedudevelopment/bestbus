@@ -1,0 +1,192 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Services | BEST Bus Admin</title>
+<style>
+:root{--navy:#173451;--blue:#2468e8;--bg:#f5f8fc;--ink:#172b40;--muted:#77879a;--line:#e5ebf2;--green:#16865b;--red:#c43e46}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--ink)}
+button,input{font:inherit}button{cursor:pointer}
+.layout{display:grid;grid-template-columns:235px minmax(0,1fr);min-height:100vh}
+.side{background:#fff;border-right:1px solid var(--line);padding:24px 16px}
+.brand{font-weight:850;letter-spacing:1px;padding:8px 10px 26px}
+.brand small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
+.nav a{display:block;padding:12px 13px;margin:4px 0;border-radius:10px;text-decoration:none;color:#607287;font-weight:650;font-size:13px}
+.nav a.active,.nav a:hover{background:#edf4ff;color:var(--blue)}
+main{padding:28px;max-width:1500px;width:100%;margin:auto}
+.top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.eyebrow{font-size:10px;font-weight:800;letter-spacing:1.5px;color:var(--blue)}
+h1{margin:7px 0;font-size:30px}.sub{color:var(--muted);margin:0 0 22px}
+.count{background:#eaf2ff;color:#245fc9;padding:8px 12px;border-radius:20px;font-weight:750;font-size:12px}
+.notice{padding:12px 14px;border-radius:10px;margin:12px 0;display:none}
+.notice.show{display:block}.notice.error{background:#fff0f0;color:#a51e2a}.notice.ok{background:#e9f8f0;color:#126b48}
+.request{background:#fff;border:1px solid var(--line);border-radius:15px;padding:18px;margin:14px 0;box-shadow:0 4px 18px #17345108}
+.requesthead{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.driver{font-weight:800;font-size:16px}.muted{color:var(--muted);font-size:12px}
+.badge{display:inline-block;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:800;background:#fff5df;color:#94600c}
+.badge.accepted{background:#e9f8f0;color:#126b48}.badge.rejected{background:#fff0f0;color:#a51e2a}
+.details{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:15px 0}
+.field{background:#f7f9fc;border:1px solid #edf0f5;border-radius:10px;padding:10px}
+.field label{display:block;font-size:10px;color:var(--muted);font-weight:800;text-transform:uppercase;margin-bottom:5px}
+.field strong{font-size:13px;overflow-wrap:anywhere}
+.problem{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7;background:#fbfcfe;border:1px solid var(--line);border-radius:10px;padding:13px;margin:12px 0;font-size:15px}
+.formrow{display:grid;grid-template-columns:2fr 1fr;gap:10px}
+.formrow label{font-size:11px;color:var(--muted);font-weight:800;display:block;margin-bottom:5px}
+.formrow input{width:100%;padding:11px;border:1px solid #dce3ec;border-radius:9px;background:#fff}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn{border:0;border-radius:9px;padding:10px 14px;font-weight:750;font-size:12px}
+.accept{background:var(--green);color:#fff}.reject{background:#fff0f0;color:#b4232d}
+.empty{background:white;border:1px dashed #ccd6e2;border-radius:14px;padding:35px;text-align:center;color:var(--muted)}
+.mobile{display:none}
+@media(max-width:850px){.layout{display:block}.side{display:none}main{padding:20px 14px 85px}h1{font-size:25px}.details,.formrow{grid-template-columns:1fr}.mobile{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);padding:8px;justify-content:space-around}.mobile a{text-decoration:none;font-size:11px;font-weight:750;padding:8px;color:#607287}.mobile a.active{color:var(--blue)}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="side">
+<div class="brand">🚌 BEST BUS<small>ADMIN WORKSPACE</small></div>
+<nav class="nav">
+<a href="../">▦ Dashboard</a>
+<a href="../addbus/">🚌 Add Bus</a>
+<a href="../assign-deassign/">⇄ Assign / De-assign</a>
+<a href="../diesel/">⛽ Diesel Data</a>
+<a href="../reports/">▤ Download Reports</a>
+<a class="active" href="./">🔧 Services</a>
+</nav>
+</aside>
+
+<main>
+<div class="top">
+<div>
+<div class="eyebrow">FLEET OPERATIONS</div>
+<h1>Service Requests</h1>
+<p class="sub">Review problems reported by drivers. Service name and cost are optional.</p>
+</div>
+<span class="count" id="pendingCount">0 pending</span>
+</div>
+
+<div id="notice" class="notice"></div>
+<div id="requests"><div class="empty">Checking administrator access…</div></div>
+</main>
+</div>
+
+<nav class="mobile">
+<a href="../">Home</a>
+<a href="../diesel/">Diesel</a>
+<a class="active" href="./">Services</a>
+<a href="../reports/">Reports</a>
+</nav>
+
+<script type="module">
+import {auth,db} from '../../firebase.js';
+import {onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
+import {collection,doc,getDoc,onSnapshot,query,orderBy,updateDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
+
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function notify(t,type='ok'){
+ const n=$('notice');n.textContent=t;n.className='notice show '+(type==='error'?'error':'ok');
+}
+function date(v){
+ if(!v)return '—';
+ if(v.toDate)return v.toDate().toLocaleString();
+ const d=new Date(v);return isNaN(d)?String(v):d.toLocaleString();
+}
+
+onAuthStateChanged(auth,async user=>{
+ if(!user){location.replace('../../');return;}
+ try{
+  const p=await getDoc(doc(db,'users',user.uid));
+  if(!p.exists()||String(p.data().role||'').toLowerCase()!=='admin'){
+   document.body.innerHTML='<div style="padding:40px;font-family:Arial">Admin access required. <a href="../../">Return to sign in</a></div>';
+   return;
+  }
+  startListening();
+ }catch(e){notify('Could not verify admin access: '+e.message,'error');}
+});
+
+function startListening(){
+ const q=query(collection(db,'serviceRequests'),orderBy('createdAt','desc'));
+ onSnapshot(q,snap=>{
+  const all=snap.docs.map(d=>({id:d.id,...d.data()}));
+  $('pendingCount').textContent=all.filter(x=>(x.status||'pending')==='pending').length+' pending';
+  render(all);
+ },e=>notify('Could not load requests. Check Firestore rules: '+e.message,'error'));
+}
+
+function render(items){
+ const root=$('requests');
+ if(!items.length){root.innerHTML='<div class="empty">No service requests yet.</div>';return;}
+
+ root.innerHTML=items.map(r=>{
+  const status=(r.status||'pending').toLowerCase();
+  const isPending=status==='pending';
+  const cost=(r.serviceCost===null||r.serviceCost===undefined||r.serviceCost==='')?
+   'Not entered':'₹'+Number(r.serviceCost).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+  return `<article class="request">
+   <div class="requesthead">
+    <div><div class="driver">${esc(r.driverName||'Driver')}</div>
+    <div class="muted">${esc(r.driverEmail||'')} · Submitted ${esc(date(r.createdAt))}</div></div>
+    <span class="badge ${['accepted','rejected'].includes(status)?status:''}">${esc(status.toUpperCase())}</span>
+   </div>
+   <div class="details">
+    <div class="field"><label>Bus</label><strong>${esc(r.busNumber||r.busCode||'—')}</strong></div>
+    <div class="field"><label>Registration</label><strong>${esc(r.registrationNo||'—')}</strong></div>
+    <div class="field"><label>Language selected by driver</label><strong>${esc(r.problemLanguage||'Not specified')}</strong></div>
+   </div>
+   <div class="muted" style="font-weight:800">DRIVER'S ORIGINAL MESSAGE</div>
+   <div class="problem" lang="${esc(r.languageCode||'und')}">${esc(r.problemDescription||'No description')}</div>
+   ${isPending?`
+    <div class="formrow">
+     <div><label for="name-${esc(r.id)}">Service name (optional)</label>
+      <input id="name-${esc(r.id)}" maxlength="120" placeholder="e.g. Brake repair, tyre replacement"></div>
+     <div><label for="cost-${esc(r.id)}">Service cost ₹ (optional)</label>
+      <input id="cost-${esc(r.id)}" type="number" min="0" step="0.01" placeholder="Enter cost if known"></div>
+    </div>
+    <div class="actions">
+     <button class="btn accept" data-action="accept" data-id="${esc(r.id)}">Accept request</button>
+     <button class="btn reject" data-action="reject" data-id="${esc(r.id)}">Reject request</button>
+    </div>`:`
+    <div class="details">
+     <div class="field"><label>Service name</label><strong>${esc(r.serviceName||'Not entered')}</strong></div>
+     <div class="field"><label>Service cost</label><strong>${cost}</strong></div>
+     <div class="field"><label>Reviewed</label><strong>${esc(date(r.reviewedAt))}</strong></div>
+    </div>`}
+  </article>`;
+ }).join('');
+}
+
+$('requests').addEventListener('click',async e=>{
+ const b=e.target.closest('button[data-action]');
+ if(!b)return;
+ const id=b.dataset.id,action=b.dataset.action;
+ b.disabled=true;
+ try{
+  const payload={
+   status:action==='accept'?'accepted':'rejected',
+   reviewedAt:serverTimestamp(),
+   reviewedBy:auth.currentUser.uid,
+   updatedAt:serverTimestamp()
+  };
+  if(action==='accept'){
+   const name=$('name-'+id).value.trim();
+   const costText=$('cost-'+id).value.trim();
+   payload.serviceName=name||'';
+   payload.serviceCost=costText===''?null:Number(costText);
+   if(costText!==''&&(!Number.isFinite(payload.serviceCost)||payload.serviceCost<0))
+    throw new Error('Enter a valid cost or leave it empty.');
+  }
+  await updateDoc(doc(db,'serviceRequests',id),payload);
+  notify(action==='accept'?'Request accepted.':'Request rejected.');
+ }catch(err){
+  notify(err.message||'Could not update request.','error');
+  b.disabled=false;
+ }
+});
+</script>
+</body>
+</html>
