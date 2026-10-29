@@ -1,0 +1,258 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Services | BEST Driver</title>
+<style>
+:root{--navy:#111b2a;--yellow:#f5bd3d;--bg:#f4f6f9;--ink:#172334;--muted:#778396;--line:#e5e9ef;--blue:#2563eb;--green:#16834a;--red:#d92d43}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Arial,sans-serif}
+.layout{display:grid;grid-template-columns:235px minmax(0,1fr);min-height:100vh}
+.side{background:var(--navy);color:#fff;padding:25px 17px}
+.brand{font-weight:850;letter-spacing:1px;padding:8px 10px 25px}
+.brand small{display:block;color:#aab5c4;font-size:10px;margin-top:4px}
+.nav a{display:block;text-decoration:none;color:#d1d9e4;padding:12px;border-radius:10px;margin:4px 0;font-weight:650;font-size:13px}
+.nav a.active,.nav a:hover{background:#26364b;color:#fff}
+main{padding:28px;max-width:1050px;width:100%;margin:auto}
+.eyebrow{font-size:10px;font-weight:800;letter-spacing:1.4px;color:#2563eb}
+h1{font-size:28px;margin:6px 0}.sub{margin:0 0 20px;color:var(--muted)}
+.card,.item{background:#fff;border:1px solid var(--line);border-radius:15px;padding:20px;margin:15px 0;box-shadow:0 5px 22px #19283c08}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.field label{display:block;font-size:12px;font-weight:800;margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;border:1px solid #d8e0e9;border-radius:10px;padding:12px;background:#fff;color:var(--ink);font:inherit}
+.field textarea{min-height:150px;resize:vertical;line-height:1.7}
+.hint{font-size:12px;color:var(--muted);margin-top:6px}
+.btn{border:0;background:var(--yellow);color:#111b2a;padding:12px 17px;border-radius:10px;font-weight:850;margin-top:15px}
+.btn:disabled{opacity:.6;cursor:wait}
+.notice{display:none;padding:12px 14px;border-radius:10px;margin:12px 0}
+.notice.show{display:block}.notice.ok{background:#e9f8f0;color:#126b48}.notice.error{background:#fff0f0;color:#a51e2a}
+.itemtop{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.badge{font-size:10px;font-weight:850;border-radius:20px;padding:5px 9px;background:#fff5df;color:#94600c}
+.badge.accepted{background:#e9f8f0;color:#126b48}.badge.rejected{background:#fff0f0;color:#a51e2a}
+.problem{white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0;line-height:1.7;font-size:15px}
+.muted{font-size:12px;color:var(--muted)}
+.mobile{display:none}
+@media(max-width:800px){.layout{display:block}.side{display:none}main{padding:20px 14px 85px}h1{font-size:24px}.grid{grid-template-columns:1fr}.mobile{display:flex;position:fixed;bottom:0;left:0;right:0;justify-content:space-around;background:#fff;border-top:1px solid var(--line);padding:8px}.mobile a{text-decoration:none;color:#667487;font-size:11px;font-weight:750;padding:8px}.mobile a.active{color:#2563eb}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="side">
+<div class="brand">BEST DRIVER<small>TRANSPORT OPERATIONS</small></div>
+<nav class="nav">
+<a href="../">▦ My Bus</a>
+<a href="../diesel/">⛽ Diesel Data</a>
+<a class="active" href="./">🔧 Services / Report Problem</a>
+</nav>
+</aside>
+
+<main>
+<div class="eyebrow">DRIVER WORKSPACE</div>
+<h1>Services / Report a Problem</h1>
+<p class="sub">Describe your bus problem in your own language. Your original message will be sent to the administrator.</p>
+
+<div id="notice" class="notice"></div>
+
+<section class="card">
+<div class="grid">
+<div class="field">
+<label for="busInfo">Assigned bus</label>
+<input id="busInfo" readonly value="Loading bus information…">
+<div class="hint">If the bus is not shown, contact your administrator.</div>
+</div>
+
+<div class="field">
+<label for="language">Language used for your message *</label>
+<select id="language" required>
+<option value="">Choose your language</option>
+<option value="ಕನ್ನಡ (Kannada)">ಕನ್ನಡ (Kannada)</option>
+<option value="English">English</option>
+<option value="हिन्दी (Hindi)">हिन्दी (Hindi)</option>
+<option value="తెలుగు (Telugu)">తెలుగు (Telugu)</option>
+<option value="தமிழ் (Tamil)">தமிழ் (Tamil)</option>
+<option value="മലയാളം (Malayalam)">മലയാളം (Malayalam)</option>
+<option value="मराठी (Marathi)">मराठी (Marathi)</option>
+<option value="اردو (Urdu)">اردو (Urdu)</option>
+<option value="বাংলা (Bengali)">বাংলা (Bengali)</option>
+<option value="ਪੰਜਾਬੀ (Punjabi)">ਪੰਜਾਬੀ (Punjabi)</option>
+<option value="ગુજરાતી (Gujarati)">ગુજરાતી (Gujarati)</option>
+<option value="ଓଡ଼ିଆ (Odia)">ଓଡ଼ିଆ (Odia)</option>
+<option value="नेपाली (Nepali)">नेपाली (Nepali)</option>
+<option value="Other / mixed language">Other / mixed language</option>
+</select>
+<div class="hint">You may type in any language, even if it is not listed. The selected language label is shown to the admin.</div>
+</div>
+</div>
+
+<div class="field" style="margin-top:16px">
+<label for="problem">What is the problem? *</label>
+<textarea id="problem" maxlength="3000" required placeholder="Describe the bus problem here in your preferred language…"></textarea>
+<div class="hint"><span id="chars">0</span>/3000 characters</div>
+</div>
+
+<button id="submit" class="btn">Submit service request</button>
+</section>
+
+<h2 style="font-size:18px;margin-top:26px">My service requests</h2>
+<p class="sub">Check whether the administrator has accepted or rejected each request.</p>
+<div id="history"><div class="card muted">Loading your requests…</div></div>
+</main>
+</div>
+
+<nav class="mobile">
+<a href="../">My Bus</a>
+<a href="../diesel/">Diesel</a>
+<a class="active" href="./">Services</a>
+</nav>
+
+<script type="module">
+import {auth,db} from '../../firebase.js';
+import {onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
+import {collection,doc,getDoc,getDocs,addDoc,onSnapshot,query,where,serverTimestamp} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
+
+const $=id=>document.getElementById(id);
+let currentUser=null,profile=null,bus=null;
+
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function notify(t,type='ok'){
+ const n=$('notice');n.textContent=t;n.className='notice show '+(type==='error'?'error':'ok');
+}
+function date(v){
+ if(!v)return '—';
+ if(v.toDate)return v.toDate().toLocaleString();
+ const d=new Date(v);return isNaN(d)?String(v):d.toLocaleString();
+}
+
+$('problem').addEventListener('input',()=>{
+ $('chars').textContent=$('problem').value.length;
+});
+
+onAuthStateChanged(auth,async user=>{
+ if(!user){location.replace('../../');return;}
+ currentUser=user;
+ try{
+  const ps=await getDoc(doc(db,'users',user.uid));
+  if(!ps.exists()){
+   notify('Driver profile not found. Please contact the administrator.','error');
+   return;
+  }
+  profile=ps.data();
+
+  if(String(profile.role||'').toLowerCase()==='admin'){
+   location.replace('../../admin/services/');
+   return;
+  }
+  if(String(profile.role||'').toLowerCase()!=='driver'){
+   notify('This page is only available to driver accounts.','error');
+   return;
+  }
+  await loadBus();
+  watchHistory();
+ }catch(e){
+  notify('Could not load your profile: '+e.message,'error');
+ }
+});
+
+async function loadBus(){
+ const assignedId=profile.assignedBusId||profile.busId||'';
+
+ if(assignedId){
+  const b=await getDoc(doc(db,'buses',assignedId));
+  if(b.exists())bus={id:b.id,...b.data()};
+ }
+
+ if(!bus){
+  const snap=await getDocs(query(collection(db,'buses'),where('assignedDriverId','==',currentUser.uid)));
+  if(!snap.empty){const b=snap.docs[0];bus={id:b.id,...b.data()};}
+ }
+
+ if(!bus){
+  const snap=await getDocs(query(collection(db,'buses'),where('driverUid','==',currentUser.uid)));
+  if(!snap.empty){const b=snap.docs[0];bus={id:b.id,...b.data()};}
+ }
+
+ $('busInfo').value=bus
+  ?[bus.busNumber||bus.busCode||bus.id,bus.registrationNumber||bus.registrationNo].filter(Boolean).join(' · ')
+  :'No assigned bus found';
+}
+
+function watchHistory(){
+ const q=query(collection(db,'serviceRequests'),where('driverUid','==',currentUser.uid));
+
+ onSnapshot(q,snap=>{
+  const rows=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>{
+   const ta=a.createdAt?.toMillis?.()||0,tb=b.createdAt?.toMillis?.()||0;
+   return tb-ta;
+  });
+
+  $('history').innerHTML=rows.length?rows.map(r=>{
+   const s=(r.status||'pending').toLowerCase();
+   const cost=r.serviceCost==null||r.serviceCost===''
+    ?'Not entered'
+    :'₹'+Number(r.serviceCost).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+   return `<article class="item">
+    <div class="itemtop">
+     <strong>${esc(date(r.createdAt))}</strong>
+     <span class="badge ${['accepted','rejected'].includes(s)?s:''}">${esc(s.toUpperCase())}</span>
+    </div>
+    <div class="muted">Language: ${esc(r.problemLanguage||'Not specified')}</div>
+    <div class="problem" lang="${esc(r.languageCode||'und')}">${esc(r.problemDescription)}</div>
+    ${s==='accepted'?`<div class="muted">Service name: ${esc(r.serviceName||'Not specified')} · Cost: ${cost}</div>`:''}
+    ${s==='rejected'?'<div class="muted">The administrator rejected this request.</div>':''}
+   </article>`;
+  }).join(''):'<div class="card muted">You have not submitted any service requests yet.</div>';
+
+ },e=>notify('Could not load request history: '+e.message,'error'));
+}
+
+$('submit').addEventListener('click',async()=>{
+ const problem=$('problem').value.trim();
+ const language=$('language').value;
+
+ if(!currentUser||!profile)return notify('Please sign in again.','error');
+ if(!language)return notify('Please select the language you are writing in.','error');
+ if(!problem)return notify('Please describe the problem before submitting.','error');
+ if(problem.length>3000)return notify('The description is too long.','error');
+
+ const btn=$('submit');
+ btn.disabled=true;
+ btn.textContent='Submitting…';
+
+ try{
+  await addDoc(collection(db,'serviceRequests'),{
+   driverUid:currentUser.uid,
+   driverName:profile.name||profile.fullName||currentUser.displayName||'Driver',
+   driverEmail:profile.email||currentUser.email||'',
+   driverPhone:profile.phone||'',
+   busId:bus?.id||'',
+   busNumber:bus?.busNumber||bus?.busCode||'',
+   registrationNo:bus?.registrationNumber||bus?.registrationNo||'',
+   problemDescription:problem,
+   problemLanguage:language,
+   languageCode:'und',
+   status:'pending',
+   serviceName:'',
+   serviceCost:null,
+   createdAt:serverTimestamp(),
+   updatedAt:serverTimestamp()
+  });
+
+  $('problem').value='';
+  $('chars').textContent='0';
+  notify('Service request submitted to the administrator.');
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+ }catch(e){
+  console.error(e);
+  notify('Could not submit the request. Check Firestore rules: '+e.message,'error');
+ }finally{
+  btn.disabled=false;
+  btn.textContent='Submit service request';
+ }
+});
+</script>
+</body>
+</html>
