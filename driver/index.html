@@ -890,11 +890,13 @@ h3 {
         <span class="nav-icon">↻</span> Reading History
       </button>
       <button id="dieselNav">
-        <span class="nav-icon">⛽</span> Diesel Data
+         <span class="nav-icon">⛽</span> Diesel Data
       </button>
-      <button data-view="profile">
-        <span class="nav-icon">◎</span> My Profile
-      </button>
+       <button data-view="services">
+      <span class="nav-icon">🔧</span> Services
+       </button>
+<button data-view="profile">
+</button>
     </nav>
 
     <div class="side-bottom">
@@ -1057,6 +1059,84 @@ h3 {
         </div>
       </section>
 
+<section id="servicesView" class="hidden">
+  <div class="card">
+    <h2>Vehicle Service Request</h2>
+    <p class="muted">
+      Report a breakdown, maintenance issue or other problem with your assigned bus.
+    </p>
+
+    <div id="serviceMessage" class="message" role="status"></div>
+
+    <div class="formgrid">
+      <div class="field">
+        <label for="serviceBus">Assigned bus</label>
+        <input id="serviceBus" readonly placeholder="Loading bus...">
+      </div>
+
+      <div class="field">
+        <label for="serviceDate">Request date</label>
+        <input id="serviceDate" type="date" readonly>
+      </div>
+
+      <div class="field">
+        <label for="serviceProblem">Problem category</label>
+        <select id="serviceProblem" required>
+          <option value="">Select problem</option>
+          <option value="Engine">Engine</option>
+          <option value="Brakes">Brakes</option>
+          <option value="Tyres">Tyres</option>
+          <option value="Electrical">Electrical</option>
+          <option value="Battery">Battery</option>
+          <option value="Lights">Lights</option>
+          <option value="Clutch or gearbox">Clutch or gearbox</option>
+          <option value="Body or doors">Body or doors</option>
+          <option value="Scheduled maintenance">Scheduled maintenance</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="serviceLanguage">Problem description language</label>
+        <select id="serviceLanguage" required>
+          <option value="English">English</option>
+          <option value="Kannada">Kannada</option>
+          <option value="Hindi">Hindi</option>
+        </select>
+      </div>
+
+      <div class="field full">
+        <label for="serviceDescription">Describe the problem</label>
+        <textarea id="serviceDescription" rows="4"
+          placeholder="Describe the issue, when it started and any warning signs..."
+          required></textarea>
+      </div>
+    </div>
+
+    <div class="formactions">
+      <button class="btn primary" id="submitServiceBtn">
+        Submit Service Request
+      </button>
+      <button class="btn" id="clearServiceBtn" type="button">
+        Clear Form
+      </button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:17px">
+    <h2>My Service Requests</h2>
+    <p class="muted">Track the requests you have submitted.</p>
+    <div id="serviceHistory" class="history">
+      <div class="empty">Your service requests will appear here.</div>
+    </div>
+    <div class="formactions">
+      <button class="btn" id="refreshServicesBtn" type="button">
+        ↻ Refresh Requests
+      </button>
+    </div>
+  </div>
+</section>
+
       <section id="profileView" class="hidden">
         <div class="card">
           <h2>My profile</h2>
@@ -1107,10 +1187,16 @@ h3 {
     <span class="nav-icon">⛽</span>
     <span>Diesel</span>
   </button>
-  <button data-view="profile">
-    <span class="nav-icon">◎</span>
-    <span>Profile</span>
-  </button>
+ 
+<button data-view="services">
+  <span class="nav-icon">🔧</span>
+  <span>Services</span>
+</button>
+<button data-view="profile">
+  <span class="nav-icon">◎</span>
+  <span>Profile</span>
+</button>
+
 </nav>
 
 <script type="module">
@@ -1120,7 +1206,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import {
   collection, doc, getDoc, getDocs, query, where,
-  runTransaction, serverTimestamp
+  runTransaction, serverTimestamp, addDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const $ = id => document.getElementById(id);
@@ -1169,7 +1255,7 @@ function sortReadings(list) {
 }
 
 function showView(name) {
-  ["bus", "reading", "history", "profile"].forEach(v => {
+  ["bus", "reading", "history", "services", "profile"].forEach(v => {
     $(v + "View").classList.toggle("hidden", v !== name);
   });
 
@@ -1178,7 +1264,7 @@ function showView(name) {
   });
 
   if (name === "history") renderHistory();
-
+if (name === "services") loadServiceRequests();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -1496,6 +1582,230 @@ async function saveReading() {
     $("saveReadingBtn").textContent = "Save reading";
   }
 }
+  
+/* =========================================
+   DRIVER SERVICES
+   Uses existing Firestore: serviceRequests
+========================================= */
+
+function showServiceMessage(text, type = "info") {
+  const el = $("serviceMessage");
+  el.textContent = text;
+  el.className = "message show " + type;
+}
+
+function clearServiceMessage() {
+  $("serviceMessage").textContent = "";
+  $("serviceMessage").className = "message";
+}
+
+function setupServiceForm() {
+  $("serviceDate").value = localDate();
+  $("serviceBus").value = bus
+    ? `${bus.registrationNo || "Bus"} (${bus.busCode || bus.id})`
+    : "No bus assigned";
+}
+
+async function submitServiceRequest() {
+  if (!user || !profile || !bus) {
+    showServiceMessage(
+      "Your driver profile or assigned bus is not loaded. Refresh and try again.",
+      "error"
+    );
+    return;
+  }
+
+  const category = $("serviceProblem").value;
+  const language = $("serviceLanguage").value;
+  const description = $("serviceDescription").value.trim();
+
+  if (!category || !language || !description) {
+    showServiceMessage(
+      "Please select a problem category and language, and describe the issue.",
+      "error"
+    );
+    return;
+  }
+
+  if (description.length < 5) {
+    showServiceMessage(
+      "Please provide a little more detail about the problem.",
+      "error"
+    );
+    return;
+  }
+
+  const btn = $("submitServiceBtn");
+  btn.disabled = true;
+  btn.textContent = "Submitting...";
+  clearServiceMessage();
+
+  try {
+    // Recheck the driver's approval and bus assignment.
+    const [driverSnap, busSnap] = await Promise.all([
+      getDoc(doc(db, "users", user.uid)),
+      getDoc(doc(db, "buses", bus.id))
+    ]);
+
+    if (!driverSnap.exists() || !busSnap.exists()) {
+      throw new Error("Driver profile or assigned bus was not found.");
+    }
+
+    const freshProfile = driverSnap.data();
+    const freshBus = busSnap.data();
+
+    const stillAssigned =
+      freshProfile.assignedBusId === bus.id ||
+      freshBus.assignedDriverId === user.uid ||
+      freshBus.driverId === user.uid ||
+      freshBus.driverUid === user.uid;
+
+    if (
+      freshProfile.role !== "driver" ||
+      freshProfile.approvalStatus !== "approved"
+    ) {
+      throw new Error("Your driver account is not approved.");
+    }
+
+    if (!stillAssigned) {
+      throw new Error(
+        "This bus is no longer assigned to you. Contact your administrator."
+      );
+    }
+
+    await addDoc(collection(db, "serviceRequests"), {
+      driverUid: user.uid,
+      driverName: profile.name || user.displayName || "",
+      driverEmail: user.email || "",
+      busId: bus.id,
+      busCode: bus.busCode || "",
+      registrationNo: bus.registrationNo || "",
+      problemCategory: category,
+      problemDescription: description,
+      problemLanguage: language,
+      status: "pending",
+      createdAt: serverTimestamp()
+    });
+
+    $("serviceProblem").value = "";
+    $("serviceLanguage").value = "English";
+    $("serviceDescription").value = "";
+
+    showServiceMessage(
+      "Service request submitted successfully. Your administrator can now review it.",
+      "ok"
+    );
+
+    await loadServiceRequests();
+
+  } catch (error) {
+    console.error("Service request submission failed:", error);
+
+    showServiceMessage(
+      "Could not submit request: " +
+      (error.code === "permission-denied"
+        ? "Firestore denied access. Check the serviceRequests rules."
+        : error.message),
+      "error"
+    );
+
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Submit Service Request";
+  }
+}
+
+async function loadServiceRequests() {
+  const list = $("serviceHistory");
+
+  if (!user) {
+    list.innerHTML =
+      '<div class="empty">Please sign in to view service requests.</div>';
+    return;
+  }
+
+  list.innerHTML =
+    '<div class="empty">Loading your service requests...</div>';
+
+  try {
+    const snap = await getDocs(query(
+      collection(db, "serviceRequests"),
+      where("driverUid", "==", user.uid)
+    ));
+
+    const requests = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => {
+        const at = a.createdAt?.toMillis?.() || 0;
+        const bt = b.createdAt?.toMillis?.() || 0;
+        return bt - at;
+      });
+
+    if (!requests.length) {
+      list.innerHTML =
+        '<div class="empty">You have not submitted any service requests yet.</div>';
+      return;
+    }
+
+    list.innerHTML = requests.map(request => {
+      const status = String(request.status || "pending");
+      const statusLabel = status.replace(/[_-]/g, " ");
+
+      let date = "Date unavailable";
+      if (request.createdAt?.toDate) {
+        date = request.createdAt.toDate().toLocaleString();
+      }
+
+      return `
+        <article class="entry">
+          <div style="flex:1;min-width:0">
+            <strong>${esc(request.problemCategory || "Service request")}</strong>
+            <div class="muted">
+              ${esc(request.registrationNo || request.busCode || "Bus")}
+              · ${esc(date)}
+            </div>
+            <div style="margin-top:8px;overflow-wrap:anywhere">
+              ${esc(request.problemDescription || "")}
+            </div>
+            <div class="muted">
+              Language: ${esc(request.problemLanguage || "—")}
+            </div>
+            ${request.adminNote
+              ? `<div class="muted">Admin note: ${esc(request.adminNote)}</div>`
+              : ""}
+          </div>
+          <div>
+            <span class="pill">${esc(statusLabel.toUpperCase())}</span>
+          </div>
+        </article>
+      `;
+    }).join("");
+
+  } catch (error) {
+    console.error("Service request history failed:", error);
+
+    list.innerHTML =
+      '<div class="empty">Could not load service requests. Check Firestore read rules.</div>';
+  }
+}
+
+$("submitServiceBtn").addEventListener(
+  "click",
+  submitServiceRequest
+);
+
+$("clearServiceBtn").addEventListener("click", () => {
+  $("serviceProblem").value = "";
+  $("serviceLanguage").value = "English";
+  $("serviceDescription").value = "";
+  clearServiceMessage();
+});
+
+$("refreshServicesBtn").addEventListener(
+  "click",
+  loadServiceRequests
+);
+
 </script>
 </body>
 </html>
