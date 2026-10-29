@@ -7,33 +7,31 @@
 <title>Diesel Management | BEST Bus Management</title>
 
 <style>
-:root{
-  --blue:#1769e0;--blue-light:#edf4ff;--bg:#f5f7fb;
-  --white:#fff;--text:#17243b;--muted:#718096;
-  --border:#e5eaf2;--green:#13875a;--orange:#b96b08;
-  --red:#d94848;--sidebar:248px;
+:root {
+  --blue:#1769e0;
+  --blue-light:#edf4ff;
+  --bg:#f5f7fb;
+  --white:#fff;
+  --text:#17243b;
+  --muted:#718096;
+  --border:#e5eaf2;
+  --green:#13875a;
+  --orange:#b96b08;
+  --red:#d94848;
+  --sidebar:248px;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif}
 button,input,select{font:inherit}
 button{cursor:pointer}
 button:disabled{opacity:.55;cursor:not-allowed}
-.app{min-height:100vh}
-.sidebar{
-  position:fixed;inset:0 auto 0 0;width:var(--sidebar);
-  background:#fff;border-right:1px solid var(--border);
-  padding:22px 15px;display:flex;flex-direction:column;z-index:10
-}
+.sidebar{position:fixed;inset:0 auto 0 0;width:var(--sidebar);background:#fff;border-right:1px solid var(--border);padding:22px 15px;display:flex;flex-direction:column;z-index:10}
 .brand{display:flex;align-items:center;gap:11px;padding:0 8px 25px}
 .logo{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:var(--blue);color:#fff;font-size:19px;font-weight:900}
 .brand-name{font-size:15px;font-weight:850}
 .brand-sub{font-size:11px;color:var(--muted);margin-top:4px}
 .nav-label{padding:10px 12px 8px;font-size:10px;font-weight:800;color:#94a0b2;letter-spacing:1px}
-.nav-link{
-  display:flex;align-items:center;gap:12px;padding:12px;
-  margin:3px 0;border-radius:11px;text-decoration:none;
-  color:#5e6b80;font-size:13px;font-weight:700
-}
+.nav-link{display:flex;align-items:center;gap:12px;padding:12px;margin:3px 0;border-radius:11px;text-decoration:none;color:#5e6b80;font-size:13px;font-weight:700}
 .nav-link:hover{background:#f5f8ff;color:var(--blue)}
 .nav-link.active{background:var(--blue-light);color:var(--blue)}
 .nav-icon{width:21px;text-align:center;font-size:17px}
@@ -47,7 +45,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .btn{border:0;border-radius:10px;padding:11px 14px;font-size:13px;font-weight:750}
 .btn-primary{background:var(--blue);color:white}
 .btn-light{background:white;border:1px solid var(--border);color:var(--text)}
-.btn-danger{background:#fff0f0;color:var(--red)}
 .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:24px}
 .stat,.panel{background:white;border:1px solid var(--border);border-radius:16px}
 .stat{padding:18px;min-width:0}
@@ -55,22 +52,14 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .stat-value{font-size:26px;font-weight:850;margin-top:10px;overflow-wrap:anywhere}
 .stat-note{font-size:11px;color:var(--muted);margin-top:5px}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:19px}
-.toolbar input,.toolbar select{
-  padding:12px;border:1px solid var(--border);border-radius:10px;
-  background:#fff;color:var(--text);outline:none
-}
+.toolbar input,.toolbar select{padding:12px;border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--text);outline:none}
 .toolbar input{flex:1;min-width:190px}
 .toolbar select{min-width:150px}
 .section-title{font-size:18px;margin:0 0 5px}
 .section-desc{font-size:12px;color:var(--muted);margin-bottom:18px}
 .bus-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
-.bus-card{
-  display:block;width:100%;text-align:left;background:#fff;
-  border:1px solid var(--border);border-radius:16px;padding:18px;
-  color:var(--text);transition:.15s
-}
+.bus-card{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--border);border-radius:16px;padding:18px;color:var(--text);transition:.15s}
 .bus-card:hover{border-color:#9bbdf6;box-shadow:0 8px 22px #17345b0b;transform:translateY(-2px)}
-.bus-card:focus-visible{outline:3px solid #1769e055}
 .card-top{display:flex;align-items:flex-start;gap:10px}
 .bus-icon{width:42px;height:42px;border-radius:12px;background:var(--blue-light);display:grid;place-items:center;font-size:21px;flex-shrink:0}
 .bus-title{min-width:0;flex:1}
@@ -80,7 +69,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .pill-green{background:#e8f8f0;color:var(--green)}
 .pill-blue{background:var(--blue-light);color:var(--blue)}
 .pill-orange{background:#fff4e3;color:var(--orange)}
-.pill-red{background:#fff0f0;color:var(--red)}
 .route{margin-top:15px;padding:11px;background:#f8faff;border-radius:10px;font-size:12px;font-weight:700;overflow-wrap:anywhere}
 .arrow{color:var(--blue);padding:0 4px}
 .card-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
@@ -93,7 +81,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .latest-row strong{text-align:right;overflow-wrap:anywhere}
 .card-bottom{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:15px;padding-top:13px;border-top:1px solid var(--border);font-size:12px}
 .view-link{color:var(--blue);font-weight:800;white-space:nowrap}
-.notice{display:none;padding:13px 15px;border-radius:10px;margin-bottom:18px;font-size:13px;line-height:1.5}
+.notice{display:none;padding:13px 15px;border-radius:10px;margin-bottom:18px;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
 .notice.error{display:block;background:#fff0f0;color:#a72e2e}
 .notice.info{display:block;background:var(--blue-light);color:#174e9d}
 .empty,.loading{padding:32px 12px;text-align:center;color:var(--muted);font-size:13px}
@@ -116,11 +104,10 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .info-label{font-size:11px;color:var(--muted);margin-bottom:6px}
 .info-value{font-size:13px;font-weight:700;overflow-wrap:anywhere;white-space:pre-wrap}
 .info-muted{font-size:11px;color:var(--muted);margin-top:4px}
-.table-wrap{width:100%}
+.table-wrap{width:100%;overflow-x:auto}
 table{width:100%;border-collapse:collapse}
 th{text-align:left;padding:12px 10px;background:#f8faff;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.3px}
 td{padding:13px 10px;border-bottom:1px solid var(--border);font-size:12px;vertical-align:top;overflow-wrap:anywhere}
-tbody tr:last-child td{border-bottom:0}
 .history-list{display:flex;flex-direction:column;gap:12px}
 .history-card{border:1px solid var(--border);border-radius:13px;padding:15px;min-width:0}
 .history-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
@@ -135,6 +122,23 @@ tbody tr:last-child td{border-bottom:0}
 .history-extra strong{color:var(--text)}
 .desktop-history{display:block}
 .mobile-history{display:none}
+
+/* NEW: bill photo preview */
+.bill-section{margin:0 0 14px}
+.bill-label{font-size:11px;color:var(--muted);font-weight:800;margin-bottom:8px}
+.bill-thumb{display:block;width:100%;max-width:340px;height:190px;object-fit:contain;background:#f4f6fa;border:1px solid var(--border);border-radius:11px;cursor:zoom-in}
+.bill-thumb:hover{border-color:#9bbdf6}
+.bill-missing{max-width:340px;padding:18px;background:#f8faff;border:1px dashed #cbd5e1;border-radius:11px;color:var(--muted);font-size:12px}
+.bill-open{display:inline-block;margin-top:8px;color:var(--blue);font-size:12px;font-weight:800;text-decoration:none}
+.bill-open:hover{text-decoration:underline}
+.bill-table-thumb{width:90px;height:70px;object-fit:contain;border:1px solid var(--border);border-radius:8px;background:#f8faff;cursor:zoom-in}
+.image-modal{display:none;position:fixed;inset:0;z-index:9999;background:rgba(10,18,30,.9);padding:25px;align-items:center;justify-content:center}
+.image-modal.open{display:flex}
+.image-modal img{max-width:95vw;max-height:88vh;object-fit:contain;background:white;border-radius:8px}
+.image-modal-close{position:absolute;top:15px;right:18px;width:43px;height:43px;border:0;border-radius:50%;background:white;color:#17243b;font-size:27px}
+.image-modal-caption{position:absolute;bottom:12px;left:10px;right:10px;text-align:center;color:white;font-size:12px}
+
+.mobile-nav{display:none}
 @media(max-width:1200px){.bus-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){
   :root{--sidebar:0px}
@@ -147,20 +151,11 @@ tbody tr:last-child td{border-bottom:0}
   .panel{padding:15px}
   .desktop-history{display:none}
   .mobile-history{display:flex}
-  .mobile-nav{
-    position:fixed;z-index:20;bottom:0;left:0;right:0;
-    display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
-    padding:8px 5px calc(8px + env(safe-area-inset-bottom));
-    background:#fff;border-top:1px solid var(--border)
-  }
-  .mobile-nav a{
-    text-decoration:none;color:#6b778b;font-size:10px;
-    display:flex;align-items:center;justify-content:center;
-    flex-direction:column;gap:5px;padding:7px 1px;border-radius:9px;
-    font-weight:750
-  }
+  .mobile-nav{position:fixed;z-index:20;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:8px 5px calc(8px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--border)}
+  .mobile-nav a{text-decoration:none;color:#6b778b;font-size:10px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px;padding:7px 1px;border-radius:9px;font-weight:750}
   .mobile-nav a.active{background:var(--blue-light);color:var(--blue)}
   .mobile-nav .nav-icon{font-size:17px;width:auto}
+  .bill-thumb{height:170px}
 }
 @media(min-width:761px){.mobile-nav{display:none}}
 @media(max-width:420px){
@@ -179,7 +174,6 @@ tbody tr:last-child td{border-bottom:0}
 
 <body>
 <div class="app">
-
   <aside class="sidebar">
     <div class="brand">
       <div class="logo">B</div>
@@ -188,14 +182,12 @@ tbody tr:last-child td{border-bottom:0}
         <div class="brand-sub">Administration panel</div>
       </div>
     </div>
-
     <div class="nav-label">WORKSPACE</div>
     <a class="nav-link" href="../"><span class="nav-icon">⌂</span>Dashboard</a>
     <a class="nav-link" href="../addbus/"><span class="nav-icon">🚌</span>Manage Buses</a>
     <a class="nav-link" href="../assign-deassign/"><span class="nav-icon">⇄</span>Assign / Deassign</a>
     <a class="nav-link active" href="./"><span class="nav-icon">⛽</span>Diesel Management</a>
     <a class="nav-link" href="../reports/"><span class="nav-icon">▤</span>Reports</a>
-
     <div class="sidebar-bottom">
       <div class="admin-label" id="adminLabel">Administrator</div>
       <a class="nav-link" href="../../"><span class="nav-icon">↪</span>Sign out</a>
@@ -218,26 +210,10 @@ tbody tr:last-child td{border-bottom:0}
 
     <section id="overviewView">
       <div class="stats">
-        <div class="stat">
-          <div class="stat-label">Total Buses</div>
-          <div class="stat-value" id="totalBuses">—</div>
-          <div class="stat-note">Registered fleet</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">Buses With Records</div>
-          <div class="stat-value" id="busesWithData">—</div>
-          <div class="stat-note">Diesel entries available</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">Total Diesel Recorded</div>
-          <div class="stat-value" id="totalLitres">—</div>
-          <div class="stat-note">All recorded entries</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">Total Spending</div>
-          <div class="stat-value" id="totalAmount">—</div>
-          <div class="stat-note">Recorded fuel expenses</div>
-        </div>
+        <div class="stat"><div class="stat-label">Total Buses</div><div class="stat-value" id="totalBuses">—</div><div class="stat-note">Registered fleet</div></div>
+        <div class="stat"><div class="stat-label">Buses With Records</div><div class="stat-value" id="busesWithData">—</div><div class="stat-note">Diesel entries available</div></div>
+        <div class="stat"><div class="stat-label">Total Diesel Recorded</div><div class="stat-value" id="totalLitres">—</div><div class="stat-note">All recorded entries</div></div>
+        <div class="stat"><div class="stat-label">Total Spending</div><div class="stat-value" id="totalAmount">—</div><div class="stat-note">Recorded fuel expenses</div></div>
       </div>
 
       <div class="toolbar">
@@ -257,29 +233,19 @@ tbody tr:last-child td{border-bottom:0}
     <section id="detailView" class="detail-view">
       <div class="detail-head">
         <button class="btn btn-light" id="backToFleet">← All Buses</button>
-        <div class="detail-heading">
-          <h2 id="detailTitle">Bus details</h2>
-          <p id="detailSubtitle"></p>
-        </div>
+        <div class="detail-heading"><h2 id="detailTitle">Bus details</h2><p id="detailSubtitle"></p></div>
         <button class="btn btn-light" id="detailRefresh">↻ Refresh</button>
       </div>
-
       <div id="detailStats" class="detail-stats"></div>
 
       <section class="panel">
-        <div class="panel-heading">
-          <h3>Bus & Driver Information</h3>
-          <span id="detailStatus" class="pill pill-blue">Bus</span>
-        </div>
+        <div class="panel-heading"><h3>Bus & Driver Information</h3><span id="detailStatus" class="pill pill-blue">Bus</span></div>
         <div id="busInfo" class="info-grid"></div>
       </section>
 
       <section class="panel">
         <div class="panel-heading">
-          <div>
-            <h3>Diesel Entry History</h3>
-            <div class="page-subtitle" style="margin-top:5px">Latest fuel entries appear first.</div>
-          </div>
+          <div><h3>Diesel Entry History</h3><div class="page-subtitle" style="margin-top:5px">Bill images appear first, followed by entry details.</div></div>
           <span class="pill pill-blue" id="entryCount">0 entries</span>
         </div>
         <div id="historyTable" class="loading">Loading history...</div>
@@ -290,7 +256,6 @@ tbody tr:last-child td{border-bottom:0}
         <div id="odometerTable" class="loading">Loading odometer history...</div>
       </section>
     </section>
-
     <div class="footer">BEST Bus Management System · Diesel records</div>
   </main>
 
@@ -303,17 +268,16 @@ tbody tr:last-child td{border-bottom:0}
   </nav>
 </div>
 
+<div id="imageModal" class="image-modal" role="dialog" aria-modal="true" aria-label="Diesel bill image">
+  <button class="image-modal-close" id="closeImageModal" aria-label="Close image">×</button>
+  <img id="largeBillImage" alt="Diesel bill enlarged preview">
+  <div id="imageCaption" class="image-modal-caption"></div>
+</div>
+
 <script type="module">
 import { auth, db } from "../../firebase.js";
-
-import {
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-import {
-  collection, doc, getDoc, getDocs
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const ADMIN_EMAIL = "admin.svtbest@gmail.com";
 
@@ -331,36 +295,24 @@ function esc(value) {
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
   })[c]);
 }
-
 function money(value) {
   return "₹" + (Number(value)||0).toLocaleString("en-IN",{maximumFractionDigits:2});
 }
-
 function num(value,digits=1) {
   if(value===null||value===undefined||value==="") return "—";
   const n=Number(value);
   return Number.isFinite(n)?n.toLocaleString("en-IN",{maximumFractionDigits:digits}):"—";
 }
-
 function busLabel(bus){return bus.registrationNo||bus.busCode||bus.id}
 function driverName(driver){return driver?.name||driver?.fullName||driver?.displayName||"—"}
 function driverPhone(driver){return driver?.phone||driver?.phoneNumber||driver?.mobile||"—"}
 function findDriver(uid){return users.find(u=>u.id===uid)||null}
 function driverUid(bus){return bus.assignedDriverId||bus.driverUid||bus.driverId||null}
 function isAssigned(bus){return Boolean(driverUid(bus)||bus.assignedDriverName||String(bus.status||"").toLowerCase()==="assigned")}
-
-function timeKey(entry){
-  return `${entry.date||""} ${entry.time||""}`;
-}
-function sortLatest(entries){
-  return [...entries].sort((a,b)=>timeKey(b).localeCompare(timeKey(a)));
-}
-function fuelFor(busId){
-  return sortLatest(dieselEntries.filter(e=>e.busId===busId));
-}
-function readingsFor(busId){
-  return sortLatest(odometerEntries.filter(e=>e.busId===busId));
-}
+function timeKey(entry){return `${entry.date||""} ${entry.time||""}`}
+function sortLatest(entries){return [...entries].sort((a,b)=>timeKey(b).localeCompare(timeKey(a)))}
+function fuelFor(busId){return sortLatest(dieselEntries.filter(e=>e.busId===busId))}
+function readingsFor(busId){return sortLatest(odometerEntries.filter(e=>e.busId===busId))}
 function odoValue(entry){
   const n=Number(entry?.reading);
   return entry?.reading!==null&&entry?.reading!==undefined&&entry?.reading!==""&&Number.isFinite(n)?n:null;
@@ -374,232 +326,166 @@ function currentOdometer(bus){
     ...readingsFor(bus.id).map(e=>({date:timeKey(e),value:odoValue(e)})),
     ...fuelFor(bus.id).map(e=>({date:timeKey(e),value:fuelOdo(e)}))
   ].filter(e=>e.value!==null).sort((a,b)=>b.date.localeCompare(a.date));
-
-  if(all.length) return all[0].value;
+  if(all.length)return all[0].value;
   const initial=Number(bus.odometerReading);
   return bus.odometerReading!==null&&bus.odometerReading!==undefined&&bus.odometerReading!==""&&Number.isFinite(initial)?initial:null;
 }
-
-/*
-Mileage between fuel entries:
-distance = later odometer - previous odometer
-interval mileage = distance / litres recorded at the later refuel.
-Average = total valid interval distance / total litres for those intervals.
-The earliest entry has no previous refuel in the recorded data, so it is
-not used as an interval. Invalid/non-increasing odometer readings are skipped.
-*/
 function mileageStats(busId){
   const entries=fuelFor(busId);
   const intervals=[];
-
   for(let i=0;i<entries.length-1;i++){
-    const later=entries[i];
-    const previous=entries[i+1];
-    const laterOdo=fuelOdo(later);
-    const previousOdo=fuelOdo(previous);
-    const litres=Number(later.litres);
-
-    if(laterOdo===null||previousOdo===null||!Number.isFinite(litres)||litres<=0) continue;
-
+    const later=entries[i],previous=entries[i+1];
+    const laterOdo=fuelOdo(later),previousOdo=fuelOdo(previous),litres=Number(later.litres);
+    if(laterOdo===null||previousOdo===null||!Number.isFinite(litres)||litres<=0)continue;
     const distance=laterOdo-previousOdo;
-    if(distance<=0) continue;
-
-    intervals.push({
-      date:later.date||"—",
-      from:previousOdo,
-      to:laterOdo,
-      distance,
-      litres,
-      mileage:distance/litres
-    });
+    if(distance<=0)continue;
+    intervals.push({date:later.date||"—",from:previousOdo,to:laterOdo,distance,litres,mileage:distance/litres});
   }
-
-  const totalDistance=intervals.reduce((s,x)=>s+x.distance,0);
-  const totalLitres=intervals.reduce((s,x)=>s+x.litres,0);
-
-  return {
-    intervals,
-    latest:intervals[0]||null,
-    average:totalLitres>0?totalDistance/totalLitres:null,
-    distance:totalDistance,
-    litres:totalLitres
-  };
+  const distance=intervals.reduce((s,x)=>s+x.distance,0);
+  const litres=intervals.reduce((s,x)=>s+x.litres,0);
+  return {intervals,latest:intervals[0]||null,average:litres>0?distance/litres:null,distance,litres};
 }
-
 function notice(message,type="info"){
   $("notice").textContent=message;
   $("notice").className="notice "+type;
 }
-function clearNotice(){
-  $("notice").textContent="";
-  $("notice").className="notice";
+function clearNotice(){$("notice").textContent="";$("notice").className="notice"}
+
+function openBillImage(url,caption="Diesel bill"){
+  if(!url)return;
+  $("largeBillImage").src=url;
+  $("imageCaption").textContent=caption;
+  $("imageModal").classList.add("open");
 }
+function closeBillImage(){
+  $("imageModal").classList.remove("open");
+  $("largeBillImage").src="";
+}
+$("closeImageModal").addEventListener("click",closeBillImage);
+$("imageModal").addEventListener("click",event=>{
+  if(event.target===$("imageModal"))closeBillImage();
+});
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape")closeBillImage();
+});
+
+/* Bill image helper. The URL comes from the ImgBB URL saved in Firestore. */
+function billImageHtml(entry,compact=false){
+  const url=String(entry.billPhotoUrl||entry.billPhotoDisplayUrl||"").trim();
+  if(!url)return `<div class="bill-section"><div class="bill-label">DIESEL BILL PHOTO</div><div class="bill-missing">No bill image attached to this record.</div></div>`;
+  // Only render HTTP(S) image links.
+  let parsed;
+  try{parsed=new URL(url)}catch{return `<div class="bill-missing">Invalid bill image URL.</div>`}
+  if(!["https:","http:"].includes(parsed.protocol))return `<div class="bill-missing">Invalid bill image URL.</div>`;
+  const caption=`${entry.busCode||"Bus"} · ${entry.date||"Diesel bill"}`;
+  const safeUrl=esc(parsed.href);
+  return `<div class="bill-section">
+    <div class="bill-label">DIESEL BILL PHOTO</div>
+    <img class="${compact?"bill-table-thumb":"bill-thumb"}" src="${safeUrl}" alt="Diesel bill photo"
+      loading="lazy" data-bill-url="${safeUrl}" data-bill-caption="${esc(caption)}"
+      onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <div class="bill-missing" style="display:none">Image could not load. Check that the saved ImgBB URL is valid.</div>
+    <a class="bill-open" href="${safeUrl}" target="_blank" rel="noopener noreferrer">Open original bill ↗</a>
+  </div>`;
+}
+document.addEventListener("click",event=>{
+  const image=event.target.closest("[data-bill-url]");
+  if(image)openBillImage(image.dataset.billUrl,image.dataset.billCaption||"Diesel bill");
+});
 
 function updateStats(){
-  const withData=buses.filter(b=>fuelFor(b.id).length>0).length;
-  const litres=dieselEntries.reduce((s,e)=>s+(Number(e.litres)||0),0);
-  const amount=dieselEntries.reduce((s,e)=>s+(Number(e.amount)||0),0);
-
+  $("busesWithData").textContent=buses.filter(b=>fuelFor(b.id).length>0).length;
   $("totalBuses").textContent=buses.length;
-  $("busesWithData").textContent=withData;
-  $("totalLitres").textContent=num(litres)+" L";
-  $("totalAmount").textContent=money(amount);
+  $("totalLitres").textContent=num(dieselEntries.reduce((s,e)=>s+(Number(e.litres)||0),0)+"")+" L";
+  $("totalAmount").textContent=money(dieselEntries.reduce((s,e)=>s+(Number(e.amount)||0),0));
 }
 
 function renderCards(){
   const search=$("searchInput").value.trim().toLowerCase();
   const filter=$("busFilter").value;
-
   const filtered=buses.filter(bus=>{
     const entries=fuelFor(bus.id);
     if(filter==="recorded"&&!entries.length)return false;
     if(filter==="none"&&entries.length)return false;
-
     const driver=findDriver(driverUid(bus));
-    const text=[
-      bus.registrationNo,bus.busCode,bus.routeFrom,bus.routeTo,
-      driverName(driver),driverPhone(driver),driver?.email
-    ].join(" ").toLowerCase();
+    const text=[bus.registrationNo,bus.busCode,bus.routeFrom,bus.routeTo,driverName(driver),driverPhone(driver),driver?.email].join(" ").toLowerCase();
     return text.includes(search);
   });
-
   if(!filtered.length){
     $("busGrid").innerHTML='<div class="empty">No buses match your search or filter.</div>';
     return;
   }
-
-  $("busGrid").innerHTML=`
-    <div class="bus-grid">
-    ${filtered.map(bus=>{
-      const entries=fuelFor(bus.id);
-      const latest=entries[0];
-      const driver=findDriver(driverUid(bus));
-      const stats=mileageStats(bus.id);
-      const odo=currentOdometer(bus);
-
-      return `
-        <button class="bus-card" type="button" data-bus="${esc(bus.id)}">
-          <div class="card-top">
-            <div class="bus-icon">🚌</div>
-            <div class="bus-title">
-              <div class="bus-reg">${esc(busLabel(bus))}</div>
-              <div class="bus-code">Code: ${esc(bus.busCode||"—")}</div>
-            </div>
-            ${entries.length
-              ?'<span class="pill pill-green">Recorded</span>'
-              :'<span class="pill pill-orange">No data</span>'}
-          </div>
-
-          <div class="route">${esc(bus.routeFrom||"—")} <span class="arrow">→</span> ${esc(bus.routeTo||"—")}</div>
-
-          <div class="card-grid">
-            <div>
-              <div class="metric-label">Current odometer</div>
-              <div class="metric-value">${num(odo)} <small>km</small></div>
-            </div>
-            <div>
-              <div class="metric-label">Latest fuel</div>
-              <div class="metric-value">${latest?num(latest.litres):"—"} <small>${latest?"L":""}</small></div>
-            </div>
-            <div>
-              <div class="metric-label">Latest amount</div>
-              <div class="metric-value">${latest?money(latest.amount):"—"}</div>
-            </div>
-            <div>
-              <div class="metric-label">Average mileage*</div>
-              <div class="metric-value">${stats.average!==null?num(stats.average,2):"—"} <small>${stats.average!==null?"km/L":""}</small></div>
-            </div>
-          </div>
-
-          <div class="latest-box">
-            <div class="latest-title">LATEST DIESEL ENTRY</div>
-            <div class="latest-row"><span class="muted">Date / time</span><strong>${latest?esc((latest.date||"—")+" "+(latest.time||"")):"No record"}</strong></div>
-            <div class="latest-row"><span class="muted">Fuel station</span><strong>${esc(latest?.station||"—")}</strong></div>
-            <div class="latest-row"><span class="muted">Driver</span><strong>${esc(driverName(driver)!=="—"?driverName(driver):(latest?.driverName||"—"))}</strong></div>
-            ${stats.latest?`<div class="latest-row"><span class="muted">Latest interval mileage</span><strong>${num(stats.latest.mileage,2)} km/L</strong></div>`:""}
-          </div>
-
-          <div class="card-bottom">
-            <span class="muted">${entries.length} fuel entries · ${isAssigned(bus)?"Driver assigned":"No driver assigned"}</span>
-            <span class="view-link">View full details →</span>
-          </div>
-        </button>
-      `;
-    }).join("")}
-    </div>
-  `;
-
-  $("busGrid").querySelectorAll("[data-bus]").forEach(card=>{
-    card.addEventListener("click",()=>openBus(card.dataset.bus));
-  });
+  $("busGrid").innerHTML=`<div class="bus-grid">${filtered.map(bus=>{
+    const entries=fuelFor(bus.id),latest=entries[0],driver=findDriver(driverUid(bus)),stats=mileageStats(bus.id),odo=currentOdometer(bus);
+    return `<button class="bus-card" type="button" data-bus="${esc(bus.id)}">
+      <div class="card-top">
+        <div class="bus-icon">🚌</div>
+        <div class="bus-title"><div class="bus-reg">${esc(busLabel(bus))}</div><div class="bus-code">Code: ${esc(bus.busCode||"—")}</div></div>
+        ${entries.length?'<span class="pill pill-green">Recorded</span>':'<span class="pill pill-orange">No data</span>'}
+      </div>
+      <div class="route">${esc(bus.routeFrom||"—")} <span class="arrow">→</span> ${esc(bus.routeTo||"—")}</div>
+      <div class="card-grid">
+        <div><div class="metric-label">Current odometer</div><div class="metric-value">${num(odo)} <small>km</small></div></div>
+        <div><div class="metric-label">Latest fuel</div><div class="metric-value">${latest?num(latest.litres):"—"} <small>${latest?"L":""}</small></div></div>
+        <div><div class="metric-label">Latest amount</div><div class="metric-value">${latest?money(latest.amount):"—"}</div></div>
+        <div><div class="metric-label">Average mileage</div><div class="metric-value">${stats.average!==null?num(stats.average,2):"—"} <small>${stats.average!==null?"km/L":""}</small></div></div>
+      </div>
+      <div class="latest-box">
+        <div class="latest-title">LATEST DIESEL ENTRY</div>
+        <div class="latest-row"><span>Date / time</span><strong>${latest?esc((latest.date||"—")+" "+(latest.time||"")):"No record"}</strong></div>
+        <div class="latest-row"><span>Fuel station</span><strong>${esc(latest?.station||"—")}</strong></div>
+        <div class="latest-row"><span>Driver</span><strong>${esc(driverName(driver)!=="—"?driverName(driver):(latest?.driverName||"—"))}</strong></div>
+        ${latest?.billPhotoUrl?'<div class="latest-row"><span>Bill photo</span><strong>Attached ✓</strong></div>':""}
+        ${stats.latest?`<div class="latest-row"><span>Latest interval mileage</span><strong>${num(stats.latest.mileage,2)} km/L</strong></div>`:""}
+      </div>
+      <div class="card-bottom"><span>${entries.length} fuel entries · ${isAssigned(bus)?"Driver assigned":"No driver assigned"}</span><span class="view-link">View full details →</span></div>
+    </button>`;
+  }).join("")}</div>`;
+  $("busGrid").querySelectorAll("[data-bus]").forEach(card=>card.addEventListener("click",()=>openBus(card.dataset.bus)));
 }
-
 function infoItem(label,value,sub=""){
-  return `<div class="info-item">
-    <div class="info-label">${esc(label)}</div>
-    <div class="info-value">${esc(value??"—")}</div>
-    ${sub?`<div class="info-muted">${esc(sub)}</div>`:""}
-  </div>`;
+  return `<div class="info-item"><div class="info-label">${esc(label)}</div><div class="info-value">${esc(value??"—")}</div>${sub?`<div class="info-muted">${esc(sub)}</div>`:""}</div>`;
 }
-
 function statCard(label,value,unit=""){
-  return `<div class="detail-stat">
-    <div class="label">${esc(label)}</div>
-    <div class="value">${esc(value)} <span class="unit">${esc(unit)}</span></div>
-  </div>`;
+  return `<div class="detail-stat"><div class="label">${esc(label)}</div><div class="value">${esc(value)} <span class="unit">${esc(unit)}</span></div></div>`;
 }
 
 function renderMobileHistory(entries){
   if(!entries.length)return '<div class="empty">No diesel entries recorded for this bus yet.</div>';
-
-  return `<div class="history-list mobile-history">
-    ${entries.map(entry=>`
-      <article class="history-card">
-        <div class="history-top">
-          <div>
-            <div class="history-date">${esc(entry.date||"Date not recorded")}</div>
-            <div class="history-driver">${esc(entry.time||"")} · ${esc(entry.driverName||"Driver not recorded")}</div>
-          </div>
-          <div class="history-amount">${money(entry.amount)}<small>Fuel amount</small></div>
-        </div>
-        <div class="history-metrics">
-          <div><div class="history-metric-label">Odometer</div><div class="history-metric-value">${num(fuelOdo(entry))} km</div></div>
-          <div><div class="history-metric-label">Diesel</div><div class="history-metric-value">${num(entry.litres)} L</div></div>
-          <div><div class="history-metric-label">Fuel station</div><div class="history-metric-value">${esc(entry.station||"—")}</div></div>
-          <div><div class="history-metric-label">Bill number</div><div class="history-metric-value">${esc(entry.billNumber||"—")}</div></div>
-        </div>
-        <div class="history-extra">
-          <strong>Driver phone/email:</strong> ${esc(entry.driverPhone||entry.driverEmail||"—")}<br>
-          <strong>Full tank:</strong> ${entry.fullTank===true?"Yes":entry.fullTank===false?"No":"—"}<br>
-          <strong>Notes:</strong> ${esc(entry.notes||"—")}
-        </div>
-      </article>
-    `).join("")}
-  </div>`;
+  return `<div class="history-list mobile-history">${entries.map(entry=>`
+    <article class="history-card">
+      ${billImageHtml(entry)}
+      <div class="history-top">
+        <div><div class="history-date">${esc(entry.date||"Date not recorded")}</div><div class="history-driver">${esc(entry.time||"")} · ${esc(entry.driverName||"Driver not recorded")}</div></div>
+        <div class="history-amount">${money(entry.amount)}<small>Fuel amount</small></div>
+      </div>
+      <div class="history-metrics">
+        <div><div class="history-metric-label">Odometer</div><div class="history-metric-value">${num(fuelOdo(entry))} km</div></div>
+        <div><div class="history-metric-label">Diesel</div><div class="history-metric-value">${num(entry.litres)} L</div></div>
+        <div><div class="history-metric-label">Fuel station</div><div class="history-metric-value">${esc(entry.station||"—")}</div></div>
+        <div><div class="history-metric-label">Bill number</div><div class="history-metric-value">${esc(entry.billNumber||"—")}</div></div>
+      </div>
+      <div class="history-extra">
+        <strong>Driver phone/email:</strong> ${esc(entry.driverPhone||entry.driverEmail||"—")}<br>
+        <strong>Full tank:</strong> ${entry.fullTank===true?"Yes":entry.fullTank===false?"No":"—"}<br>
+        <strong>Notes:</strong> ${esc(entry.notes||"—")}
+      </div>
+    </article>`).join("")}</div>`;
 }
 
 function renderDesktopHistory(entries){
   if(!entries.length)return '<div class="empty">No diesel entries recorded for this bus yet.</div>';
-
-  return `<div class="desktop-history">
-    <div class="table-wrap"><table>
-      <thead><tr>
-        <th>Date / Time</th><th>Driver</th><th>Odometer</th><th>Litres</th>
-        <th>Amount</th><th>Station</th><th>Bill</th><th>Full tank</th><th>Notes</th>
-      </tr></thead>
-      <tbody>${entries.map(entry=>`<tr>
-        <td>${esc(entry.date||"—")}<br><span class="info-muted">${esc(entry.time||"")}</span></td>
-        <td>${esc(entry.driverName||"—")}<br><span class="info-muted">${esc(entry.driverPhone||entry.driverEmail||"")}</span></td>
-        <td>${num(fuelOdo(entry))} km</td>
-        <td><strong>${num(entry.litres)} L</strong></td>
-        <td><strong>${money(entry.amount)}</strong></td>
-        <td>${esc(entry.station||"—")}</td>
-        <td>${esc(entry.billNumber||"—")}</td>
-        <td>${entry.fullTank===true?"Yes":entry.fullTank===false?"No":"—"}</td>
-        <td>${esc(entry.notes||"—")}</td>
-      </tr>`).join("")}</tbody>
-    </table></div>
-  </div>`;
+  return `<div class="desktop-history"><div class="table-wrap"><table>
+    <thead><tr><th>Bill photo</th><th>Date / Time</th><th>Driver</th><th>Odometer</th><th>Litres</th><th>Amount</th><th>Station</th><th>Bill</th><th>Full tank</th><th>Notes</th></tr></thead>
+    <tbody>${entries.map(entry=>`<tr>
+      <td>${billImageHtml(entry,true)}</td>
+      <td>${esc(entry.date||"—")}<br><span class="info-muted">${esc(entry.time||"")}</span></td>
+      <td>${esc(entry.driverName||"—")}<br><span class="info-muted">${esc(entry.driverPhone||entry.driverEmail||"")}</span></td>
+      <td>${num(fuelOdo(entry))} km</td><td><strong>${num(entry.litres)} L</strong></td><td><strong>${money(entry.amount)}</strong></td>
+      <td>${esc(entry.station||"—")}</td><td>${esc(entry.billNumber||"—")}</td>
+      <td>${entry.fullTank===true?"Yes":entry.fullTank===false?"No":"—"}</td><td>${esc(entry.notes||"—")}</td>
+    </tr>`).join("")}</tbody>
+  </table></div></div>`;
 }
 
 function renderOdometerHistory(readings){
@@ -607,52 +493,34 @@ function renderOdometerHistory(readings){
     $("odometerTable").innerHTML='<div class="empty">No separate pickup/drop odometer records found.</div>';
     return;
   }
-
   $("odometerTable").innerHTML=`
-    <div class="history-list mobile-history">
-      ${readings.map(entry=>`
-        <article class="history-card">
-          <div class="history-top">
-            <div><div class="history-date">${esc(entry.date||"—")}</div><div class="history-driver">${esc(entry.time||"")}</div></div>
-            <div class="history-amount">${num(entry.reading)} km<small>${esc(entry.type||"Reading")}</small></div>
-          </div>
-          <div class="history-extra"><strong>Driver UID:</strong> ${esc(entry.driverUid||"—")}</div>
-        </article>
-      `).join("")}
-    </div>
+    <div class="history-list mobile-history">${readings.map(entry=>`
+      <article class="history-card"><div class="history-top">
+        <div><div class="history-date">${esc(entry.date||"—")}</div><div class="history-driver">${esc(entry.time||"")}</div></div>
+        <div class="history-amount">${num(entry.reading)} km<small>${esc(entry.type||"Reading")}</small></div>
+      </div><div class="history-extra"><strong>Driver UID:</strong> ${esc(entry.driverUid||"—")}</div></article>
+    `).join("")}</div>
     <div class="desktop-history"><div class="table-wrap"><table>
       <thead><tr><th>Date</th><th>Time</th><th>Type</th><th>Odometer</th><th>Driver UID</th></tr></thead>
-      <tbody>${readings.map(entry=>`<tr>
-        <td>${esc(entry.date||"—")}</td><td>${esc(entry.time||"—")}</td>
-        <td>${esc(entry.type||"—")}</td><td><strong>${num(entry.reading)} km</strong></td>
-        <td>${esc(entry.driverUid||"—")}</td>
-      </tr>`).join("")}</tbody>
+      <tbody>${readings.map(entry=>`<tr><td>${esc(entry.date||"—")}</td><td>${esc(entry.time||"—")}</td><td>${esc(entry.type||"—")}</td><td><strong>${num(entry.reading)} km</strong></td><td>${esc(entry.driverUid||"—")}</td></tr>`).join("")}</tbody>
     </table></div></div>`;
 }
 
 function renderSelectedBus(bus){
-  const entries=fuelFor(bus.id);
-  const readings=readingsFor(bus.id);
-  const stats=mileageStats(bus.id);
+  const entries=fuelFor(bus.id),readings=readingsFor(bus.id),stats=mileageStats(bus.id);
   const totalLitres=entries.reduce((s,e)=>s+(Number(e.litres)||0),0);
   const totalAmount=entries.reduce((s,e)=>s+(Number(e.amount)||0),0);
-  const latest=entries[0];
-  const uid=driverUid(bus);
-  const driver=findDriver(uid);
-  const odo=currentOdometer(bus);
-
+  const latest=entries[0],driver=findDriver(driverUid(bus)),odo=currentOdometer(bus);
   $("detailTitle").textContent=busLabel(bus);
   $("detailSubtitle").textContent=`${bus.busCode||"No bus code"} · ${bus.routeFrom||"—"} → ${bus.routeTo||"—"}`;
   $("detailStatus").className="pill "+(isAssigned(bus)?"pill-green":"pill-blue");
   $("detailStatus").textContent=isAssigned(bus)?"Driver assigned":"No driver assigned";
-
   $("detailStats").innerHTML=[
     statCard("Total diesel",num(totalLitres),"L"),
     statCard("Total spending",money(totalAmount),""),
     statCard("Current odometer",num(odo),"km"),
     statCard("Average mileage",stats.average!==null?num(stats.average,2):"—",stats.average!==null?"km/L":"")
   ].join("");
-
   $("busInfo").innerHTML=[
     infoItem("Registration number",bus.registrationNo),
     infoItem("Bus code",bus.busCode),
@@ -670,12 +538,10 @@ function renderSelectedBus(bus){
     infoItem("Distance across valid intervals",stats.intervals.length?`${num(stats.distance)} km`:"Not available"),
     infoItem("Intervals used in average",stats.intervals.length)
   ].join("");
-
   $("entryCount").textContent=`${entries.length} entries`;
   $("historyTable").innerHTML=renderMobileHistory(entries)+renderDesktopHistory(entries);
   renderOdometerHistory(readings);
 }
-
 function openBus(id){
   const bus=buses.find(b=>b.id===id);
   if(!bus)return;
@@ -686,7 +552,6 @@ function openBus(id){
   renderSelectedBus(bus);
   window.scrollTo({top:0,behavior:"smooth"});
 }
-
 function showFleet(){
   selectedBusId=null;
   $("detailView").style.display="none";
@@ -694,19 +559,29 @@ function showFleet(){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
+/*
+ * Read collections separately. This identifies the collection that is
+ * denied by Firestore instead of hiding the cause inside Promise.all().
+ */
+async function readCollection(collectionName){
+  try {
+    return await getDocs(collection(db,collectionName));
+  } catch(error) {
+    console.error("Firestore read failed for collection:",collectionName,error);
+    const code=error.code||"unknown";
+    throw new Error(`Cannot read "${collectionName}" (${code}). Check its Firestore rules and the signed-in admin profile.`);
+  }
+}
 async function loadData(){
   if(loading)return;
   loading=true;
   clearNotice();
   $("busGrid").innerHTML='<div class="loading">Loading fleet and diesel records...</div>';
-
   try{
-    const [busSnap,userSnap,fuelSnap,odoSnap]=await Promise.all([
-      getDocs(collection(db,"buses")),
-      getDocs(collection(db,"users")),
-      getDocs(collection(db,"dieselEntries")),
-      getDocs(collection(db,"odometerEntries"))
-    ]);
+    const busSnap=await readCollection("buses");
+    const userSnap=await readCollection("users");
+    const fuelSnap=await readCollection("dieselEntries");
+    const odoSnap=await readCollection("odometerEntries");
 
     buses=busSnap.docs.map(d=>({id:d.id,...d.data()}));
     users=userSnap.docs.map(d=>({id:d.id,...d.data()}));
@@ -715,16 +590,15 @@ async function loadData(){
 
     updateStats();
     renderCards();
-
     if(selectedBusId){
       const bus=buses.find(b=>b.id===selectedBusId);
       if(bus)renderSelectedBus(bus);
       else showFleet();
     }
   }catch(error){
-    console.error(error);
-    notice("Unable to load diesel information. Check Firestore read permissions. "+(error.code||error.message||""),"error");
-    $("busGrid").innerHTML='<div class="empty">Could not load fleet data.</div>';
+    console.error("Diesel management load error:",error);
+    notice(error.message||"Unable to load diesel information.","error");
+    $("busGrid").innerHTML='<div class="empty">Could not load fleet data. See the error message above.</div>';
   }finally{
     loading=false;
   }
@@ -742,7 +616,6 @@ $("backBtn").addEventListener("click",()=>{
 
 onAuthStateChanged(auth,async user=>{
   if(!user){location.href="../../";return;}
-
   try{
     const profile=await getDoc(doc(db,"users",user.uid));
     if(
@@ -755,12 +628,11 @@ onAuthStateChanged(auth,async user=>{
       setTimeout(()=>location.href="../../",1200);
       return;
     }
-
     $("adminLabel").textContent=user.email||"Administrator";
     await loadData();
   }catch(error){
-    console.error(error);
-    notice("Could not verify admin access. Check your admin profile and Firestore rules.","error");
+    console.error("Admin verification failed:",error);
+    notice("Could not verify admin access. Check the users/{uid} read rule and your admin profile. "+(error.code||error.message||""),"error");
   }
 });
 </script>
