@@ -1,258 +1,1501 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Services | BEST Driver</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111b2a">
+<title>BEST | Driver Portal</title>
+
 <style>
-:root{--navy:#111b2a;--yellow:#f5bd3d;--bg:#f4f6f9;--ink:#172334;--muted:#778396;--line:#e5e9ef;--blue:#2563eb;--green:#16834a;--red:#d92d43}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Arial,sans-serif}
-.layout{display:grid;grid-template-columns:235px minmax(0,1fr);min-height:100vh}
-.side{background:var(--navy);color:#fff;padding:25px 17px}
-.brand{font-weight:850;letter-spacing:1px;padding:8px 10px 25px}
-.brand small{display:block;color:#aab5c4;font-size:10px;margin-top:4px}
-.nav a{display:block;text-decoration:none;color:#d1d9e4;padding:12px;border-radius:10px;margin:4px 0;font-weight:650;font-size:13px}
-.nav a.active,.nav a:hover{background:#26364b;color:#fff}
-main{padding:28px;max-width:1050px;width:100%;margin:auto}
-.eyebrow{font-size:10px;font-weight:800;letter-spacing:1.4px;color:#2563eb}
-h1{font-size:28px;margin:6px 0}.sub{margin:0 0 20px;color:var(--muted)}
-.card,.item{background:#fff;border:1px solid var(--line);border-radius:15px;padding:20px;margin:15px 0;box-shadow:0 5px 22px #19283c08}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
-.field label{display:block;font-size:12px;font-weight:800;margin-bottom:7px}
-.field input,.field select,.field textarea{width:100%;border:1px solid #d8e0e9;border-radius:10px;padding:12px;background:#fff;color:var(--ink);font:inherit}
-.field textarea{min-height:150px;resize:vertical;line-height:1.7}
-.hint{font-size:12px;color:var(--muted);margin-top:6px}
-.btn{border:0;background:var(--yellow);color:#111b2a;padding:12px 17px;border-radius:10px;font-weight:850;margin-top:15px}
-.btn:disabled{opacity:.6;cursor:wait}
-.notice{display:none;padding:12px 14px;border-radius:10px;margin:12px 0}
-.notice.show{display:block}.notice.ok{background:#e9f8f0;color:#126b48}.notice.error{background:#fff0f0;color:#a51e2a}
-.itemtop{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.badge{font-size:10px;font-weight:850;border-radius:20px;padding:5px 9px;background:#fff5df;color:#94600c}
-.badge.accepted{background:#e9f8f0;color:#126b48}.badge.rejected{background:#fff0f0;color:#a51e2a}
-.problem{white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0;line-height:1.7;font-size:15px}
-.muted{font-size:12px;color:var(--muted)}
-.mobile{display:none}
-@media(max-width:800px){.layout{display:block}.side{display:none}main{padding:20px 14px 85px}h1{font-size:24px}.grid{grid-template-columns:1fr}.mobile{display:flex;position:fixed;bottom:0;left:0;right:0;justify-content:space-around;background:#fff;border-top:1px solid var(--line);padding:8px}.mobile a{text-decoration:none;color:#667487;font-size:11px;font-weight:750;padding:8px}.mobile a.active{color:#2563eb}}
+:root {
+  --navy: #111b2a;
+  --navy-light: #1b2b40;
+  --yellow: #f5bd3d;
+  --bg: #f4f6f9;
+  --white: #ffffff;
+  --ink: #172334;
+  --muted: #778396;
+  --line: #e5e9ef;
+  --blue: #2563eb;
+  --green: #16834a;
+  --red: #d92d43;
+  --radius: 17px;
+  --shadow: 0 5px 22px rgba(25, 40, 60, .045);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  transition: .18s ease;
+}
+
+button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+/* Desktop application shell */
+
+.app {
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  width: 245px;
+  padding: 25px 17px 18px;
+  background: var(--navy);
+  color: white;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 9px 27px;
+  border-bottom: 1px solid #2b3646;
+}
+
+.brand-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 43px;
+  width: 43px;
+  height: 43px;
+  border-radius: 13px;
+  background: var(--yellow);
+  color: var(--navy);
+  font-size: 23px;
+  font-weight: 900;
+}
+
+.brand-name {
+  font-size: 21px;
+  font-weight: 850;
+  letter-spacing: 1px;
+  line-height: 1.1;
+}
+
+.brand-caption {
+  margin-top: 5px;
+  color: #a9b7c9;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.35px;
+}
+
+.side-label {
+  padding: 26px 11px 10px;
+  color: #8493a7;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.nav {
+  display: grid;
+  gap: 6px;
+}
+
+.nav button {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  min-height: 47px;
+  padding: 12px 13px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: transparent;
+  color: #c1ccda;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.nav button:hover {
+  background: #1b2a3d;
+  color: white;
+}
+
+.nav button.active {
+  border-color: #35445a;
+  background: #26364c;
+  color: white;
+}
+
+.nav button.active .nav-icon {
+  color: var(--yellow);
+}
+
+.nav-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 23px;
+  font-size: 18px;
+}
+
+.side-bottom {
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid #2b3646;
+}
+
+.account-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 7px 15px;
+  min-width: 0;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 37px;
+  width: 37px;
+  height: 37px;
+  border-radius: 50%;
+  background: #34465d;
+  color: white;
+  font-weight: 800;
+}
+
+.account-text {
+  min-width: 0;
+  flex: 1;
+}
+
+.account-text strong,
+.account-text span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-text strong {
+  font-size: 12px;
+}
+
+.account-text span {
+  margin-top: 3px;
+  color: #a9b7c9;
+  font-size: 11px;
+}
+
+.side-signout {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #344255;
+  border-radius: 10px;
+  background: transparent;
+  color: #d5deea;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.side-signout:hover {
+  background: #273548;
+}
+
+.main-area {
+  min-height: 100vh;
+  margin-left: 245px;
+}
+
+/* Top bar */
+
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 72px;
+  padding: 15px 34px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, .94);
+  backdrop-filter: blur(16px);
+}
+
+.top-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.top-title {
+  font-size: 15px;
+  font-weight: 750;
+  letter-spacing: -.2px;
+}
+
+.top-subtitle {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.topright {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 41px;
+  padding: 10px 15px;
+  border: 1px solid #dfe4eb;
+  border-radius: 10px;
+  background: white;
+  color: #253348;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.btn:hover {
+  background: #f6f8fb;
+  border-color: #cbd3df;
+}
+
+.btn.primary {
+  border-color: var(--navy);
+  background: var(--navy);
+  color: white;
+}
+
+.btn.primary:hover {
+  background: #26374d;
+}
+
+.btn.danger {
+  border-color: #f7d4d9;
+  background: #fff4f5;
+  color: var(--red);
+}
+
+/* Main content */
+
+.shell {
+  width: 100%;
+  max-width: 1260px;
+  margin: 0 auto;
+  padding: 32px 34px 50px;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+h1 {
+  margin: 0 0 6px;
+  font-size: clamp(25px, 3vw, 32px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.2;
+}
+
+h2 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 750;
+  letter-spacing: -.4px;
+}
+
+h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 11px;
+  border: 1px solid #ccebd8;
+  border-radius: 30px;
+  background: #effaf3;
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 17px;
+}
+
+.card {
+  min-width: 0;
+  padding: 23px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--white);
+  box-shadow: var(--shadow);
+}
+
+/* Assigned vehicle */
+
+.bushero {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 18px;
+  padding: 29px;
+  border: 1px solid #26384d;
+  border-radius: 20px;
+  background: linear-gradient(125deg, #111b2a, #233750);
+  color: white;
+  box-shadow: 0 12px 30px rgba(17, 27, 42, .11);
+}
+
+.bushero::after {
+  content: "BUS";
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  color: rgba(255, 255, 255, .055);
+  font-size: 72px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  pointer-events: none;
+}
+
+.bushero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.bushero .muted {
+  color: #c0ccdb;
+}
+
+.reg {
+  margin: 8px 0;
+  font-size: clamp(25px, 3vw, 35px);
+  font-weight: 850;
+  letter-spacing: -.8px;
+  overflow-wrap: anywhere;
+}
+
+.reading {
+  margin: 8px 0;
+  font-size: clamp(30px, 4vw, 40px);
+  font-weight: 850;
+  letter-spacing: -1.2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.unit {
+  color: #c0ccdb;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 11px;
+  margin-top: 17px;
+}
+
+.detail {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .075);
+}
+
+.detail label {
+  display: block;
+  margin-bottom: 6px;
+  color: #bdc9d8;
+  font-size: 11px;
+}
+
+.detail strong {
+  font-size: 13px;
+  font-weight: 750;
+  overflow-wrap: anywhere;
+}
+
+.bushero > .detail {
+  margin-top: 21px !important;
+  padding: 18px;
+  background: rgba(255, 255, 255, .09);
+}
+
+.bushero > .detail .reading {
+  font-size: clamp(32px, 4vw, 42px);
+}
+
+/* Forms */
+
+.formgrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 17px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.field label {
+  color: #354155;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 45px;
+  padding: 11px 13px;
+  border: 1px solid #dce2e9;
+  border-radius: 10px;
+  outline: none;
+  background: #fff;
+  color: var(--ink);
+  font-size: 13px;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .11);
+}
+
+.field input[readonly] {
+  background: #f5f7fa;
+  color: #647084;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.formactions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 21px;
+}
+
+/* Messages */
+
+.message {
+  display: none;
+  margin-bottom: 17px;
+  padding: 13px 15px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.message.show {
+  display: block;
+}
+
+.message.ok {
+  border-color: #d0ecd9;
+  background: #effaf3;
+  color: #176b39;
+}
+
+.message.error {
+  border-color: #f5d0d5;
+  background: #fff3f4;
+  color: #ae2638;
+}
+
+.message.info {
+  border-color: #d3e5ff;
+  background: #eff6ff;
+  color: #2055a4;
+}
+
+/* Reading history */
+
+.history {
+  display: grid;
+  gap: 10px;
+}
+
+.entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: white;
+}
+
+.entry strong {
+  font-size: 13px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+
+.entry .muted {
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+}
+
+.pill {
+  display: inline-block;
+  padding: 5px 9px;
+  border: 1px solid #e1e6ed;
+  border-radius: 30px;
+  background: #f2f5f9;
+  color: #536174;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .4px;
+}
+
+.empty {
+  padding: 29px 15px;
+  border: 1px dashed #d8dee7;
+  border-radius: 13px;
+  background: #fafbfd;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+  text-align: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.mobile-bottom {
+  display: none;
+}
+
+/* Tablet */
+
+@media (max-width: 1000px) {
+  .sidebar {
+    width: 215px;
+    padding-right: 13px;
+    padding-left: 13px;
+  }
+
+  .main-area {
+    margin-left: 215px;
+  }
+
+  .shell {
+    padding: 26px 22px 40px;
+  }
+
+  .top {
+    padding-right: 22px;
+    padding-left: 22px;
+  }
+
+  .card {
+    padding: 19px;
+  }
+}
+
+/* Mobile navigation and layout */
+
+@media (max-width: 720px) {
+  body {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .main-area {
+    margin-left: 0;
+  }
+
+  .top {
+    position: relative;
+    min-height: 66px;
+    padding: 13px 16px;
+  }
+
+  .top-title {
+    font-size: 14px;
+  }
+
+  .top-subtitle {
+    font-size: 10px;
+  }
+
+  .topright {
+    gap: 6px;
+  }
+
+  .topright .small {
+    display: none;
+  }
+
+  .topright .btn {
+    min-height: 37px;
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .shell {
+    padding: 22px 14px 28px;
+  }
+
+  .heading {
+    align-items: flex-start;
+    margin-bottom: 19px;
+  }
+
+  h1 {
+    font-size: 27px;
+    letter-spacing: -.8px;
+  }
+
+  h2 {
+    font-size: 17px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 13px;
+  }
+
+  .card {
+    padding: 19px;
+    border-radius: 16px;
+  }
+
+  .bushero {
+    padding: 22px 18px;
+    border-radius: 18px;
+  }
+
+  .bushero::after {
+    top: 23px;
+    right: 12px;
+    font-size: 43px;
+  }
+
+  .reg {
+    max-width: 100%;
+    font-size: 27px;
+  }
+
+  .reading {
+    font-size: 32px;
+  }
+
+  .details {
+    gap: 9px;
+  }
+
+  .detail {
+    padding: 12px;
+  }
+
+  .formgrid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .full {
+    grid-column: auto;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    min-height: 47px;
+    font-size: 16px;
+  }
+
+  .formactions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+
+  .formactions .btn {
+    width: 100%;
+    min-height: 46px;
+  }
+
+  .entry {
+    align-items: flex-start;
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .entry > div:last-child {
+    text-align: left !important;
+  }
+
+  .empty {
+    padding: 25px 13px;
+  }
+
+  /* Fixed bottom navigation */
+
+  .mobile-bottom {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 50;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
+    padding: 7px 5px calc(7px + env(safe-area-inset-bottom));
+    border-top: 1px solid #e3e7ed;
+    background: rgba(255, 255, 255, .96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .mobile-bottom button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+    min-height: 51px;
+    padding: 4px 1px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: #778396;
+    font-size: 9px;
+    font-weight: 700;
+  }
+
+  .mobile-bottom button.active {
+    color: #175bc2;
+    background: #edf4ff;
+  }
+
+  .mobile-bottom .nav-icon {
+    width: auto;
+    font-size: 19px;
+    line-height: 1.2;
+  }
+}
+
+@media (max-width: 380px) {
+  .details {
+    grid-template-columns: 1fr;
+  }
+
+  .topright .btn {
+    padding: 8px;
+    font-size: 10px;
+  }
+
+  .mobile-bottom button {
+    font-size: 8px;
+  }
+}
 </style>
 </head>
+
 <body>
-<div class="layout">
-<aside class="side">
-<div class="brand">BEST DRIVER<small>TRANSPORT OPERATIONS</small></div>
-<nav class="nav">
-<a href="../">▦ My Bus</a>
-<a href="../diesel/">⛽ Diesel Data</a>
-<a class="active" href="./">🔧 Services / Report Problem</a>
-</nav>
-</aside>
+<div class="app">
 
-<main>
-<div class="eyebrow">DRIVER WORKSPACE</div>
-<h1>Services / Report a Problem</h1>
-<p class="sub">Describe your bus problem in your own language. Your original message will be sent to the administrator.</p>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">B</div>
+      <div>
+        <div class="brand-name">BEST</div>
+        <div class="brand-caption">TRANSPORT OPERATIONS</div>
+      </div>
+    </div>
 
-<div id="notice" class="notice"></div>
+    <div class="side-label">DRIVER WORKSPACE</div>
 
-<section class="card">
-<div class="grid">
-<div class="field">
-<label for="busInfo">Assigned bus</label>
-<input id="busInfo" readonly value="Loading bus information…">
-<div class="hint">If the bus is not shown, contact your administrator.</div>
+    <nav class="nav" id="navigation">
+      <button class="active" data-view="bus">
+        <span class="nav-icon">▦</span> My Bus
+      </button>
+      <button data-view="reading">
+        <span class="nav-icon">◷</span> Odometer Reading
+      </button>
+      <button data-view="history">
+        <span class="nav-icon">↻</span> Reading History
+      </button>
+      <button id="dieselNav">
+        <span class="nav-icon">⛽</span> Diesel Data
+      </button>
+      <button data-view="profile">
+        <span class="nav-icon">◎</span> My Profile
+      </button>
+    </nav>
+
+    <div class="side-bottom">
+      <div class="account-box">
+        <div class="avatar" id="sideAvatar">D</div>
+        <div class="account-text">
+          <strong id="sideDriverName">Driver account</strong>
+          <span id="sideDriverStatus">Verifying account…</span>
+        </div>
+      </div>
+      <button class="side-signout" id="sideLogoutBtn">↪ &nbsp; Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main-area">
+    <header class="top">
+      <div class="top-left">
+        <div>
+          <div class="top-title">BEST Driver Portal</div>
+          <div class="top-subtitle">Your vehicle. Your daily operations.</div>
+        </div>
+      </div>
+
+      <div class="topright">
+        <span id="driverLabel" class="small">Checking account…</span>
+        <button class="btn" id="refreshBtn">↻ Refresh</button>
+        <button class="btn" id="logoutBtn">Sign out</button>
+      </div>
+    </header>
+
+    <main class="shell">
+      <div class="heading">
+        <div>
+          <h1 id="welcome">My dashboard</h1>
+          <div class="muted">Manage your assigned bus and daily readings.</div>
+        </div>
+        <span class="status" id="approvalBadge">Verifying</span>
+      </div>
+
+      <div id="message" class="message" role="status"></div>
+
+      <section id="busView">
+        <div class="bushero">
+          <div class="muted">YOUR ASSIGNED VEHICLE</div>
+          <div class="reg" id="busRegistration">Loading bus…</div>
+          <div class="muted" id="busRoute">Loading route…</div>
+
+          <div class="detail" style="margin-top:20px">
+            <label>Current odometer reading</label>
+            <div class="reading">
+              <span id="currentReading">—</span>
+              <span class="unit">km</span>
+            </div>
+            <div class="muted" id="currentReadingMeta">Latest saved reading</div>
+          </div>
+
+          <div class="details">
+            <div class="detail">
+              <label>Bus code</label>
+              <strong id="busCode">—</strong>
+            </div>
+            <div class="detail">
+              <label>Expected mileage</label>
+              <strong id="busMileage">—</strong>
+            </div>
+            <div class="detail">
+              <label>Last pickup reading</label>
+              <strong id="lastPickup">—</strong>
+            </div>
+            <div class="detail">
+              <label>Last drop reading</label>
+              <strong id="lastDrop">—</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <h2>Odometer reading</h2>
+            <p class="muted">
+              Record your pickup or drop reading at the correct time.
+            </p>
+            <button class="btn primary" data-goto="reading">
+              + Enter reading
+            </button>
+          </div>
+
+          <div class="card">
+            <h2>Diesel and fuel</h2>
+            <p class="muted">
+              Record refuelling, litres, expenses and station details.
+            </p>
+            <button class="btn" id="dieselCardBtn">
+              Open Diesel Data →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="readingView" class="hidden">
+        <div class="card">
+          <h2>Record odometer reading</h2>
+          <p class="muted">
+            Enter the vehicle's actual reading. Saved readings appear in your history.
+          </p>
+
+          <div class="formgrid">
+            <div class="field">
+              <label for="readingDate">Date</label>
+              <input type="date" id="readingDate" required>
+            </div>
+
+            <div class="field">
+              <label for="readingTime">Time</label>
+              <input type="time" id="readingTime" required>
+            </div>
+
+            <div class="field">
+              <label for="readingType">Reading type</label>
+              <select id="readingType">
+                <option value="pickup">Pickup / Start of duty</option>
+                <option value="drop">Drop / End of duty</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="readingValue">Odometer reading (km)</label>
+              <input
+                type="number"
+                id="readingValue"
+                min="0"
+                step="0.1"
+                placeholder="Enter kilometres"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="formactions">
+            <button class="btn primary" id="saveReadingBtn">Save reading</button>
+            <button class="btn" id="viewHistoryBtn">View history</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="historyView" class="hidden">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+            <div>
+              <h2 style="margin-bottom:5px">Reading history</h2>
+              <div class="muted">Your saved pickup and drop records.</div>
+            </div>
+            <button class="btn" id="historyRefreshBtn">↻ Reload history</button>
+          </div>
+
+          <div id="historySummary" class="muted" style="margin-bottom:12px"></div>
+          <div id="historyList" class="history">
+            <div class="empty">Loading history…</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="profileView" class="hidden">
+        <div class="card">
+          <h2>My profile</h2>
+          <p class="muted">Your registered driver account information.</p>
+
+          <div class="formgrid">
+            <div class="field">
+              <label>Name</label>
+              <input id="profileName" readonly>
+            </div>
+            <div class="field">
+              <label>Phone</label>
+              <input id="profilePhone" readonly>
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input id="profileEmail" readonly>
+            </div>
+            <div class="field">
+              <label>Date of birth</label>
+              <input id="profileDob" readonly>
+            </div>
+            <div class="field full">
+              <label>Driver ID</label>
+              <input id="profileId" readonly>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 </div>
 
-<div class="field">
-<label for="language">Language used for your message *</label>
-<select id="language" required>
-<option value="">Choose your language</option>
-<option value="ಕನ್ನಡ (Kannada)">ಕನ್ನಡ (Kannada)</option>
-<option value="English">English</option>
-<option value="हिन्दी (Hindi)">हिन्दी (Hindi)</option>
-<option value="తెలుగు (Telugu)">తెలుగు (Telugu)</option>
-<option value="தமிழ் (Tamil)">தமிழ் (Tamil)</option>
-<option value="മലയാളം (Malayalam)">മലയാളം (Malayalam)</option>
-<option value="मराठी (Marathi)">मराठी (Marathi)</option>
-<option value="اردو (Urdu)">اردو (Urdu)</option>
-<option value="বাংলা (Bengali)">বাংলা (Bengali)</option>
-<option value="ਪੰਜਾਬੀ (Punjabi)">ਪੰਜਾਬੀ (Punjabi)</option>
-<option value="ગુજરાતી (Gujarati)">ગુજરાતી (Gujarati)</option>
-<option value="ଓଡ଼ିଆ (Odia)">ଓଡ଼ିଆ (Odia)</option>
-<option value="नेपाली (Nepali)">नेपाली (Nepali)</option>
-<option value="Other / mixed language">Other / mixed language</option>
-</select>
-<div class="hint">You may type in any language, even if it is not listed. The selected language label is shown to the admin.</div>
-</div>
-</div>
-
-<div class="field" style="margin-top:16px">
-<label for="problem">What is the problem? *</label>
-<textarea id="problem" maxlength="3000" required placeholder="Describe the bus problem here in your preferred language…"></textarea>
-<div class="hint"><span id="chars">0</span>/3000 characters</div>
-</div>
-
-<button id="submit" class="btn">Submit service request</button>
-</section>
-
-<h2 style="font-size:18px;margin-top:26px">My service requests</h2>
-<p class="sub">Check whether the administrator has accepted or rejected each request.</p>
-<div id="history"><div class="card muted">Loading your requests…</div></div>
-</main>
-</div>
-
-<nav class="mobile">
-<a href="../">My Bus</a>
-<a href="../diesel/">Diesel</a>
-<a class="active" href="./">Services</a>
+<nav class="mobile-bottom" aria-label="Driver navigation">
+  <button class="active" data-view="bus">
+    <span class="nav-icon">▦</span>
+    <span>My Bus</span>
+  </button>
+  <button data-view="reading">
+    <span class="nav-icon">◷</span>
+    <span>Reading</span>
+  </button>
+  <button data-view="history">
+    <span class="nav-icon">↻</span>
+    <span>History</span>
+  </button>
+  <button data-diesel-link>
+    <span class="nav-icon">⛽</span>
+    <span>Diesel</span>
+  </button>
+  <button data-view="profile">
+    <span class="nav-icon">◎</span>
+    <span>Profile</span>
+  </button>
 </nav>
 
 <script type="module">
-import {auth,db} from '../../firebase.js';
-import {onAuthStateChanged} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
-import {collection,doc,getDoc,getDocs,addDoc,onSnapshot,query,where,serverTimestamp} from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
+import { auth, db } from "../firebase.js";
+import {
+  onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import {
+  collection, doc, getDoc, getDocs, query, where,
+  runTransaction, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-const $=id=>document.getElementById(id);
-let currentUser=null,profile=null,bus=null;
+const $ = id => document.getElementById(id);
+let user = null, profile = null, bus = null, readings = [], busy = false;
 
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const localDate = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+};
 
-function notify(t,type='ok'){
- const n=$('notice');n.textContent=t;n.className='notice show '+(type==='error'?'error':'ok');
-}
-function date(v){
- if(!v)return '—';
- if(v.toDate)return v.toDate().toLocaleString();
- const d=new Date(v);return isNaN(d)?String(v):d.toLocaleString();
-}
+const localTime = () => {
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+};
 
-$('problem').addEventListener('input',()=>{
- $('chars').textContent=$('problem').value.length;
-});
-
-onAuthStateChanged(auth,async user=>{
- if(!user){location.replace('../../');return;}
- currentUser=user;
- try{
-  const ps=await getDoc(doc(db,'users',user.uid));
-  if(!ps.exists()){
-   notify('Driver profile not found. Please contact the administrator.','error');
-   return;
-  }
-  profile=ps.data();
-
-  if(String(profile.role||'').toLowerCase()==='admin'){
-   location.replace('../../admin/services/');
-   return;
-  }
-  if(String(profile.role||'').toLowerCase()!=='driver'){
-   notify('This page is only available to driver accounts.','error');
-   return;
-  }
-  await loadBus();
-  watchHistory();
- }catch(e){
-  notify('Could not load your profile: '+e.message,'error');
- }
-});
-
-async function loadBus(){
- const assignedId=profile.assignedBusId||profile.busId||'';
-
- if(assignedId){
-  const b=await getDoc(doc(db,'buses',assignedId));
-  if(b.exists())bus={id:b.id,...b.data()};
- }
-
- if(!bus){
-  const snap=await getDocs(query(collection(db,'buses'),where('assignedDriverId','==',currentUser.uid)));
-  if(!snap.empty){const b=snap.docs[0];bus={id:b.id,...b.data()};}
- }
-
- if(!bus){
-  const snap=await getDocs(query(collection(db,'buses'),where('driverUid','==',currentUser.uid)));
-  if(!snap.empty){const b=snap.docs[0];bus={id:b.id,...b.data()};}
- }
-
- $('busInfo').value=bus
-  ?[bus.busNumber||bus.busCode||bus.id,bus.registrationNumber||bus.registrationNo].filter(Boolean).join(' · ')
-  :'No assigned bus found';
+function esc(v = "") {
+  return String(v).replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[c]));
 }
 
-function watchHistory(){
- const q=query(collection(db,'serviceRequests'),where('driverUid','==',currentUser.uid));
+function showMessage(text, type = "info") {
+  $("message").textContent = text;
+  $("message").className = "message show " + type;
+}
 
- onSnapshot(q,snap=>{
-  const rows=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>{
-   const ta=a.createdAt?.toMillis?.()||0,tb=b.createdAt?.toMillis?.()||0;
-   return tb-ta;
+function clearMessage() {
+  $("message").className = "message";
+  $("message").textContent = "";
+}
+
+function localDateTime(entry) {
+  const date = entry.date || "";
+  const time = entry.time || "";
+  if (date || time) return `${date} ${time}`.trim();
+  const timestamp = entry.createdAt?.toDate?.();
+  return timestamp ? timestamp.toLocaleString() : "Time not recorded";
+}
+
+function sortReadings(list) {
+  return [...list].sort((a, b) => {
+    const aa = `${a.date || ""}T${a.time || "00:00"}`;
+    const bb = `${b.date || ""}T${b.time || "00:00"}`;
+    return bb.localeCompare(aa);
+  });
+}
+
+function showView(name) {
+  ["bus", "reading", "history", "profile"].forEach(v => {
+    $(v + "View").classList.toggle("hidden", v !== name);
   });
 
-  $('history').innerHTML=rows.length?rows.map(r=>{
-   const s=(r.status||'pending').toLowerCase();
-   const cost=r.serviceCost==null||r.serviceCost===''
-    ?'Not entered'
-    :'₹'+Number(r.serviceCost).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
-
-   return `<article class="item">
-    <div class="itemtop">
-     <strong>${esc(date(r.createdAt))}</strong>
-     <span class="badge ${['accepted','rejected'].includes(s)?s:''}">${esc(s.toUpperCase())}</span>
-    </div>
-    <div class="muted">Language: ${esc(r.problemLanguage||'Not specified')}</div>
-    <div class="problem" lang="${esc(r.languageCode||'und')}">${esc(r.problemDescription)}</div>
-    ${s==='accepted'?`<div class="muted">Service name: ${esc(r.serviceName||'Not specified')} · Cost: ${cost}</div>`:''}
-    ${s==='rejected'?'<div class="muted">The administrator rejected this request.</div>':''}
-   </article>`;
-  }).join(''):'<div class="card muted">You have not submitted any service requests yet.</div>';
-
- },e=>notify('Could not load request history: '+e.message,'error'));
-}
-
-$('submit').addEventListener('click',async()=>{
- const problem=$('problem').value.trim();
- const language=$('language').value;
-
- if(!currentUser||!profile)return notify('Please sign in again.','error');
- if(!language)return notify('Please select the language you are writing in.','error');
- if(!problem)return notify('Please describe the problem before submitting.','error');
- if(problem.length>3000)return notify('The description is too long.','error');
-
- const btn=$('submit');
- btn.disabled=true;
- btn.textContent='Submitting…';
-
- try{
-  await addDoc(collection(db,'serviceRequests'),{
-   driverUid:currentUser.uid,
-   driverName:profile.name||profile.fullName||currentUser.displayName||'Driver',
-   driverEmail:profile.email||currentUser.email||'',
-   driverPhone:profile.phone||'',
-   busId:bus?.id||'',
-   busNumber:bus?.busNumber||bus?.busCode||'',
-   registrationNo:bus?.registrationNumber||bus?.registrationNo||'',
-   problemDescription:problem,
-   problemLanguage:language,
-   languageCode:'und',
-   status:'pending',
-   serviceName:'',
-   serviceCost:null,
-   createdAt:serverTimestamp(),
-   updatedAt:serverTimestamp()
+  document.querySelectorAll("[data-view]").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.view === name);
   });
 
-  $('problem').value='';
-  $('chars').textContent='0';
-  notify('Service request submitted to the administrator.');
-  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
- }catch(e){
-  console.error(e);
-  notify('Could not submit the request. Check Firestore rules: '+e.message,'error');
- }finally{
-  btn.disabled=false;
-  btn.textContent='Submit service request';
- }
+  if (name === "history") renderHistory();
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+document.querySelectorAll("[data-view]").forEach(btn => {
+  btn.addEventListener("click", () => showView(btn.dataset.view));
 });
+
+document.querySelectorAll("[data-goto]").forEach(btn => {
+  btn.addEventListener("click", () => showView(btn.dataset.goto));
+});
+
+function openDiesel() {
+  location.href = "./diesel/";
+}
+
+$("dieselNav").addEventListener("click", openDiesel);
+$("dieselCardBtn").addEventListener("click", openDiesel);
+
+document.querySelectorAll("[data-diesel-link]").forEach(btn => {
+  btn.addEventListener("click", openDiesel);
+});
+
+$("viewHistoryBtn").addEventListener("click", () => showView("history"));
+$("historyRefreshBtn").addEventListener("click", loadReadings);
+$("refreshBtn").addEventListener("click", loadAll);
+
+async function logout() {
+  await signOut(auth);
+  location.replace("../");
+}
+
+$("logoutBtn").addEventListener("click", logout);
+$("sideLogoutBtn").addEventListener("click", logout);
+
+$("readingDate").value = localDate();
+$("readingTime").value = localTime();
+
+onAuthStateChanged(auth, async signedInUser => {
+  if (!signedInUser) {
+    location.replace("../");
+    return;
+  }
+
+  user = signedInUser;
+  await loadAll();
+});
+
+async function loadAll() {
+  if (!user || busy) return;
+  clearMessage();
+
+  try {
+    const profileSnap = await getDoc(doc(db, "users", user.uid));
+
+    if (!profileSnap.exists()) {
+      showMessage("Driver profile not found. Please sign in again or contact the administrator.", "error");
+      return;
+    }
+
+    profile = profileSnap.data();
+
+    if (profile.role === "admin") {
+      location.replace("../admin/");
+      return;
+    }
+
+    if (profile.role !== "driver") {
+      showMessage("This portal is for driver accounts only.", "error");
+      return;
+    }
+
+    if (profile.approvalStatus !== "approved") {
+      $("approvalBadge").textContent = "Not approved";
+      $("sideDriverStatus").textContent = "Awaiting approval";
+      showMessage("Your driver account is not approved yet. Please contact the administrator.", "info");
+      return;
+    }
+
+    $("driverLabel").textContent = profile.name || user.email || "Driver";
+    $("welcome").textContent = "Welcome, " + (profile.name || "Driver");
+    $("approvalBadge").textContent = "Approved";
+    $("sideDriverName").textContent = profile.name || "Driver";
+    $("sideDriverStatus").textContent = "Approved driver";
+    $("sideAvatar").textContent = (profile.name || "D").trim().charAt(0).toUpperCase();
+
+    $("profileName").value = profile.name || "";
+    $("profilePhone").value = profile.phone || "";
+    $("profileEmail").value = profile.email || user.email || "";
+    $("profileDob").value = profile.dob || "";
+    $("profileId").value = user.uid;
+
+    bus = null;
+
+    if (profile.assignedBusId) {
+      const snap = await getDoc(doc(db, "buses", profile.assignedBusId));
+      if (snap.exists()) bus = { id: snap.id, ...snap.data() };
+    }
+
+    if (!bus) {
+      const linked = await getDocs(query(
+        collection(db, "buses"),
+        where("assignedDriverId", "==", user.uid)
+      ));
+
+      if (!linked.empty) bus = { id: linked.docs[0].id, ...linked.docs[0].data() };
+    }
+
+    if (!bus) {
+      $("busRegistration").textContent = "No bus assigned";
+      $("busRoute").textContent = "Please contact your administrator.";
+      $("currentReading").textContent = "—";
+      $("currentReadingMeta").textContent = "No assigned vehicle";
+      $("busCode").textContent = "—";
+      $("busMileage").textContent = "—";
+      $("lastPickup").textContent = "—";
+      $("lastDrop").textContent = "—";
+      showMessage("Your account is approved, but no bus is assigned yet.", "info");
+      return;
+    }
+
+    await loadReadings();
+    renderBus();
+
+  } catch (error) {
+    console.error(error);
+    showMessage("Unable to load driver portal: " + error.message, "error");
+  }
+}
+
+async function loadReadings() {
+  if (!user) return;
+
+  $("historyList").innerHTML = '<div class="empty">Loading saved readings from Firestore…</div>';
+
+  try {
+    const snap = await getDocs(query(
+      collection(db, "odometerEntries"),
+      where("driverUid", "==", user.uid)
+    ));
+
+    readings = snap.docs.map(s => ({ id: s.id, ...s.data() }));
+
+    if (bus) readings = readings.filter(r => r.busId === bus.id);
+
+    readings = sortReadings(readings);
+    renderHistory();
+    renderBus();
+
+  } catch (error) {
+    console.error("Reading history load failed:", error);
+    $("historyList").innerHTML = '<div class="empty">Could not load reading history.</div>';
+    showMessage(
+      "Reading history could not be loaded: " + error.message +
+      ". Check Firestore read rules for odometerEntries.",
+      "error"
+    );
+  }
+}
+
+function renderBus() {
+  if (!bus) return;
+
+  $("busRegistration").textContent = bus.registrationNo || "Bus";
+  $("busRoute").textContent = (bus.routeFrom || "—") + " → " + (bus.routeTo || "—");
+  $("busCode").textContent = bus.busCode || "—";
+  $("busMileage").textContent = bus.expectedMileage != null ? bus.expectedMileage + " km/l" : "—";
+
+  const chronological = [...readings].sort((a, b) => {
+    const aa = `${a.date || ""}T${a.time || "00:00"}`;
+    const bb = `${b.date || ""}T${b.time || "00:00"}`;
+    return aa.localeCompare(bb);
+  });
+
+  const latest = chronological[chronological.length - 1];
+
+  $("currentReading").textContent = latest?.reading != null
+    ? Number(latest.reading).toLocaleString()
+    : (bus.odometerReading ?? "—");
+
+  $("currentReadingMeta").textContent = latest
+    ? `Last saved ${localDateTime(latest)} · ${String(latest.type || "").toUpperCase()}`
+    : "No driver readings saved yet · Initial bus reading shown if available";
+
+  const pickup = [...chronological].reverse().find(r => r.type === "pickup");
+  const drop = [...chronological].reverse().find(r => r.type === "drop");
+
+  $("lastPickup").textContent = pickup ? `${pickup.reading} km · ${pickup.date || ""}` : "—";
+  $("lastDrop").textContent = drop ? `${drop.reading} km · ${drop.date || ""}` : "—";
+}
+
+function renderHistory() {
+  const list = sortReadings(readings);
+
+  $("historySummary").textContent =
+    `${list.length} saved reading${list.length === 1 ? "" : "s"}`;
+
+  if (!list.length) {
+    $("historyList").innerHTML =
+      '<div class="empty">No saved readings found for this bus yet.<br>After you save a pickup or drop reading, it will appear here and remain after refresh.</div>';
+    return;
+  }
+
+  $("historyList").innerHTML = list.map(r => {
+    const type = (r.type || "unknown").toLowerCase();
+    const label = type === "pickup"
+      ? "Pickup / Start"
+      : type === "drop"
+        ? "Drop / End"
+        : type;
+
+    return `<article class="entry">
+      <div>
+        <strong>${esc(label)}</strong>
+        <div class="muted">${esc(localDateTime(r))}</div>
+        <div class="muted">Bus: ${esc(bus?.registrationNo || r.busId || "—")}</div>
+      </div>
+      <div style="text-align:right">
+        <strong>${esc(r.reading ?? "—")} km</strong>
+        <div style="margin-top:7px"><span class="pill">${esc(type.toUpperCase())}</span></div>
+      </div>
+    </article>`;
+  }).join("");
+}
+
+$("saveReadingBtn").addEventListener("click", saveReading);
+
+async function saveReading() {
+  if (!user || !profile || !bus || busy) {
+    showMessage("Your assigned bus is not loaded. Refresh and try again.", "error");
+    return;
+  }
+
+  const date = $("readingDate").value;
+  const time = $("readingTime").value;
+  const type = $("readingType").value;
+  const reading = Number($("readingValue").value);
+
+  if (!date || !time || $("readingValue").value.trim() === "" ||
+      !Number.isFinite(reading) || reading < 0) {
+    showMessage("Enter a valid date, time and non-negative odometer reading.", "error");
+    return;
+  }
+
+  const id = `${bus.id}_${date}_${type}`;
+  const entryRef = doc(db, "odometerEntries", id);
+  const driverRef = doc(db, "users", user.uid);
+  const busRef = doc(db, "buses", bus.id);
+
+  busy = true;
+  $("saveReadingBtn").disabled = true;
+  $("saveReadingBtn").textContent = "Saving…";
+  clearMessage();
+
+  try {
+    await runTransaction(db, async transaction => {
+      const [entrySnap, driverSnap, busSnap] = await Promise.all([
+        transaction.get(entryRef),
+        transaction.get(driverRef),
+        transaction.get(busRef)
+      ]);
+
+      if (entrySnap.exists()) {
+        throw new Error(
+          "A " + type + " reading is already saved for this bus on " +
+          date + ". Choose the other reading type or contact your administrator."
+        );
+      }
+
+      if (!driverSnap.exists()) throw new Error("Driver profile not found.");
+
+      const freshDriver = driverSnap.data();
+
+      if (freshDriver.role !== "driver" ||
+          freshDriver.approvalStatus !== "approved") {
+        throw new Error("Your driver account is not approved.");
+      }
+
+      if (freshDriver.assignedBusId !== bus.id) {
+        throw new Error("This bus is no longer assigned to your account. Refresh and contact the administrator.");
+      }
+
+      if (!busSnap.exists()) throw new Error("Assigned bus no longer exists.");
+
+      transaction.set(entryRef, {
+        busId: bus.id,
+        driverUid: user.uid,
+        date,
+        time,
+        type,
+        reading,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+    });
+
+    $("readingValue").value = "";
+    showMessage("Reading saved successfully. Updating current odometer and history…", "ok");
+
+    // Correct refresh: do not call loadAll() while busy is true.
+    await loadReadings();
+    renderBus();
+    showView("history");
+
+    // Prepare the form for the next entry.
+    $("readingDate").value = localDate();
+    $("readingTime").value = localTime();
+
+  } catch (error) {
+    console.error("Save reading failed:", error);
+    showMessage("Could not save reading: " + error.message, "error");
+
+  } finally {
+    busy = false;
+    $("saveReadingBtn").disabled = false;
+    $("saveReadingBtn").textContent = "Save reading";
+  }
+}
 </script>
 </body>
 </html>
