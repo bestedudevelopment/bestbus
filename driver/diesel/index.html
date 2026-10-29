@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,6 +22,7 @@
   --red:#d92d43;
   --shadow:0 5px 22px rgba(25,40,60,.045);
 }
+
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{
   margin:0;background:var(--bg);color:var(--ink);
@@ -30,6 +32,7 @@ body{
 button,input,select,textarea{font:inherit}
 button{cursor:pointer;transition:.18s ease}
 button:disabled{opacity:.6;cursor:not-allowed}
+
 .sidebar{
   position:fixed;inset:0 auto 0 0;z-index:30;
   display:flex;flex-direction:column;width:245px;
@@ -69,6 +72,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
   background:transparent;color:#d5deea;text-align:left;font-size:12px;font-weight:600
 }
 .side-signout:hover{background:#273548}
+
 .main-area{min-height:100vh;margin-left:245px}
 .top{
   position:sticky;top:0;z-index:20;display:flex;align-items:center;
@@ -80,6 +84,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .top-subtitle{margin-top:2px;color:var(--muted);font-size:11px}
 .topright{display:flex;align-items:center;gap:9px}
 .small{color:var(--muted);font-size:12px}
+
 .shell{width:100%;max-width:1260px;margin:0 auto;padding:32px 34px 50px}
 .heading{
   display:flex;align-items:center;justify-content:space-between;
@@ -108,6 +113,7 @@ h3{margin:0 0 8px;font-size:14px;font-weight:700}
 .btn.primary{border-color:var(--navy);background:var(--navy);color:white}
 .btn.primary:hover{background:#26374d}
 .btn.danger{border-color:#f7d4d9;background:#fff4f5;color:var(--red)}
+
 .vehicle-card{
   position:relative;overflow:hidden;margin-bottom:18px;padding:25px;
   border:1px solid #26384d;border-radius:20px;
@@ -128,11 +134,13 @@ h3{margin:0 0 8px;font-size:14px;font-weight:700}
 .vehicle-detail strong{font-size:14px;font-weight:750;overflow-wrap:anywhere}
 .odometer-value{margin-top:5px;font-size:29px;font-weight:850;letter-spacing:-.7px;font-variant-numeric:tabular-nums}
 .odometer-value span{font-size:12px;font-weight:500;color:#c0ccdb;letter-spacing:0}
+
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-bottom:18px}
 .stat{padding:19px;border:1px solid var(--line);border-radius:15px;background:white;box-shadow:var(--shadow);min-width:0}
 .stat-label{color:var(--muted);font-size:11px;font-weight:700}
 .stat-value{margin-top:8px;font-size:25px;font-weight:850;letter-spacing:-.7px;overflow-wrap:anywhere}
 .stat-unit{color:var(--muted);font-size:11px;font-weight:500;letter-spacing:0}
+
 .formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
 .field{display:flex;flex-direction:column;gap:7px;min-width:0}
 .field label{color:#354155;font-size:12px;font-weight:700}
@@ -145,13 +153,9 @@ h3{margin:0 0 8px;font-size:14px;font-weight:700}
   border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.11)
 }
 .field textarea{resize:vertical;min-height:90px}
-.bill-upload{display:flex;flex-direction:column;gap:10px;padding:14px;border:1px dashed #b9c8dc;border-radius:12px;background:#f8fbff}
-.bill-upload input{background:#fff}
-.bill-preview{display:none;max-width:100%;max-height:280px;object-fit:contain;align-self:flex-start;border:1px solid var(--line);border-radius:10px;background:#fff}
-.bill-preview.show{display:block}
-.bill-help{color:var(--muted);font-size:11px;line-height:1.6}
 .full{grid-column:1/-1}
 .formactions{display:flex;flex-wrap:wrap;gap:10px;margin-top:21px}
+
 .message{
   display:none;margin-bottom:17px;padding:13px 15px;border:1px solid transparent;
   border-radius:12px;font-size:13px;line-height:1.6;overflow-wrap:anywhere
@@ -160,6 +164,7 @@ h3{margin:0 0 8px;font-size:14px;font-weight:700}
 .message.ok{border-color:#d0ecd9;background:#effaf3;color:#176b39}
 .message.error{border-color:#f5d0d5;background:#fff3f4;color:#ae2638}
 .message.info{border-color:#d3e5ff;background:#eff6ff;color:#2055a4}
+
 .history{display:grid;gap:11px}
 .entry{
   display:flex;align-items:center;justify-content:space-between;gap:14px;
@@ -185,6 +190,7 @@ h3{margin:0 0 8px;font-size:14px;font-weight:700}
   .top{padding-right:22px;padding-left:22px}
   .card{padding:19px}
 }
+
 @media(max-width:720px){
   body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
   .sidebar{display:none}
@@ -385,27 +391,6 @@ h3{margin:0 0 8px;font-size:14px;font-weight:700}
           </select>
         </div>
 
-        <!-- NEW: REQUIRED BILL PHOTO -->
-        <div class="field full">
-          <label for="fuelBillPhoto">
-            Fuel bill photo <span style="color:var(--red)">*</span> — compulsory
-          </label>
-          <div class="bill-upload">
-            <input
-              type="file"
-              id="fuelBillPhoto"
-              accept="image/jpeg,image/png,image/webp"
-              capture="environment"
-              required
-            >
-            <div class="bill-help">
-              Upload a clear photo of the original diesel bill. JPG, PNG or WEBP only;
-              maximum 5 MB. You must upload a bill to save this entry.
-            </div>
-            <img id="billPhotoPreview" class="bill-preview" alt="Fuel bill photo preview">
-          </div>
-        </div>
-
         <div class="field full">
           <label for="fuelNotes">Notes (optional)</label>
           <textarea id="fuelNotes" placeholder="Additional information…"></textarea>
@@ -443,27 +428,15 @@ h3{margin:0 0 8px;font-size:14px;font-weight:700}
 
 <script type="module">
 import { auth, db } from "../../firebase.js";
-
 import {
-  onAuthStateChanged,
-  signOut
+  onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
 import {
   collection, doc, getDoc, getDocs, query, where,
   addDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-/* NEW: Firebase Storage functions for bill photo upload */
-import {
-  getStorage,
-  ref as storageRef,
-  uploadBytes,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
-
 const $ = id => document.getElementById(id);
-const storage = getStorage();
 
 let user = null;
 let profile = null;
@@ -530,35 +503,6 @@ $("historyRefreshBtn").addEventListener("click", loadDieselRecords);
 $("fuelDate").value = localDate();
 $("fuelTime").value = localTime();
 
-/* NEW: preview and validate selected bill image */
-$("fuelBillPhoto").addEventListener("change", () => {
-  const file = $("fuelBillPhoto").files?.[0];
-  const preview = $("billPhotoPreview");
-
-  preview.removeAttribute("src");
-  preview.classList.remove("show");
-
-  if (!file) return;
-
-  const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
-
-  if (!allowedTypes.includes(file.type)) {
-    $("fuelBillPhoto").value = "";
-    showMessage("Choose a JPG, PNG or WEBP image for the diesel bill.","error");
-    return;
-  }
-
-  if (file.size > 5 * 1024 * 1024) {
-    $("fuelBillPhoto").value = "";
-    showMessage("The bill photo must be 5 MB or smaller.","error");
-    return;
-  }
-
-  preview.src = URL.createObjectURL(file);
-  preview.classList.add("show");
-  clearMessage();
-});
-
 $("clearFuelBtn").addEventListener("click", () => {
   $("fuelOdometer").value = "";
   $("fuelLitres").value = "";
@@ -566,9 +510,6 @@ $("clearFuelBtn").addEventListener("click", () => {
   $("fuelStation").value = "";
   $("fuelBill").value = "";
   $("fuelNotes").value = "";
-  $("fuelBillPhoto").value = "";
-  $("billPhotoPreview").removeAttribute("src");
-  $("billPhotoPreview").classList.remove("show");
   $("fuelDate").value = localDate();
   $("fuelTime").value = localTime();
   $("fullTank").value = "yes";
@@ -722,6 +663,7 @@ function getMileageData() {
     }
   }
 
+  // The interval calculation assumes the fuel entries represent comparable refuelling intervals.
   const validLitres = records.reduce((sum,r) => {
     return sum + (intervalMileage.has(r.id) ? (Number(r.litres) || 0) : 0);
   },0);
@@ -738,6 +680,7 @@ function renderFuelSummary() {
   $("totalLitres").innerHTML = `${totalLitres.toLocaleString(undefined,{maximumFractionDigits:2})} <span class="stat-unit">L</span>`;
   $("averageMileage").innerHTML = `${average == null ? "—" : average.toFixed(2)} <span class="stat-unit">km/L</span>`;
 
+  // Display the greatest available odometer reading as a simple current-meter reference.
   const readings = [
     Number(bus?.odometerReading),
     ...dieselRecords.map(r => Number(r.odometerReading))
@@ -767,13 +710,6 @@ function renderFuelHistory() {
         <div class="muted">${esc(r.station || "Fuel station not recorded")}</div>
         <div class="muted">Odometer: ${esc(r.odometerReading ?? "—")} km · ${esc(r.litres ?? "—")} L</div>
         <div class="muted">Bill: ${esc(r.billNumber || "—")} · Full tank: ${r.fullTank === "yes" ? "Yes" : "No"}</div>
-
-        ${
-          r.billPhotoUrl
-            ? `<div class="muted"><a href="${esc(r.billPhotoUrl)}" target="_blank" rel="noopener noreferrer">View fuel bill photo</a></div>`
-            : `<div class="muted">Bill photo: Not available for this older entry</div>`
-        }
-
         ${r.notes ? `<div class="muted">${esc(r.notes)}</div>` : ""}
       </div>
       <div>
@@ -801,20 +737,6 @@ async function saveFuel() {
   const billNumber = $("fuelBill").value.trim();
   const fullTank = $("fullTank").value;
   const notes = $("fuelNotes").value.trim();
-  const billPhoto = $("fuelBillPhoto").files?.[0];
-
-  /* Bill photo is compulsory */
-  if (!billPhoto) {
-    showMessage("Fuel bill photo is compulsory. Upload the bill before saving.","error");
-    $("fuelBillPhoto").focus();
-    return;
-  }
-
-  if (!["image/jpeg", "image/png", "image/webp"].includes(billPhoto.type) ||
-      billPhoto.size > 5 * 1024 * 1024) {
-    showMessage("Upload a JPG, PNG or WEBP bill photo no larger than 5 MB.","error");
-    return;
-  }
 
   if (!date || !time ||
       $("fuelOdometer").value.trim() === "" ||
@@ -829,20 +751,17 @@ async function saveFuel() {
 
   saving = true;
   $("saveFuelBtn").disabled = true;
-  $("saveFuelBtn").textContent = "Uploading bill and saving…";
+  $("saveFuelBtn").textContent = "Saving…";
   clearMessage();
 
   try {
     const freshProfileSnap = await getDoc(doc(db,"users",user.uid));
 
-    if (!freshProfileSnap.exists()) {
-      throw new Error("Driver profile not found.");
-    }
+    if (!freshProfileSnap.exists()) throw new Error("Driver profile not found.");
 
     const freshProfile = freshProfileSnap.data();
 
-    if (freshProfile.role !== "driver" ||
-        freshProfile.approvalStatus !== "approved") {
+    if (freshProfile.role !== "driver" || freshProfile.approvalStatus !== "approved") {
       throw new Error("Your driver account is not approved.");
     }
 
@@ -852,12 +771,9 @@ async function saveFuel() {
 
     const busSnap = await getDoc(doc(db,"buses",bus.id));
 
-    if (!busSnap.exists()) {
-      throw new Error("Assigned bus no longer exists.");
-    }
+    if (!busSnap.exists()) throw new Error("Assigned bus no longer exists.");
 
     const freshBus = busSnap.data();
-
     const stillAssigned =
       freshBus.assignedDriverId === user.uid ||
       freshBus.driverId === user.uid ||
@@ -867,35 +783,13 @@ async function saveFuel() {
       throw new Error("This bus is no longer assigned to your account. Contact your administrator.");
     }
 
-    /*
-      Upload the compulsory bill image to Firebase Storage.
-      The image URL and file path will be saved in Firestore.
-    */
-    const safeFileName = billPhoto.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const billPath =
-      `dieselBills/${user.uid}/${bus.id}/${Date.now()}_${safeFileName}`;
-
-    const billRef = storageRef(storage, billPath);
-
-    const billUpload = await uploadBytes(billRef, billPhoto, {
-      contentType: billPhoto.type,
-      customMetadata: {
-        driverUid: user.uid,
-        busId: bus.id,
-        billDate: date
-      }
-    });
-
-    const billPhotoUrl = await getDownloadURL(billUpload.ref);
-
-    /* Save the diesel details and bill URL in the existing collection */
-    await addDoc(collection(db,"dieselEntries"), {
-      busId: bus.id,
-      registrationNo: bus.registrationNo || "",
-      busCode: bus.busCode || "",
-      driverUid: user.uid,
-      driverName: profile.name || "",
-      driverEmail: user.email || "",
+    await addDoc(collection(db,"dieselEntries"),{
+      busId:bus.id,
+      registrationNo:bus.registrationNo || "",
+      busCode:bus.busCode || "",
+      driverUid:user.uid,
+      driverName:profile.name || "",
+      driverEmail:user.email || "",
       date,
       time,
       odometerReading,
@@ -903,15 +797,9 @@ async function saveFuel() {
       amount,
       station,
       billNumber,
-
-      /* NEW FIRESTORE FIELDS */
-      billPhotoUrl: billPhotoUrl,
-      billPhotoPath: billPath,
-      billPhotoName: billPhoto.name,
-
       fullTank,
       notes,
-      createdAt: serverTimestamp()
+      createdAt:serverTimestamp()
     });
 
     $("fuelOdometer").value = "";
@@ -920,21 +808,13 @@ async function saveFuel() {
     $("fuelStation").value = "";
     $("fuelBill").value = "";
     $("fuelNotes").value = "";
-    $("fuelBillPhoto").value = "";
-    $("billPhotoPreview").removeAttribute("src");
-    $("billPhotoPreview").classList.remove("show");
     $("fuelDate").value = localDate();
     $("fuelTime").value = localTime();
     $("fullTank").value = "yes";
 
-    showMessage("Diesel record and bill photo saved successfully.","ok");
-
+    showMessage("Diesel record saved successfully.","ok");
     await loadDieselRecords();
-
-    $("fuelHistorySection").scrollIntoView({
-      behavior:"smooth",
-      block:"start"
-    });
+    $("fuelHistorySection").scrollIntoView({behavior:"smooth",block:"start"});
 
   } catch(error) {
     console.error("Save diesel record failed:",error);
